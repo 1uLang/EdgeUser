@@ -108,7 +108,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 		{
 			"code": "dashboard",
 			"name": "概览",
-			"icon": "dashboard",
+			"icon": "chart line area",
 		},
 		{
 			"code": "servers",

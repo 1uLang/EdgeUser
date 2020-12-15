@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/TeaOSLab/EdgeUser/apps"
+	"github.com/TeaOSLab/EdgeUser/internal/apps"
 	teaconst "github.com/TeaOSLab/EdgeUser/internal/const"
 	"github.com/TeaOSLab/EdgeUser/internal/nodes"
 	_ "github.com/iwind/TeaGo/bootstrap"

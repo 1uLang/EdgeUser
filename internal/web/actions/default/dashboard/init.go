@@ -9,6 +9,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth("")).
+			Data("teaMenu", "dashboard").
 			Prefix("/dashboard").
 			Get("", new(IndexAction)).
 			EndAll()

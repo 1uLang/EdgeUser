@@ -137,6 +137,9 @@ func (this *UserNode) pullConfig() error {
 	serverConfig := &TeaGo.ServerConfig{
 		Env: Tea.EnvProd,
 	}
+	if Tea.IsTesting() {
+		serverConfig.Env = Tea.EnvDev
+	}
 
 	// HTTP
 	httpConfig, err := this.decodeHTTP(node)
