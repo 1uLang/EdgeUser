@@ -1,9 +1,13 @@
 package helpers
 
 import (
+	"errors"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/configloaders"
 	teaconst "github.com/TeaOSLab/EdgeUser/internal/const"
+	"github.com/TeaOSLab/EdgeUser/internal/rpc"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/logs"
 	"github.com/iwind/TeaGo/maps"
 	"net/http"
 	"reflect"
@@ -58,7 +62,10 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 	action.Data["teaShowVersion"] = config.ShowVersion
 	action.Data["teaTitle"] = config.UserSystemName
 	action.Data["teaName"] = config.ProductName
-	action.Data["teaUsername"] = this.findUserFullname(userId)
+	action.Data["teaUsername"], err = this.findUserFullname(userId)
+	if err != nil {
+		logs.Println("[USER_MUST_AUTH]" + err.Error())
+	}
 
 	action.Data["teaUserAvatar"] = ""
 
@@ -99,10 +106,42 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 func (this *userMustAuth) modules(userId int64) []maps.Map {
 	allMaps := []maps.Map{
 		{
-			"code": "servers",
-			"name": "网站服务",
-			"icon": "clone outsize",
+			"code": "dashboard",
+			"name": "概览",
+			"icon": "dashboard",
 		},
+		{
+			"code": "servers",
+			"name": "域名管理",
+			"icon": "clone outsize",
+			"subItems": []maps.Map{
+				{
+					"name": "证书管理",
+					"code": "certs",
+					"url":  "/servers/certs",
+				},
+			},
+		},
+		{
+			"code": "cache",
+			"name": "刷新预热",
+			"icon": "eraser",
+		},
+		{
+			"code": "waf",
+			"name": "WAF",
+			"icon": "shield alternate",
+		},
+		{
+			"code": "finance",
+			"name": "费用账单",
+			"icon": "yen sign",
+		},
+		/**{
+			"code": "tickets",
+			"name": "工单",
+			"icon": "question circle outline",
+		},**/
 	}
 
 	return allMaps
@@ -114,7 +153,18 @@ func (this *userMustAuth) login(action *actions.ActionObject) {
 }
 
 // 查找用户名称
-func (this *userMustAuth) findUserFullname(userId int64) string {
-	// TODO
-	return ""
+func (this *userMustAuth) findUserFullname(userId int64) (string, error) {
+	rpcClient, err := rpc.SharedRPC()
+	if err != nil {
+		return "", err
+	}
+	resp, err := rpcClient.UserRPC().FindEnabledUser(rpcClient.Context(userId), &pb.FindEnabledUserRequest{UserId: userId})
+	if err != nil {
+		return "", err
+	}
+	if resp.User == nil {
+		return "", errors.New("can not find user")
+	}
+
+	return resp.User.Fullname, nil
 }
