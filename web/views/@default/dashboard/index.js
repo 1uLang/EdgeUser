@@ -61,9 +61,18 @@ Tea.context(function () {
 					data: this.dailyTrafficStats.map(function (v) {
 						return v.count;
 					}),
-					areaStyle: {}
+					itemStyle: {
+						color: "#9DD3E8"
+					},
+					lineStyle: {
+						color: "#9DD3E8"
+					},
+					areaStyle: {
+						color: "#9DD3E8"
+					}
 				}
-			]
+			],
+			animation: false
 		}
 		chart.setOption(option)
 	}
@@ -96,9 +105,18 @@ Tea.context(function () {
 					data: this.dailyPeekTrafficStats.map(function (v) {
 						return v.count;
 					}),
-					areaStyle: {}
+					itemStyle: {
+						color: "#9DD3E8"
+					},
+					lineStyle: {
+						color: "#9DD3E8"
+					},
+					areaStyle: {
+						color: "#9DD3E8"
+					}
 				}
-			]
+			],
+			animation: false
 		}
 		chart.setOption(option)
 	}

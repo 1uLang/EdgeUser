@@ -1,4 +1,4 @@
-package servers
+package certs
 
 import "github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 

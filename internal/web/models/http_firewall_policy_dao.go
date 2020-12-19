@@ -17,33 +17,33 @@ type HTTPFirewallPolicyDAO struct {
 }
 
 // 查找WAF策略基本信息
-func (this *HTTPFirewallPolicyDAO) FindEnabledPolicy(ctx context.Context, policyId int64) (*pb.HTTPFirewallPolicy, error) {
+func (this *HTTPFirewallPolicyDAO) FindEnabledHTTPFirewallPolicy(ctx context.Context, policyId int64) (*pb.HTTPFirewallPolicy, error) {
 	client, err := rpc.SharedRPC()
 	if err != nil {
 		return nil, err
 	}
-	resp, err := client.HTTPFirewallPolicyRPC().FindEnabledFirewallPolicy(ctx, &pb.FindEnabledFirewallPolicyRequest{FirewallPolicyId: policyId})
+	resp, err := client.HTTPFirewallPolicyRPC().FindEnabledHTTPFirewallPolicy(ctx, &pb.FindEnabledHTTPFirewallPolicyRequest{HttpFirewallPolicyId: policyId})
 	if err != nil {
 		return nil, err
 	}
-	return resp.FirewallPolicy, nil
+	return resp.HttpFirewallPolicy, nil
 }
 
 // 查找WAF策略配置
-func (this *HTTPFirewallPolicyDAO) FindEnabledPolicyConfig(ctx context.Context, policyId int64) (*firewallconfigs.HTTPFirewallPolicy, error) {
+func (this *HTTPFirewallPolicyDAO) FindEnabledHTTPFirewallPolicyConfig(ctx context.Context, policyId int64) (*firewallconfigs.HTTPFirewallPolicy, error) {
 	client, err := rpc.SharedRPC()
 	if err != nil {
 		return nil, err
 	}
-	resp, err := client.HTTPFirewallPolicyRPC().FindEnabledFirewallPolicyConfig(ctx, &pb.FindEnabledFirewallPolicyConfigRequest{FirewallPolicyId: policyId})
+	resp, err := client.HTTPFirewallPolicyRPC().FindEnabledHTTPFirewallPolicyConfig(ctx, &pb.FindEnabledHTTPFirewallPolicyConfigRequest{HttpFirewallPolicyId: policyId})
 	if err != nil {
 		return nil, err
 	}
-	if len(resp.FirewallPolicyJSON) == 0 {
+	if len(resp.HttpFirewallPolicyJSON) == 0 {
 		return nil, nil
 	}
 	firewallPolicy := &firewallconfigs.HTTPFirewallPolicy{}
-	err = json.Unmarshal(resp.FirewallPolicyJSON, firewallPolicy)
+	err = json.Unmarshal(resp.HttpFirewallPolicyJSON, firewallPolicy)
 	if err != nil {
 		return nil, err
 	}
@@ -51,8 +51,8 @@ func (this *HTTPFirewallPolicyDAO) FindEnabledPolicyConfig(ctx context.Context, 
 }
 
 // 查找WAF的Inbound
-func (this *HTTPFirewallPolicyDAO) FindEnabledPolicyInboundConfig(ctx context.Context, policyId int64) (*firewallconfigs.HTTPFirewallInboundConfig, error) {
-	config, err := this.FindEnabledPolicyConfig(ctx, policyId)
+func (this *HTTPFirewallPolicyDAO) FindEnabledHTTPFirewallPolicyInboundConfig(ctx context.Context, policyId int64) (*firewallconfigs.HTTPFirewallInboundConfig, error) {
+	config, err := this.FindEnabledHTTPFirewallPolicyConfig(ctx, policyId)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func (this *HTTPFirewallPolicyDAO) FindEnabledPolicyWhiteIPListId(ctx context.Co
 		return 0, err
 	}
 
-	config, err := this.FindEnabledPolicyConfig(ctx, policyId)
+	config, err := this.FindEnabledHTTPFirewallPolicyConfig(ctx, policyId)
 	if err != nil {
 		return 0, err
 	}
@@ -111,8 +111,8 @@ func (this *HTTPFirewallPolicyDAO) FindEnabledPolicyWhiteIPListId(ctx context.Co
 			return 0, err
 		}
 		_, err = client.HTTPFirewallPolicyRPC().UpdateHTTPFirewallInboundConfig(ctx, &pb.UpdateHTTPFirewallInboundConfigRequest{
-			FirewallPolicyId: policyId,
-			InboundJSON:      inboundJSON,
+			HttpFirewallPolicyId: policyId,
+			InboundJSON:          inboundJSON,
 		})
 		if err != nil {
 			return 0, err
@@ -130,7 +130,7 @@ func (this *HTTPFirewallPolicyDAO) FindEnabledPolicyBlackIPListId(ctx context.Co
 		return 0, err
 	}
 
-	config, err := this.FindEnabledPolicyConfig(ctx, policyId)
+	config, err := this.FindEnabledHTTPFirewallPolicyConfig(ctx, policyId)
 	if err != nil {
 		return 0, err
 	}
@@ -160,8 +160,8 @@ func (this *HTTPFirewallPolicyDAO) FindEnabledPolicyBlackIPListId(ctx context.Co
 			return 0, err
 		}
 		_, err = client.HTTPFirewallPolicyRPC().UpdateHTTPFirewallInboundConfig(ctx, &pb.UpdateHTTPFirewallInboundConfigRequest{
-			FirewallPolicyId: policyId,
-			InboundJSON:      inboundJSON,
+			HttpFirewallPolicyId: policyId,
+			InboundJSON:          inboundJSON,
 		})
 		if err != nil {
 			return 0, err

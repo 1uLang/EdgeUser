@@ -51,6 +51,10 @@ func (this *RPCClient) SysSettingRPC() pb.SysSettingServiceClient {
 	return pb.NewSysSettingServiceClient(this.pickConn())
 }
 
+func (this *RPCClient) NodeClusterRPC() pb.NodeClusterServiceClient {
+	return pb.NewNodeClusterServiceClient(this.pickConn())
+}
+
 func (this *RPCClient) NodeRegionRPC() pb.NodeRegionServiceClient {
 	return pb.NewNodeRegionServiceClient(this.pickConn())
 }

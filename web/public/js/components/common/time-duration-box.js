@@ -1,5 +1,8 @@
 Vue.component("time-duration-box", {
-	props: ["v-name", "v-value", "v-count", "v-unit"],
+	props: ["v-name", "v-value", "v-count", "v-unit", "placeholder"],
+	mounted: function () {
+		this.change()
+	},
 	data: function () {
 		let v = this.vValue
 		if (v == null) {
@@ -38,7 +41,7 @@ Vue.component("time-duration-box", {
 	template: `<div class="ui fields inline" style="padding-bottom: 0; margin-bottom: 0">
 	<input type="hidden" :name="vName" :value="JSON.stringify(duration)"/>
 	<div class="ui field">
-		<input type="text" v-model="countString" maxlength="11" size="11"/>
+		<input type="text" v-model="countString" maxlength="11" size="10" :placeholder="placeholder" @keypress.enter.prevent="1"/>
 	</div>
 	<div class="ui field">
 		<select class="ui dropdown" v-model="duration.unit" @change="change">
@@ -50,4 +53,27 @@ Vue.component("time-duration-box", {
 		</select>
 	</div>
 </div>`
+})
+
+Vue.component("time-duration-text", {
+	props: ["v-value"],
+	methods: {
+		unitName: function (unit) {
+			switch (unit) {
+				case "ms":
+					return "毫秒"
+				case "second":
+					return "秒"
+				case "minute":
+					return "分钟"
+				case "hour":
+					return "小时"
+				case "day":
+					return "天"
+			}
+		}
+	},
+	template: `<span>
+	{{vValue.count}} {{unitName(vValue.unit)}}
+</span>`
 })

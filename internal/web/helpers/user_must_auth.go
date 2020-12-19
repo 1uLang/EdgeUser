@@ -108,7 +108,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 		{
 			"code": "dashboard",
 			"name": "概览",
-			"icon": "chart line area",
+			"icon": "dashboard",
 		},
 		{
 			"code": "servers",
@@ -127,11 +127,16 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"name": "刷新预热",
 			"icon": "eraser",
 		},
-		{
+		/**{
+			"code": "stat",
+			"name": "用量统计",
+			"icon": "chart line area",
+		},**/
+		/**{
 			"code": "waf",
 			"name": "WAF",
 			"icon": "shield alternate",
-		},
+		},**/
 		{
 			"code": "finance",
 			"name": "费用账单",

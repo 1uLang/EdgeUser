@@ -14,20 +14,20 @@ type HTTPCachePolicyDAO struct {
 }
 
 // 查找缓存策略配置
-func (this *HTTPCachePolicyDAO) FindEnabledCachePolicyConfig(ctx context.Context, cachePolicyId int64) (*serverconfigs.HTTPCachePolicy, error) {
+func (this *HTTPCachePolicyDAO) FindEnabledHTTPCachePolicyConfig(ctx context.Context, cachePolicyId int64) (*serverconfigs.HTTPCachePolicy, error) {
 	rpcClient, err := rpc.SharedRPC()
 	if err != nil {
 		return nil, err
 	}
-	resp, err := rpcClient.HTTPCachePolicyRPC().FindEnabledHTTPCachePolicyConfig(ctx, &pb.FindEnabledHTTPCachePolicyConfigRequest{CachePolicyId: cachePolicyId})
+	resp, err := rpcClient.HTTPCachePolicyRPC().FindEnabledHTTPCachePolicyConfig(ctx, &pb.FindEnabledHTTPCachePolicyConfigRequest{HttpCachePolicyId: cachePolicyId})
 	if err != nil {
 		return nil, err
 	}
-	if len(resp.CachePolicyJSON) == 0 {
+	if len(resp.HttpCachePolicyJSON) == 0 {
 		return nil, nil
 	}
 	config := &serverconfigs.HTTPCachePolicy{}
-	err = json.Unmarshal(resp.CachePolicyJSON, config)
+	err = json.Unmarshal(resp.HttpCachePolicyJSON, config)
 	if err != nil {
 		return nil, err
 	}

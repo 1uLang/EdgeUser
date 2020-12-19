@@ -1,4 +1,4 @@
-package servers
+package certs
 
 import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/helpers"
@@ -13,6 +13,9 @@ func init() {
 			Data("teaSubMenu", "certs").
 			Prefix("/servers/certs").
 			Get("", new(IndexAction)).
+			Post("/count", new(CountAction)).
+			Get("/selectPopup", new(SelectPopupAction)).
+			GetPost("/uploadPopup", new(UploadPopupAction)).
 
 			EndAll()
 	})
