@@ -2,7 +2,7 @@ package ui
 
 import (
 	"encoding/json"
-	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/settings/conds/condutils"
+	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/conds/condutils"
 	"github.com/iwind/TeaGo/Tea"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/files"

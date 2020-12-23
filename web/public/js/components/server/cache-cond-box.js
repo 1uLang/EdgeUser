@@ -107,7 +107,7 @@ Vue.component("cache-cond-box", {
 	</div>
 	
 	<!-- 添加扩展名 -->
-	<div v-if="addingExt">
+	<div v-show="addingExt">
 		<div class="ui fields inline">
 			<div class="ui field">
 				<input type="text" placeholder="扩展名，比如.png, .gif，英文逗号分割" style="width:20em" ref="extInput" @keyup.enter="confirmExt" @keypress.enter.prevent="1"/>
@@ -122,7 +122,7 @@ Vue.component("cache-cond-box", {
 	</div>
 	
 	<!-- 添加路径 -->
-	<div v-if="addingPath">
+	<div v-show="addingPath">
 		<div class="ui fields inline">
 			<div class="ui field">
 				<input type="text" placeholder="路径，以/开头" style="width:20em" ref="pathInput" @keyup.enter="confirmPath" @keypress.enter.prevent="1"/>

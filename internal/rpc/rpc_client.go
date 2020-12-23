@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"encoding/base64"
 	"errors"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/configs"
 	teaconst "github.com/TeaOSLab/EdgeUser/internal/const"
@@ -43,6 +44,9 @@ func NewRPCClient(apiConfig *configs.APIConfig) (*RPCClient, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// 设置DAO的RPC
+	dao.SetRPC(client)
 
 	return client, nil
 }

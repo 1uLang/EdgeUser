@@ -2,6 +2,7 @@ package index
 
 import (
 	"fmt"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/configloaders"
 	teaconst "github.com/TeaOSLab/EdgeUser/internal/const"
@@ -10,7 +11,6 @@ import (
 	"github.com/TeaOSLab/EdgeUser/internal/utils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/helpers"
-	"github.com/TeaOSLab/EdgeUser/internal/web/models"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/types"
 	stringutil "github.com/iwind/TeaGo/utils/string"
@@ -102,7 +102,7 @@ func (this *IndexAction) RunPost(params struct {
 	})
 
 	if err != nil {
-		err = models.SharedLogDAO.CreateUserLog(rpcClient.Context(0), oplogs.LevelError, this.Request.URL.Path, "登录时发生系统错误："+err.Error(), this.RequestRemoteIP())
+		err = dao.SharedLogDAO.CreateUserLog(rpcClient.Context(0), oplogs.LevelError, this.Request.URL.Path, "登录时发生系统错误："+err.Error(), this.RequestRemoteIP())
 		if err != nil {
 			utils.PrintError(err)
 		}
@@ -111,7 +111,7 @@ func (this *IndexAction) RunPost(params struct {
 	}
 
 	if !resp.IsOk {
-		err = models.SharedLogDAO.CreateUserLog(rpcClient.Context(0), oplogs.LevelWarn, this.Request.URL.Path, "登录失败，用户名："+params.Username, this.RequestRemoteIP())
+		err = dao.SharedLogDAO.CreateUserLog(rpcClient.Context(0), oplogs.LevelWarn, this.Request.URL.Path, "登录失败，用户名："+params.Username, this.RequestRemoteIP())
 		if err != nil {
 			utils.PrintError(err)
 		}
@@ -123,7 +123,7 @@ func (this *IndexAction) RunPost(params struct {
 	params.Auth.StoreUser(userId, params.Remember)
 
 	// 记录日志
-	err = models.SharedLogDAO.CreateUserLog(rpcClient.Context(userId), oplogs.LevelInfo, this.Request.URL.Path, "成功登录系统，用户名："+params.Username, this.RequestRemoteIP())
+	err = dao.SharedLogDAO.CreateUserLog(rpcClient.Context(userId), oplogs.LevelInfo, this.Request.URL.Path, "成功登录系统，用户名："+params.Username, this.RequestRemoteIP())
 	if err != nil {
 		utils.PrintError(err)
 	}

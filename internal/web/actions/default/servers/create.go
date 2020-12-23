@@ -339,7 +339,7 @@ func (this *CreateAction) RunPost(params struct {
 						Connector: "or",
 						Conds: []*shared.HTTPRequestCond{
 							{
-								IsRequest: false,
+								IsRequest: true,
 								Type:      condType,
 								Param:     param,
 								Operator:  operator,

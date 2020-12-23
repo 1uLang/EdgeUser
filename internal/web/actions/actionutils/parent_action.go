@@ -4,10 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeUser/internal/oplogs"
 	"github.com/TeaOSLab/EdgeUser/internal/rpc"
 	"github.com/TeaOSLab/EdgeUser/internal/utils"
-	"github.com/TeaOSLab/EdgeUser/internal/web/models"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/logs"
 	"net/http"
@@ -87,7 +87,7 @@ func (this *ParentAction) CreateLog(level string, description string, args ...in
 			}
 		}
 	}
-	err := models.SharedLogDAO.CreateUserLog(this.UserContext(), level, this.Request.URL.Path, desc, this.RequestRemoteIP())
+	err := dao.SharedLogDAO.CreateUserLog(this.UserContext(), level, this.Request.URL.Path, desc, this.RequestRemoteIP())
 	if err != nil {
 		utils.PrintError(err)
 	}

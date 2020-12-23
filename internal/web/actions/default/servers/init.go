@@ -14,9 +14,11 @@ func init() {
 			Get("", new(IndexAction)).
 			GetPost("/create", new(CreateAction)).
 			Get("/serverNamesPopup", new(ServerNamesPopupAction)).
+			GetPost("/addServerNamePopup", new(AddServerNamePopupAction)).
 			Post("/status", new(StatusAction)).
 			Post("/delete", new(DeleteAction)).
 			Post("/updateOn", new(UpdateOnAction)).
+			Get("/server", new(ServerAction)).
 			EndAll()
 	})
 }
