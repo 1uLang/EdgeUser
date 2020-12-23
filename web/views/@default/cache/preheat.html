@@ -1,0 +1,18 @@
+{$layout}
+{$template "menu"}
+
+<form class="ui form" method="post" data-tea-action="$" data-tea-success="success">
+    <csrf-token></csrf-token>
+    <table class="ui table selectable definition">
+        <tr>
+            <td class="title">
+                URL列表 *
+            </td>
+            <td>
+                <textarea rows="10" name="urlList"></textarea>
+                <p class="comment">每行一条。</p>
+            </td>
+        </tr>
+    </table>
+    <submit-btn>预热缓存</submit-btn>
+</form>

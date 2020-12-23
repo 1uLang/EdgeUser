@@ -55,6 +55,10 @@ func (this *RPCClient) SysSettingRPC() pb.SysSettingServiceClient {
 	return pb.NewSysSettingServiceClient(this.pickConn())
 }
 
+func (this *RPCClient) NodeRPC() pb.NodeServiceClient {
+	return pb.NewNodeServiceClient(this.pickConn())
+}
+
 func (this *RPCClient) NodeClusterRPC() pb.NodeClusterServiceClient {
 	return pb.NewNodeClusterServiceClient(this.pickConn())
 }
@@ -206,6 +210,10 @@ func (this *RPCClient) UserBillRPC() pb.UserBillServiceClient {
 
 func (this *RPCClient) UserNodeRPC() pb.UserNodeServiceClient {
 	return pb.NewUserNodeServiceClient(this.pickConn())
+}
+
+func (this *RPCClient) APINodeRPC() pb.APINodeServiceClient {
+	return pb.NewAPINodeServiceClient(this.pickConn())
 }
 
 // 构造用户上下文

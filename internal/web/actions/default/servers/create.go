@@ -397,7 +397,7 @@ func (this *CreateAction) RunPost(params struct {
 		UserId:           this.UserId(),
 		AdminId:          0,
 		Type:             serverconfigs.ServerTypeHTTPProxy,
-		Name:             "",
+		Name:             serverNames[0].Name,
 		Description:      "",
 		ServerNamesJON:   serverNamesJSON,
 		HttpJSON:         httpJSON,

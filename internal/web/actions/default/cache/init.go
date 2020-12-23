@@ -11,8 +11,8 @@ func init() {
 			Helper(helpers.NewUserMustAuth("")).
 			Data("teaMenu", "cache").
 			Prefix("/cache").
-			Get("", new(IndexAction)).
-
+			GetPost("", new(IndexAction)).
+			GetPost("/preheat", new(PreheatAction)).
 			EndAll()
 	})
 }

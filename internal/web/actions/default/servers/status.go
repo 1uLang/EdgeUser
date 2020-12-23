@@ -2,8 +2,10 @@ package servers
 
 import (
 	"encoding/json"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
+	"github.com/TeaOSLab/EdgeUser/internal/utils"
 	"github.com/TeaOSLab/EdgeUser/internal/utils/numberutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/maps"
@@ -26,14 +28,23 @@ func (this *StatusAction) RunPost(params struct {
 		this.Success()
 	}
 
+	// 读取全局配置
+	globalConfig, err := dao.SharedSysSettingDAO.ReadGlobalConfig(this.UserContext())
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	auditingPrompt := ""
+	if globalConfig != nil {
+		auditingPrompt = globalConfig.HTTPAll.DomainAuditingPrompt
+	}
+
 	wg := sync.WaitGroup{}
 	wg.Add(len(params.ServerIds))
 
-	// 是否需要审核
-	// TODO
-
 	for _, serverId := range params.ServerIds {
 		go func(serverId int64) {
+			defer utils.Recover()
 			defer wg.Done()
 
 			m := maps.Map{
@@ -99,7 +110,11 @@ func (this *StatusAction) RunPost(params struct {
 			if serverNamesResp.IsAuditing {
 				m["type"] = "auditing"
 				m["message"] = "审核中"
-				m["todo"] = "域名正在审核中，请耐心等待"
+				if len(auditingPrompt) > 0 {
+					m["todo"] = auditingPrompt
+				} else {
+					m["todo"] = "域名正在审核中，请耐心等待"
+				}
 				return
 			}
 			if serverNamesResp.AuditingResult != nil && !serverNamesResp.AuditingResult.IsOk {

@@ -1,1 +1,28 @@
 {$layout}
+{$template "menu"}
+
+<form class="ui form" method="post" data-tea-action="$" data-tea-success="success">
+    <csrf-token></csrf-token>
+    <table class="ui table selectable definition">
+        <tr>
+            <td class="title">刷新类型 *</td>
+            <td>
+                <select class="ui dropdown auto-width" name="type" v-model="type">
+                    <option value="file">URL</option>
+                    <option value="dir">目录</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span v-if="type == 'file'">URL列表 *</span>
+                <span v-if="type == 'dir'">目录列表 *</span>
+            </td>
+            <td>
+                <textarea rows="10" name="urlList"></textarea>
+                <p class="comment">每行一条。</p>
+            </td>
+        </tr>
+    </table>
+    <submit-btn>刷新缓存</submit-btn>
+</form>

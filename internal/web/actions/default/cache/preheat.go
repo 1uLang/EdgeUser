@@ -12,31 +12,24 @@ import (
 	"strings"
 )
 
-type IndexAction struct {
+type PreheatAction struct {
 	actionutils.ParentAction
 }
 
-func (this *IndexAction) Init() {
-	this.Nav("", "", "purge")
+func (this *PreheatAction) Init() {
+	this.Nav("", "", "preheat")
 }
 
-func (this *IndexAction) RunGet(params struct{}) {
+func (this *PreheatAction) RunGet(params struct{}) {
 	this.Show()
 }
 
-func (this *IndexAction) RunPost(params struct {
-	Type    string
+func (this *PreheatAction) RunPost(params struct {
 	UrlList string
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
 }) {
-	switch params.Type {
-	case "file", "dir":
-	default:
-		this.Fail("请选择正确的刷新类型")
-	}
-
 	// 查找当前用户的所有域名
 	serverNamesResp, err := this.RPC().ServerRPC().FindAllEnabledServerNamesWithUserId(this.UserContext(), &pb.FindAllEnabledServerNamesWithUserIdRequest{UserId: this.UserId()})
 	if err != nil {
@@ -64,19 +57,11 @@ func (this *IndexAction) RunPost(params struct {
 			this.Fail("'" + key + "'中域名'" + u.Host + "'没有绑定")
 		}
 
-		if params.Type == "dir" && !strings.HasSuffix(key, "/") {
-			key += "/"
-		}
-
 		keys = append(keys, key)
 	}
 
 	if len(keys) == 0 {
-		if params.Type == "file" {
-			this.Fail("请输入要刷新的URL列表")
-		} else if params.Type == "dir" {
-			this.Fail("请输入要刷新的目录列表")
-		}
+		this.Fail("请输入要刷新的URL列表")
 	}
 
 	// 当前用户所在集群
@@ -113,12 +98,11 @@ func (this *IndexAction) RunPost(params struct {
 	}
 
 	// 发送命令
-	msg := &messageconfigs.PurgeCacheMessage{
+	msg := &messageconfigs.PreheatCacheMessage{
 		CachePolicyJSON: cachePolicyResp.HttpCachePolicyJSON,
 		Keys:            keys,
-		Type:            params.Type,
 	}
-	results, err := nodeutils.SendMessageToCluster(this.UserContext(), clusterId, messageconfigs.MessageCodePurgeCache, msg, 10)
+	results, err := nodeutils.SendMessageToCluster(this.UserContext(), clusterId, messageconfigs.MessageCodePreheatCache, msg, 10)
 	if err != nil {
 		this.ErrorPage(err)
 		return
