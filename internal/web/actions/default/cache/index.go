@@ -31,6 +31,8 @@ func (this *IndexAction) RunPost(params struct {
 	Must *actions.Must
 	CSRF *actionutils.CSRF
 }) {
+	defer this.CreateLogInfo("批量刷新缓存")
+
 	switch params.Type {
 	case "file", "dir":
 	default:

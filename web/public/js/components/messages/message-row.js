@@ -61,6 +61,16 @@ Vue.component("message-row", {
 			<div v-if="message.type == 'SSLCertACMETaskFailed'" style="margin-top: 0.8em">
 				<a href="" @click.prevent="viewCert(params.certId)">查看证书</a> &nbsp;|&nbsp; <a :href="'/servers/certs/acme'" v-if="params != null && params.acmeTaskId > 0">查看任务&raquo;</a>
 			</div>
+			
+			<!-- 服务审核通过 -->
+			<div v-if="message.type == 'ServerNamesAuditingSuccess'">
+				<a :href="'/servers/server?serverId=' + params.serverId">去查看&raquo;</a>
+			</div>
+			
+			<!-- 服务审核失败 -->
+			<div v-if="message.type == 'ServerNamesAuditingFailed'">
+				<a :href="'/servers/server?serverId=' + params.serverId">去查看&raquo;</a>
+			</div>
 		</td>
 	</tr>
 </table>
