@@ -142,6 +142,11 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"name": "费用账单",
 			"icon": "yen sign",
 		},
+		{
+			"code": "acl",
+			"name": "访问控制",
+			"icon": "address book",
+		},
 		/**{
 			"code": "tickets",
 			"name": "工单",

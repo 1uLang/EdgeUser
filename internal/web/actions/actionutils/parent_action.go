@@ -9,6 +9,7 @@ import (
 	"github.com/TeaOSLab/EdgeUser/internal/rpc"
 	"github.com/TeaOSLab/EdgeUser/internal/utils"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/logs"
 	"net/http"
 	"strconv"
@@ -125,4 +126,24 @@ func (this *ParentAction) UserContext() context.Context {
 		this.rpcClient = rpcClient
 	}
 	return this.rpcClient.Context(this.UserId())
+}
+
+// 校验Feature
+func (this *ParentAction) ValidateFeature(feature string) bool {
+	features := this.Context.Get("features")
+	if features == nil {
+		this.WriteString("Error: unsupported feature")
+		return false
+	}
+	_, ok := features.([]string)
+	if !ok {
+		this.WriteString("Error: unsupported feature")
+		return false
+	}
+
+	if !lists.ContainsString(features.([]string), feature) {
+		this.WriteString("Error: unsupported feature")
+		return false
+	}
+	return true
 }

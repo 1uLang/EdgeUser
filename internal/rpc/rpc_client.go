@@ -216,6 +216,10 @@ func (this *RPCClient) APINodeRPC() pb.APINodeServiceClient {
 	return pb.NewAPINodeServiceClient(this.pickConn())
 }
 
+func (this *RPCClient) UserAccessKeyRPC() pb.UserAccessKeyServiceClient {
+	return pb.NewUserAccessKeyServiceClient(this.pickConn())
+}
+
 // 构造用户上下文
 func (this *RPCClient) Context(userId int64) context.Context {
 	ctx := context.Background()
