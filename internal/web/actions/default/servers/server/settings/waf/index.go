@@ -20,9 +20,7 @@ func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
 	// 校验权限
-	if !this.ValidateFeature("server.waf") {
-		return
-	}
+	this.Data["featureIsOn"] = this.ValidateFeature("server.waf")
 
 	webConfig, err := webutils.FindWebConfigWithServerId(this.Parent(), params.ServerId)
 	if err != nil {

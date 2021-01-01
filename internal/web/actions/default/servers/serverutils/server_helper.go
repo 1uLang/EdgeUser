@@ -8,7 +8,6 @@ import (
 	"github.com/TeaOSLab/EdgeUser/internal/rpc"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
-	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/logs"
 	"github.com/iwind/TeaGo/maps"
 	"github.com/iwind/TeaGo/types"
@@ -70,18 +69,6 @@ func (this *ServerHelper) createLeftMenu(action *actions.ActionObject) {
 		return
 	}
 
-	// 用户功能
-	userFeatureResp, err := rpcClient.UserRPC().FindUserFeatures(ctx, &pb.FindUserFeaturesRequest{UserId: userId})
-	if err != nil {
-		logs.Error(err)
-		return
-	}
-	userFeatureCodes := []string{}
-	for _, feature := range userFeatureResp.Features {
-		userFeatureCodes = append(userFeatureCodes, feature.Code)
-	}
-	action.Context.Set("features", userFeatureCodes)
-
 	// 服务管理
 	serverConfig := &serverconfigs.ServerConfig{}
 	err = json.Unmarshal(server.Config, serverConfig)
@@ -111,7 +98,7 @@ func (this *ServerHelper) createLeftMenu(action *actions.ActionObject) {
 	case "stat":
 		action.Data["leftMenuItems"] = this.createStatMenu(types.String(secondMenuItem), serverIdString, serverConfig)
 	case "setting":
-		action.Data["leftMenuItems"] = this.createSettingsMenu(types.String(secondMenuItem), serverIdString, serverConfig, userFeatureCodes)
+		action.Data["leftMenuItems"] = this.createSettingsMenu(types.String(secondMenuItem), serverIdString, serverConfig)
 	case "delete":
 		action.Data["leftMenuItems"] = this.createDeleteMenu(types.String(secondMenuItem), serverIdString, serverConfig)
 	}
@@ -161,7 +148,7 @@ func (this *ServerHelper) createStatMenu(secondMenuItem string, serverIdString s
 }
 
 // 设置菜单
-func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdString string, serverConfig *serverconfigs.ServerConfig, features []string) (items []maps.Map) {
+func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdString string, serverConfig *serverconfigs.ServerConfig) (items []maps.Map) {
 	menuItems := []maps.Map{
 		/**{
 			"name":     "基本信息",
@@ -227,14 +214,12 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 			"isActive": secondMenuItem == "rewrite",
 			"isOn":     serverConfig.Web != nil && len(serverConfig.Web.RewriteRefs) > 0,
 		})**/
-		if lists.ContainsString(features, "server.waf") {
-			menuItems = append(menuItems, maps.Map{
-				"name":     "WAF",
-				"url":      "/servers/server/settings/waf?serverId=" + serverIdString,
-				"isActive": secondMenuItem == "waf",
-				"isOn":     serverConfig.Web != nil && serverConfig.Web.FirewallRef != nil && serverConfig.Web.FirewallRef.IsOn,
-			})
-		}
+		menuItems = append(menuItems, maps.Map{
+			"name":     "WAF",
+			"url":      "/servers/server/settings/waf?serverId=" + serverIdString,
+			"isActive": secondMenuItem == "waf",
+			"isOn":     serverConfig.Web != nil && serverConfig.Web.FirewallRef != nil && serverConfig.Web.FirewallRef.IsOn,
+		})
 		menuItems = append(menuItems, maps.Map{
 			"name":     "缓存",
 			"url":      "/servers/server/settings/cache?serverId=" + serverIdString,
@@ -252,14 +237,12 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 			"isActive": secondMenuItem == "charset",
 			"isOn":     serverConfig.Web != nil && serverConfig.Web.Charset != nil && serverConfig.Web.Charset.IsOn,
 		})
-		if lists.ContainsString(features, "server.accessLog") {
-			menuItems = append(menuItems, maps.Map{
-				"name":     "访问日志",
-				"url":      "/servers/server/settings/accessLog?serverId=" + serverIdString,
-				"isActive": secondMenuItem == "accessLog",
-				"isOn":     serverConfig.Web != nil && serverConfig.Web.AccessLogRef != nil && serverConfig.Web.AccessLogRef.IsOn,
-			})
-		}
+		menuItems = append(menuItems, maps.Map{
+			"name":     "访问日志",
+			"url":      "/servers/server/settings/accessLog?serverId=" + serverIdString,
+			"isActive": secondMenuItem == "accessLog",
+			"isOn":     serverConfig.Web != nil && serverConfig.Web.AccessLogRef != nil && serverConfig.Web.AccessLogRef.IsOn,
+		})
 		/**menuItems = append(menuItems, maps.Map{
 			"name":     "统计",
 			"url":      "/servers/server/settings/stat?serverId=" + serverIdString,

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/oplogs"
 	"github.com/TeaOSLab/EdgeUser/internal/rpc"
 	"github.com/TeaOSLab/EdgeUser/internal/utils"
@@ -130,20 +131,16 @@ func (this *ParentAction) UserContext() context.Context {
 
 // 校验Feature
 func (this *ParentAction) ValidateFeature(feature string) bool {
-	features := this.Context.Get("features")
-	if features == nil {
-		this.WriteString("Error: unsupported feature")
+	// 用户功能
+	userFeatureResp, err := this.RPC().UserRPC().FindUserFeatures(this.UserContext(), &pb.FindUserFeaturesRequest{UserId: this.UserId()})
+	if err != nil {
+		logs.Error(err)
 		return false
 	}
-	_, ok := features.([]string)
-	if !ok {
-		this.WriteString("Error: unsupported feature")
-		return false
+	userFeatureCodes := []string{}
+	for _, feature := range userFeatureResp.Features {
+		userFeatureCodes = append(userFeatureCodes, feature.Code)
 	}
 
-	if !lists.ContainsString(features.([]string), feature) {
-		this.WriteString("Error: unsupported feature")
-		return false
-	}
-	return true
+	return lists.ContainsString(userFeatureCodes, feature)
 }
