@@ -1,9 +1,9 @@
 package waf
 
 import (
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/websocket/webutils"
 	"github.com/iwind/TeaGo/actions"
 )
 
@@ -22,7 +22,7 @@ func (this *IndexAction) RunGet(params struct {
 	// 校验权限
 	this.Data["featureIsOn"] = this.ValidateFeature("server.waf")
 
-	webConfig, err := webutils.FindWebConfigWithServerId(this.Parent(), params.ServerId)
+	webConfig, err := dao.SharedHTTPWebDAO.FindWebConfigWithServerId(this.UserContext(), params.ServerId)
 	if err != nil {
 		this.ErrorPage(err)
 		return

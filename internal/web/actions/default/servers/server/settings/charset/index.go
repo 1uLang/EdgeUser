@@ -2,10 +2,10 @@ package charset
 
 import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/configutils"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/oplogs"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/websocket/webutils"
 	"github.com/iwind/TeaGo/actions"
 )
 
@@ -21,7 +21,7 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
-	webConfig, err := webutils.FindWebConfigWithServerId(this.Parent(), params.ServerId)
+	webConfig, err := dao.SharedHTTPWebDAO.FindWebConfigWithServerId(this.UserContext(), params.ServerId)
 	if err != nil {
 		this.ErrorPage(err)
 		return

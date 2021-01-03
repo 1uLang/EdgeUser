@@ -7,7 +7,6 @@ import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 	"github.com/TeaOSLab/EdgeUser/internal/oplogs"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/websocket/webutils"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 )
@@ -47,7 +46,7 @@ func (this *IndexAction) RunGet(params struct {
 	}
 
 	// 跳转相关设置
-	webConfig, err := webutils.FindWebConfigWithServerId(this.Parent(), params.ServerId)
+	webConfig, err := dao.SharedHTTPWebDAO.FindWebConfigWithServerId(this.UserContext(), params.ServerId)
 	if err != nil {
 		this.ErrorPage(err)
 		return

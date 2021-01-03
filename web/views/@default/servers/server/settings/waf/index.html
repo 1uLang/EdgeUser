@@ -2,6 +2,8 @@
 {$template "/left_menu"}
 
 <div class="right-box">
+    {$template "menu"}
+
     <form method="post" class="ui form" data-tea-action="$"  data-tea-success="success" v-show="featureIsOn">
         <input type="hidden" name="webId" :value="webId"/>
         <http-firewall-config-box :v-firewall-config="firewallConfig"></http-firewall-config-box>

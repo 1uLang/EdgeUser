@@ -2,10 +2,10 @@ package headers
 
 import (
 	"encoding/json"
+	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/shared"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/websocket/webutils"
 )
 
 type IndexAction struct {
@@ -20,7 +20,7 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
-	webConfig, err := webutils.FindWebConfigWithServerId(this.Parent(), params.ServerId)
+	webConfig, err := dao.SharedHTTPWebDAO.FindWebConfigWithServerId(this.UserContext(), params.ServerId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -85,7 +85,7 @@ func (this *IndexAction) RunGet(params struct {
 
 	// 重新获取配置
 	if isChanged {
-		webConfig, err = webutils.FindWebConfigWithServerId(this.Parent(), params.ServerId)
+		webConfig, err = dao.SharedHTTPWebDAO.FindWebConfigWithServerId(this.UserContext(), params.ServerId)
 		if err != nil {
 			this.ErrorPage(err)
 			return
