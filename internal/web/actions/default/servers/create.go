@@ -12,6 +12,7 @@ import (
 	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/maps"
 	"net"
+	"strings"
 )
 
 type CreateAction struct {
@@ -175,7 +176,12 @@ func (this *CreateAction) RunPost(params struct {
 		if len(host) == 0 {
 			this.Fail("源站地址不能为空")
 		}
-		if !domainutils.ValidateDomainFormat(host) {
+		if strings.Index(host, ":") > 0 {
+			_, _, err := net.SplitHostPort(host)
+			if err != nil {
+				this.Fail("源站地址'" + host + "'格式错误")
+			}
+		} else if !domainutils.ValidateDomainFormat(host) {
 			this.Fail("源站地址'" + host + "'格式错误")
 		}
 
