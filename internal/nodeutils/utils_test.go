@@ -1,7 +1,7 @@
 package nodeutils
 
 import (
-	"github.com/TeaOSLab/EdgeAdmin/internal/rpc"
+	"github.com/TeaOSLab/EdgeUser/internal/rpc"
 	_ "github.com/iwind/TeaGo/bootstrap"
 	"github.com/iwind/TeaGo/logs"
 	"testing"

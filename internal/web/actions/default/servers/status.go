@@ -9,7 +9,6 @@ import (
 	"github.com/TeaOSLab/EdgeUser/internal/utils/numberutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/maps"
-	"net"
 	"sync"
 )
 
@@ -140,11 +139,17 @@ func (this *StatusAction) RunPost(params struct {
 				for _, serverName := range serverNames {
 					if len(serverName.SubNames) == 0 {
 						// TODO 可以指定查找解析记录的DNSResolver
-						result, err := net.LookupCNAME(serverName.Name)
+						result, err := utils.LookupCNAME(serverName.Name)
 						if err != nil {
 							m["type"] = "dnsResolveErr"
 							m["message"] = "域名解析错误"
 							m["todo"] = "错误信息：解析域名'" + serverName.Name + "' CNAME记录时出错：" + err.Error() + "，请修复此问题。如果已经修改，请等待一个小时后再试。"
+							return
+						}
+						if len(result) == 0 {
+							m["type"] = "dnsResolveErr"
+							m["message"] = "域名解析错误"
+							m["todo"] = "错误信息：找不到域名'" + serverName.Name + "'的CNAME记录，请修复此问题。如果已经修改，请等待一个小时后再试。"
 							return
 						}
 						if result == serverName.Name+"." {
@@ -162,11 +167,17 @@ func (this *StatusAction) RunPost(params struct {
 					} else {
 						for _, subName := range serverName.SubNames {
 							// TODO 可以指定查找解析记录的DNSResolver
-							result, err := net.LookupCNAME(subName)
+							result, err := utils.LookupCNAME(subName)
 							if err != nil {
 								m["type"] = "dnsResolveErr"
 								m["message"] = "域名解析错误"
 								m["todo"] = "错误信息：解析域名'" + subName + "' CNAME记录时出错：" + err.Error() + "，请修复此问题。如果已经修改，请等待一个小时后再试。"
+								return
+							}
+							if len(result) == 0 {
+								m["type"] = "dnsResolveErr"
+								m["message"] = "域名解析错误"
+								m["todo"] = "错误信息：找不到域名'" + subName + "'的CNAME记录，请修复此问题。如果已经修改，请等待一个小时后再试。"
 								return
 							}
 							if result == cname+"." {
