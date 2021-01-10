@@ -202,6 +202,12 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 			"url":      "",
 			"isActive": false,
 		})
+		menuItems = append(menuItems, maps.Map{
+			"name":     "URL跳转",
+			"url":      "/servers/server/settings/redirects?serverId=" + serverIdString,
+			"isActive": secondMenuItem == "redirects",
+			"isOn":     serverConfig.Web != nil && len(serverConfig.Web.HostRedirects) > 0,
+		})
 		/**menuItems = append(menuItems, maps.Map{
 			"name":     "路径规则",
 			"url":      "/servers/server/settings/locations?serverId=" + serverIdString,

@@ -22,6 +22,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/http"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/https"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/origins"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/redirects"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/reverseProxy"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/serverNames"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/waf"
