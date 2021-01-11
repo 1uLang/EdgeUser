@@ -104,7 +104,7 @@ func (this *PreheatAction) RunPost(params struct {
 		CachePolicyJSON: cachePolicyResp.HttpCachePolicyJSON,
 		Keys:            keys,
 	}
-	results, err := nodeutils.SendMessageToCluster(this.UserContext(), clusterId, messageconfigs.MessageCodePreheatCache, msg, 10)
+	results, err := nodeutils.SendMessageToCluster(this.UserContext(), clusterId, messageconfigs.MessageCodePreheatCache, msg, 60)
 	if err != nil {
 		this.ErrorPage(err)
 		return

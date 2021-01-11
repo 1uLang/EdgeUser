@@ -120,7 +120,7 @@ func (this *IndexAction) RunPost(params struct {
 		Keys:            keys,
 		Type:            params.Type,
 	}
-	results, err := nodeutils.SendMessageToCluster(this.UserContext(), clusterId, messageconfigs.MessageCodePurgeCache, msg, 10)
+	results, err := nodeutils.SendMessageToCluster(this.UserContext(), clusterId, messageconfigs.MessageCodePurgeCache, msg, 60)
 	if err != nil {
 		this.ErrorPage(err)
 		return

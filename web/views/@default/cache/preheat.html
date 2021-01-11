@@ -1,7 +1,7 @@
 {$layout}
 {$template "menu"}
 
-<form class="ui form" method="post" data-tea-action="$" data-tea-success="success">
+<form class="ui form" method="post" data-tea-action="$" data-tea-success="success" data-tea-done="done" data-tea-timeout="600" data-tea-before="before">
     <csrf-token></csrf-token>
     <table class="ui table selectable definition">
         <tr>
@@ -14,5 +14,6 @@
             </td>
         </tr>
     </table>
-    <submit-btn>预热缓存</submit-btn>
+    <submit-btn v-if="!isRequesting">预热缓存</submit-btn>
+    <button class="ui button disabled" type="button" v-if="isRequesting">处理中...</button>
 </form>
