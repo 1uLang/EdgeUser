@@ -10,15 +10,20 @@ import (
 	teaconst "github.com/TeaOSLab/EdgeUser/internal/const"
 	"github.com/TeaOSLab/EdgeUser/internal/events"
 	"github.com/TeaOSLab/EdgeUser/internal/rpc"
+	"github.com/TeaOSLab/EdgeUser/internal/utils"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web"
 	"github.com/go-yaml/yaml"
 	"github.com/iwind/TeaGo"
 	"github.com/iwind/TeaGo/Tea"
+	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/logs"
 	"github.com/iwind/TeaGo/rands"
 	"github.com/iwind/TeaGo/sessions"
 	"io/ioutil"
+	"log"
+	"net"
 	"os"
+	"os/exec"
 	"time"
 )
 
@@ -34,8 +39,15 @@ func (this *UserNode) Run() {
 	secret := this.genSecret()
 	configs.Secret = secret
 
+	// 本地Sock
+	err := this.listenSock()
+	if err != nil {
+		logs.Println("[USER_NODE]" + err.Error())
+		return
+	}
+
 	// 检查server配置
-	err := this.checkServer()
+	err = this.checkServer()
 	if err != nil {
 		logs.Println("[USER_NODE]" + err.Error())
 		return
@@ -59,6 +71,68 @@ func (this *UserNode) Run() {
 		ReadHeaderTimeout(3 * time.Second).
 		ReadTimeout(600 * time.Second).
 		Start()
+}
+
+// 实现守护进程
+func (this *UserNode) Daemon() {
+	path := os.TempDir() + "/edge-user.sock"
+	isDebug := lists.ContainsString(os.Args, "debug")
+	isDebug = true
+	for {
+		conn, err := net.DialTimeout("unix", path, 1*time.Second)
+		if err != nil {
+			if isDebug {
+				log.Println("[DAEMON]starting ...")
+			}
+
+			// 尝试启动
+			err = func() error {
+				exe, err := os.Executable()
+				if err != nil {
+					return err
+				}
+				cmd := exec.Command(exe)
+				err = cmd.Start()
+				if err != nil {
+					return err
+				}
+				err = cmd.Wait()
+				if err != nil {
+					return err
+				}
+				return nil
+			}()
+
+			if err != nil {
+				if isDebug {
+					log.Println("[DAEMON]", err)
+				}
+				time.Sleep(1 * time.Second)
+			} else {
+				time.Sleep(5 * time.Second)
+			}
+		} else {
+			_ = conn.Close()
+			time.Sleep(5 * time.Second)
+		}
+	}
+}
+
+// 安装系统服务
+func (this *UserNode) InstallSystemService() error {
+	shortName := teaconst.SystemdServiceName
+
+	exe, err := os.Executable()
+	if err != nil {
+		return err
+	}
+
+	manager := utils.NewServiceManager(shortName, teaconst.ProductName)
+	err = manager.Install(exe, []string{})
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // 检查Server配置
@@ -259,4 +333,41 @@ func (this *UserNode) DecodeHTTPS(node *pb.UserNode) (*serverconfigs.HTTPSProtoc
 	}
 
 	return config, nil
+}
+
+// 监听本地sock
+func (this *UserNode) listenSock() error {
+	path := os.TempDir() + "/edge-user.sock"
+
+	// 检查是否已经存在
+	_, err := os.Stat(path)
+	if err == nil {
+		conn, err := net.Dial("unix", path)
+		if err != nil {
+			_ = os.Remove(path)
+		} else {
+			_ = conn.Close()
+		}
+	}
+
+	// 新的监听任务
+	listener, err := net.Listen("unix", path)
+	if err != nil {
+		return err
+	}
+	events.On(events.EventQuit, func() {
+		logs.Println("USER_NODE", "quit unix sock")
+		_ = listener.Close()
+	})
+
+	go func() {
+		for {
+			_, err := listener.Accept()
+			if err != nil {
+				return
+			}
+		}
+	}()
+
+	return nil
 }
