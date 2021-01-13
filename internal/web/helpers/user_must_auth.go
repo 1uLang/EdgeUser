@@ -154,7 +154,16 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 		},**/
 	}
 
-	return allMaps
+	result := []maps.Map{}
+	config, _ := configloaders.LoadUIConfig()
+	for _, m := range allMaps {
+		if m.GetString("code") == "finance" && config != nil && !config.ShowFinance {
+			continue
+		}
+		result = append(result, m)
+	}
+
+	return result
 }
 
 // 跳转到登录页
