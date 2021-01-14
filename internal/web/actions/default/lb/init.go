@@ -1,4 +1,4 @@
-package cache
+package lb
 
 import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/helpers"
@@ -9,11 +9,13 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth("")).
-			Data("teaMenu", "servers").
-			Data("teaSubMenu", "cache").
-			Prefix("/cache").
+			Data("teaMenu", "lb").
+			Prefix("/lb").
 			GetPost("", new(IndexAction)).
-			GetPost("/preheat", new(PreheatAction)).
+			GetPost("/create", new(CreateAction)).
+			Post("/updateOn", new(UpdateOnAction)).
+			Post("/delete", new(DeleteAction)).
+			Get("/server", new(ServerAction)).
 			EndAll()
 	})
 }

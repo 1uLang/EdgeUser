@@ -11,5 +11,9 @@ func (this *IndexAction) Init() {
 }
 
 func (this *IndexAction) RunGet(params struct{}) {
+	if !this.ValidateFeature("server.waf") {
+		return
+	}
+
 	this.Show()
 }

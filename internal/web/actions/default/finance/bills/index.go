@@ -19,6 +19,10 @@ func (this *IndexAction) RunGet(params struct {
 	PaidFlag int32 `default:"-1"`
 	Month    string
 }) {
+	if !this.ValidateFeature("finance") {
+		return
+	}
+
 	countResp, err := this.RPC().UserBillRPC().CountAllUserBills(this.UserContext(), &pb.CountAllUserBillsRequest{})
 	if err != nil {
 		this.ErrorPage(err)

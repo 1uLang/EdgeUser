@@ -1,7 +1,6 @@
-package servers
+package lb
 
 import (
-	"encoding/json"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
@@ -17,11 +16,15 @@ func (this *IndexAction) Init() {
 }
 
 func (this *IndexAction) RunGet(params struct{}) {
+	if !this.ValidateFeature("server.tcp") {
+		return
+	}
+
 	countResp, err := this.RPC().ServerRPC().CountAllEnabledServersMatch(this.UserContext(), &pb.CountAllEnabledServersMatchRequest{
 		GroupId:        0,
 		Keyword:        "",
 		UserId:         this.UserId(),
-		ProtocolFamily: "http",
+		ProtocolFamily: "tcp",
 	})
 	if err != nil {
 		this.ErrorPage(err)
@@ -36,7 +39,7 @@ func (this *IndexAction) RunGet(params struct{}) {
 		Size:           page.Size,
 		GroupId:        0,
 		Keyword:        "",
-		ProtocolFamily: "http",
+		ProtocolFamily: "tcp",
 		UserId:         this.UserId(),
 	})
 	if err != nil {
@@ -45,27 +48,6 @@ func (this *IndexAction) RunGet(params struct{}) {
 	}
 	serverMaps := []maps.Map{}
 	for _, server := range serversResp.Servers {
-		// 域名列表
-		serverNames := []*serverconfigs.ServerNameConfig{}
-		if server.IsAuditing || (server.AuditingResult != nil && !server.AuditingResult.IsOk) {
-			server.ServerNamesJSON = server.AuditingServerNamesJSON
-		}
-		if len(server.ServerNamesJSON) > 0 {
-			err = json.Unmarshal(server.ServerNamesJSON, &serverNames)
-			if err != nil {
-				this.ErrorPage(err)
-				return
-			}
-		}
-		countServerNames := 0
-		for _, serverName := range serverNames {
-			if len(serverName.SubNames) == 0 {
-				countServerNames++
-			} else {
-				countServerNames += len(serverName.SubNames)
-			}
-		}
-
 		// CNAME
 		cname := ""
 		if server.NodeCluster != nil {
@@ -82,42 +64,43 @@ func (this *IndexAction) RunGet(params struct{}) {
 			}
 		}
 
-		// HTTP
-		httpIsOn := false
-		if len(server.HttpJSON) > 0 {
-			httpConfig, err := serverconfigs.NewHTTPProtocolConfigFromJSON(server.HttpJSON)
+		// TCP
+		tcpPorts := []string{}
+		if len(server.TcpJSON) > 0 {
+			config, err := serverconfigs.NewTCPProtocolConfigFromJSON(server.TcpJSON)
 			if err != nil {
 				this.ErrorPage(err)
 				return
 			}
-			httpIsOn = httpConfig.IsOn && len(httpConfig.Listen) > 0
+			if config.IsOn {
+				for _, listen := range config.Listen {
+					tcpPorts = append(tcpPorts, listen.PortRange)
+				}
+			}
 		}
 
-		// HTTPS
-		httpsIsOn := false
-		if len(server.HttpsJSON) > 0 {
-			httpsConfig, err := serverconfigs.NewHTTPSProtocolConfigFromJSON(server.HttpsJSON)
+		// TLS
+		tlsPorts := []string{}
+		if len(server.TlsJSON) > 0 {
+			config, err := serverconfigs.NewTLSProtocolConfigFromJSON(server.TlsJSON)
 			if err != nil {
 				this.ErrorPage(err)
 				return
 			}
-			httpsIsOn = httpsConfig.IsOn && len(httpsConfig.Listen) > 0
+			if config.IsOn {
+				for _, listen := range config.Listen {
+					tlsPorts = append(tlsPorts, listen.PortRange)
+				}
+			}
 		}
 
 		serverMaps = append(serverMaps, maps.Map{
-			"id":               server.Id,
-			"serverNames":      serverNames,
-			"countServerNames": countServerNames,
-			"isAuditing":       false,
-			"cname":            cname,
-			"httpIsOn":         httpIsOn,
-			"httpsIsOn":        httpsIsOn,
-			"status": maps.Map{
-				"isOk":    false,
-				"message": "",
-				"type":    "",
-			},
-			"isOn": server.IsOn,
+			"id":       server.Id,
+			"name":     server.Name,
+			"cname":    cname,
+			"tcpPorts": tcpPorts,
+			"tlsPorts": tlsPorts,
+			"isOn":     server.IsOn,
 		})
 	}
 	this.Data["servers"] = serverMaps

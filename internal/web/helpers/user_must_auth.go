@@ -7,6 +7,7 @@ import (
 	teaconst "github.com/TeaOSLab/EdgeUser/internal/const"
 	"github.com/TeaOSLab/EdgeUser/internal/rpc"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/logs"
 	"github.com/iwind/TeaGo/maps"
 	"net/http"
@@ -104,6 +105,18 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 
 // 菜单配置
 func (this *userMustAuth) modules(userId int64) []maps.Map {
+	// 开通的功能
+	featureCodes := []string{}
+	rpcClient, err := rpc.SharedRPC()
+	if err == nil {
+		userFeatureResp, err := rpcClient.UserRPC().FindUserFeatures(rpcClient.Context(userId), &pb.FindUserFeaturesRequest{UserId: userId})
+		if err == nil {
+			for _, feature := range userFeatureResp.Features {
+				featureCodes = append(featureCodes, feature.Code)
+			}
+		}
+	}
+
 	allMaps := []maps.Map{
 		{
 			"code": "dashboard",
@@ -112,20 +125,30 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 		},
 		{
 			"code": "servers",
-			"name": "域名管理",
-			"icon": "clone outsize",
+			"name": "CDN加速",
+			"icon": "clone outline",
 			"subItems": []maps.Map{
 				{
 					"name": "证书管理",
 					"code": "certs",
 					"url":  "/servers/certs",
 				},
+				{
+					"name": "刷新预热",
+					"code": "cache",
+					"url":  "/cache",
+				},
 			},
 		},
 		{
-			"code": "cache",
-			"name": "刷新预热",
-			"icon": "eraser",
+			"code": "lb",
+			"name": "负载均衡",
+			"icon": "clone outline",
+		},
+		{
+			"code": "waf",
+			"name": "WAF安全",
+			"icon": "clone outline",
 		},
 		/**{
 			"code": "stat",
@@ -157,7 +180,18 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 	result := []maps.Map{}
 	config, _ := configloaders.LoadUIConfig()
 	for _, m := range allMaps {
-		if m.GetString("code") == "finance" && config != nil && !config.ShowFinance {
+		if m.GetString("code") == "finance" {
+			if config != nil && !config.ShowFinance {
+				continue
+			}
+			if !lists.ContainsString(featureCodes, "finance") {
+				continue
+			}
+		}
+		if m.GetString("code") == "lb" && !lists.ContainsString(featureCodes, "server.tcp") {
+			continue
+		}
+		if m.GetString("code") == "waf" && !lists.ContainsString(featureCodes, "server.waf") {
 			continue
 		}
 		result = append(result, m)

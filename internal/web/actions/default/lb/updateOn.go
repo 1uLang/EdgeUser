@@ -1,4 +1,4 @@
-package servers
+package lb
 
 import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"

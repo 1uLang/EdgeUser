@@ -1,0 +1,42 @@
+{$layout}
+{$template "menu"}
+
+<div class="margin"></div>
+<form class="ui form" method="post" data-tea-success="success" data-tea-action="$">
+    <csrf-token></csrf-token>
+    <table class="ui table definition selectable">
+        <tr>
+            <td>服务名称 *</td>
+            <td>
+                <input type="text" name="name" maxlength="50" ref="focus"/>
+                <p class="comment">请设置一个容易识别的服务名称。</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">监听端口 *</td>
+            <td>
+                添加后自动随机生成
+            </td>
+        </tr>
+        <tr>
+            <td>监听协议 *</td>
+            <td>
+                <checkbox name="protocols" :v-value="'tcp'">TCP</checkbox> &nbsp; &nbsp; &nbsp;
+                <checkbox name="protocols" :v-value="'tls'" v-model="supportTLS">TLS</checkbox>
+            </td>
+        </tr>
+        <tr v-show="supportTLS">
+            <td>HTTPS证书 *</td>
+            <td>
+                <ssl-certs-box></ssl-certs-box>
+            </td>
+        </tr>
+        <tr>
+            <td>源站信息 *</td>
+            <td>
+                <origin-input-box :v-family="'tcp'"></origin-input-box>
+            </td>
+        </tr>
+    </table>
+    <submit-btn></submit-btn>
+</form>

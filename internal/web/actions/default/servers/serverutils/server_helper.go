@@ -82,9 +82,9 @@ func (this *ServerHelper) createLeftMenu(action *actions.ActionObject) {
 	tabbar := actionutils.NewTabbar()
 	tabbar.Add("服务列表", "", "/servers", "", false)
 	//tabbar.Add("看板", "", "/servers/server/board?serverId="+serverIdString, "dashboard", selectedTabbar == "board")
-	//tabbar.Add("日志", "", "/servers/server/log?serverId="+serverIdString, "history", selectedTabbar == "log")
 	//tabbar.Add("统计", "", "/servers/server/stat?serverId="+serverIdString, "chart area", selectedTabbar == "stat")
 	tabbar.Add("设置", "", "/servers/server?serverId="+serverIdString, "setting", selectedTabbar == "setting")
+	tabbar.Add("日志", "", "/servers/server/log?serverId="+serverIdString, "history", selectedTabbar == "log")
 	//tabbar.Add("删除", "", "/servers/server/delete?serverId="+serverIdString, "trash", selectedTabbar == "delete")
 
 	actionutils.SetTabbar(action, tabbar)
