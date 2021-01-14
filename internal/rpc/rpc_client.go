@@ -224,6 +224,10 @@ func (this *RPCClient) UserAccessKeyRPC() pb.UserAccessKeyServiceClient {
 	return pb.NewUserAccessKeyServiceClient(this.pickConn())
 }
 
+func (this *RPCClient) IPLibraryRPC() pb.IPLibraryServiceClient {
+	return pb.NewIPLibraryServiceClient(this.pickConn())
+}
+
 // 构造用户上下文
 func (this *RPCClient) Context(userId int64) context.Context {
 	ctx := context.Background()
@@ -281,11 +285,11 @@ func (this *RPCClient) init() error {
 		}
 		var conn *grpc.ClientConn
 		if u.Scheme == "http" {
-			conn, err = grpc.Dial(u.Host, grpc.WithInsecure())
+			conn, err = grpc.Dial(u.Host, grpc.WithInsecure(), grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(128*1024*1024)))
 		} else if u.Scheme == "https" {
 			conn, err = grpc.Dial(u.Host, grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{
 				InsecureSkipVerify: true,
-			})))
+			})), grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(128*1024*1024)))
 		} else {
 			return errors.New("parse endpoint failed: invalid scheme '" + u.Scheme + "'")
 		}

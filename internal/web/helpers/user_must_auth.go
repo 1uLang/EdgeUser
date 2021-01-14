@@ -136,7 +136,12 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 				{
 					"name": "刷新预热",
 					"code": "cache",
-					"url":  "/cache",
+					"url":  "/servers/cache",
+				},
+				{
+					"name": "用量统计",
+					"code": "stat",
+					"url":  "/servers/stat",
 				},
 			},
 		},
@@ -150,16 +155,6 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"name": "WAF安全",
 			"icon": "clone outline",
 		},
-		/**{
-			"code": "stat",
-			"name": "用量统计",
-			"icon": "chart line area",
-		},**/
-		/**{
-			"code": "waf",
-			"name": "WAF",
-			"icon": "shield alternate",
-		},**/
 		{
 			"code": "finance",
 			"name": "费用账单",

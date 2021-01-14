@@ -3,7 +3,6 @@ package web
 import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/acl"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/acl/accesskeys"
-	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/cache"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/csrf"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/dashboard"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/finance"
@@ -16,7 +15,9 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/logout"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/messages"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/cache"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/certs"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/log"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/accessLog"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/cache"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/charset"
