@@ -18,9 +18,11 @@ func (this *AllowListAction) Init() {
 }
 
 func (this *AllowListAction) RunGet(params struct {
-	ServerId int64
+	ServerId         int64
+	FirewallPolicyId int64
 }) {
 	this.Data["featureIsOn"] = true
+	this.Data["firewallPolicyId"] = params.FirewallPolicyId
 
 	// 校验权限
 	if !this.ValidateFeature("server.waf") {
