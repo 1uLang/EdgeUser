@@ -33,7 +33,7 @@ func (this *IndexAction) RunGet(params struct {
 
 	// 当前的Server独立设置
 	if webConfig.FirewallRef == nil || webConfig.FirewallRef.FirewallPolicyId == 0 {
-		firewallPolicyId, err := dao.SharedHTTPWebDAO.InitEmptyHTTPFirewallPolicy(this.UserContext(), webConfig.Id, webConfig.FirewallRef != nil && webConfig.FirewallRef.IsOn)
+		firewallPolicyId, err := dao.SharedHTTPWebDAO.InitEmptyHTTPFirewallPolicy(this.UserContext(), params.ServerId, webConfig.Id, webConfig.FirewallRef != nil && webConfig.FirewallRef.IsOn)
 		if err != nil {
 			this.ErrorPage(err)
 			return

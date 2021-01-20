@@ -1,4 +1,4 @@
-package waf
+package logs
 
 import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/helpers"
@@ -10,7 +10,8 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth("")).
 			Data("teaMenu", "waf").
-			Prefix("/waf").
+			Data("teaSubMenu", "wafLogs").
+			Prefix("/waf/logs").
 			Get("", new(IndexAction)).
 
 			EndAll()

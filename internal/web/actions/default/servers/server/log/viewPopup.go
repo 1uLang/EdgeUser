@@ -2,6 +2,7 @@ package log
 
 import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/TeaOSLab/EdgeUser/internal/errors"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/maps"
 	"net/http"
@@ -45,10 +46,23 @@ func (this *ViewPopupAction) RunGet(params struct {
 	if accessLog.FirewallPolicyId > 0 {
 		policyResp, err := this.RPC().HTTPFirewallPolicyRPC().FindEnabledHTTPFirewallPolicy(this.UserContext(), &pb.FindEnabledHTTPFirewallPolicyRequest{HttpFirewallPolicyId: accessLog.FirewallPolicyId})
 		if err != nil {
-			this.ErrorPage(err)
-			return
-		}
-		if policyResp.HttpFirewallPolicy != nil {
+			// 如果没有权限查看，则只显示系统策略
+			if errors.IsResourceNotFound(err) {
+				wafMap = maps.Map{
+					"policy": maps.Map{
+						"id":   0,
+						"name": "系统策略",
+					},
+					"group": maps.Map{
+						"id":   0,
+						"name": "系统策略",
+					},
+				}
+			} else {
+				this.ErrorPage(err)
+				return
+			}
+		} else if policyResp.HttpFirewallPolicy != nil {
 			wafMap = maps.Map{
 				"policy": maps.Map{
 					"id":   policyResp.HttpFirewallPolicy.Id,

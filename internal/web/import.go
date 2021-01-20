@@ -38,4 +38,5 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/settings/profile"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/ui"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/waf"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/waf/logs"
 )

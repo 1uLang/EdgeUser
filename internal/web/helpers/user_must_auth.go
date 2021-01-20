@@ -154,6 +154,13 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"code": "waf",
 			"name": "WAF安全",
 			"icon": "clone outline",
+			"subItems": []maps.Map{
+				{
+					"name": "拦截日志",
+					"code": "wafLogs",
+					"url":  "/waf/logs",
+				},
+			},
 		},
 		{
 			"code": "finance",
