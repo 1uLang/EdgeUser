@@ -61,14 +61,14 @@ Vue.component("reverse-proxy-box", {
 			<tr>
 				<td>回源主机名<em>（Host）</em></td>
 				<td>	
-					<radio :v-value="0" v-model="reverseProxyConfig.requestHostType">跟随代理服务</radio> &nbsp;
+					<radio :v-value="0" v-model="reverseProxyConfig.requestHostType">跟随CDN域名</radio> &nbsp;
 					<radio :v-value="1" v-model="reverseProxyConfig.requestHostType">跟随源站</radio> &nbsp;
 					<radio :v-value="2" v-model="reverseProxyConfig.requestHostType">自定义</radio>
 					<div v-show="reverseProxyConfig.requestHostType == 2" style="margin-top: 0.8em">
 						<input type="text" placeholder="比如example.com" v-model="reverseProxyConfig.requestHost"/>
 					</div>
 					<p class="comment">请求源站时的Host，用于修改源站接收到的域名
-					<span v-if="reverseProxyConfig.requestHostType == 0">，"跟随代理服务"是指源站接收到的域名和当前代理服务保持一致</span>
+					<span v-if="reverseProxyConfig.requestHostType == 0">，"跟随CDN域名"是指源站接收到的域名和当前CDN访问域名保持一致</span>
 					<span v-if="reverseProxyConfig.requestHostType == 1">，"跟随源站"是指源站接收到的域名仍然是填写的源站地址中的信息，不随代理服务域名改变而改变</span>					
 					<span v-if="reverseProxyConfig.requestHostType == 2">，自定义Host内容中支持请求变量</span>。</p>
 				</td>
