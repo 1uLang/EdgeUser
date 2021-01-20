@@ -6,17 +6,24 @@ import (
 	"io/ioutil"
 )
 
+var SharedAPIConfig *APIConfig
+
 // API配置
 type APIConfig struct {
 	RPC struct {
 		Endpoints []string `yaml:"endpoints"`
 	} `yaml:"rpc"`
-	NodeId string `yaml:"nodeId"`
-	Secret string `yaml:"secret"`
+	NodeId   string `yaml:"nodeId"`
+	Secret   string `yaml:"secret"`
+	NumberId int64  `yaml:"numberId"`
 }
 
 // 加载API配置
 func LoadAPIConfig() (*APIConfig, error) {
+	if SharedAPIConfig != nil {
+		return SharedAPIConfig, nil
+	}
+
 	data, err := ioutil.ReadFile(Tea.ConfigFile("api.yaml"))
 	if err != nil {
 		return nil, err
@@ -27,6 +34,8 @@ func LoadAPIConfig() (*APIConfig, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	SharedAPIConfig = config
 
 	return config, nil
 }

@@ -63,6 +63,9 @@ func (this *UserNode) Run() {
 		return
 	}
 
+	// 监控状态
+	go NewNodeStatusExecutor().Listen()
+
 	// 启动Web服务
 	TeaGo.NewServer(false).
 		AccessLog(false).
@@ -205,6 +208,10 @@ func (this *UserNode) pullConfig() error {
 	node := nodeResp.Node
 	if node == nil {
 		return errors.New("invalid 'nodeId' or 'secret'")
+	}
+
+	if configs.SharedAPIConfig != nil {
+		configs.SharedAPIConfig.NumberId = node.Id
 	}
 
 	// 读取Web服务配置
