@@ -138,11 +138,11 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"code": "cache",
 					"url":  "/servers/cache",
 				},
-				{
+				/**{
 					"name": "用量统计",
 					"code": "stat",
 					"url":  "/servers/stat",
-				},
+				},**/
 			},
 		},
 		{

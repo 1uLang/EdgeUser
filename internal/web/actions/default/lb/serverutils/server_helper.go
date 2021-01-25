@@ -163,7 +163,7 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 		},
 	}
 
-	if serverConfig.IsTCP() {
+	if serverConfig.IsTCPFamily() {
 		/**menuItems = append(menuItems, maps.Map{
 			"name":     "TCP",
 			"url":      "/lb/server/settings/tcp?serverId=" + serverIdString,
@@ -182,14 +182,14 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 			"isActive": secondMenuItem == "reverseProxy",
 			"isOn":     serverConfig.ReverseProxyRef != nil && serverConfig.ReverseProxyRef.IsOn,
 		})
-	} else if serverConfig.IsUnix() {
+	} else if serverConfig.IsUnixFamily() {
 		menuItems = append(menuItems, maps.Map{
 			"name":     "Unix",
 			"url":      "/lb/server/settings/unix?serverId=" + serverIdString,
 			"isActive": secondMenuItem == "unix",
 			"isOn":     serverConfig.Unix != nil && serverConfig.Unix.IsOn && len(serverConfig.Unix.Listen) > 0,
 		})
-	} else if serverConfig.IsUDP() {
+	} else if serverConfig.IsUDPFamily() {
 		menuItems = append(menuItems, maps.Map{
 			"name":     "UDP",
 			"url":      "/lb/server/settings/udp?serverId=" + serverIdString,

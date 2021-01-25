@@ -82,8 +82,10 @@ func (this *ServerHelper) createLeftMenu(action *actions.ActionObject) {
 	tabbar := actionutils.NewTabbar()
 	tabbar.Add("服务列表", "", "/servers", "", false)
 	//tabbar.Add("看板", "", "/servers/server/board?serverId="+serverIdString, "dashboard", selectedTabbar == "board")
-	//tabbar.Add("统计", "", "/servers/server/stat?serverId="+serverIdString, "chart area", selectedTabbar == "stat")
 	tabbar.Add("设置", "", "/servers/server?serverId="+serverIdString, "setting", selectedTabbar == "setting")
+	if serverConfig.IsHTTPFamily() {
+		tabbar.Add("统计", "", "/servers/server/stat?serverId="+serverIdString, "chart area", selectedTabbar == "stat")
+	}
 	tabbar.Add("日志", "", "/servers/server/log?serverId="+serverIdString, "history", selectedTabbar == "log")
 	//tabbar.Add("删除", "", "/servers/server/delete?serverId="+serverIdString, "trash", selectedTabbar == "delete")
 
@@ -140,9 +142,19 @@ func (this *ServerHelper) createLogMenu(secondMenuItem string, serverIdString st
 func (this *ServerHelper) createStatMenu(secondMenuItem string, serverIdString string, serverConfig *serverconfigs.ServerConfig) []maps.Map {
 	menuItems := []maps.Map{}
 	menuItems = append(menuItems, maps.Map{
-		"name":     "统计",
+		"name":     "地域分布",
 		"url":      "/servers/server/stat?serverId=" + serverIdString,
 		"isActive": secondMenuItem == "index",
+	})
+	menuItems = append(menuItems, maps.Map{
+		"name":     "运营商",
+		"url":      "/servers/server/stat/providers?serverId=" + serverIdString,
+		"isActive": secondMenuItem == "provider",
+	})
+	menuItems = append(menuItems, maps.Map{
+		"name":     "终端",
+		"url":      "/servers/server/stat/clients?serverId=" + serverIdString,
+		"isActive": secondMenuItem == "client",
 	})
 	return menuItems
 }
@@ -164,7 +176,7 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 	}
 
 	// HTTP
-	if serverConfig.IsHTTP() {
+	if serverConfig.IsHTTPFamily() {
 		menuItems = append(menuItems, maps.Map{
 			"name":     "域名",
 			"url":      "/servers/server/settings/serverNames?serverId=" + serverIdString,
@@ -249,13 +261,13 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 			"isActive": secondMenuItem == "accessLog",
 			"isOn":     serverConfig.Web != nil && serverConfig.Web.AccessLogRef != nil && serverConfig.Web.AccessLogRef.IsOn,
 		})
-		/**menuItems = append(menuItems, maps.Map{
+		menuItems = append(menuItems, maps.Map{
 			"name":     "统计",
 			"url":      "/servers/server/settings/stat?serverId=" + serverIdString,
 			"isActive": secondMenuItem == "stat",
 			"isOn":     serverConfig.Web != nil && serverConfig.Web.StatRef != nil && serverConfig.Web.StatRef.IsOn,
 		})
-		menuItems = append(menuItems, maps.Map{
+		/**menuItems = append(menuItems, maps.Map{
 			"name":     "Gzip压缩",
 			"url":      "/servers/server/settings/gzip?serverId=" + serverIdString,
 			"isActive": secondMenuItem == "gzip",
@@ -279,7 +291,7 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 			"isActive": secondMenuItem == "websocket",
 			"isOn":     serverConfig.Web != nil && serverConfig.Web.WebsocketRef != nil && serverConfig.Web.WebsocketRef.IsOn,
 		})
-	} else if serverConfig.IsTCP() {
+	} else if serverConfig.IsTCPFamily() {
 		menuItems = append(menuItems, maps.Map{
 			"name":     "TCP",
 			"url":      "/servers/server/settings/tcp?serverId=" + serverIdString,
@@ -298,14 +310,14 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 			"isActive": secondMenuItem == "reverseProxy",
 			"isOn":     serverConfig.ReverseProxyRef != nil && serverConfig.ReverseProxyRef.IsOn,
 		})
-	} else if serverConfig.IsUnix() {
+	} else if serverConfig.IsUnixFamily() {
 		menuItems = append(menuItems, maps.Map{
 			"name":     "Unix",
 			"url":      "/servers/server/settings/unix?serverId=" + serverIdString,
 			"isActive": secondMenuItem == "unix",
 			"isOn":     serverConfig.Unix != nil && serverConfig.Unix.IsOn && len(serverConfig.Unix.Listen) > 0,
 		})
-	} else if serverConfig.IsUDP() {
+	} else if serverConfig.IsUDPFamily() {
 		menuItems = append(menuItems, maps.Map{
 			"name":     "UDP",
 			"url":      "/servers/server/settings/udp?serverId=" + serverIdString,
