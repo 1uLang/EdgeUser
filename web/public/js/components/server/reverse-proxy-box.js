@@ -1,26 +1,26 @@
 Vue.component("reverse-proxy-box", {
-	props: ["v-reverse-proxy-ref", "v-reverse-proxy-config", "v-is-location"],
-	data: function () {
-		let reverseProxyRef = this.vReverseProxyRef
-		if (reverseProxyRef == null) {
-			reverseProxyRef = {
-				isPrior: false,
-				isOn: false,
-				reverseProxyId: 0
-			}
-		}
+    props: ["v-reverse-proxy-ref", "v-reverse-proxy-config", "v-is-location"],
+    data: function () {
+        let reverseProxyRef = this.vReverseProxyRef
+        if (reverseProxyRef == null) {
+            reverseProxyRef = {
+                isPrior: false,
+                isOn: false,
+                reverseProxyId: 0
+            }
+        }
 
-		let reverseProxyConfig = this.vReverseProxyConfig
-		if (reverseProxyConfig == null) {
-			reverseProxyConfig = {
-				requestPath: "",
-				stripPrefix: "",
-				requestURI: "",
-				requestHost: "",
-				requestHostType: 0,
+        let reverseProxyConfig = this.vReverseProxyConfig
+        if (reverseProxyConfig == null) {
+            reverseProxyConfig = {
+                requestPath: "",
+                stripPrefix: "",
+                requestURI: "",
+                requestHost: "",
+                requestHostType: 0,
                 addHeaders: []
-			}
-		}
+            }
+        }
 
         let forwardHeaders = [
             {
@@ -48,29 +48,29 @@ Vue.component("reverse-proxy-box", {
             v.isChecked = reverseProxyConfig.addHeaders.$contains(v.name)
         })
 
-		return {
-			reverseProxyRef: reverseProxyRef,
-			reverseProxyConfig: reverseProxyConfig,
-			advancedVisible: false,
+        return {
+            reverseProxyRef: reverseProxyRef,
+            reverseProxyConfig: reverseProxyConfig,
+            advancedVisible: false,
             forwardHeaders: forwardHeaders
-		}
-	},
-	watch: {
-		"reverseProxyConfig.requestHostType": function (v) {
-			let requestHostType = parseInt(v)
-			if (isNaN(requestHostType)) {
-				requestHostType = 0
-			}
-			this.reverseProxyConfig.requestHostType = requestHostType
-		}
-	},
-	methods: {
-		isOn: function () {
-			return (!this.vIsLocation || this.reverseProxyRef.isPrior) && this.reverseProxyRef.isOn
-		},
-		changeAdvancedVisible: function (v) {
-			this.advancedVisible = v
-		},
+        }
+    },
+    watch: {
+        "reverseProxyConfig.requestHostType": function (v) {
+            let requestHostType = parseInt(v)
+            if (isNaN(requestHostType)) {
+                requestHostType = 0
+            }
+            this.reverseProxyConfig.requestHostType = requestHostType
+        }
+    },
+    methods: {
+        isOn: function () {
+            return (!this.vIsLocation || this.reverseProxyRef.isPrior) && this.reverseProxyRef.isOn
+        },
+        changeAdvancedVisible: function (v) {
+            this.advancedVisible = v
+        },
         changeAddHeader: function () {
             this.reverseProxyConfig.addHeaders = this.forwardHeaders.filter(function (v) {
                 return v.isChecked
@@ -78,8 +78,8 @@ Vue.component("reverse-proxy-box", {
                 return v.name
             })
         }
-	},
-	template: `<div>
+    },
+    template: `<div>
 	<input type="hidden" name="reverseProxyRefJSON" :value="JSON.stringify(reverseProxyRef)"/>
 	<input type="hidden" name="reverseProxyJSON" :value="JSON.stringify(reverseProxyConfig)"/>
 	<table class="ui table selectable definition">
@@ -116,10 +116,12 @@ Vue.component("reverse-proxy-box", {
 		        <td>自动添加的Header</td>
 		        <td>
 		            <div>
-		                <div style="width: 20em; float: left; margin-bottom: 1em" v-for="header in forwardHeaders" :key="header.name">
+		                <div style="width: 14em; float: left; margin-bottom: 1em" v-for="header in forwardHeaders" :key="header.name">
 		                    <checkbox v-model="header.isChecked" @input="changeAddHeader">{{header.name}}</checkbox>
                         </div>
+                        <div style="clear: both;"></div>
                     </div>
+                    <p class="comment">选中后，会自动向源站请求添加这些Header。</p>
                 </td> 
             </tr>
 			<tr>
