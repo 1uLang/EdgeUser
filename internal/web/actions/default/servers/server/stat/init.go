@@ -15,6 +15,7 @@ func init() {
 			Get("", new(IndexAction)).
 			Get("/providers", new(ProvidersAction)).
 			Get("/clients", new(ClientsAction)).
+			Get("/waf", new(WafAction)).
 			EndAll()
 	})
 }

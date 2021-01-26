@@ -1,87 +1,27 @@
-package waf
+package stat
 
 import (
-	"encoding/json"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
-	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/maps"
 	timeutil "github.com/iwind/TeaGo/utils/time"
 )
 
-type IndexAction struct {
+type WafAction struct {
 	actionutils.ParentAction
 }
 
-func (this *IndexAction) Init() {
-	this.Nav("", "", "")
+func (this *WafAction) Init() {
+	this.Nav("", "stat", "")
+	this.SecondMenu("waf")
 }
 
-func (this *IndexAction) RunGet(params struct {
+func (this *WafAction) RunGet(params struct {
 	ServerId int64
 }) {
-	if !this.ValidateFeature("server.waf") {
-		return
-	}
-
-	this.Data["serverId"] = params.ServerId
-	this.Data["path"] = this.Request.URL.Path
-
-	// 所有的服务列表
-	serversResp, err := this.RPC().ServerRPC().ListEnabledServersMatch(this.UserContext(), &pb.ListEnabledServersMatchRequest{
-		Offset:         0,
-		Size:           100, // 我们这里最多显示前100个
-		GroupId:        0,
-		Keyword:        "",
-		ProtocolFamily: "http",
-		UserId:         this.UserId(),
-	})
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	serverMaps := []maps.Map{}
-	for _, server := range serversResp.Servers {
-		if !server.IsOn {
-			continue
-		}
-
-		// 域名列表
-		serverNames := []*serverconfigs.ServerNameConfig{}
-		if server.IsAuditing || (server.AuditingResult != nil && !server.AuditingResult.IsOk) {
-			server.ServerNamesJSON = server.AuditingServerNamesJSON
-		}
-		if len(server.ServerNamesJSON) > 0 {
-			err = json.Unmarshal(server.ServerNamesJSON, &serverNames)
-			if err != nil {
-				this.ErrorPage(err)
-				return
-			}
-		}
-		if len(serverNames) == 0 {
-			continue
-		}
-
-		serverName := server.Name
-		if len(serverNames) > 0 {
-			if len(serverNames[0].SubNames) == 0 {
-				serverName = serverNames[0].Name
-			} else {
-				serverName = serverNames[0].SubNames[0]
-			}
-		}
-
-		serverMaps = append(serverMaps, maps.Map{
-			"id":         server.Id,
-			"serverName": serverName,
-		})
-	}
-	this.Data["servers"] = serverMaps
-
 	// 统计数据
 	resp, err := this.RPC().ServerHTTPFirewallDailyStatRPC().ComposeServerHTTPFirewallDashboard(this.UserContext(), &pb.ComposeServerHTTPFirewallDashboardRequest{
 		Day:      timeutil.Format("Ymd"),
-		UserId:   this.UserId(),
 		ServerId: params.ServerId,
 	})
 	if err != nil {
