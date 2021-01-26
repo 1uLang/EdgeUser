@@ -17,13 +17,42 @@ Vue.component("reverse-proxy-box", {
 				stripPrefix: "",
 				requestURI: "",
 				requestHost: "",
-				requestHostType: 0
+				requestHostType: 0,
+                addHeaders: []
 			}
 		}
+
+        let forwardHeaders = [
+            {
+                name: "X-Real-IP",
+                isChecked: false
+            },
+            {
+                name: "X-Forwarded-For",
+                isChecked: false
+            },
+            {
+                name: "X-Forwarded-By",
+                isChecked: false
+            },
+            {
+                name: "X-Forwarded-Host",
+                isChecked: false
+            },
+            {
+                name: "X-Forwarded-Proto",
+                isChecked: false
+            }
+        ]
+        forwardHeaders.forEach(function (v) {
+            v.isChecked = reverseProxyConfig.addHeaders.$contains(v.name)
+        })
+
 		return {
 			reverseProxyRef: reverseProxyRef,
 			reverseProxyConfig: reverseProxyConfig,
-			advancedVisible: false
+			advancedVisible: false,
+            forwardHeaders: forwardHeaders
 		}
 	},
 	watch: {
@@ -41,7 +70,14 @@ Vue.component("reverse-proxy-box", {
 		},
 		changeAdvancedVisible: function (v) {
 			this.advancedVisible = v
-		}
+		},
+        changeAddHeader: function () {
+            this.reverseProxyConfig.addHeaders = this.forwardHeaders.filter(function (v) {
+                return v.isChecked
+            }).map(function (v) {
+                return v.name
+            })
+        }
 	},
 	template: `<div>
 	<input type="hidden" name="reverseProxyRefJSON" :value="JSON.stringify(reverseProxyRef)"/>
@@ -76,6 +112,16 @@ Vue.component("reverse-proxy-box", {
 		</tbody>
 		<more-options-tbody @change="changeAdvancedVisible" v-if="isOn()"></more-options-tbody>
 		<tbody v-show="isOn() && advancedVisible">
+			<tr>
+		        <td>自动添加的Header</td>
+		        <td>
+		            <div>
+		                <div style="width: 20em; float: left; margin-bottom: 1em" v-for="header in forwardHeaders" :key="header.name">
+		                    <checkbox v-model="header.isChecked" @input="changeAddHeader">{{header.name}}</checkbox>
+                        </div>
+                    </div>
+                </td> 
+            </tr>
 			<tr>
 				<td>请求URI<em>（RequestURI）</em></td>
 				<td>
