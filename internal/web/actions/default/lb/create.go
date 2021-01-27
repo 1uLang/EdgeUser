@@ -9,6 +9,7 @@ import (
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/maps"
+	"github.com/iwind/TeaGo/types"
 	"net"
 	"strconv"
 )
@@ -26,6 +27,8 @@ func (this *CreateAction) RunGet(params struct{}) {
 		return
 	}
 
+	this.Data["canSpecifyPort"] = this.ValidateFeature("server.tcp.port")
+
 	this.Show()
 }
 
@@ -34,10 +37,23 @@ func (this *CreateAction) RunPost(params struct {
 	Protocols   []string
 	CertIdsJSON []byte
 	OriginsJSON []byte
+	TcpPorts    []int
+	TlsPorts    []int
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
 }) {
+	// 检查用户所在集群
+	clusterIdResp, err := this.RPC().UserRPC().FindUserNodeClusterId(this.UserContext(), &pb.FindUserNodeClusterIdRequest{UserId: this.UserId()})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	clusterId := clusterIdResp.NodeClusterId
+	if clusterId == 0 {
+		this.Fail("当前用户没有指定集群，不能使用此服务")
+	}
+
 	if !this.ValidateFeature("server.tcp") {
 		this.Fail("你没有权限使用此功能")
 	}
@@ -51,13 +67,59 @@ func (this *CreateAction) RunPost(params struct {
 		this.Fail("请选择至少一个协议")
 	}
 
-	// 检查用户所在集群
-	clusterIdResp, err := this.RPC().UserRPC().FindUserNodeClusterId(this.UserContext(), &pb.FindUserNodeClusterIdRequest{UserId: this.UserId()})
-	if err != nil {
-		this.ErrorPage(err)
-		return
+	// 检查端口
+	canSpecifyPort := this.ValidateFeature("server.tcp.port")
+	if canSpecifyPort {
+		if lists.Contains(params.Protocols, "tcp") {
+			if len(params.TcpPorts) == 0 {
+				this.Fail("需要至少指定一个TCP监听端口")
+			}
+			for _, port := range params.TcpPorts {
+				if port < 1024 || port > 65534 {
+					this.Fail("端口 '" + strconv.Itoa(port) + "' 范围错误")
+				}
+
+				// 检查是否被使用
+				resp, err := this.RPC().NodeClusterRPC().CheckPortIsUsingInNodeCluster(this.UserContext(), &pb.CheckPortIsUsingInNodeClusterRequest{
+					Port:          types.Int32(port),
+					NodeClusterId: clusterId,
+				})
+				if err != nil {
+					this.ErrorPage(err)
+					return
+				}
+				if resp.IsUsing {
+					this.Fail("端口 '" + strconv.Itoa(port) + "' 正在被别的服务使用，请换一个")
+				}
+			}
+		}
+		if lists.Contains(params.Protocols, "tls") {
+			if len(params.TlsPorts) == 0 {
+				this.Fail("需要至少指定一个TLS监听端口")
+			}
+			for _, port := range params.TlsPorts {
+				if port < 1024 || port > 65534 {
+					this.Fail("端口 '" + strconv.Itoa(port) + "' 范围错误")
+				}
+				if lists.ContainsInt(params.TcpPorts, port) {
+					this.Fail("TLS端口 '" + strconv.Itoa(port) + "' 已经被TCP端口使用，不能重复使用")
+				}
+
+				// 检查是否被使用
+				resp, err := this.RPC().NodeClusterRPC().CheckPortIsUsingInNodeCluster(this.UserContext(), &pb.CheckPortIsUsingInNodeClusterRequest{
+					Port:          types.Int32(port),
+					NodeClusterId: clusterId,
+				})
+				if err != nil {
+					this.ErrorPage(err)
+					return
+				}
+				if resp.IsUsing {
+					this.Fail("端口 '" + strconv.Itoa(port) + "' 正在被别的服务使用，请换一个")
+				}
+			}
+		}
 	}
-	clusterId := clusterIdResp.NodeClusterId
 
 	// 先加锁
 	lockerKey := "create_tcp_server"
@@ -86,54 +148,74 @@ func (this *CreateAction) RunPost(params struct {
 	// TCP
 	ports := []int{}
 	if lists.ContainsString(params.Protocols, "tcp") {
-		// 获取随机端口
-		portResp, err := this.RPC().NodeClusterRPC().FindFreePortInNodeCluster(this.UserContext(), &pb.FindFreePortInNodeClusterRequest{NodeClusterId: clusterId})
-		if err != nil {
-			this.ErrorPage(err)
-			return
-		}
-		port := int(portResp.Port)
-		ports = append(ports, port)
-
 		tcpConfig.IsOn = true
-		tcpConfig.Listen = []*serverconfigs.NetworkAddressConfig{
-			{
-				Protocol:  serverconfigs.ProtocolTCP,
-				Host:      "",
-				PortRange: strconv.Itoa(port),
-			},
-		}
-	}
 
-	// TLS
-	if lists.ContainsString(params.Protocols, "tls") {
-		var port int
-
-		// 尝试N次
-		for i := 0; i < 5; i++ {
+		if canSpecifyPort {
+			for _, port := range params.TcpPorts {
+				tcpConfig.Listen = append(tcpConfig.Listen, &serverconfigs.NetworkAddressConfig{
+					Protocol:  serverconfigs.ProtocolTCP,
+					Host:      "",
+					PortRange: strconv.Itoa(port),
+				})
+			}
+		} else {
 			// 获取随机端口
 			portResp, err := this.RPC().NodeClusterRPC().FindFreePortInNodeCluster(this.UserContext(), &pb.FindFreePortInNodeClusterRequest{NodeClusterId: clusterId})
 			if err != nil {
 				this.ErrorPage(err)
 				return
 			}
-			p := int(portResp.Port)
-			if !lists.ContainsInt(ports, p) {
-				port = p
-				break
+			port := int(portResp.Port)
+			ports = append(ports, port)
+			tcpConfig.Listen = []*serverconfigs.NetworkAddressConfig{
+				{
+					Protocol:  serverconfigs.ProtocolTCP,
+					Host:      "",
+					PortRange: strconv.Itoa(port),
+				},
 			}
 		}
-		if port == 0 {
-			this.Fail("无法找到可用的端口，请稍后重试")
-		}
+	}
 
+	// TLS
+	if lists.ContainsString(params.Protocols, "tls") {
 		tlsConfig.IsOn = true
-		tlsConfig.Listen = []*serverconfigs.NetworkAddressConfig{
-			{
-				Protocol:  serverconfigs.ProtocolTLS,
-				Host:      "",
-				PortRange: strconv.Itoa(port),
-			},
+
+		if canSpecifyPort {
+			for _, port := range params.TlsPorts {
+				tlsConfig.Listen = append(tlsConfig.Listen, &serverconfigs.NetworkAddressConfig{
+					Protocol:  serverconfigs.ProtocolTLS,
+					Host:      "",
+					PortRange: strconv.Itoa(port),
+				})
+			}
+		} else {
+			var port int
+
+			// 尝试N次
+			for i := 0; i < 5; i++ {
+				// 获取随机端口
+				portResp, err := this.RPC().NodeClusterRPC().FindFreePortInNodeCluster(this.UserContext(), &pb.FindFreePortInNodeClusterRequest{NodeClusterId: clusterId})
+				if err != nil {
+					this.ErrorPage(err)
+					return
+				}
+				p := int(portResp.Port)
+				if !lists.ContainsInt(ports, p) {
+					port = p
+					break
+				}
+			}
+			if port == 0 {
+				this.Fail("无法找到可用的端口，请稍后重试")
+			}
+			tlsConfig.Listen = []*serverconfigs.NetworkAddressConfig{
+				{
+					Protocol:  serverconfigs.ProtocolTLS,
+					Host:      "",
+					PortRange: strconv.Itoa(port),
+				},
+			}
 		}
 
 		if len(params.CertIdsJSON) == 0 {

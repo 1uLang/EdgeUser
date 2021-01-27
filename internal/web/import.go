@@ -12,6 +12,8 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/lb/server/settings/basic"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/lb/server/settings/dns"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/lb/server/settings/reverseProxy"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/lb/server/settings/tcp"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/lb/server/settings/tls"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/logout"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/messages"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers"

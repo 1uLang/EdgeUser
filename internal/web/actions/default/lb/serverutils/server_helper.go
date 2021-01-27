@@ -164,7 +164,7 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 	}
 
 	if serverConfig.IsTCPFamily() {
-		/**menuItems = append(menuItems, maps.Map{
+		menuItems = append(menuItems, maps.Map{
 			"name":     "TCP",
 			"url":      "/lb/server/settings/tcp?serverId=" + serverIdString,
 			"isActive": secondMenuItem == "tcp",
@@ -175,7 +175,7 @@ func (this *ServerHelper) createSettingsMenu(secondMenuItem string, serverIdStri
 			"url":      "/lb/server/settings/tls?serverId=" + serverIdString,
 			"isActive": secondMenuItem == "tls",
 			"isOn":     serverConfig.TLS != nil && serverConfig.TLS.IsOn && len(serverConfig.TLS.Listen) > 0,
-		})**/
+		})
 		menuItems = append(menuItems, maps.Map{
 			"name":     "源站",
 			"url":      "/lb/server/settings/reverseProxy?serverId=" + serverIdString,

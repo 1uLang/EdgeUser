@@ -1,49 +1,57 @@
-package https
+package tls
 
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/sslconfigs"
-	"github.com/TeaOSLab/EdgeUser/internal/oplogs"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 	"github.com/iwind/TeaGo/types"
 )
 
+// TLS设置
 type IndexAction struct {
 	actionutils.ParentAction
 }
 
 func (this *IndexAction) Init() {
 	this.Nav("", "setting", "index")
-	this.SecondMenu("https")
+	this.SecondMenu("tls")
 }
 
 func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
-	serverConfig, err := dao.SharedServerDAO.FindEnabledServerConfig(this.UserContext(), params.ServerId)
+	this.Data["canSpecifyPort"] = this.ValidateFeature("server.tcp.port")
+
+	server, err := dao.SharedServerDAO.FindEnabledServer(this.UserContext(), params.ServerId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	if serverConfig == nil {
+	if server == nil {
 		this.NotFound("server", params.ServerId)
 		return
 	}
-
-	httpsConfig := serverConfig.HTTPS
-	if httpsConfig == nil {
-		httpsConfig = &serverconfigs.HTTPSProtocolConfig{}
+	tlsConfig := &serverconfigs.TLSProtocolConfig{}
+	if len(server.TlsJSON) > 0 {
+		err := json.Unmarshal(server.TlsJSON, tlsConfig)
+		if err != nil {
+			this.ErrorPage(err)
+		}
+	} else {
+		tlsConfig.IsOn = true
 	}
 
+	// SSL配置
 	var sslPolicy *sslconfigs.SSLPolicy
-	if httpsConfig.SSLPolicyRef != nil && httpsConfig.SSLPolicyRef.SSLPolicyId > 0 {
-		sslPolicyConfigResp, err := this.RPC().SSLPolicyRPC().FindEnabledSSLPolicyConfig(this.UserContext(), &pb.FindEnabledSSLPolicyConfigRequest{SslPolicyId: httpsConfig.SSLPolicyRef.SSLPolicyId})
+	if tlsConfig.SSLPolicyRef != nil && tlsConfig.SSLPolicyRef.SSLPolicyId > 0 {
+		sslPolicyConfigResp, err := this.RPC().SSLPolicyRPC().FindEnabledSSLPolicyConfig(this.UserContext(), &pb.FindEnabledSSLPolicyConfigRequest{SslPolicyId: tlsConfig.SSLPolicyRef.SSLPolicyId})
 		if err != nil {
 			this.ErrorPage(err)
 			return
@@ -59,9 +67,10 @@ func (this *IndexAction) RunGet(params struct {
 		}
 	}
 
-	this.Data["serverType"] = serverConfig.Type
-	this.Data["httpsConfig"] = maps.Map{
-		"isOn":      httpsConfig.IsOn,
+	this.Data["serverType"] = server.Type
+	this.Data["tlsConfig"] = maps.Map{
+		"isOn":      tlsConfig.IsOn,
+		"listen":    tlsConfig.Listen,
 		"sslPolicy": sslPolicy,
 	}
 
@@ -69,24 +78,62 @@ func (this *IndexAction) RunGet(params struct {
 }
 
 func (this *IndexAction) RunPost(params struct {
-	ServerId int64
-	IsOn     bool
+	ServerId   int64
+	ServerType string
+	Addresses  string
 
 	SslPolicyJSON []byte
 
 	Must *actions.Must
 }) {
-	// 记录日志
-	defer this.CreateLog(oplogs.LevelInfo, "修改服务 %d 的HTTPS设置", params.ServerId)
+	defer this.CreateLogInfo("修改代理服务 %d TLS设置", params.ServerId)
 
-	serverConfig, err := dao.SharedServerDAO.FindEnabledServerConfig(this.UserContext(), params.ServerId)
+	canSpecifyPort := this.ValidateFeature("server.tcp.port")
+
+	server, err := dao.SharedServerDAO.FindEnabledServer(this.UserContext(), params.ServerId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	if serverConfig == nil {
+	if server == nil {
 		this.NotFound("server", params.ServerId)
 		return
+	}
+
+	addresses := []*serverconfigs.NetworkAddressConfig{}
+	err = json.Unmarshal([]byte(params.Addresses), &addresses)
+	if err != nil {
+		this.Fail("端口地址解析失败：" + err.Error())
+	}
+
+	// 检查端口是否被使用
+	clusterIdResp, err := this.RPC().UserRPC().FindUserNodeClusterId(this.UserContext(), &pb.FindUserNodeClusterIdRequest{UserId: this.UserId()})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	clusterId := clusterIdResp.NodeClusterId
+	if clusterId == 0 {
+		this.Fail("当前用户没有指定集群，不能使用此服务")
+	}
+	for _, address := range addresses {
+		port := types.Int32(address.PortRange)
+		if port < 1024 || port > 65534 {
+			this.Fail("'" + address.PortRange + "' 端口范围错误")
+		}
+		resp, err := this.RPC().NodeClusterRPC().CheckPortIsUsingInNodeCluster(this.UserContext(), &pb.CheckPortIsUsingInNodeClusterRequest{
+			Port:            port,
+			NodeClusterId:   clusterId,
+			ExcludeServerId: params.ServerId,
+			ExcludeProtocol: "tls",
+		})
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+		if resp.IsUsing {
+			this.Fail("端口 '" + fmt.Sprintf("%d", port) + "' 正在被别的服务或者同服务其他网络协议使用，请换一个")
+		}
 	}
 
 	// 校验SSL
@@ -154,25 +201,33 @@ func (this *IndexAction) RunPost(params struct {
 		}
 	}
 
-	httpsConfig := serverConfig.HTTPS
-	if httpsConfig == nil {
-		httpsConfig = &serverconfigs.HTTPSProtocolConfig{}
+	tlsConfig := &serverconfigs.TLSProtocolConfig{}
+	if len(server.TlsJSON) > 0 {
+		err := json.Unmarshal(server.TlsJSON, tlsConfig)
+		if err != nil {
+			this.ErrorPage(err)
+		}
+	} else {
+		tlsConfig.IsOn = true
+	}
+	if canSpecifyPort {
+		tlsConfig.Listen = addresses
 	}
 
-	httpsConfig.SSLPolicyRef = &sslconfigs.SSLPolicyRef{
+	tlsConfig.SSLPolicyRef = &sslconfigs.SSLPolicyRef{
 		IsOn:        true,
 		SSLPolicyId: sslPolicyId,
 	}
-	httpsConfig.IsOn = params.IsOn
-	configData, err := json.Marshal(httpsConfig)
+
+	configData, err := json.Marshal(tlsConfig)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
 
-	_, err = this.RPC().ServerRPC().UpdateServerHTTPS(this.UserContext(), &pb.UpdateServerHTTPSRequest{
-		ServerId:  params.ServerId,
-		HttpsJSON: configData,
+	_, err = this.RPC().ServerRPC().UpdateServerTLS(this.UserContext(), &pb.UpdateServerTLSRequest{
+		ServerId: params.ServerId,
+		TlsJSON:  configData,
 	})
 	if err != nil {
 		this.ErrorPage(err)

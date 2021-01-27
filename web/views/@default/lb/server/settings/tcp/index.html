@@ -1,0 +1,27 @@
+{$layout}
+
+{$template "/left_menu"}
+
+<div class="right-box">
+    {$if eq .canSpecifyPort false}
+    <p class="ui message warning">根据管理员设定，你不能修改此服务的端口信息。</p>
+    {$end}
+	<form method="post" class="ui form" data-tea-action="$" data-tea-success="success">
+		<input type="hidden" name="serverId" :value="serverId"/>
+		<input type="hidden" name="serverType" :value="serverType"/>
+		<table class="ui table selectable definition">
+			<tr>
+				<td class="title">绑定端口 *</td>
+				<td>
+                    <div v-show="canSpecifyPort">
+					    <network-addresses-box :v-server-type="serverType" :v-addresses="tcpConfig.listen" :v-protocol="'tcp'"></network-addresses-box>
+                    </div>
+                    <div v-show="!canSpecifyPort" v-if="tcpConfig.listen != null">
+                        <span v-for="listen in tcpConfig.listen" class="ui basic small label">tcp://*:{{listen.portRange}}</span>
+                    </div>
+				</td>
+			</tr>
+		</table>
+		<submit-btn></submit-btn>
+	</form>
+</div>

@@ -19,6 +19,7 @@ func init() {
 			Post("/delete", new(DeleteAction)).
 			Post("/updateOn", new(UpdateOnAction)).
 			Get("/server", new(ServerAction)).
+			GetPost("/addPortPopup", new(AddPortPopupAction)).
 			EndAll()
 	})
 }

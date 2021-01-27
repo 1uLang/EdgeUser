@@ -23,7 +23,7 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
-	serverConfig, err := dao.SharedServerDAO.FindServerConfig(this.UserContext(), params.ServerId)
+	serverConfig, err := dao.SharedServerDAO.FindEnabledServerConfig(this.UserContext(), params.ServerId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -70,7 +70,7 @@ func (this *IndexAction) RunPost(params struct {
 	// 记录日志
 	defer this.CreateLog(oplogs.LevelInfo, "修改服务 %d 的HTTP设置", params.ServerId)
 
-	serverConfig, err := dao.SharedServerDAO.FindServerConfig(this.UserContext(), params.ServerId)
+	serverConfig, err := dao.SharedServerDAO.FindEnabledServerConfig(this.UserContext(), params.ServerId)
 	if err != nil {
 		this.ErrorPage(err)
 		return

@@ -26,7 +26,7 @@ func (this *UpdateSchedulingPopupAction) RunGet(params struct {
 	ServerId       int64
 	ReverseProxyId int64
 }) {
-	serverConfig, err := dao.SharedServerDAO.FindServerConfig(this.UserContext(), params.ServerId)
+	serverConfig, err := dao.SharedServerDAO.FindEnabledServerConfig(this.UserContext(), params.ServerId)
 	if err != nil {
 		this.ErrorPage(err)
 		return
