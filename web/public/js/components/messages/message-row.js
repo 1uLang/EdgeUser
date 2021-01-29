@@ -1,29 +1,37 @@
 Vue.component("message-row", {
-	props: ["v-message"],
-	data: function () {
-		let paramsJSON = this.vMessage.params
-		let params = null
-		if (paramsJSON != null && paramsJSON.length > 0) {
-			params = JSON.parse(paramsJSON)
-		}
+    props: ["v-message"],
+    data: function () {
+        let paramsJSON = this.vMessage.params
+        let params = null
+        if (paramsJSON != null && paramsJSON.length > 0) {
+            params = JSON.parse(paramsJSON)
+        }
 
-		return {
-			message: this.vMessage,
-			params: params
-		}
-	},
-	methods: {
-		viewCert: function (certId) {
-			teaweb.popup("/servers/certs/certPopup?certId=" + certId, {
-				height: "28em",
-				width: "48em"
-			})
-		}
-	},
-	template: `<div>
+        return {
+            message: this.vMessage,
+            params: params
+        }
+    },
+    methods: {
+        viewCert: function (certId) {
+            teaweb.popup("/servers/certs/certPopup?certId=" + certId, {
+                height: "28em",
+                width: "48em"
+            })
+        },
+        readMessage: function (messageId) {
+            Tea.action("/messages/readPage")
+                .params({"messageIds": [messageId]})
+                .post()
+                .success(function () {
+                    teaweb.reload()
+                })
+        }
+    },
+    template: `<div>
 <table class="ui table selectable">
 	<tr :class="{error: message.level == 'error', positive: message.level == 'success', warning: message.level == 'warning'}">
-		<td>
+		<td style="position: relative">
 			<strong>{{message.datetime}}</strong>
 			<span v-if="message.cluster != null && message.cluster.id != null">
 				<span> | </span>
@@ -33,6 +41,7 @@ Vue.component("message-row", {
 				<span> | </span>
 				<a :href="'/clusters/cluster/node?clusterId=' + message.cluster.id + '&nodeId=' + message.node.id">节点：{{message.node.name}}</a>
 			</span>
+			<a href=""  style="position: absolute; right: 1em" @click.prevent="readMessage(message.id)" title="标为已读"><i class="icon check"></i></a>
 		</td>
 	</tr>
 	<tr :class="{error: message.level == 'error', positive: message.level == 'success', warning: message.level == 'warning'}">
