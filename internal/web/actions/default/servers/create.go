@@ -57,6 +57,9 @@ func (this *CreateAction) RunPost(params struct {
 	if len(params.DomainNames) == 0 {
 		this.Fail("请添加要加速的域名")
 	}
+	for k, v := range params.DomainNames {
+		params.DomainNames[k] = strings.ToLower(v)
+	}
 
 	serverNames := []*serverconfigs.ServerNameConfig{}
 	for _, domainName := range params.DomainNames {
@@ -69,6 +72,21 @@ func (this *CreateAction) RunPost(params struct {
 			SubNames: nil,
 		})
 	}
+	serverconfigs.NormalizeServerNames(serverNames)
+
+	// 检查域名是否已经存在
+	dupResp, err := this.RPC().ServerRPC().CheckServerNameDuplicationInNodeCluster(this.UserContext(), &pb.CheckServerNameDuplicationInNodeClusterRequest{
+		ServerNames:   params.DomainNames,
+		NodeClusterId: clusterId,
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	if len(dupResp.DuplicatedServerNames) > 0 {
+		this.Fail("域名 " + strings.Join(dupResp.DuplicatedServerNames, ", ") + " 已经被其他服务所占用，不能重复使用")
+	}
+
 	serverNamesJSON, err := json.Marshal(serverNames)
 	if err != nil {
 		this.ErrorPage(err)

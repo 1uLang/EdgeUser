@@ -9,6 +9,7 @@ import (
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 	timeutil "github.com/iwind/TeaGo/utils/time"
+	"strings"
 )
 
 // 域名管理
@@ -68,10 +69,36 @@ func (this *IndexAction) RunPost(params struct {
 	// 记录日志
 	defer this.CreateLog(oplogs.LevelInfo, "修改代理服务 %d 域名", params.ServerId)
 
+	// 检查用户所在集群
+	clusterIdResp, err := this.RPC().UserRPC().FindUserNodeClusterId(this.UserContext(), &pb.FindUserNodeClusterIdRequest{UserId: this.UserId()})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	clusterId := clusterIdResp.NodeClusterId
+
 	serverNames := []*serverconfigs.ServerNameConfig{}
-	err := json.Unmarshal([]byte(params.ServerNames), &serverNames)
+	err = json.Unmarshal([]byte(params.ServerNames), &serverNames)
 	if err != nil {
 		this.Fail("域名解析失败：" + err.Error())
+	}
+	serverconfigs.NormalizeServerNames(serverNames)
+
+	// 检查域名是否已经存在
+	allServerNames := serverconfigs.PlainServerNames(serverNames)
+	if len(allServerNames) > 0 {
+		dupResp, err := this.RPC().ServerRPC().CheckServerNameDuplicationInNodeCluster(this.UserContext(), &pb.CheckServerNameDuplicationInNodeClusterRequest{
+			ServerNames:     allServerNames,
+			NodeClusterId:   clusterId,
+			ExcludeServerId: params.ServerId,
+		})
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+		if len(dupResp.DuplicatedServerNames) > 0 {
+			this.Fail("域名 " + strings.Join(dupResp.DuplicatedServerNames, ", ") + " 已经被其他服务所占用，不能重复使用")
+		}
 	}
 
 	_, err = this.RPC().ServerRPC().UpdateServerNames(this.UserContext(), &pb.UpdateServerNamesRequest{
