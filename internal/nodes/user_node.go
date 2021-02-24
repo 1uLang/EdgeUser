@@ -10,6 +10,7 @@ import (
 	teaconst "github.com/TeaOSLab/EdgeUser/internal/const"
 	"github.com/TeaOSLab/EdgeUser/internal/events"
 	"github.com/TeaOSLab/EdgeUser/internal/rpc"
+	_ "github.com/TeaOSLab/EdgeUser/internal/tasks"
 	"github.com/TeaOSLab/EdgeUser/internal/utils"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web"
 	"github.com/go-yaml/yaml"
