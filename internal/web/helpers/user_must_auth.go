@@ -63,6 +63,8 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 	action.Data["teaShowVersion"] = config.ShowVersion
 	action.Data["teaTitle"] = config.UserSystemName
 	action.Data["teaName"] = config.ProductName
+	action.Data["teaFaviconFileId"] = config.FaviconFileId
+	action.Data["teaLogoFileId"] = config.LogoFileId
 	action.Data["teaUsername"], err = this.findUserFullname(userId)
 	if err != nil {
 		logs.Println("[USER_MUST_AUTH]" + err.Error())
