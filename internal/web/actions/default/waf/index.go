@@ -31,7 +31,7 @@ func (this *IndexAction) RunGet(params struct {
 	serversResp, err := this.RPC().ServerRPC().ListEnabledServersMatch(this.UserContext(), &pb.ListEnabledServersMatchRequest{
 		Offset:         0,
 		Size:           100, // 我们这里最多显示前100个
-		GroupId:        0,
+		ServerGroupId:  0,
 		Keyword:        "",
 		ProtocolFamily: "http",
 		UserId:         this.UserId(),

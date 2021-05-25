@@ -18,7 +18,7 @@ func (this *IndexAction) Init() {
 
 func (this *IndexAction) RunGet(params struct{}) {
 	countResp, err := this.RPC().ServerRPC().CountAllEnabledServersMatch(this.UserContext(), &pb.CountAllEnabledServersMatchRequest{
-		GroupId:        0,
+		ServerGroupId:        0,
 		Keyword:        "",
 		UserId:         this.UserId(),
 		ProtocolFamily: "http",
@@ -34,7 +34,7 @@ func (this *IndexAction) RunGet(params struct{}) {
 	serversResp, err := this.RPC().ServerRPC().ListEnabledServersMatch(this.UserContext(), &pb.ListEnabledServersMatchRequest{
 		Offset:         page.Offset,
 		Size:           page.Size,
-		GroupId:        0,
+		ServerGroupId:        0,
 		Keyword:        "",
 		ProtocolFamily: "http",
 		UserId:         this.UserId(),

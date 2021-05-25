@@ -432,7 +432,7 @@ func (this *CreateAction) RunPost(params struct {
 		UdpJSON:          nil,
 		WebId:            0,
 		ReverseProxyJSON: reverseProxyRefJSON,
-		GroupIds:         nil,
+		ServerGroupIds:   nil,
 		NodeClusterId:    clusterId,
 		IncludeNodesJSON: nil,
 		ExcludeNodesJSON: nil,
