@@ -10,10 +10,9 @@ require (
 	github.com/cespare/xxhash v1.1.0
 	github.com/go-ole/go-ole v1.2.5 // indirect
 	github.com/go-yaml/yaml v2.1.0+incompatible
-	github.com/iwind/TeaGo v0.0.0-20201209122854-4c8b1780a42b
+	github.com/iwind/TeaGo v0.0.0-20210411134150-ddf57e240c2f
 	github.com/miekg/dns v1.1.35
 	github.com/shirou/gopsutil v2.20.9+incompatible
 	golang.org/x/sys v0.0.0-20200724161237-0e2f3a69832c
 	google.golang.org/grpc v1.32.0
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
