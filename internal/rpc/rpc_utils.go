@@ -8,6 +8,7 @@ import (
 var sharedRPC *RPCClient = nil
 var locker = &sync.Mutex{}
 
+// SharedRPC 获取GRPC客户端
 func SharedRPC() (*RPCClient, error) {
 	locker.Lock()
 	defer locker.Unlock()

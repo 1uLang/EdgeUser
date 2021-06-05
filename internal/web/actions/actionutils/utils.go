@@ -2,6 +2,7 @@ package actionutils
 
 import (
 	"fmt"
+	rpcerrors "github.com/TeaOSLab/EdgeCommon/pkg/rpc/errors"
 	teaconst "github.com/TeaOSLab/EdgeUser/internal/const"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/logs"
@@ -26,6 +27,8 @@ func FailPage(action actions.ActionWrapper, err error) {
 	if err != nil {
 		logs.Println("[" + reflect.TypeOf(action).String() + "]" + findStack(err.Error()))
 	}
+
+	err = rpcerrors.HumanError(err)
 	action.Object().ResponseWriter.WriteHeader(http.StatusInternalServerError)
 	if len(action.Object().Request.Header.Get("X-Requested-With")) > 0 {
 		action.Object().WriteString(teaconst.ErrServer)
