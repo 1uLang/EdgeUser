@@ -150,12 +150,12 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 		{
 			"code": "lb",
 			"name": "负载均衡",
-			"icon": "clone outline",
+			"icon": "paper plane",
 		},
 		{
 			"code": "waf",
 			"name": "WAF安全",
-			"icon": "clone outline",
+			"icon": "shield",
 			"subItems": []maps.Map{
 				{
 					"name": "拦截日志",

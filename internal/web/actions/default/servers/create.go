@@ -303,16 +303,12 @@ func (this *CreateAction) RunPost(params struct {
 
 	// 缓存设置
 	cacheCondMaps := []maps.Map{}
-	if len(params.CacheCondsJSON) == 0 {
-		this.Fail("请添加缓存设置")
-	}
-	err = json.Unmarshal(params.CacheCondsJSON, &cacheCondMaps)
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	if len(cacheCondMaps) == 0 {
-		this.Fail("请添加缓存设置")
+	if len(params.CacheCondsJSON) > 0 {
+		err = json.Unmarshal(params.CacheCondsJSON, &cacheCondMaps)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
 	}
 
 	cacheRefs := []*serverconfigs.HTTPCacheRef{}
