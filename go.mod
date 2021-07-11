@@ -10,7 +10,7 @@ require (
 	github.com/cespare/xxhash v1.1.0
 	github.com/go-ole/go-ole v1.2.5 // indirect
 	github.com/go-yaml/yaml v2.1.0+incompatible
-	github.com/iwind/TeaGo v0.0.0-20210411134150-ddf57e240c2f
+	github.com/iwind/TeaGo v0.0.0-20210628135026-38575a4ab060
 	github.com/miekg/dns v1.1.35
 	github.com/shirou/gopsutil v3.21.5+incompatible
 	github.com/tklauser/go-sysconf v0.3.6 // indirect

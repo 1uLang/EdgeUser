@@ -7,10 +7,12 @@ import (
 	"github.com/TeaOSLab/EdgeUser/internal/configs"
 	teaconst "github.com/TeaOSLab/EdgeUser/internal/const"
 	"github.com/TeaOSLab/EdgeUser/internal/events"
+	"github.com/TeaOSLab/EdgeUser/internal/monitor"
 	"github.com/TeaOSLab/EdgeUser/internal/remotelogs"
 	"github.com/TeaOSLab/EdgeUser/internal/rpc"
 	"github.com/TeaOSLab/EdgeUser/internal/utils"
 	"github.com/iwind/TeaGo/lists"
+	"github.com/iwind/TeaGo/maps"
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/disk"
 	"os"
@@ -130,6 +132,11 @@ func (this *NodeStatusExecutor) updateCPU(status *nodeconfigs.NodeStatus) {
 		status.CPULogicalCount = this.cpuLogicalCount
 		status.CPUPhysicalCount = this.cpuPhysicalCount
 	}
+
+	// 记录监控数据
+	monitor.SharedValueQueue.Add(nodeconfigs.NodeValueItemCPU, maps.Map{
+		"usage": status.CPUUsage,
+	})
 }
 
 // 更新硬盘
