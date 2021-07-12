@@ -7,6 +7,23 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/dashboard"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/finance"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/finance/bills"
+
+	//主机安全防护
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/agent"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/baseline"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/examine"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/abnormalAccount"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/abnormalLogin"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/abnormalProcess"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/logDelete"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/reboundShell"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/systemCmd"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/virus"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/invade/webShell"
+	_ "github.com/TeaOSLab/EdgeAdmin/internal/web/actions/default/hids/risk"
+
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/index"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/lb"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/lb/server/settings/basic"
@@ -43,4 +60,11 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/ui"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/waf"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/waf/logs"
+
+	//web漏洞扫描
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan/reports"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan/scans"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan/targets"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan/vulnerabilities"
 )
