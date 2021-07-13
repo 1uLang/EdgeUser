@@ -1,0 +1,36 @@
+{$layout "layout_popup"}
+{$var "header"}
+<script type="text/javascript" src="/_/@default/hids/risk/systemRiskList.js"></script>
+{$end}
+
+<div style="margin-top: 40px;">
+    <div style="display: flex;flex-direction: column;">
+        <div style="border: 1px solid #f0f0f0;flex: 1;">
+            <div style="padding: 30px;display: flex;flex-direction: row;justify-content: flex-start;">
+                <div :class="{'low-bg-color':riskDetails.level===1,'middle-bg-color':riskDetails.level===2,'height-bg-color':riskDetails.level===3,'serious-bg-color':riskDetails.level===4}">
+                    {{getDangerName(riskDetails.level)}}
+                </div>
+                <!-- <div style="margin-left: 20px;">{{riskDetails.name}} &nbsp; {{detailName}} &nbsp;  （操作系统内部版本 {{os}}）</div> -->
+                <div style="margin-left: 20px;">{{riskDetails.name}} &nbsp; {{detailName}}</div>
+            </div>
+        </div>
+        <div style="flex: 5;padding-left: 15px;">
+            <h3 style="margin: 10px 15px;">详情描述</h3>
+            <div style="margin: 10px 15px;">{{riskDetails.description}}</div>
+            <div style="display: flex;flex-direction: column;">
+                <div style="margin: 10px 15px; display:flex;justify-content: start;align-items: center;">
+                    <h3>修复影响</h3>
+                    <span style="margin-left: 15px;">{{riskDetails.repairAffect}}</span>
+                </div>
+                <div style="margin: 10px 15px;display:flex;justify-content: start;align-items: center;">
+                    <h3>漏洞来源</h3>
+                    <span style="margin-left: 15px;">{{riskDetails.srcName}}</span>
+                </div>
+                <div style="margin: 10px 15px;display:flex;flex-direction: column;justify-content: start;">
+                    <h3>参考详情</h3>
+                    <span>{{riskDetails.refUrl}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

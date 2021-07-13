@@ -1,0 +1,21 @@
+default:
+  db: prod
+  prefix: ""
+dbs:
+  prod:
+    driver: mysql
+    dsn: root:test1234@tcp(127.0.0.1:3306)/edges?charset=utf8mb4&timeout=30s
+    prefix: edge
+    connections:
+      pool: 0
+      max: 0
+      life: ""
+    models:
+      package: ""
+
+redis:
+  addr: 45.195.61.132:6379
+  password: 1232345342675
+
+  # addr: 127.0.0.1:3306
+  # password: test1234

@@ -1,0 +1,60 @@
+<!-- 添加目标 -->
+{$layout}
+{$template "/datepicker"}
+{$var "header"}
+<script type="text/javascript" src="/js/timeFactory.js"></script>
+{$end}
+<p class="comment" v-if="nodeErr != ''">请先添加web漏洞扫描节点</p>
+
+<first-menu v-if="nodeErr  == ''">
+	<menu-item @click.prevent="hanleOpen">[添加目标]</menu-item>
+</first-menu>
+<div class="btn-contain" v-if="targets.length > 0 ">
+    <div id="scan-btn" @click="onScan()">扫描</div>
+    <div id="del-btn" @click="onDelete()">删除</div>
+</div>
+<p class="comment" v-if="targets.length == 0 && nodeErr == ''">暂时还没有目标。</p>
+<div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;">
+    <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;" v-if="targets.length > 0">
+        <thead>
+        <tr align="center">
+            <th class='table-head-bg' style="width: 72px;">
+                <input id="js-all-checkbox" type="checkbox" @click="checkAll">
+            </th>
+            <th class='table-head-bg' style="width: 185px;">地址</th>
+            <th class='table-head-bg' style="width: 150px;">描述</th>
+            <th class='table-head-bg' style="width: 167px;">类型</th>
+            <th class='table-head-bg' style="width: 282px;">漏洞</th>
+            <th class='table-head-bg' style="width: 129px;">扫描状态</th>
+            <th class='table-head-bg' style="width: 214px;">扫描时间</th>
+        </tr>
+        </thead>
+        <tbody id='tableBody'>
+        <tr align="center" style="height: 50px;" v-for="item in targets">
+            <td>
+                <input type="checkbox" name="select" :value="item.target_id" @click="clickCheckbox">
+            </td>
+            <td>{{item.address}}</td>
+            <td>{{item.description}}</td>
+            <td>Web</td>
+            <td>
+                <div style="display: flex;justify-content: center;" v-if="item.severity_counts">
+                    <div class="vulnerable-num" style="background-color: #ec808d;">{{item.severity_counts.high}}</div>
+                    <div class="vulnerable-num" style="background-color: #fcc77d;">{{item.severity_counts.medium}}</div>
+                    <div class="vulnerable-num" style="background-color: #3abee8;">{{item.severity_counts.low}}</div>
+                    <div class="vulnerable-num" style="background-color: #00b144;">{{item.severity_counts.info}}</div>
+                </div>
+                <div style="display: flex;justify-content: center;" v-else>
+                    <div class="vulnerable-num" style="background-color: #ec808d;">0</div>
+                    <div class="vulnerable-num" style="background-color: #fcc77d;">0</div>
+                    <div class="vulnerable-num" style="background-color: #3abee8;">0</div>
+                    <div class="vulnerable-num" style="background-color: #00b144;">0</div>
+                </div>
+            </td>
+            <td>{{onChangeStatusFormat(item.last_scan_session_status)}}</td>
+            <td>{{onChangeTimeFormat(item.last_scan_date)}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+

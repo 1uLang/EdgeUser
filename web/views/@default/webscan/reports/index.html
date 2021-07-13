@@ -1,0 +1,43 @@
+<!-- 扫描报告 -->
+{$layout}
+{$var "header"}
+<script type="text/javascript" src="/js/timeFactory.js"></script>
+{$end}
+
+<p class="comment" v-if="nodeErr != ''">请先添加web漏洞扫描节点</p>
+
+<div class="btn-contain" v-if="reports.length > 0">
+    <div id="del-btn" @click="onDelete()">删除</div>
+</div>
+<!-- <p class="comment" v-if="reports.length == 0 && nodeErr == ''">暂时还没有目标。</p> -->
+<div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;">
+    <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;">
+        <thead>
+        <tr align="center">
+            <th class='table-head-bg' style="width: 60px;">
+                <input id="js-all-checkbox" type="checkbox" @click="checkAll">
+            </th>
+            <th class='table-head-bg' style="width: 243px;">目标</th>
+            <th class='table-head-bg' style="width: 275px;">创建时间</th>
+            <th class='table-head-bg' style="width: 262px;">状态</th>
+            <th class='table-head-bg' style="width: 191px;">下载</th>
+        </tr>
+        </thead>
+        <tbody id='tableBody'>
+            <tr align="center" style="height: 50px;" v-for="item in reports">
+                <td>
+                    <input type="checkbox" name="select" :value="item.report_id" @click="clickCheckbox">
+                </td>
+                <td>{{parseDesc(item.source.description)}}</td>
+                <td>{{onChangeTimeFormat(item.generation_date)}}</td>
+                <td>{{onChangeStatusFormat(item.status)}}</td>
+                <td>
+                    <div style="display: inline-flex;">
+                        <div class="pdf-style" @click="downloadFile(item.download[1])">PDF</div>
+                        <div class="html-style" @click="downloadFile(item.download[0])">HTML</div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

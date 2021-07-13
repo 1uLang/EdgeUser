@@ -1,0 +1,66 @@
+{$layout}
+<!-- echart -->
+{$var "header"}
+<script type="text/javascript" src="/js/echarts/echarts.min.js"></script>
+{$end}
+<p class="comment" v-if="data.nodeErr != ''">请先添加漏洞扫描节点。</p>
+
+
+<div v-if="data.nodeErr == ''">
+
+    <div class="card-box" style="height: 380px;">
+        <div class="chart-box" id="high-vulnerabilities-chart-box"></div>
+        <div class="chart-box" id="med-vulnerabilities-chart-box"></div>
+        <div class="chart-box" id="low-vulnerabilities-chart-box"></div>
+    </div>
+    <div class="card-box ui five columns grid" style="height: 130px">
+        <div class="ui column">
+            <h4>正在扫描</h4>
+            <div class="value"><span class="show-num">{{data.scans_running_count}}</span></div>
+        </div>
+        <div class="ui column">
+            <h4>等待扫描</h4>
+            <div class="value"><span class="show-num">{{data.scans_waiting_count}}</span></div>
+        </div>
+        <div class="ui column">
+            <h4>扫描次数</h4>
+            <div class="value"><span class="show-num">{{data.scans_conducted_count}}</span></div>
+        </div>
+        <div class="ui column">
+            <h4>发现漏洞</h4>
+            <div class="value"><span class="show-num">{{data.vuln_count.low + data.vuln_count.med + data.vuln_count.high}}</span></div>
+        </div>
+        <div class="ui column">
+            <h4>目标总数</h4>
+            <div class="value"><span class="show-num">{{data.targets_count}}</span></div>
+        </div>
+    </div>
+    <div class="card-box" style="height: auto;width: 48%;float: left;margin-top: 30px">
+        <h5>最易受攻击目标</h5>
+        <table class="ui table selectable" v-if="data.most_vulnerable_targets.length > 0">
+            <tr v-for="(vulnerable,idx) in data.most_vulnerable_targets" v-if="idx <6">
+                <td >{{vulnerable.address}}</td>
+                <td >
+                    <div>
+                        <div class="vulnerable-num-low">{{vulnerable.low_vuln_count}}</div>
+                        <div class="vulnerable-num-med">{{vulnerable.med_vuln_count}}</div>
+                        <div class="vulnerable-num-high">{{vulnerable.high_vuln_count}}</div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="card-box" style="height: auto;width: 48%;float: left;margin-top: 30px;margin-left: 4%">
+        <h5>常见漏洞</h5>
+        <table class="ui table selectable" v-if="data.top_vulnerabilities.length > 0">
+            <tr v-for="vulnerable in data.top_vulnerabilities">
+                <td >{{vulnerable.name}}</td>
+                <td >
+                    <div>
+                        <div class="vulnerable-count">{{vulnerable.count}}</div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
