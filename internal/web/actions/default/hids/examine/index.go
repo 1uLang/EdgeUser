@@ -63,12 +63,6 @@ func (this *IndexAction) RunGet(params struct {
 
 	req.StartTime = params.StartTime
 	req.EndTime = params.EndTime
-	//去掉 ','
-	params.ExamineItems = strings.TrimPrefix(params.ExamineItems, ",")
-	params.ExamineItems = strings.TrimSuffix(params.ExamineItems, ",")
-	if len(params.ExamineItems) > 0 {
-		req.ExamineItems = strings.Split(params.ExamineItems, ",")
-	}
 	list, err := examine_server.List(req)
 	if err != nil {
 		this.Data["errorMessage"] = fmt.Sprintf("获取主机体检信息列表失败：%v", err)
@@ -85,19 +79,34 @@ func (this *IndexAction) RunGet(params struct {
 			return
 		}
 		list.ServerExamineResultInfoList[k]["os"] = os
+
 		if req.State != -1 {
 			list.ServerExamineResultInfoList[k]["state"] = req.State
 		}
 
+		//看当前主机是否保存了主机体检状态
+		_, isExist := gl_examine_scan_maps.Load(v["macCode"].(string) + v["userName"].(string))
+		if isExist {
+			if v["serverExamineResultInfo"].(map[string]interface{})["state"].(float64) == 0 { //未检测  - 延迟 设置成体检中
+				list.ServerExamineResultInfoList[k]["serverExamineResultInfo"].(map[string]interface{})["state"] = 1
+			} else { //已生效 删除该记录
+				gl_examine_scan_maps.Delete(v["macCode"].(string) + v["userName"].(string))
+			}
+		}
 		datas = append(datas, list.ServerExamineResultInfoList[k])
 	}
 	this.Data["datas"] = datas
 	this.Data["state"] = params.State
 	this.Data["Type"] = params.Type
 	this.Data["score"] = params.Score
-	this.Data["examineItems"] = params.ExamineItems
-	this.Data["startTime"] = params.StartTime
-	this.Data["endTime"] = params.EndTime
+
+	if len(params.StartTime) > 0 {
+		this.Data["startTime"] = strings.ReplaceAll(params.StartTime, " ", "T")
+	}
+
+	if len(params.EndTime) > 0 {
+		this.Data["endTime"] = strings.ReplaceAll(params.EndTime, " ", "T")
+	}
 }
 func (this *IndexAction) RunPost(params struct {
 	PageNo       int
@@ -134,12 +143,6 @@ func (this *IndexAction) RunPost(params struct {
 
 	req.StartTime = params.StartTime
 	req.EndTime = params.EndTime
-	//去掉 ','
-	params.ExamineItems = strings.TrimPrefix(params.ExamineItems, ",")
-	params.ExamineItems = strings.TrimSuffix(params.ExamineItems, ",")
-	if len(params.ExamineItems) > 0 {
-		req.ExamineItems = strings.Split(params.ExamineItems, ",")
-	}
 	list, err := examine_server.List(req)
 	if err != nil {
 		this.ErrorPage(fmt.Errorf("获取主机体检信息列表失败：%v", err))
@@ -160,6 +163,15 @@ func (this *IndexAction) RunPost(params struct {
 		if req.State != -1 {
 			list.ServerExamineResultInfoList[k]["state"] = req.State
 		}
+		//看当前主机是否保存了主机体检状态
+		_, isExist := gl_examine_scan_maps.Load(v["macCode"].(string) + v["userName"].(string))
+		if isExist {
+			if list.ServerExamineResultInfoList[k]["state"].(float64) == 0 { //未检测  - 延迟 设置成体检中
+				list.ServerExamineResultInfoList[k]["state"] = 1
+			} else { //已生效 删除该记录
+				gl_examine_scan_maps.Delete(v["macCode"].(string) + req.UserName)
+			}
+		}
 
 		datas = append(datas, list.ServerExamineResultInfoList[k])
 	}
@@ -167,10 +179,14 @@ func (this *IndexAction) RunPost(params struct {
 	this.Data["state"] = params.State
 	this.Data["Type"] = params.Type
 	this.Data["score"] = params.Score
-	this.Data["examineItems"] = params.ExamineItems
-	this.Data["startTime"] = params.StartTime
-	this.Data["endTime"] = params.EndTime
 
+	if len(params.StartTime) > 0 {
+		this.Data["startTime"] = strings.ReplaceAll(params.StartTime, " ", "T")
+	}
+
+	if len(params.EndTime) > 0 {
+		this.Data["endTime"] = strings.ReplaceAll(params.EndTime, " ", "T")
+	}
 	this.Success()
 	return
 }

@@ -10,11 +10,14 @@ import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids"
 	"github.com/iwind/TeaGo/actions"
 	"strings"
+	"sync"
 )
 
 type CheckAction struct {
 	actionutils.ParentAction
 }
+
+var gl_baseline_check_maps sync.Map
 
 func (this *CheckAction) RunPost(params struct {
 	MacCode    []string `json:"macCodes"`
@@ -38,10 +41,10 @@ func (this *CheckAction) RunPost(params struct {
 		return
 	}
 	if params.ServerIp != "" {
-		params.ServerIp = strings.ReplaceAll(params.ServerIp,"/",".")
+		params.ServerIp = strings.ReplaceAll(params.ServerIp, "/", ".")
 		req := &agent.SearchReq{}
 		req.ServerIp = params.ServerIp
-		req.UserName,err = this.UserName()
+		req.UserName, err = this.UserName()
 		if err != nil {
 			this.ErrorPage(fmt.Errorf("获取用户信息失败:%v", err))
 			return
@@ -67,6 +70,10 @@ func (this *CheckAction) RunPost(params struct {
 	if err != nil {
 		this.Error(fmt.Sprintf("检测失败：%v", err), 400)
 		return
+	}
+	userName, _ := this.UserName()
+	if len(params.MacCode) > 0 && params.MacCode[0] != "" { //该主机进行合规基线
+		gl_baseline_check_maps.Store(params.MacCode[0]+userName, true)
 	}
 
 	this.Success()

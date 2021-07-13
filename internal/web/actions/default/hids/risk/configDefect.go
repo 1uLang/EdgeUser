@@ -45,6 +45,13 @@ func (this *ConfigDefectAction) RunGet(params struct {
 		this.Data["errorMessage"] = fmt.Sprintf("获取缺陷配置详细列表信息失败：%v", err)
 		return
 	}
+	req.ProcessState = 2
+	list2, err := risk_server.ConfigDefectList(req)
+	if err != nil {
+		this.Data["errorMessage"] = fmt.Errorf("获取缺陷配置详细列表信息失败：%v", err)
+		return
+	}
+	list.List = append(list.List, list2.List...)
 	for k, v := range list.List {
 
 		if v["userName"] != req.UserName {

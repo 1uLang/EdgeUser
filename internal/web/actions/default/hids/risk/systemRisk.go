@@ -52,6 +52,13 @@ func (this *SystemRiskAction) RunGet(params struct {
 		this.Data["errorMessage"] = fmt.Errorf("获取系统漏洞信息失败：%v", err)
 		return
 	}
+	req.ProcessState = 2
+	list2, err := risk_server.SystemDistributed(req)
+	if err != nil {
+		this.Data["errorMessage"] = fmt.Errorf("获取系统漏洞信息失败：%v", err)
+		return
+	}
+	risk.List = append(risk.List, list2.List...)
 	this.Data["risks"] = risk.List
 	this.Data["serverIp"] = params.ServerIp
 	this.Data["level"] = params.Level

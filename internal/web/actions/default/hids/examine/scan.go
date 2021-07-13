@@ -10,11 +10,14 @@ import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids"
 	"github.com/iwind/TeaGo/actions"
 	"strings"
+	"sync"
 )
 
 type ScanAction struct {
 	actionutils.ParentAction
 }
+
+var gl_examine_scan_maps sync.Map
 
 func (this *ScanAction) RunPost(params struct {
 	Opt       string
@@ -82,5 +85,13 @@ func (this *ScanAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
+
+	if params.Opt == "now" {
+		userName, _ := this.UserName()
+		if len(params.MacCode) > 0 && params.MacCode[0] != "" { //该主机进行主机体检
+			gl_examine_scan_maps.Store(params.MacCode[0]+userName, true)
+		}
+	}
+
 	this.Success()
 }

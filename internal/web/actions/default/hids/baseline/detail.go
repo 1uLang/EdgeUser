@@ -47,6 +47,9 @@ func (this *DetailAction) RunGet(params struct {
 			return
 		}
 		for _, v := range info.List {
+			if v["result"].(float64) == 1 { //去掉正常项
+				continue
+			}
 			if v["typeName"].(string) == "操作系统安全" {
 				systemSafe = append(systemSafe, v)
 			} else if v["typeName"].(string) == "中间件安全" {

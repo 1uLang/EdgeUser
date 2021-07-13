@@ -49,6 +49,13 @@ func (this *DangerAccountAction) RunGet(params struct {
 		this.Data["errorMessage"] = fmt.Errorf("获取风险账号信息失败：%v", err)
 		return
 	}
+	req.ProcessState = 2
+	list2, err := risk_server.DangerAccountList(req)
+	if err != nil {
+		this.Data["errorMessage"] = fmt.Errorf("获取风险账号信息失败：%v", err)
+		return
+	}
+	list.List = append(list.List, list2.List...)
 	for k, v := range list.List {
 
 		if v["userName"] != req.UserName {
