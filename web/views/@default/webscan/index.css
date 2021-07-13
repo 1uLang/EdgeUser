@@ -1,0 +1,84 @@
+.ui.message .icon {
+    position: absolute;
+    right: 1em;
+    top: 1.8em;
+}
+
+.grid {
+    margin-top: 2em !important;
+    margin-left: 0.1em !important;
+}
+
+.grid .column {
+    margin-bottom: 2em;
+    border-right: 1px #eee solid;
+}
+
+.grid .column div.value {
+    margin-top: 1.5em;
+}
+
+.grid .column div.value span {
+    font-size: 2em;
+    margin-right: 0.2em;
+}
+
+.grid .column.no-border {
+    border-right: 0;
+}
+
+.grid h4 a {
+    display: none;
+}
+
+.grid .column:hover a {
+    display: inline;
+}
+
+.chart-box {
+    width: 33%;
+    height: 20em;
+    float: left;
+}
+.show-num{
+    color: #d9001b;
+    font-size: 32px !important;
+}
+.card-box {
+    box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.01), 0 1px 1px 0 rgba(0, 0, 0, 0.01), 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    display: block;
+    position: relative;
+    padding: 16px;
+    border-radius: 4px;
+}
+.vulnerable-num-high{
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #ec808d;
+    float: right;
+}
+.vulnerable-num-med{
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #fcc77d;
+    float: right;
+}
+.vulnerable-num-low{
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #3abee8;
+    float: right;
+}
+.vulnerable-count{
+    float: right;
+    font-size: 16px;
+    color: #ec808d;
+}
+/*# sourceMappingURL=index.css.map */

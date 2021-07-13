@@ -1,0 +1,20 @@
+{$layout "layout_popup"}
+
+
+<div  style="display: flex;flex-direction: column;">
+    <div style="height: 450px;">
+        <div style="border-bottom: 1px solid #d7d7d7;height: 40px;color: #333;line-height: 40px;font-size: 18px;font-weight: 600;">
+            选择检查模板
+        </div>
+        <div style="margin-top: 10px;padding-left: 150px;">
+            <div v-for='item in templates' @click="onSetSelectValue(item.id)"
+                 style="display: flex;justify-content: start;align-items: center;margin: 12px 0;">
+                <img :src="sSelectValue == item.id ? '/images/select_select.png':'/images/select_box.png'" width="12px" height="12px">
+                <span style="margin-left: 10px;">{{item.name}}</span>
+            </div>
+        </div>
+    </div>
+    <div style="display: flex;height: 50px;align-items: center;justify-content: center;border-top: 1px #d7d7d7 solid;">
+        <div class="sure-btn" @click="onStartCheck(macCode)">确定</div>
+    </div>
+</div>

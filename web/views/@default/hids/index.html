@@ -1,0 +1,82 @@
+{$layout}
+{$template "/datepicker"}
+{$var "header"}
+<script type="text/javascript" src="/js/echarts/echarts.min.js"></script>
+{$end}
+
+<div style="width: 100%;margin-top: 30px;display: flex;flex-direction: row;">
+    <div class="card-div" style="margin-right: 5%;">
+        <div style="height: 60%;display: flex;justify-content: space-between;margin-bottom: 10px;">
+            <div>
+                <div style="margin-bottom: 10px;">主机总数</div>
+                <div style="font-size: 30px;">{{data.hostCount}}</div>
+            </div>
+            <img src="/images/danget_icon_1.png" width="40px" height="40px">
+        </div>
+        <div style="border-bottom:1px solid #000;"></div>  
+        <div style="margin-top: 10px;">
+            <span>在线：</span>
+            <span>{{data.hostOnline}}</span>
+        </div>
+    </div>
+    <div class="card-div" style="margin-right: 5%;">
+        <div style="height: 60%;display: flex;justify-content: space-between;margin-bottom: 10px;">
+            <div>
+                <div style="margin-bottom: 10px;">待处理入侵事件</div>
+                <div style="font-size: 30px;">{{data.detailAttCount}}</div>
+            </div>
+            <img src="/images/danget_icon_2.png" width="40px" height="40px">
+        </div>
+        <div style="border-bottom:1px solid #000;"></div>  
+        <div style="margin-top: 10px;">
+            <span>今日：</span>
+            <span>{{data.detailAttTodayCount}}</span>
+        </div>
+    </div>
+    <div class="card-div">
+        <div style="height: 60%;display: flex;justify-content: space-between;margin-bottom: 10px;">
+            <div>
+                <div style="margin-bottom: 10px;">待处理高危漏洞</div>
+                <div style="font-size: 30px;">{{data.detailloopholeCount}}</div>
+            </div>
+            <img src="/images/danget_icon_3.png" width="40px" height="40px">
+        </div>
+        <div style="border-bottom:1px solid #000;"></div>  
+        <div style="margin-top: 10px;">
+            <span>今日：</span>
+            <span>{{data.detailloopholeTodayCount}}</span>
+        </div>
+    </div>
+</div>
+
+<div class="card-div" style="width: 100%;height: 430px;margin-top: 30px;">
+    <div style="display: flex;justify-content: space-between;height: 45px;border-bottom: 1px #000 solid;padding-bottom: 10px;">
+        <div style="display: inline-flex;margin-top: 10px;">
+            <div :class="{'menu-select-color':nShowState===1,'menu-define-color':nShowState!=1}" @click="onChangeShowState(1)">系统漏洞发现</div>
+            <div :class="{'menu-select-color':nShowState===2,'menu-define-color':nShowState!=2}" @click="onChangeShowState(2)">系统漏洞处置</div>
+        </div>
+        <div align="right" style="display: inline-flex;">
+            <form class="ui form" autocomplete="off">
+                <div style="display: flex;flex-direction: row;">
+                    <div style="display: inline-flex;align-items: center;width: 50%;">
+                        <div :class="{'time-select-color':nTimeSelect===1,'time-define-color':nTimeSelect!=1}" @click="onChangeTimeSelect(1)">7天</div>
+                        <div :class="{'time-select-color':nTimeSelect===2,'time-define-color':nTimeSelect!=2}" @click="onChangeTimeSelect(2)">30天</div>
+                        <div :class="{'time-select-color':nTimeSelect===3,'time-define-color':nTimeSelect!=3}" @click="onChangeTimeSelect(3)">全年</div>
+                    </div>
+                    <div class="ui fields inline">
+                        <div class="ui field">
+                            <input type="text" name="dayFrom" placeholder="开始日期" v-model="dayFrom" value="" style="width:8em" id="day-from-picker"/>
+                        </div>
+                        <div class="ui field">
+                            <input type="text" name="dayTo" placeholder="结束日期" v-model="dayTo" value="" style="width:8em" id="day-to-picker"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div v-show="nShowState===1" style="height:30em;width: 100%;" id="find-chart-box"></div>
+    <div v-show="nShowState===2" style="height:30em;width: 100%;" id="detail-chart-box"></div>
+
+</div>
