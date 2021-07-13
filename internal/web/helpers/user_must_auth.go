@@ -148,6 +148,60 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			},
 		},
 		{
+			"code": "hids",
+			"name": "主机防护",
+			"icon": "linux",
+			"subItems": []maps.Map{
+				{
+					"name": "主机体检",
+					"url":  "/hids/examine",
+					"code": "examine",
+				},
+				{
+					"name": "漏洞风险",
+					"url":  "/hids/risk",
+					"code": "risk",
+				},
+				{
+					"name": "入侵威胁",
+					"url":  "/hids/invade",
+					"code": "invade",
+				},
+				{
+					"name": "合规基线",
+					"url":  "/hids/baseline",
+					"code": "baseline",
+				},
+				{
+					"name": "Agent管理",
+					"url":  "/hids/agent",
+					"code": "agent",
+				},
+			},
+		},
+		{
+			"code": "webscan",
+			"name": "漏洞扫描",
+			"icon": "ioxhost",
+			"subItems": []maps.Map{
+				{
+					"name": "扫描目标",
+					"url":  "/webscan/targets",
+					"code": "targets",
+				},
+				{
+					"name": "扫描任务",
+					"url":  "/webscan/scans",
+					"code": "scans",
+				},
+				{
+					"name": "扫描报告",
+					"url":  "/webscan/reports",
+					"code": "reports",
+				},
+			},
+		},
+		{
 			"code": "lb",
 			"name": "负载均衡",
 			"icon": "paper plane",
@@ -179,12 +233,22 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"name": "工单",
 			"icon": "question circle outline",
 		},**/
+
 	}
 
 	result := []maps.Map{}
 	config, _ := configloaders.LoadUIConfig()
 	for _, m := range allMaps {
 		if m.GetString("code") == "finance" {
+
+			if m.GetString("code") == "webscan" {
+				result = append(result, m)
+				continue
+			}
+			if m.GetString("code") == "hids" {
+				result = append(result, m)
+				continue
+			}
 			if config != nil && !config.ShowFinance {
 				continue
 			}
