@@ -7,6 +7,7 @@ import (
 	"github.com/1uLang/zhiannet-api/hids/server/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids"
+	"strings"
 )
 
 type IndexAction struct {
