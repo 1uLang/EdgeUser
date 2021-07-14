@@ -5,7 +5,7 @@ go 1.15
 replace github.com/TeaOSLab/EdgeCommon => ../EdgeCommon
 
 require (
-	github.com/1uLang/zhiannet-api v0.0.0-20210712075030-8d12255a548f
+	github.com/1uLang/zhiannet-api v0.0.0-20210708125244-71a3ce5b52b3
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/TeaOSLab/EdgeCommon v0.0.0-00010101000000-000000000000
 	github.com/cespare/xxhash v1.1.0

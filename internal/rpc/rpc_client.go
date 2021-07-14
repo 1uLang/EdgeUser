@@ -79,6 +79,10 @@ func (this *RPCClient) NodeLogRPC() pb.NodeLogServiceClient {
 	return pb.NewNodeLogServiceClient(this.pickConn())
 }
 
+func (this *RPCClient) NodeValueRPC() pb.NodeValueServiceClient {
+	return pb.NewNodeValueServiceClient(this.pickConn())
+}
+
 func (this *RPCClient) ServerRPC() pb.ServerServiceClient {
 	return pb.NewServerServiceClient(this.pickConn())
 }
