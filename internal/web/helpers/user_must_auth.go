@@ -122,14 +122,21 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 	allMaps := []maps.Map{
 		{
 			"code": "dashboard",
-			"name": "概览",
+			"name": "业务概览",
 			"icon": "dashboard",
+			"url":  "/dashboard",
 		},
 		{
 			"code": "servers",
 			"name": "CDN加速",
+			"url":  "/servers",
 			"icon": "clone outline",
 			"subItems": []maps.Map{
+				{
+					"name": "域名管理",
+					"code": "servers",
+					"url":  "/servers",
+				},
 				{
 					"name": "证书管理",
 					"code": "certs",
@@ -140,15 +147,34 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"code": "cache",
 					"url":  "/servers/cache",
 				},
-				/**{
-					"name": "用量统计",
-					"code": "stat",
-					"url":  "/servers/stat",
-				},**/
+			},
+		},
+		//{
+		//	"code": "lb",
+		//	"name": "负载均衡",
+		//	"icon": "paper plane",
+		//},
+		{
+			"code": "waf",
+			"name": "WAF安全",
+			"icon": "shield",
+			"url":  "/waf",
+			"subItems": []maps.Map{
+				{
+					"name": "安全概览",
+					"code": "waf",
+					"url":  "/waf",
+				},
+				{
+					"name": "拦截日志",
+					"code": "wafLogs",
+					"url":  "/waf/logs",
+				},
 			},
 		},
 		{
 			"code": "hids",
+			"url":  "/hids/examine",
 			"name": "主机防护",
 			"icon": "linux",
 			"subItems": []maps.Map{
@@ -181,6 +207,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 		},
 		{
 			"code": "webscan",
+			"url":  "/webscan/targets",
 			"name": "漏洞扫描",
 			"icon": "ioxhost",
 			"subItems": []maps.Map{
@@ -201,33 +228,16 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 				},
 			},
 		},
-		{
-			"code": "lb",
-			"name": "负载均衡",
-			"icon": "paper plane",
-		},
-		{
-			"code": "waf",
-			"name": "WAF安全",
-			"icon": "shield",
-			"subItems": []maps.Map{
-				{
-					"name": "拦截日志",
-					"code": "wafLogs",
-					"url":  "/waf/logs",
-				},
-			},
-		},
-		{
-			"code": "finance",
-			"name": "费用账单",
-			"icon": "yen sign",
-		},
-		{
-			"code": "acl",
-			"name": "访问控制",
-			"icon": "address book",
-		},
+		//{
+		//	"code": "finance",
+		//	"name": "费用账单",
+		//	"icon": "yen sign",
+		//},
+		//{
+		//	"code": "acl",
+		//	"name": "访问控制",
+		//	"icon": "address book",
+		//},
 		/**{
 			"code": "tickets",
 			"name": "工单",
@@ -241,14 +251,6 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 	for _, m := range allMaps {
 		if m.GetString("code") == "finance" {
 
-			if m.GetString("code") == "webscan" {
-				result = append(result, m)
-				continue
-			}
-			if m.GetString("code") == "hids" {
-				result = append(result, m)
-				continue
-			}
 			if config != nil && !config.ShowFinance {
 				continue
 			}
@@ -260,6 +262,9 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			continue
 		}
 		if m.GetString("code") == "waf" && !lists.ContainsString(featureCodes, "server.waf") {
+			continue
+		}
+		if code := m.GetString("code"); (code == "hids" || code == "webscan") && !lists.ContainsString(featureCodes, code) {
 			continue
 		}
 		result = append(result, m)
