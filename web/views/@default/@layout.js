@@ -2,6 +2,8 @@ Tea.context(function () {
 	this.moreOptionsVisible = false
 	this.globalMessageBadge = 0
 
+	this.curSelectCode = sessionStorage.getItem("leftSelectCode")? sessionStorage.getItem("leftSelectCode"):"dashboard"
+
 	if (typeof this.leftMenuItemIsDisabled == "undefined") {
 		this.leftMenuItemIsDisabled = false
 	}
@@ -10,6 +12,11 @@ Tea.context(function () {
 		if (this.$refs.focus != null) {
 			this.$refs.focus.focus()
 		}
+
+		let curSelectCode = sessionStorage.getItem("leftSelectCode")
+        if(curSelectCode){
+            this.onSetLeftTouchCode(curSelectCode)
+        }
 
 		// 检查消息
 		this.checkMessages()
@@ -69,6 +76,32 @@ Tea.context(function () {
 	if (window.IS_POPUP === true) {
 		this.success = window.NotifyPopup
 	}
+
+	this.onChangeUrl = function (url,code) {
+        let tempUrl = url
+        if(tempUrl){
+            if(tempUrl.indexOf("nfw") != -1){
+                let curSelectNode = localStorage.getItem("nfwSelectNodeId");
+                if(curSelectNode){
+                    tempUrl = tempUrl+"?nodeId="+curSelectNode
+                }
+            }else if(tempUrl.indexOf("ddos") != -1){
+                let curSelectNode = localStorage.getItem("ddosSelectNodeId");
+                if(curSelectNode){
+                    tempUrl = tempUrl+"?nodeId="+curSelectNode
+                }
+            }
+        }
+
+        return tempUrl
+    }
+
+    this.onSetLeftTouchCode = function (code) {
+        if(this.curSelectCode!=code){
+            this.curSelectCode = code
+        }
+        sessionStorage.setItem("leftSelectCode",this.curSelectCode)
+    }
 });
 
 window.NotifySuccess = function (message, url, params) {

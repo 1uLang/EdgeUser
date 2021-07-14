@@ -49,9 +49,31 @@
                 <i class="ui dashboard icon"></i>
                 <span>仪表板</span>
             </a>-->
+            <div v-for="module in teaModules">
+                <a v-if="module.subItems && module.subItems.length>0" class="item" :class="{active:curSelectCode===module.code}" :href="onChangeUrl(module.url)"
+                    @click="onSetLeftTouchCode(module.code)">
+                    <span v-if="module.code.length > 0">
+						<i class="window restore outline icon" v-if="module.icon == null"></i>
+						<i class="ui icon" v-if="module.icon != null" :class="module.icon"></i>
+						<span class="module-name">{{module.name}}</span>
+					</span>
+                </a>
+                <div v-if="module.subItems && module.subItems.length>0 && curSelectCode == module.code" class="sub-items">
+					<a class="item" v-for="subItem in module.subItems" v-if="subItem.isOn !== false" :href="onChangeUrl(subItem.url)">
+                        <i class="icon angle right" v-if="subItem.code == teaMenu"></i> {{subItem.name}}</a>
+                </div>
+                <a v-if="!module.subItems ||module.subItems.length==0" class="item" :href="onChangeUrl(module.url)"
+                    :class="{active:curSelectCode===module.code}" @click="onSetLeftTouchCode(module.code)">
 
+                    <span v-if="module.code.length > 0">
+						<i class="window restore outline icon" v-if="module.icon == null"></i>
+						<i class="ui icon" v-if="module.icon != null" :class="module.icon"></i>
+						<span class="module-name">{{module.name}}</span>
+					</span>
+                </a>
+            </div>
             <!-- 模块 -->
-			<div v-for="module in teaModules">
+			<!-- <div v-for="module in teaModules">
 				<a class="item" :href="Tea.url(module.code)" :class="{active:teaMenu == module.code && teaSubMenu.length == 0, separator:module.code.length == 0}">
 					<span v-if="module.code.length > 0">
 						<i class="window restore outline icon" v-if="module.icon == null"></i>
@@ -62,7 +84,7 @@
 				<div v-if="teaMenu == module.code" class="sub-items">
 					<a class="item" v-for="subItem in module.subItems" :href="subItem.url" :class="{active:subItem.code == teaSubMenu}">{{subItem.name}}</a>
 				</div>
-			</div>
+			</div> -->
         </div>
     </div>
 
