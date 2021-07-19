@@ -442,9 +442,28 @@ Tea.context(function () {
     //选择时间之后的回调
     this.onTimeChange = function () {
         let startTime = document.getElementById("day-from-picker").value
-        startTime = startTime.replace("T", " ");
+        if(startTime.length > 0){
+            let tempCharCount=startTime.split(":").length-1;
+            if(tempCharCount<=1){
+                document.getElementById("day-from-picker").value = ""
+            }else{
+                startTime = startTime.replace("T", " ");
+            }
+        }else{
+            document.getElementById("day-from-picker").value = ""
+        }
+
         let endTime = document.getElementById("day-to-picker").value
-        endTime = endTime.replace("T", " ");
+        if(endTime.length > 0){
+            let tempCharCount=endTime.split(":").length-1;
+            if(tempCharCount<=1){
+                document.getElementById("day-to-picker").value = ""
+            }else{
+                endTime = endTime.replace("T", " ");
+            }
+        }else{
+            document.getElementById("day-to-picker").value = ""
+        }
         //todo req
     }
 
