@@ -2,20 +2,33 @@ package ui
 
 import (
 	"bytes"
+	"crypto/md5"
 	"encoding/json"
+	"fmt"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
+	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs/shared"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/conds/condutils"
 	"github.com/iwind/TeaGo/Tea"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/files"
 	"github.com/iwind/TeaGo/logs"
+	"net/http"
 )
 
 type ComponentsAction actions.Action
 
 var componentsData = []byte{}
+var componentsDataSum string
 
 func (this *ComponentsAction) RunGet(params struct{}) {
 	this.AddHeader("Content-Type", "text/javascript; charset=utf-8")
+
+	// etag
+	var requestETag = this.Header("If-None-Match")
+	if len(requestETag) > 0 && requestETag == "\""+componentsDataSum+"\"" {
+		this.ResponseWriter.WriteHeader(http.StatusNotModified)
+		return
+	}
 
 	if !Tea.IsTesting() && len(componentsData) > 0 {
 		this.AddHeader("Last-Modified", "Fri, 06 Sep 2019 08:29:50 GMT")
@@ -59,6 +72,34 @@ func (this *ComponentsAction) RunGet(params struct{}) {
 		buffer.Write([]byte{'\n', '\n'})
 	}
 
+	// 请求变量
+	requestVariablesJSON, err := json.Marshal(shared.DefaultRequestVariables())
+	if err != nil {
+		logs.Println("ComponentsAction marshal request variables failed: " + err.Error())
+	} else {
+		buffer.WriteString("window.REQUEST_VARIABLES = ")
+		buffer.Write(requestVariablesJSON)
+		buffer.Write([]byte{'\n', '\n'})
+	}
+
+	// 指标
+	metricHTTPKeysJSON, err := json.Marshal(serverconfigs.FindAllMetricKeyDefinitions(serverconfigs.MetricItemCategoryHTTP))
+	if err != nil {
+		logs.Println("ComponentsAction marshal metric http keys failed: " + err.Error())
+	} else {
+		buffer.WriteString("window.METRIC_HTTP_KEYS = ")
+		buffer.Write(metricHTTPKeysJSON)
+		buffer.Write([]byte{'\n', '\n'})
+	}
+
+
 	componentsData = buffer.Bytes()
+
+	// ETag
+	var h = md5.New()
+	h.Write(buffer.Bytes())
+	componentsDataSum = fmt.Sprintf("%x", h.Sum(nil))
+	this.AddHeader("ETag", "\""+componentsDataSum+"\"")
+
 	this.Write(componentsData)
 }
