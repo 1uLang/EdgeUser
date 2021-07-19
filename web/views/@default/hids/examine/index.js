@@ -1,5 +1,6 @@
 Tea.context(function () {
-    this.progressListData = []//{id:1,curPer:1,disabled:1}
+    this.localProgressData = localStorage.getItem("examinProgressData")
+    this.progressListData =  this.localProgressData ? JSON.parse(this.localProgressData) : [];//{id:1,curPer:1,disabled:1}
 
     this.Items = this.examineItems !== ""? this.examineItems.split(","): []
     this.curIndex = -1
@@ -14,6 +15,8 @@ Tea.context(function () {
     this.serverIp = ""
     this.bTimeOutTip = false
     this.bShowScanPath = false
+
+    let that = this
 
     this.sTopSelectItem = [
         {id: "01", value: "系统漏洞"},
@@ -33,19 +36,19 @@ Tea.context(function () {
  
     this.$delay(function () {
 
-        this.onReloadProgressData()
+        
         if (this.errorMessage !== "" && this.errorMessage !== undefined) {
             teaweb.warn(this.errorMessage, function () {
             })
         }
 
-        let that = this
         // that.onCreateLoopTimeOut()
         window.addEventListener('beforeunload', function () {
             that.onReleaseUpdateTimeOut()
             // that.onReleaseTimeOut()
         })
     })
+    
 
     this.onCallBack = function () {
         if (this.checkScans()) {
@@ -352,37 +355,36 @@ Tea.context(function () {
 
     this.getProgressItemInfo = function (id) {
         if(id){
-            for(var index=0;index<this.progressListData.length;index++){
-                if(this.progressListData[index].id == id){
-                    return this.progressListData[index]
+            for(var index=0;index<that.progressListData.length;index++){
+                if(that.progressListData[index].id == id){
+                    return that.progressListData[index]
                 }
             }
         }
         return null
     }
-
+    
     this.getProgressPerStr = function (curValue, maxValue,id,state) {
-
-        if(!this.getProgressItemInfo){return "0%"}
+        if(!that.getProgressItemInfo){return "0%"}
 
         if(curValue == 0 ){
             if(state==1){
-                this.onCreateUpdateTimeOut()
-                let curData = this.getProgressItemInfo(id)
+                that.onCreateUpdateTimeOut()
+                let curData = that.getProgressItemInfo(id)
                 if(curData){
                     if(curData.curPer == 0){
                         return "1%"
                     }
                     return curData.curPer+"%"
                 }
-                this.onCreateProgressItemInfo(id)
+                that.onCreateProgressItemInfo(id)
                 return "1%"
             }else{
-                this.onChangeProgressDataState(id,state)
+                that.onChangeProgressDataState(id,state)
                 return ""
             }
         }else if(curValue == 100){
-            this.onChangeProgressDataState(id,state)
+            that.onChangeProgressDataState(id,state)
         }
 
         if(curValue && maxValue && maxValue>0 && maxValue >= curValue){
@@ -404,28 +406,25 @@ Tea.context(function () {
     //     console.log(that.getProgressPerStr(curValue, maxValue,id,state))
     //     return "0%"
     // }
-    this.getInitProgressPerString = function(curValue, maxValue,id,state){
-        let that = this
-        this.testFunc = function(){
-            console.log(that.getProgressPerStr)
-            console.log(that.getProgressPerStr(curValue, maxValue,id,state))
-        }
-        this.testFunc()
-    }
+    // this.getInitProgressPerString = function(curValue, maxValue,id,state){
+    //     let that = this
+    //     this.testFunc = function(){
+    //         console.log(that.getProgressPerStr)
+    //         console.log(that.getProgressPerStr(curValue, maxValue,id,state))
+    //     }
+    //     this.testFunc()
+    // }
 
     this.getProgressPer = function (curValue, maxValue,id,state) {
-        console.log(state);
-        console.log(curValue);
-        console.log(maxValue);
-        if(!this.getProgressItemInfo){return "0%"}
+        if(!that.getProgressItemInfo){return "0%"}
         
         if(curValue == 0 ){
             if(state && state==1){
-                let curData = this.getProgressItemInfo(id)
+                let curData = that.getProgressItemInfo(id)
                 if(curData){
                     return curData.curPer+"%"
                 }
-                this.onCreateProgressItemInfo(id)
+                that.onCreateProgressItemInfo(id)
                 return "1%"
             }
         }
@@ -454,64 +453,54 @@ Tea.context(function () {
 
     this.onCreateProgressItemInfo = function (id) {
         let curData = {id:id,curPer:0,state:1,disabled:0}
-        this.progressListData.push(curData)
-        this.onSaveProgressData()
+        that.progressListData.push(curData)
+        that.onSaveProgressData()
     }
     this.onChangeProgressDataState = function (id,state) {
-        for(var index=0;index<this.progressListData.length;index++){
-            if(this.progressListData[index].id==id){
-                this.progressListData[index].state = state
+
+        for(var index=0;index<that.progressListData.length;index++){
+            if(that.progressListData[index].id==id){
+                that.progressListData[index].state = state
                 break
             }
         }
-        if(this.progressListData.length>0){
-            this.progressListData = this.progressListData.filter((item) => {
+        if(that.progressListData.length>0){
+            that.progressListData = that.progressListData.filter((item) => {
                 return item.state == 1;
             });
         }
-        console.log(this.progressListData);
-        this.onSaveProgressData()
+        that.onSaveProgressData()
     }
     // 进度的缓存数据
-    this.onReloadProgressData = function () {
-        let curProgressData = localStorage.getItem("examinProgressData");
-        if(curProgressData){
-            this.progressListData = JSON.parse(curProgressData)
-        }else{
-            this.progressListData = []
-        }
-    }
-
     this.onUpdateProgressData = function () {
-        for(var index=0;index<this.progressListData.length;index++){
-            if(this.progressListData[index].state==1){
-                this.progressListData[index].curPer = this.progressListData[index].curPer+5
-                if(this.progressListData[index].curPer>=95){
-                    this.progressListData[index].curPer = 95
+        for(var index=0;index<that.progressListData.length;index++){
+            if(that.progressListData[index].state==1){
+                that.progressListData[index].curPer = that.progressListData[index].curPer+5
+                if(that.progressListData[index].curPer>=95){
+                    that.progressListData[index].curPer = 95
                 }
             }
         }
-        this.onSaveProgressData()
+        that.onSaveProgressData()
     }
     this.onSaveProgressData = function () {
-        localStorage.setItem("examinProgressData", JSON.stringify(this.progressListData));
+        localStorage.setItem("examinProgressData", JSON.stringify(that.progressListData));
     }
     
 
     //计时器
     this.onCreateUpdateTimeOut = function () {
-        console.log(this.updateTimeId)
-        if(!this.updateTimeId){
-            this.updateTimeId = createTimer(this.onUpdateProgressData, {timeout: 5000});
-            this.updateTimeId.start();
+        if(!that.updateTimeId){
+            that.updateTimeId = createTimer(that.onUpdateProgressData, {timeout: 5000});
+            that.updateTimeId.start();
         }
     }
 
     this.onReleaseUpdateTimeOut = function () {
 
-        if (this.updateTimeId) {
-            this.updateTimeId.stop()
-            this.updateTimeId = null
+        if (that.updateTimeId) {
+            that.updateTimeId.stop()
+            that.updateTimeId = null
         }
     }
 

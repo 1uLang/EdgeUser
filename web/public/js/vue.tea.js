@@ -50,6 +50,7 @@ Array.$nil={};Array.prototype.$contains=function(a){var c=this;if(c==null){retur
 
         var innerMethods = {
             $delay: Tea.delay,
+            $initView:Tea.initView,
             $get: function (action) {
                 return Tea.action(action).get();
             },
@@ -160,6 +161,7 @@ Array.$nil={};Array.prototype.$contains=function(a){var c=this;if(c==null){retur
                 // 内置方法
                 methods: {
                     $delay: Tea.delay,
+                    $initView:Tea.initView,
                     $get: function (action) {
                         return Tea.action(action).get();
                     },
@@ -463,6 +465,10 @@ window.Tea.delay = function (fn, ms) {
         fn.call(Tea.Vue);
     }, ms);
 };
+
+window.Tea.initView = function (fn) {
+    fn.call(Tea.Vue);
+}
 
 /**
  * 定义Action对象

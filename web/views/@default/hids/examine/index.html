@@ -85,7 +85,7 @@
                     <div :class="[checkShowColor(item.serverExamineResultInfo.progress,100) ? 'progress-green-bg-style' : 'progress-blue-bg-style']"
                          :style="{width:getProgressPer(item.serverExamineResultInfo.progress,100,item.serverExamineResultInfo.serverIp,item.serverExamineResultInfo.state)}">
                     </div>
-                    <span>{{getInitProgressPerString(item.serverExamineResultInfo.progress,100,item.serverExamineResultInfo.serverIp,item.serverExamineResultInfo.state)}}</span>
+                    <span>{{getProgressPerStr(item.serverExamineResultInfo.progress,100,item.serverExamineResultInfo.serverIp,item.serverExamineResultInfo.state)}}</span>
                 </div>
             </td>
             <td>{{getStatusName(item.serverExamineResultInfo.state)}}</td>
