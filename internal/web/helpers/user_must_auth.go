@@ -249,6 +249,12 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 	result := []maps.Map{}
 	config, _ := configloaders.LoadUIConfig()
 	for _, m := range allMaps {
+
+		if m.GetString("code") == "wescan" || m.GetString("code") == "hids" {
+			result = append(result, m)
+			continue
+		}
+
 		if m.GetString("code") == "finance" {
 
 			if config != nil && !config.ShowFinance {

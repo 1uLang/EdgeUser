@@ -34,7 +34,6 @@ Tea.context(function () {
     this.$delay(function () {
 
         this.onReloadProgressData()
-
         if (this.errorMessage !== "" && this.errorMessage !== undefined) {
             teaweb.warn(this.errorMessage, function () {
             })
@@ -399,8 +398,25 @@ Tea.context(function () {
         return "0%"
     }
 
-    this.getProgressPer = function (curValue, maxValue,id,state) {
+    // let that = this
+    // this.testFunc = function(curValue, maxValue,id,state){
+    //     console.log(that.getProgressPerStr)
+    //     console.log(that.getProgressPerStr(curValue, maxValue,id,state))
+    //     return "0%"
+    // }
+    this.getInitProgressPerString = function(curValue, maxValue,id,state){
+        let that = this
+        this.testFunc = function(){
+            console.log(that.getProgressPerStr)
+            console.log(that.getProgressPerStr(curValue, maxValue,id,state))
+        }
+        this.testFunc()
+    }
 
+    this.getProgressPer = function (curValue, maxValue,id,state) {
+        console.log(state);
+        console.log(curValue);
+        console.log(maxValue);
         if(!this.getProgressItemInfo){return "0%"}
         
         if(curValue == 0 ){
