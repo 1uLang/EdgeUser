@@ -45,10 +45,6 @@
     <div class="main-menu" v-cloak="">
         <div class="ui labeled menu vertical blue inverted tiny borderless">
 			<div class="item"></div>
-            <!--<a :href="Tea.url('dashboard')" class="item" :class="{active:teaMenu == 'dashboard'}">
-                <i class="ui dashboard icon"></i>
-                <span>仪表板</span>
-            </a>-->
             <div v-for="module in teaModules">
                 <a v-if="module.subItems && module.subItems.length>0" class="item" :class="{active:curSelectCode===module.code}" :href="onChangeUrl(module.url)"
                     @click="onSetLeftTouchCode(module.code)">
@@ -60,7 +56,9 @@
                 </a>
                 <div v-if="module.subItems && module.subItems.length>0 && curSelectCode == module.code" class="sub-items">
 					<a class="item" v-for="subItem in module.subItems" v-if="subItem.isOn !== false" :href="onChangeUrl(subItem.url)">
-                        <i class="icon angle right" v-if="subItem.code == teaMenu"></i> {{subItem.name}}</a>
+                        <i class="icon angle right" style="margin: 0;float: left;" v-if="subItem.code == teaMenu"></i> 
+                        <span class="module-name">{{subItem.name}}</span>
+                    </a>
                 </div>
                 <a v-if="!module.subItems ||module.subItems.length==0" class="item" :href="onChangeUrl(module.url)"
                     :class="{active:curSelectCode===module.code}" @click="onSetLeftTouchCode(module.code)">
