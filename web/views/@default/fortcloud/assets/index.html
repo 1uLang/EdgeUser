@@ -77,11 +77,11 @@
             <div style="display: flex;flex-direction: column;">
                 <div class="base_title_content">
                     <span class="base_title_f">主机名*</span>
-                    <input type="text" v-model="host" style="resize: none;height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="text" v-model="host" style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </div>
                 <div class="base_title_content">
                     <span class="base_title_f">IP(域名)*</span>
-                    <input type="text" v-model="post" style="resize: none;height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="text" v-model="post" style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </div>
                 <div class="base_title_content">
                     <span class="base_title_f">系统平台*</span>
@@ -89,7 +89,7 @@
                 </div>
                 <div class="base_title_content">
                     <span class="base_title_f">公网IP</span>
-                    <input type="text" v-model="pubHost" style="resize: none;height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="text" v-model="pubHost" style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </div>
             </div>
         </div>
@@ -101,7 +101,7 @@
                 <div style="display: flex;flex-direction: column;">
                     <div v-for="(item,index) in protoData" style="display: inline-flex;align-items: center;margin-bottom: 5px;">
                         <assert-proto-selector :v-assembly-id="item.protoIndex"></assert-proto-selector>
-                        <input type="text" v-model="item.inputValue" style="resize: none;height: 30px;width: 560px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                        <input type="text" v-model="item.inputValue" style="height: 30px;width: 560px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                         <div v-show="index===(protoData.length-1)" class="add_less_btn_style" style="background-color: #fd9d9f;" @click="onRemoveProtoData(index)">-</div>
                         <div v-show="index===(protoData.length-1)" class="add_less_btn_style" style="background-color: #00b144;" @click="onAddProtoData">+</div>
                     </div>
@@ -128,7 +128,7 @@
                 </div>
                 <div class="base_title_content">
                     <span class="base_title_f">备注</span>
-                    <input type="text" v-model="maskStr" style="resize: none;height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="text" v-model="maskStr" style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </div>
             </div>
         </div>
@@ -151,7 +151,7 @@
         </div>
     </div>
     <div v-if="pageState===3" style="width: 100%;margin-top: 10px;display: flex;justify-content: center;">
-        <div style="border: 1px solid #d7d7d7;width: 1150px;">
+        <div style="border: 1px solid #d7d7d7;width: 1150px;height: 650px;">
             <div style="border-bottom: 1px solid #d7d7d7;height: 30px;display: flex;align-items: center;">
                 <img src="/images/icon_warring.png" width="15px" height="15px" style="margin-left:20px;">
                 <span style="font-size: 14px;margin-left: 5px;">基本信息</span>
@@ -174,7 +174,6 @@
                     <div class="sure-btn-min" style="margin-left:30px;" @click="onResTest">测试</div>
                 </div>
             </div>
-            <div style="width: 100%;height: 30px;"></div>
         </div>
     </div>
     <div v-else>

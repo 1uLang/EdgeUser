@@ -3,4 +3,126 @@
 {$var "header"}
 {$end}
 
-<p class="comment" >管理账号</p>
+<div v-if="pageState==1">
+    <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+        <div style="cursor: pointer;margin-top: 10px;" @click="onChangeState(2)">[添加账号]</div>
+    </div>
+    
+    <div style="width: 100%;height: 650px;margin-top: 10px;overflow-x: auto; overflow-y: auto;">
+        <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+                <tr align="center">
+                    <th class='table-head-bg' style="width: 320px;" >名称</th>
+                    <th class='table-head-bg' style="width: 215px;" >用户名</th>
+                    <th class='table-head-bg' style="width: 100px;" >资产</th>
+                    <th class='table-head-bg' style="width: 410px;" >备注</th>
+                    <th class='table-head-bg' style="width: 135px;" >操作</th>
+                </tr>
+            </thead>
+            <tbody id='tableBody'>
+                <tr align="center" style="height: 40px;" v-for="(item,index) in tableData" >
+                    <td>
+                        <u @click="onOpenDetail(item)" style="color: #169BD5;cursor: pointer;">{{item.value1}}</u>
+                    </td>
+                    <td>{{item.value2}}</td>
+                    <td>{{item.value3}}</td>
+                    <td>{{item.value4}}</td>
+                    <td>
+                        <div style="display: flex;justify-content: space-around;padding: 4px 0;">
+                            <div class="edit_btn" @click="onEdit(item.id)">修改</div>
+                            <div class="edit_btn" @click="onDelete(item.id)">删除</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>    
+</div>
+
+<div v-else-if="pageState==2">
+    <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+        <div style="display: inline-flex;margin-top: 10px;">
+            <span style="cursor: pointer;" @click="onChangeState(1)">账号列表</span>
+            <div style="margin-left: 20px;color: #0090cb;cursor: pointer;">[添加账号]</div>
+        </div>
+    </div>
+    <div style="padding: 10px 30px;">
+        <div style="width: 100%;padding-bottom: 10px;">
+            <div style="display: flex;flex-direction: column;justify-content: flex-start;">
+                <div class="base_title_content">
+                    <span class="base_title_f">名称*</span>
+                    <input type="text" v-model="name" style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                </div>
+                <div class="base_title_content">
+                    <span class="base_title_f">用户名*</span>
+                    <input type="text" v-model="username" style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                </div>
+                <div class="base_title_content">
+                    <span class="base_title_f">密码*</span>
+                    <input type="text" v-model="password" style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                </div>
+                <div class="base_title_content" style="height: auto;">
+                    <span class="base_title_f">备注</span>
+                    <textarea type="text" v-model="maskStr" style="resize: none;height: 100px;width: 790px;border: 1px solid #d7d7d7;"></textarea>
+                </div>
+            </div>
+        </div>
+        
+        <div style="width: 100%;display: flex;justify-content: center;margin-top: 10px;">
+            <div class="sure-btn" @click="onSave">保存</div>
+        </div>
+        
+    </div>
+</div>
+
+<div v-else>
+    <div style="display: flex;flex-direction: column;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+        <div style="display: inline-flex;margin-top: 10px;">
+            <span style="cursor: pointer;" @click="onChangeState(1)">账号列表</span>
+            <span v-show="pageState===3" style="margin-left: 20px;color:#0090cb">账号详情</span>
+            <span v-show="pageState===4" style="margin-left: 20px;cursor: pointer;color:#000" @click="onChangeState(3)">账号详情</span>
+            <span v-show="pageState===4" style="margin-left: 20px;color:#0090cb">资产列表</span>
+            <span v-show="pageState===3" style="margin-left: 20px;cursor: pointer;color:#000" @click="onChangeState(4)">资产列表</span>
+        </div>
+    </div>
+    <div v-if="pageState===3" style="width: 100%;margin-top: 10px;display: flex;justify-content: center;">
+        <div style="border: 1px solid #d7d7d7;width: 1150px;height: 650px;">
+            <div style="border-bottom: 1px solid #d7d7d7;height: 30px;display: flex;align-items: center;">
+                <img src="/images/icon_warring.png" width="15px" height="15px" style="margin-left:20px;">
+                <span style="font-size: 14px;margin-left: 5px;">基本信息</span>
+            </div>
+            <div v-for="item in accountData" style="margin-top:10px;margin-left:20px;display: inline-flex;">
+                <div style="width: 450px;">
+                    <span style="font-size: 14px;">{{item.key}}</span>
+                </div>
+                <div style="width: 670px;margin-left: 10px;">
+                    <span style="font-size: 14px;">{{item.value}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div v-else>
+        <div style="width: 100%;margin-top: 10px;height: 650px;overflow-x: auto; overflow-y: auto;">
+            <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+                <thead>
+                    <tr align="center">
+                        <th class='table-head-bg' style="width: 235px;" >主机名</th>
+                        <th class='table-head-bg' style="width: 235px;" >IP</th>
+                        <th class='table-head-bg' style="width: 235px;" >管理用户</th>
+                        <th class='table-head-bg' style="width: 235px;" >连接状态</th>
+                        <th class='table-head-bg' style="width: 235px;" >更新时间</th>
+                    </tr>
+                </thead>
+                <tbody id='tableBody'>
+                    <tr align="center" style="height: 40px;" v-for="item in hostData" >
+                        <td>{{item.value1}}</td>
+                        <td>{{item.value2}}</td>
+                        <td>{{item.value3}}</td>
+                        <td>{{getLinkStatus(item.value4)}}</td>
+                        <td>{{onChangeTimeFormat(item.value5)}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>    
+    </div>
+</div>

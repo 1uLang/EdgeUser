@@ -1,0 +1,71 @@
+.table-head-bg{
+    height: 32px;
+    background: #f0f0f0;
+}
+
+.status-open{
+    display: inline-block;
+    color: #21ba45;
+    font-weight: 700;
+    padding: 4px 6px;
+    border-radius: 5px;
+    border: 1px solid #21ba45;
+}
+.status-close{
+    display: inline-block;
+    color: #db2828;
+    font-weight: 700;
+    padding: 4px 6px;
+    border-radius: 5px;
+    border: 1px solid #db2828;
+}
+.edit_btn{
+    color: #0090cb;
+    cursor: pointer;
+}
+
+.base_title_f{
+    margin-left: 60px;
+    margin-right: 30px;
+    width: 100px;
+    text-align: right;
+}
+
+.base_title_content{
+    height: 60px;
+    padding: 5px 0;
+    display:inline-flex;
+    align-items: center;
+}
+
+.add_less_btn_style{
+    width:20px;
+    height: 20px;
+    margin-left: 16px;
+    font-size: 15px;
+    line-height: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.sure-btn{
+    width: 60px;
+    height: 30px;
+    background-color: #0090cb;
+    color: #fff;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+.sure-btn-min{
+    width: 50px;
+    height: 20px;
+    background-color: #0090cb;
+    color: #fff;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+}
