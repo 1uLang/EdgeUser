@@ -1,0 +1,209 @@
+.table-head-bg{
+    height: 32px;
+    background: #f0f0f0;
+}
+
+.status-open{
+    display: inline-block;
+    color: #21ba45;
+    font-weight: 700;
+    padding: 4px 6px;
+    border-radius: 5px;
+    border: 1px solid #21ba45;
+}
+.status-close{
+    display: inline-block;
+    color: #db2828;
+    font-weight: 700;
+    padding: 4px 6px;
+    border-radius: 5px;
+    border: 1px solid #db2828;
+}
+.edit_btn{
+    color: #0090cb;
+    cursor: pointer;
+}
+
+.base_title_f{
+    margin-left: 60px;
+    margin-right: 30px;
+    width: 100px;
+    text-align: right;
+}
+
+.base_title_content{
+    height: 60px;
+    padding: 5px 0;
+    display:inline-flex;
+    align-items: center;
+}
+
+.add_less_btn_style{
+    width:20px;
+    height: 20px;
+    margin-left: 16px;
+    font-size: 15px;
+    line-height: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.sure-btn{
+    width: 60px;
+    height: 30px;
+    background-color: #0090cb;
+    color: #fff;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+.sure-btn-min{
+    width: 50px;
+    height: 20px;
+    background-color: #0090cb;
+    color: #fff;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 20px;
+    cursor: pointer;
+}
+
+.dialog-style{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 1;display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dialog-bg-style{
+    width: 445px;
+    height: 270px;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 1);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(215, 215, 215, 1);
+    border-radius: 0px;
+    box-shadow: none;
+}
+
+.btn-switch {
+    cursor: pointer;
+    width: 52px;
+    height: 31px;
+    position: relative;
+    border: 1px solid #dfdfdf;
+    background-color: #fdfdfd;
+    box-shadow: #dfdfdf 0 0 0 0 inset;
+    border-radius: 20px;
+    background-clip: content-box;
+    display: inline-block;
+    -webkit-appearance: none;
+    user-select: none;
+    outline: none !important;
+    }
+    
+    .btn-switch.large {
+    width: 44px;
+    height: 22px;
+    border-radius: 30px;
+    }
+    
+    .btn-switch.large:before {
+    content: '';
+    width: 22px;
+    height: 22px;
+    border-radius: 30px;
+    }
+    
+    .btn-switch.large:after {
+    content: '';
+    color: #999;
+    left: 30px;
+    position: absolute;
+    line-height: 30px;
+    font-size: 14px;
+    }
+    
+    .btn-switch.large:checked:after {
+    content: '';
+    color: #fff;
+    left: 10px;
+    position: absolute;
+    line-height: 30px;
+    font-size: 14px;
+    }
+    
+    .btn-switch.large:checked:before {
+    left: 22px;
+    }
+    
+    .btn-switch:before {
+    content: '';
+    width: 29px;
+    height: 29px;
+    position: absolute;
+    top: -1px;
+    left: 0;
+    border-radius: 20px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    }
+    
+    .btn-switch:checked {
+    border-color: #64bd63;
+    box-shadow: #64bd63 0 0 0 16px inset;
+    background-color: #64bd63;
+    }
+    
+    .btn-switch:checked:before {
+    left: 21px;
+    }
+    
+    .btn-switch.btn-switch-animbg {
+    transition: background-color ease 0.4s;
+    }
+    
+    .btn-switch.btn-switch-animbg:before {
+    transition: left 0.3s;
+    }
+    
+    .btn-switch.btn-switch-animbg:checked {
+    box-shadow: #dfdfdf 0 0 0 0 inset;
+    background-color: #64bd63;
+    transition: border-color 0.4s, background-color ease 0.4s;
+    }
+    
+    .btn-switch.btn-switch-animbg:checked:before {
+    transition: left 0.3s;
+    }
+    
+    .btn-switch.btn-switch-anim {
+    transition: border cubic-bezier(0, 0, 0, 1) 0.4s, box-shadow cubic-bezier(0, 0, 0, 1) 0.4s;
+    }
+    
+    .btn-switch.btn-switch-anim:before {
+    transition: left 0.3s;
+    }
+    
+    .btn-switch.btn-switch-anim:checked {
+    box-shadow: #64bd63 0 0 0 16px inset;
+    background-color: #64bd63;
+    transition: border ease 0.4s, box-shadow ease 0.4s, background-color ease 1.2s;
+    }
+    
+    .btn-switch.btn-switch-anim:checked:before {
+    transition: left 0.3s;
+    }
+    
+    input[type=checkbox]:checked::before {
+    font: normal normal normal 14px/2 FontAwesome;
+    }
