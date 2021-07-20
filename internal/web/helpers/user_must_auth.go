@@ -228,6 +228,34 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 				},
 			},
 		},
+		{
+			"code": "fortcloud",
+			"url":  "/fortcloud/assets",
+			"name": "堡垒机",
+			"icon": "ioxhost",
+			"subItems": []maps.Map{
+				{
+					"name": "资产管理",
+					"url":  "/fortcloud/assets",
+					"code": "assets",
+				},
+				{
+					"name": "管理账号",
+					"url":  "/fortcloud/admins",
+					"code": "admins",
+				},
+				{
+					"name": "会话管理",
+					"url":  "/fortcloud/sessions",
+					"code": "sessions",
+				},
+				{
+					"name": "命令记录",
+					"url":  "/fortcloud/command",
+					"code": "command",
+				},
+			},
+		},
 		//{
 		//	"code": "finance",
 		//	"name": "费用账单",
@@ -249,6 +277,13 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 	result := []maps.Map{}
 	config, _ := configloaders.LoadUIConfig()
 	for _, m := range allMaps {
+
+		//默认展示该组件
+		if m.GetString("code") == "hids" || m.GetString("code") == "webscan" || m.GetString("code") == "fortcloud"{
+			result = append(result, m)
+			continue
+		}
+
 		if m.GetString("code") == "finance" {
 
 			if config != nil && !config.ShowFinance {

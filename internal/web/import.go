@@ -8,6 +8,12 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/finance"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/finance/bills"
 
+	//堡垒机
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/admins"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/assets"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/command"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/sessions"
+
 	//主机安全防护
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/agent"
