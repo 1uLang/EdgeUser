@@ -271,7 +271,39 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"name": "工单",
 			"icon": "question circle outline",
 		},**/
-
+		{
+			"code": "audit",
+			"url":  "/audit/db",
+			"name": "安全审计",
+			"icon": "ioxhost",
+			"subItems": []maps.Map{
+				{
+					"name": "数据库管理",
+					"url":  "/audit/db",
+					"code": "assets",
+				},
+				{
+					"name": "主机管理",
+					"url":  "/audit/host",
+					"code": "admins",
+				},
+				{
+					"name": "应用管理",
+					"url":  "/audit/app",
+					"code": "sessions",
+				},
+				{
+					"name": "审计日志",
+					"url":  "/audit/logs",
+					"code": "command",
+				},
+				{
+					"name": "订阅报告",
+					"url":  "/audit/report",
+					"code": "command",
+				},
+			},
+		},
 	}
 
 	result := []maps.Map{}
@@ -279,7 +311,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 	for _, m := range allMaps {
 
 		//默认展示该组件
-		if m.GetString("code") == "hids" || m.GetString("code") == "webscan" || m.GetString("code") == "fortcloud"{
+		if m.GetString("code") == "hids" || m.GetString("code") == "webscan" || m.GetString("code") == "fortcloud" {
 			result = append(result, m)
 			continue
 		}
