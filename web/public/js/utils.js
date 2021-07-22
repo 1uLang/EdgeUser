@@ -115,6 +115,7 @@ window.teaweb = {
 		}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         Swal.fire({
             html: '<iframe src="' + url + '#popup-' + width + '" style="border:0; width: 100%; height:' + height + '"></iframe>',
             width: width,
@@ -162,6 +163,8 @@ window.teaweb = {
             width = "30em";
         }
 =======
+=======
+>>>>>>> a3fd01ca696dc54d6e426178497c64e5083dc0c6
 		Swal.fire({
 			html: '<iframe src="' + url + '#popup-' + width + '" style="border:0; width: 100%; height:' + height + '"></iframe>',
 			width: width,
@@ -203,6 +206,9 @@ window.teaweb = {
 		if (message.length > 30) {
 			width = "30em";
 		}
+<<<<<<< HEAD
+>>>>>>> a3fd01ca696dc54d6e426178497c64e5083dc0c6
+=======
 >>>>>>> a3fd01ca696dc54d6e426178497c64e5083dc0c6
 
 		let config = {
