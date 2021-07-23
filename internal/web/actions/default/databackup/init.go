@@ -12,7 +12,7 @@ func init() {
 			Data("teaMenu", "databackup").
 			Prefix("/databackup").
 			Get("", new(IndexAction)).
-			Get("", new(CreateAction)).
+			Get("create", new(CreateAction)).
 			EndAll()
 	})
 }
