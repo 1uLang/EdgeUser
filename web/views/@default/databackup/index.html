@@ -5,3 +5,58 @@
     <div :class="{'menu-select-color':pageState===1,'menu-define-color':pageState!=1}" @click="onChangeState(1)">平台管理</div>
     <div :class="{'menu-select-color':pageState===2,'menu-define-color':pageState!=2}" @click="onChangeState(2)">上传文件</div>
 </div>
+
+<div v-if="pageState===1"  style="width: 100%;height: 600px;margin-top: 10px;overflow-x: auto; overflow-y: auto;">
+    <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <thead>
+            <tr align="center">
+                <th class='table-head-bg' style="width: 390px;" >文件名</th>
+                <th class='table-head-bg' style="width: 350px;" >描述</th>
+                <th class='table-head-bg' style="width: 110px;" >尺寸</th>
+                <th class='table-head-bg' style="width: 150px;" >上传时间</th>
+                <th class='table-head-bg' style="width: 175px;" >操作</th>
+            </tr>
+        </thead>
+        <tbody id='tableBody'>
+            <tr align="center" style="height: 40px;" v-for="item in tableData" >
+                <td>{{item.value1}}</td>
+                <td>{{item.value2}}</td>
+                <td>{{item.value3}}</td>
+                <td>{{onChangeTimeFormat(item.value4)}}</td>
+                <td>
+                    <div style="display: flex;justify-content: space-around;padding: 4px 0;">
+                        <div class="edit_btn" @click="onDownFile(item.id)">下载</div>
+                        <div class="edit_btn" @click="onEdit(item.id)">修改</div>
+                        <div class="del-btn" @click="onDelete(item.id)">删除</div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div v-if="pageState===2" style="margin-top: 10px;">
+    <form class="ui form" method="post" data-tea-action="$" data-tea-success="success">
+        <table class="ui table definition selectable">
+            <tr>
+                <td class="title">文件描述</td>
+                <td>
+                    <input type="text" v-model="fileDesc" style="height: 40px;line-height: 40px;border: 1px solid #d7d7d7;"></input>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">选择文件*</td>
+                <td>
+                    <div style="display:inline-flex;justify-content: center;align-items: center;">
+                        <div class="sure-btn">选择文件</div>
+                        <span style="margin-left: 20px;">{{uploadFileName}}</span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div style="width: 100%;display: flex;align-items: center;justify-content: center;">
+            <div class="save-btn" @click="">保存</div>
+        </div>
+        
+    </form>
+
+</div>

@@ -10,3 +10,43 @@
     margin-right: 15px;
     margin-top: 10px;
 }
+
+.table-head-bg{
+    height: 32px;
+    background: #f0f0f0;
+}
+
+.edit_btn{
+    color: #0090cb;
+    cursor: pointer;
+}
+
+.del-btn{
+    color: #D51F16;
+    cursor: pointer;
+}
+
+.sure-btn{
+    width: 60px;
+    height: 30px;
+    background-color: #ececec;
+    color: #333;
+    border: 1px solid #333;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+.save-btn{
+    width: 80px;
+    height: 35px;
+    background-color: #0090cb;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 35px;
+    cursor: pointer;
+}
