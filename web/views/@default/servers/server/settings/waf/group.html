@@ -46,18 +46,19 @@
 					<label-on :v-is-on="set.isOn"></label-on>
 				</p>
 			</td>
-			<td class="rules-box">
-				<div v-for="rule in set.rules" style="margin-top: 0.4em;margin-bottom:0.4em">
-					<span class="ui label tiny basic">{{rule.name}}[{{rule.param}}] <span v-if="rule.paramFilters != null && rule.paramFilters.length > 0" v-for="paramFilter in rule.paramFilters"> | {{paramFilter.code}}</span> <var :class="{dash:rule.isCaseInsensitive}" :title="rule.isCaseInsensitive ? '大小写不敏感':''" v-if="!rule.isComposed">{{rule.operator}}</var> {{rule.value}}</span>
-				</div>
-				<span class="ui disabled" v-if="set.rules.length == 0">暂时还没有规则</span>
-			</td>
-			<td class="center">{{set.connector.toUpperCase()}}</td>
-			<td nowrap=""><span :class="{red:set.action == 'BLOCK' || set.action == 'CAPTCHA', green:set.action != 'BLOCK' && set.action != 'CAPTCHA'}">{{set.actionName}}[{{set.action.toUpperCase()}}]</span>
-				<div v-if="set.actionLinks != null && set.actionLinks.length > 0" style="margin-top:0.3em">
-					<span class="disabled">-&gt;</span> <span v-for="link in set.actionLinks"><a :href="link.url"><span class="disabled">[{{link.name}}]</span></a> &nbsp;</span>
-				</div>
-			</td>
+            <td class="rules-box">
+                <div v-for="rule in set.rules" style="margin-top: 0.4em;margin-bottom:0.4em">
+                    <http-firewall-rule-label :v-rule="rule"></http-firewall-rule-label>
+                </div>
+                <span class="ui disabled" v-if="set.rules.length == 0">暂时还没有规则</span>
+            </td>
+            <td class="center">
+                <span v-if="set.connector.toUpperCase() == 'OR'">或</span><span v-else>和</span>
+                <span class="small grey">({{set.connector.toUpperCase()}})</span>
+            </td>
+            <td nowrap="">
+                <http-firewall-actions-view :v-actions="set.actions"></http-firewall-actions-view>
+            </td>
 			<td>
 				<a href="" @click.prevent="updateSet(set.id)">修改</a> &nbsp; <a href="" @click.prevent="updateSetOn(set.id, false)" v-if="set.isOn">停用</a><a href="" @click.prevent="updateSetOn(set.id, true)" v-if="!set.isOn">启用</a> &nbsp; <a href="" @click.prevent="deleteSet(set.id)">删除</a>
 			</td>

@@ -9,7 +9,6 @@ import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
-	"strings"
 )
 
 type UpdateSetPopupAction struct {
@@ -79,6 +78,14 @@ func (this *UpdateSetPopupAction) RunGet(params struct {
 	}
 	this.Data["setConfig"] = setConfig
 
+	// action configs
+	actionConfigs, err := dao.SharedHTTPFirewallPolicyDAO.FindHTTPFirewallActionConfigs(this.UserContext(), setConfig.Actions)
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	this.Data["actionConfigs"] = actionConfigs
+
 	this.Show()
 }
 
@@ -86,10 +93,10 @@ func (this *UpdateSetPopupAction) RunPost(params struct {
 	GroupId int64
 	SetId   int64
 
-	Name      string
-	RulesJSON []byte
-	Connector string
-	Action    string
+	Name        string
+	RulesJSON   []byte
+	Connector   string
+	ActionsJSON []byte
 
 	Must *actions.Must
 }) {
@@ -120,21 +127,22 @@ func (this *UpdateSetPopupAction) RunPost(params struct {
 		this.Fail("请添加至少一个规则")
 	}
 
+	var actionConfigs = []*firewallconfigs.HTTPFirewallActionConfig{}
+	if len(params.ActionsJSON) > 0 {
+		err = json.Unmarshal(params.ActionsJSON, &actionConfigs)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+	}
+	if len(actionConfigs) == 0 {
+		this.Fail("请添加至少一个动作")
+	}
+
 	setConfig.Name = params.Name
 	setConfig.Connector = params.Connector
 	setConfig.Rules = rules
-	setConfig.Action = params.Action
-	setConfig.ActionOptions = maps.Map{}
-
-	for k, v := range this.ParamsMap {
-		if len(v) == 0 {
-			continue
-		}
-		index := strings.Index(k, "action_")
-		if index > -1 {
-			setConfig.ActionOptions[k[len("action_"):]] = v[0]
-		}
-	}
+	setConfig.Actions = actionConfigs
 
 	setConfigJSON, err := json.Marshal(setConfig)
 	if err != nil {

@@ -316,15 +316,15 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			continue
 		}
 
-		if m.GetString("code") == "finance" {
-
-			if config != nil && !config.ShowFinance {
-				continue
-			}
-			if !lists.ContainsString(featureCodes, "finance") {
-				continue
-			}
-		}
+		//if m.GetString("code") == "finance" {
+		//
+		//	if config != nil && !config.ShowFinance {
+		//		continue
+		//	}
+		//	if !lists.ContainsString(featureCodes, "finance") {
+		//		continue
+		//	}
+		//}
 		if m.GetString("code") == "lb" && !lists.ContainsString(featureCodes, "server.tcp") {
 			continue
 		}
