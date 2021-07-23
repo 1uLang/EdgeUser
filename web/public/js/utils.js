@@ -114,8 +114,7 @@ window.teaweb = {
 			};
 		}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
         Swal.fire({
             html: '<iframe src="' + url + '#popup-' + width + '" style="border:0; width: 100%; height:' + height + '"></iframe>',
             width: width,
@@ -130,41 +129,16 @@ window.teaweb = {
             }
         });
     },
-    popupFinish: function () {
-        if (window.POPUP_CALLBACK != null) {
-            window.POPUP_CALLBACK.apply(window, arguments);
-        }
-    },
-    popupTip: function (html) {
-        Swal.fire({
-            html: '<i class="icon question circle"></i><span style="line-height: 1.7">' + html + "</span>",
-            width: "30em",
-            padding: "5em",
-            showConfirmButton: false,
-            showCloseButton: true,
-            focusConfirm: false
-        });
-    },
-    isPopup: function () {
-        var hash = window.location.hash;
-        return hash != null && hash.startsWith("#popup");
-    },
     closePopup: function () {
 		if (this.isPopup()) {
 			window.parent.Swal.close();
 		}
 	},
-    Swal: function () {
-        return this.isPopup() ? window.parent.Swal : window.Swal;
-    },
     success: function (message, callback) {
         var width = "20em";
         if (message.length > 30) {
             width = "30em";
         }
-=======
-=======
->>>>>>> a3fd01ca696dc54d6e426178497c64e5083dc0c6
 		Swal.fire({
 			html: '<iframe src="' + url + '#popup-' + width + '" style="border:0; width: 100%; height:' + height + '"></iframe>',
 			width: width,
@@ -206,11 +180,6 @@ window.teaweb = {
 		if (message.length > 30) {
 			width = "30em";
 		}
-<<<<<<< HEAD
->>>>>>> a3fd01ca696dc54d6e426178497c64e5083dc0c6
-=======
->>>>>>> a3fd01ca696dc54d6e426178497c64e5083dc0c6
-
 		let config = {
 			confirmButtonText: "确定",
 			buttonsStyling: false,

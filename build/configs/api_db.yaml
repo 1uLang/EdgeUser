@@ -5,7 +5,7 @@ default:
 dbs:
   prod:
     driver: "mysql"
-    dsn: "root:123456@tcp(192.168.137.1:3306)/edge?charset=utf8mb4&timeout=30s"
+    dsn: "root:test1234@tcp(127.0.0.1:3306)/edges?charset=utf8mb4&timeout=30s"
     prefix: "edge"
     models:
       package: internal/web/models

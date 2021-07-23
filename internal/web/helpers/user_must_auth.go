@@ -2,6 +2,9 @@ package helpers
 
 import (
 	"errors"
+	"net/http"
+	"reflect"
+
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/configloaders"
 	teaconst "github.com/TeaOSLab/EdgeUser/internal/const"
@@ -10,8 +13,6 @@ import (
 	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/logs"
 	"github.com/iwind/TeaGo/maps"
-	"net/http"
-	"reflect"
 )
 
 // 认证拦截
@@ -307,7 +308,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 	}
 
 	result := []maps.Map{}
-	config, _ := configloaders.LoadUIConfig()
+	configloaders.LoadUIConfig()
 	for _, m := range allMaps {
 
 		//默认展示该组件
