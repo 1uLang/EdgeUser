@@ -1,19 +1,70 @@
 {$layout "layout_popup"}
 
-<h3>添加数据库</h3>
 
-<form class="ui form" method="post" data-tea-action="$" data-tea-success="success">
-    <csrf-token></csrf-token>
+<div style="margin-top: 35px;margin-left: 15px;">
+    <form class="ui form" method="post" data-tea-action="$" data-tea-success="success">
+        <table class="ui table definition selectable">
+            <tr>
+                <td class="title">名称*</td>
+                <td>
+                    <input type="text" v-model="name" style="height: 30px;width: 250px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">IP*</td>
+                <td>
+                    <sql-type-selector :v-assembly-id.sync="typeSelect"></sql-type-selector>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">版本*</td>
+                <td>
+                    <sql-ver-selector :v-assembly-id.sync="verSelect"></sql-ver-selector>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">IP端口*</td>
+                <td>
+                    <input type="text" v-model="ip" style="height: 30px;width: 250px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="text" v-model="port" style="margin-left: 20px;height: 30px;width: 80px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">操作系统</td>
+                <td>
+                    <div style="display: inline-flex;">
+                        <div style="width: 120px;" @click="onSelectSystem">
+                            <input type="radio" name="systemSelect" v-model="systemSelect" :value="1" />
+                            <span style="margin-left: 10px;font-size: 14px;">Linux</span>
+                        </div>
+                        <div style="width: 120px;" @click="onSelectSystem">
+                            <input type="radio" name="systemSelect"  v-model="systemSelect" :value="2" />
+                            <span style="margin-left: 10px;font-size: 14px;">Windows</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">状态</td>
+                <td>
+                    <div style="display: inline-flex;">
+                        <div style="width: 120px;cursor: null;" @click="onSelectOpenState">
+                            <input type="radio" name="openState" v-model="openState" :value="1" />
+                            <span style="margin-left: 10px;font-size: 14px;">启用</span>
+                        </div>
+                        <div style="width: 120px;cursor: null;" @click="onSelectOpenState">
+                            <input type="radio" name="openState"  v-model="openState" :value="2" />
+                            <span style="margin-left: 10px;font-size: 14px;">禁用</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div style="width: 100%;display: flex;align-items: center;justify-content: center;">
+            <submit-btn></submit-btn>
+        </div>
+        
+    </form>
+    <div style="width: 100%;height: 15px;"></div>
+</div>
 
-    <table class="ui table definition selectable">
-        <tr>
-            <td class="title">备注 *</td>
-            <td>
-                <textarea rows="2" name="description" maxlength="100" ref="focus"></textarea>
-                <p class="comment">描述AccessKey的用途等。</p>
-            </td>
-        </tr>
-    </table>
-
-    <submit-btn></submit-btn>
-</form>

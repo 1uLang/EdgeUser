@@ -1,0 +1,42 @@
+.sure-btn{
+    width: 60px;
+    height: 26px;
+    background-color: #0090cb;
+    color: #fff;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 26px;
+    cursor: pointer;
+}
+
+.table-head-bg{
+    height: 32px;
+    background: #f0f0f0;
+}
+
+.status-open{
+    display: inline-block;
+    color: #21ba45;
+    font-weight: 700;
+    padding: 4px 6px;
+    border-radius: 5px;
+    border: 1px solid #21ba45;
+}
+.status-close{
+    display: inline-block;
+    color: #db2828;
+    font-weight: 700;
+    padding: 4px 6px;
+    border-radius: 5px;
+    border: 1px solid #db2828;
+}
+
+.edit_btn{
+    color: #0090cb;
+    cursor: pointer;
+}
+
+.del-btn{
+    color: #D51F16;
+    cursor: pointer;
+}

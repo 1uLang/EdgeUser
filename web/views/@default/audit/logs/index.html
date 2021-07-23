@@ -1,5 +1,155 @@
 <!-- 审计-数据库 -->
 {$layout}
+{$template "/datepicker"}
 {$var "header"}
 {$end}
-审计-日志
+<div @click="onCloseDropMenu">
+    <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+        <div :class="{'menu-select-color':pageState===1,'menu-define-color':pageState!=1}" @click="onChangeState(1)">数据库审计</div>
+        <div :class="{'menu-select-color':pageState===2,'menu-define-color':pageState!=2}" @click="onChangeState(2)">主机审计</div>
+        <div :class="{'menu-select-color':pageState===3,'menu-define-color':pageState!=3}" @click="onChangeState(3)">应用审计</div>
+    </div>
+
+    <div style="width: 100%;display: flex;flex-direction: column;margin-top: 10px;">
+        <div style="display: inline-flex;margin-top: 15px;">
+            <div style="width: 70px;margin-right: 10px;text-align: right;">时间范围：</div>
+            <div :class="{'box-select-style':timeSelectIndex===0,'box-define-style':timeSelectIndex!=0}" @click="onChangeCheckTime(0)">最近5分钟</div>
+            <div :class="{'box-select-style':timeSelectIndex===1,'box-define-style':timeSelectIndex!=1}" @click="onChangeCheckTime(1)">最近30分钟</div>
+            <div :class="{'box-select-style':timeSelectIndex===2,'box-define-style':timeSelectIndex!=2}" @click="onChangeCheckTime(2)">最近1小时</div>
+            <div :class="{'box-select-style':timeSelectIndex===3,'box-define-style':timeSelectIndex!=3}" @click="onChangeCheckTime(3)">最近6小时</div>
+            <div :class="{'box-select-style':timeSelectIndex===4,'box-define-style':timeSelectIndex!=4}" @click="onChangeCheckTime(4)">本日</div>
+            <div :class="{'box-select-style':timeSelectIndex===5,'box-define-style':timeSelectIndex!=5}" @click="onChangeCheckTime(5)">昨日</div>
+            <div :class="{'box-select-style':timeSelectIndex===6,'box-define-style':timeSelectIndex!=6}" @click="onChangeCheckTime(6)">本周</div>
+            <div :class="{'box-select-style':timeSelectIndex===7,'box-define-style':timeSelectIndex!=7}" @click="onChangeCheckTime(7)">本月</div>
+            <div class="ui field" style="margin-right: 10px">
+                <input type="text" name="dayFrom" placeholder="开始日期" v-model="dayFrom" value="" style="width:142px;height: 24px;font-size: 13px;border: 1px solid #d7d7d7;" id="day-from-picker" @change="onTimeChange"/>
+            </div>
+            <div class="ui field" style="margin-right: 10px">
+                <input type="text" name="dayTo" placeholder="结束日期" v-model="dayTo" value="" style="width:142px;height: 24px;font-size: 13px;border: 1px solid #d7d7d7;" id="day-to-picker" @change="onTimeChange"/>
+            </div>
+        </div>
+
+        <div style="width: 100%;display: inline-flex;margin-top: 10px;align-items: center;">
+            <div style="display: inline-flex;">
+                <div style="width: 70px;margin-right: 10px;text-align: right;height: 26px;line-height: 26px;">数据库：</div>
+                <div style="width: 200px;position: relative;">
+                    <div @click.stop="onShowSqlName" style="height: 26px;width: 200px;border: 1px solid #d7d7d7;display: inline-flex;align-items: center;">
+                        <div v-for="itemId in sSelectSqlName" style="background-color: #0090cc;color: #fff;border-radius: 10px;height: 18px;font-size: 10px;line-height: 18px;padding: 0px 2px;">
+                        {{getItemInfo(itemId,sqlNameData)}}</div>
+                    </div>
+                    <div v-if="bShowSqlName" style="width:100%;position: absolute;left: 0;top: 28px;background-color: #fff;border: 1px solid #d7d7d7;">
+                        <div v-for="item in sqlNameData" style="margin-left: 5px;padding-bottom: 3px;" @click.stop="onAddSqlNameValue(item.id)">
+                            <img :src="getShowSelectValueImage(item.id,sSelectSqlName)" width="12px" height="12px">
+                            <span style="margin-left: 5px;">{{item.name}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: inline-flex;margin-left: 30px;">
+                <div style="width: 70px;margin-right: 10px;text-align: right;height: 26px;line-height: 26px;">客户端IP：</div>
+                <input type="text" v-model="clientIp" style="height: 26px;width: 150px;line-height: 26px;border: 1px solid #d7d7d7;" placeholder="请输入客户端IP"></input>
+            </div>
+
+            <div style="display: inline-flex;margin-left: 30px;">
+                <div style="width: 100px;margin-right: 10px;text-align: right;height: 26px;line-height: 26px;">数据库账号：</div>
+                <input type="text" v-model="sqlName" style="height: 26px;width: 150px;line-height: 26px;border: 1px solid #d7d7d7;" placeholder="请输入数据库账号"></input>
+            </div>
+
+            <div style="display: inline-flex;margin-left: 30px;">
+                <div style="width: 100px;margin-right: 10px;text-align: right;height: 26px;line-height: 26px;">风险等级：</div>
+                <div style="width: 155px;position: relative;">
+                    <div @click.stop="onShowDangerLevel" style="height: 26px;width: 155px;border: 1px solid #d7d7d7;display: inline-flex;align-items: center;">
+                        <div v-for="itemId in sSelectDangerLevel" style="background-color: #0090cc;color: #fff;border-radius: 10px;height: 18px;font-size: 10px;line-height: 18px;padding: 0px 2px;">
+                        {{getItemInfo(itemId,dangerLevelData)}}</div>
+                    </div>
+                    <div v-if="bShowDangerLevel" style="width:100%;position: absolute;left: 0;top: 28px;background-color: #fff;border: 1px solid #d7d7d7;">
+                        <div v-for="item in dangerLevelData" style="margin-left: 5px;padding-bottom: 3px;" @click.stop="onAddDangerLevelValue(item.id)">
+                            <img :src="getShowSelectValueImage(item.id,sSelectDangerLevel)" width="12px" height="12px">
+                            <span style="margin-left: 5px;">{{item.name}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="display: inline-flex;margin-left: 30px;margin-top: 10px;">
+            <div style="width: 70px;margin-right: 10px;text-align: right;height: 26px;line-height: 26px;">关键词：</div>
+            <input type="text" v-model="searchKey" style="height: 26px;width: 1015px;line-height: 26px;border: 1px solid #d7d7d7;" placeholder="请输入SQL语句关键词"></input>
+        </div>
+    </div>
+
+    <div style="width: 100%;height: 600px;margin-top: 10px;overflow-x: auto; overflow-y: auto;">
+        <table v-if="pageState===1" id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+                <tr align="center">
+                    <th class='table-head-bg' style="width: 110px;" >数据库名称</th>
+                    <th class='table-head-bg' style="width: 120px;" >服务端IP</th>
+                    <th class='table-head-bg' style="width: 120px;" >客户端IP</th>
+                    <th class='table-head-bg' style="width: 100px;" >数据库账号</th>
+                    <th class='table-head-bg' style="width: 100px;" >数据库类型</th>
+                    <th class='table-head-bg' style="width: 290px;" >SQL语句</th>
+                    <th class='table-head-bg' style="width: 80px;" >风险等级</th>
+                    <th class='table-head-bg' style="width: 110px;" >风险类型</th>
+                    <th class='table-head-bg' style="width: 140px;" >记录时间</th>
+                </tr>
+            </thead>
+            <tbody id='tableBody'>
+                <tr align="center" style="height: 40px;" v-for="item in tableData1" >
+                    <td>{{item.value1}}</td>
+                    <td>{{item.value2}}</td>
+                    <td>{{item.value3}}</td>
+                    <td>{{item.value4}}</td>
+                    <td>{{item.value5}}</td>
+                    <td>{{item.value6}}</td>
+                    <td>{{getDangerLevel(item.value7)}}</td>
+                    <td>{{getDangerType(item.value8)}}</td>
+                    <td>{{onChangeTimeFormat(item.value9)}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table v-if="pageState===2" id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+                <tr align="center">
+                    <th class='table-head-bg' style="width: 120px;" >主机IP</th>
+                    <th class='table-head-bg' style="width: 120px;" >主机类型</th>
+                    <th class='table-head-bg' style="width: 670px;" >报文</th>
+                    <th class='table-head-bg' style="width: 100px;" >日志类型</th>
+                    <th class='table-head-bg' style="width: 140px;" >记录时间</th>
+                </tr>
+            </thead>
+            <tbody id='tableBody'>
+                <tr align="center" style="height: 40px;" v-for="item in tableData2" >
+                    <td>{{item.value1}}</td>
+                    <td>{{item.value2}}</td>
+                    <td style="overflow: hidden">{{item.value3}}</td>
+                    <td>{{getLogType(item.value4)}}</td>
+                    <td>{{onChangeTimeFormat(item.value5)}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table v-if="pageState===3" id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+                <tr align="center">
+                    <th class='table-head-bg' style="width: 110px;" >应用IP</th>
+                    <th class='table-head-bg' style="width: 110px;" >应用类型</th>
+                    <th class='table-head-bg' style="width: 540px;" >报文</th>
+                    <th class='table-head-bg' style="width: 100px;" >请求方式</th>
+                    <th class='table-head-bg' style="width: 100px;" >请求状态</th>
+                    <th class='table-head-bg' style="width: 140px;" >记录时间</th>
+                </tr>
+            </thead>
+            <tbody id='tableBody'>
+                <tr align="center" style="height: 40px;" v-for="item in tableData3" >
+                    <td>{{item.value1}}</td>
+                    <td>{{item.value2}}</td>
+                    <td style="overflow: hidden">{{item.value3}}</td>
+                    <td>{{item.value4}}</td>
+                    <td>{{item.value5}}</td>
+                    <td>{{onChangeTimeFormat(item.value6)}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>  
+</div>

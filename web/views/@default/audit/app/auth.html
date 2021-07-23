@@ -1,19 +1,9 @@
 {$layout "layout_popup"}
 
-<h3>添加授权</h3>
-
-<form class="ui form" method="post" data-tea-action="$" data-tea-success="success">
-    <csrf-token></csrf-token>
-
-    <table class="ui table definition selectable">
-        <tr>
-            <td class="title">备注 *</td>
-            <td>
-                <textarea rows="2" name="description" maxlength="100" ref="focus"></textarea>
-                <p class="comment">描述AccessKey的用途等。</p>
-            </td>
-        </tr>
-    </table>
-
-    <submit-btn></submit-btn>
-</form>
+<div style="margin-top: 15px;">
+    <span style="font-size: 14px;color:#333;padding: 0 20px;">请输入被授权账号邮箱，多个请以换行符相隔 (不可重复)：</span>
+    <textarea style="margin: 5px 20px;width: 400px;height: 170px;border: 1px solid #d7d7d7;resize: none;" v-model="authValue" ></textarea>
+    <div style="width: 100%;display: flex;justify-content: center;margin-top: 10px;">
+        <div class="sure-btn" @click="onSaveAuth">确认</div>
+    </div>
+</div>
