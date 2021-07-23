@@ -80,4 +80,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/host"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/logs"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/report"
+
+	//数据备份
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/databackup"
 )
