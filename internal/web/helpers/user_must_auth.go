@@ -310,18 +310,18 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"url":  "/databackup",
 			"name": "数据备份",
 			"icon": "ioxhost",
-			"subItems": []maps.Map{
-				{
-					"name": "文件管理",
-					"url":  "/databackup",
-					"code": "assets",
-				},
-				{
-					"name": "上传文件",
-					"url":  "/databackup/createPopUp",
-					"code": "admins",
-				},
-			},
+			//"subItems": []maps.Map{
+			//	{
+			//		"name": "文件管理",
+			//		"url":  "/databackup",
+			//		"code": "assets",
+			//	},
+			//	{
+			//		"name": "上传文件",
+			//		"url":  "/databackup/createPopUp",
+			//		"code": "admins",
+			//	},
+			//},
 		},
 	}
 
