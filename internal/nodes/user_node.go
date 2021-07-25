@@ -18,21 +18,25 @@ import (
 	"github.com/iwind/TeaGo/Tea"
 	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/logs"
+	"github.com/iwind/TeaGo/maps"
 	"github.com/iwind/TeaGo/rands"
 	"github.com/iwind/TeaGo/sessions"
+	"github.com/iwind/gosock/pkg/gosock"
 	"io/ioutil"
 	"log"
-	"net"
 	"os"
 	"os/exec"
 	"time"
 )
 
-func NewUserNode() *UserNode {
-	return &UserNode{}
+type UserNode struct {
+	sock *gosock.Sock
 }
 
-type UserNode struct {
+func NewUserNode() *UserNode {
+	return &UserNode{
+		sock: gosock.NewTmpSock(teaconst.ProcessName),
+	}
 }
 
 func (this *UserNode) Run() {
@@ -77,13 +81,12 @@ func (this *UserNode) Run() {
 		Start()
 }
 
-// 实现守护进程
+// Daemon 实现守护进程
 func (this *UserNode) Daemon() {
-	path := os.TempDir() + "/edge-user.sock"
 	isDebug := lists.ContainsString(os.Args, "debug")
 	isDebug = true
 	for {
-		conn, err := net.DialTimeout("unix", path, 1*time.Second)
+		conn, err := this.sock.Dial()
 		if err != nil {
 			if isDebug {
 				log.Println("[DAEMON]starting ...")
@@ -122,7 +125,7 @@ func (this *UserNode) Daemon() {
 	}
 }
 
-// 安装系统服务
+// InstallSystemService 安装系统服务
 func (this *UserNode) InstallSystemService() error {
 	shortName := teaconst.SystemdServiceName
 
@@ -287,7 +290,7 @@ func (this *UserNode) decodeHTTP(node *pb.UserNode) (*serverconfigs.HTTPProtocol
 	return config, nil
 }
 
-// 解析HTTPS配置
+// DecodeHTTPS 解析HTTPS配置
 func (this *UserNode) DecodeHTTPS(node *pb.UserNode) (*serverconfigs.HTTPSProtocolConfig, error) {
 	if len(node.HttpsJSON) == 0 {
 		return nil, nil
@@ -345,37 +348,46 @@ func (this *UserNode) DecodeHTTPS(node *pb.UserNode) (*serverconfigs.HTTPSProtoc
 
 // 监听本地sock
 func (this *UserNode) listenSock() error {
-	path := os.TempDir() + "/edge-user.sock"
-
-	// 检查是否已经存在
-	_, err := os.Stat(path)
-	if err == nil {
-		conn, err := net.Dial("unix", path)
-		if err != nil {
-			_ = os.Remove(path)
+	// 检查是否在运行
+	if this.sock.IsListening() {
+		reply, err := this.sock.Send(&gosock.Command{Code: "pid"})
+		if err == nil {
+			return errors.New("error: the process is already running, pid: " + maps.NewMap(reply.Params).GetString("pid"))
 		} else {
-			_ = conn.Close()
+			return errors.New("error: the process is already running")
 		}
 	}
 
-	// 新的监听任务
-	listener, err := net.Listen("unix", path)
-	if err != nil {
-		return err
-	}
-	events.On(events.EventQuit, func() {
-		logs.Println("USER_NODE", "quit unix sock")
-		_ = listener.Close()
-	})
-
+	// 启动监听
 	go func() {
-		for {
-			_, err := listener.Accept()
-			if err != nil {
-				return
+		this.sock.OnCommand(func(cmd *gosock.Command) {
+			switch cmd.Code {
+			case "pid":
+				_ = cmd.Reply(&gosock.Command{
+					Code: "pid",
+					Params: map[string]interface{}{
+						"pid": os.Getpid(),
+					},
+				})
+			case "stop":
+				_ = cmd.ReplyOk()
+
+				// 退出主进程
+				events.Notify(events.EventQuit)
+				os.Exit(0)
 			}
+		})
+
+		err := this.sock.Listen()
+		if err != nil {
+			logs.Println("NODE", err.Error())
 		}
 	}()
+
+	events.On(events.EventQuit, func() {
+		logs.Println("NODE", "quit unix sock")
+		_ = this.sock.Close()
+	})
 
 	return nil
 }
