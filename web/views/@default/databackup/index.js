@@ -3,7 +3,6 @@ Tea.context(function () {
     this.pageState = 1
 
     this.fileDesc = ""
-    this.uploadFileName = "未选择任何文件"
 
     this.onChangeState=function (id) {
         if(this.pageState!=id){
