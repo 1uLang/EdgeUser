@@ -26,6 +26,8 @@ func (this *IndexAction) RunGet(params struct {
 	Must *actions.Must
 	//CSRF *actionutils.CSRF
 }) {
+	_ = hids.InitAPIServer()
+
 	defer this.Show()
 	this.Data["agents"] = nil
 
