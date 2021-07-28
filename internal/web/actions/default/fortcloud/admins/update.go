@@ -9,11 +9,11 @@ import (
 	"github.com/iwind/TeaGo/actions"
 )
 
-type IndexAction struct {
+type UpdateAction struct {
 	actionutils.ParentAction
 }
 
-func (this *IndexAction) checkAndNewServerRequest() (*jumpserver_server.Request, error) {
+func (this *UpdateAction) checkAndNewServerRequest() (*jumpserver_server.Request, error) {
 	if fortcloud.ServerUrl == "" {
 		err := fortcloud.InitAPIServer()
 		if err != nil {
@@ -23,27 +23,8 @@ func (this *IndexAction) checkAndNewServerRequest() (*jumpserver_server.Request,
 	username, _ := this.UserName()
 	return fortcloud.NewServerRequest(username, "dengbao-"+username)
 }
-func (this *IndexAction) Init() {
-	this.Nav("", "fortcloud", "index")
-}
-
-func (this *IndexAction) RunGet() {
-
-	req, err := this.checkAndNewServerRequest()
-	if err != nil {
-		this.Data["nodeErr"] = "堡垒机组件错误:" + err.Error()
-		this.Show()
-		return
-	}
-
-	list, err := req.AdminUser.List(&admin_users_model.ListReq{
-		UserId: uint64(this.UserId()),
-	})
-	this.Data["adminUsers"] = list
-	this.Show()
-}
-
-func (this *IndexAction) RunPost(params struct {
+func (this *UpdateAction) RunPost(params struct {
+	Id       string
 	Name     string
 	Username string
 	Password string
@@ -51,6 +32,9 @@ func (this *IndexAction) RunPost(params struct {
 
 	Must *actions.Must
 }) {
+	params.Must.
+		Field("id", params.Id).
+		Require("请选择管理用户")
 
 	params.Must.
 		Field("name", params.Name).
@@ -70,18 +54,19 @@ func (this *IndexAction) RunPost(params struct {
 		return
 	}
 
-	args := &admin_users_model.CreateReq{}
+	args := &admin_users_model.UpdateReq{}
+	args.ID = params.Id
 	args.Name = params.Name
 	args.UserName = params.Username
 	args.Password = params.Password
 	args.Comment = params.Comment
 	args.UserId = uint64(this.UserId())
-	_, err = req.AdminUser.Create(args)
+	_, err = req.AdminUser.Update(args)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
 	// 日志
-	this.CreateLogInfo("堡垒机 - 新增管理用户:[%v]成功", params.Name)
+	this.CreateLogInfo("堡垒机 - 修改管理用户:[%v]成功", params.Id)
 	this.Success()
 }

@@ -8,15 +8,15 @@ Vue.component("assert-system-selector", {
 		// 		that.assemblys = resp.data.assemblys
 		// 	})
 	},
-	props: ["v-assembly-id"],
+	props: ["v-platform"],
 	data: function () {
-		let assemblyType = this.vAssemblyId
-		if (assemblyType == null) {
-			assemblyType = -1
+		let platform = this.vPlatform
+		if (platform == null) {
+			platform = "Linux"
 		}
 		return {
 			assemblys: [],
-			assemblyType: assemblyType,
+			platform: platform,
 		}
 	},
 	watch:{
@@ -27,9 +27,14 @@ Vue.component("assert-system-selector", {
 		// }
 	},
 	template: `<div>
-	<select name="assemblyType" v-model="assemblyType" style="width: 790px;height: 30px;border: 1px solid #d7d7d7;">
-		<option value="-1">linux</option>
-		<option v-for="assembly in assemblys" :value="assembly.id">{{assembly.name}}</option>
+	<select name="platform" v-model="platform" style="width: 790px;height: 30px;border: 1px solid #d7d7d7;">
+		<option value="Linux">Linux</option>
+		<option value="Unix">Unix</option>
+		<option value="MacOS">MacOS</option>
+		<option value="BSD">BSD</option>
+		<option value="Windows">Windows</option>
+		<option value="Windows2016">Windows2016</option>
+		<option value="Other">Other</option>
 	</select>
 </div>`
 })

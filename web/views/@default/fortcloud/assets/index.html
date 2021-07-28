@@ -6,65 +6,68 @@
     <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
         <div style="cursor: pointer;margin-top: 10px;" @click="onChangeState(2)">[添加主机]</div>
     </div>
-    
     <div style="width: 100%;height: 650px;margin-top: 10px;overflow-x: auto; overflow-y: auto;">
-        <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <table  class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
-                <tr align="center">
-                    <th class='table-head-bg' style="width: 248px;" >主机名</th>
-                    <th class='table-head-bg' style="width: 165px;" >IP</th>
-                    <th class='table-head-bg' style="width: 220px;" >硬件信息</th>
-                    <th class='table-head-bg' style="width: 123px;" >连接状态</th>
-                    <th class='table-head-bg' style="width: 113px;" >状态</th>
-                    <th class='table-head-bg' style="width: 161px;" >更新时间</th>
-                    <th class='table-head-bg' style="width: 151px;" >操作</th>
-                </tr>
+            <tr align="center">
+                <th class='table-head-bg' style="width: 248px;">主机名</th>
+                <th class='table-head-bg' style="width: 165px;">IP</th>
+                <th class='table-head-bg' style="width: 220px;">硬件信息</th>
+                <th class='table-head-bg' style="width: 123px;">连接状态</th>
+                <th class='table-head-bg' style="width: 113px;">状态</th>
+                <th class='table-head-bg' style="width: 161px;">更新时间</th>
+                <th class='table-head-bg' style="width: 151px;">操作</th>
+            </tr>
             </thead>
-            <tbody id='tableBody'>
-                <tr align="center" style="height: 40px;" v-for="(item,index) in tableData" >
-                    <td @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)">
-                        <div style="padding: 4px 0;">
-                            <u v-show="index===curIndex && item.bAuth===0 " @click="onOpenDetail(item)" style="color: #169BD5;cursor: pointer;">{{item.value1}}</u>
-                            <span v-show="index!=curIndex || (index===curIndex && item.bAuth===1)" style="color: #000;">{{item.value1}}</span>
-                        </div>
-                    </td>
-                    <td>
-                        <div style="padding: 4px 0;">
-                            {{item.value2}}
-                        </div>
-                    </td>
-                    <td>
-                        <div style="padding: 4px 0;">
-                            {{item.value3}}
-                        </div>
-                    </td>
-                    <td>
-                        <div style="padding: 4px 0;">
-                            {{getLinkStatus(item.value4)}}
-                        </div>
-                    </td>
-                    <td>
-                        <div :class="{'status-open':item.value5=='1','status-close':item.value5=='0'}">
-                            {{getStatus(item.value5)}}
-                        </div>
-                    </td>
-                    <td>{{onChangeTimeFormat(item.value6)}}</td>
-                    <td>
-                        <div style="display: flex;justify-content: space-around;padding: 4px 0;">
-                            <div v-if="item.value5===1" class="edit_btn" @click="onConnect(item.id)">连接</div>
-                            <div class="edit_btn" @click="onOpenAuth(item.id)">授权</div>
-                            <div class="edit_btn" @click="onEdit(item.id)">编辑</div>
-                            <div class="edit_btn" @click="onDelete(item.id)">删除</div>
-                        </div>
-                    </td>
-                </tr>
+            <tbody >
+            <tr align="center" style="height: 40px;" v-for="(item,index) in assets">
+                <td @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)">
+                    <div style="padding: 4px 0;">
+                        <u v-show="index===curIndex" @click="onOpenDetail(item)"
+                           style="color: #169BD5;cursor: pointer;">{{item.hostname}}</u>
+                        <span v-show="index!=curIndex" style="color: #000;">{{item.hostname}}</span>
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.ip}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.hardware_info}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{getLinkStatus(item.connectivity.status)}}
+                    </div>
+                </td>
+                <td>
+                    <div class="status-open" v-if="item.is_active">
+                        {{getStatus(item.is_active)}}
+                    </div>
+                    <div class="status-close" v-else>
+                        {{getStatus(item.is_active)}}
+                    </div>
+                </td>
+                <td>{{onChangeTimeFormat(item.connectivity.datetime)}}</td>
+                <td>
+                    <div style="display: flex;justify-content: space-around;padding: 4px 0;">
+                        <div v-if="item.is_active && item.connectivity.status === 1" class="edit_btn" @click="onConnect(item.id)">连接</div>
+                        <div class="edit_btn" @click="onOpenAuth(item.id)">授权</div>
+                        <div class="edit_btn" @click="onEdit(item)">编辑</div>
+                        <div class="edit_btn" @click="onDelete(item.id)">删除</div>
+                    </div>
+                </td>
+            </tr>
             </tbody>
         </table>
-    </div>    
+    </div>
 </div>
 
 <!-- 添加主机 -->
-<div v-else-if="pageState==2">
+<div v-else-if="pageState==2 || pageState==5">
     <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
         <div style="display: inline-flex;margin-top: 10px;">
             <span style="cursor: pointer;" @click="onChangeState(1)">资产列表</span>
@@ -77,19 +80,32 @@
             <div style="display: flex;flex-direction: column;">
                 <div class="base_title_content">
                     <span class="base_title_f">主机名*</span>
-                    <input type="text" v-model="host" style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="text" v-model="host"
+                           style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </div>
                 <div class="base_title_content">
                     <span class="base_title_f">IP(域名)*</span>
-                    <input type="text" v-model="post" style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="text" v-model="post"
+                           style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </div>
                 <div class="base_title_content">
                     <span class="base_title_f">系统平台*</span>
-                    <assert-system-selector></assert-system-selector>
+                    <div>
+                        <select name="platform" v-model="platform" style="width: 790px;height: 30px;border: 1px solid #d7d7d7;">
+                            <option value="Linux">Linux</option>
+                            <option value="Unix">Unix</option>
+                            <option value="MacOS">MacOS</option>
+                            <option value="BSD">BSD</option>
+                            <option value="Windows">Windows</option>
+                            <option value="Windows2016">Windows2016</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="base_title_content">
                     <span class="base_title_f">公网IP</span>
-                    <input type="text" v-model="pubHost" style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="text" v-model="pubHost"
+                           style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </div>
             </div>
         </div>
@@ -99,11 +115,25 @@
             <div class="base_title_content" style="height: auto;align-items: flex-start;">
                 <span class="base_title_f">协议组</span>
                 <div style="display: flex;flex-direction: column;">
-                    <div v-for="(item,index) in protoData" style="display: inline-flex;align-items: center;margin-bottom: 5px;">
-                        <assert-proto-selector :v-assembly-id="item.protoIndex"></assert-proto-selector>
-                        <input type="text" v-model="item.inputValue" style="height: 30px;width: 560px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
-                        <div v-show="index===(protoData.length-1)" class="add_less_btn_style" style="background-color: #fd9d9f;" @click="onRemoveProtoData(index)">-</div>
-                        <div v-show="index===(protoData.length-1)" class="add_less_btn_style" style="background-color: #00b144;" @click="onAddProtoData">+</div>
+                    <div v-for="(item,index) in protoData"
+                         style="display: inline-flex;align-items: center;margin-bottom: 5px;">
+<!--                        <assert-proto-selector :v-proto="item.proto"></assert-proto-selector>-->
+                        <div>
+                            <select name="proto" v-model="item.proto" style="width: 110px;height: 30px;border: 1px solid #d7d7d7;">
+                                <option value="ssh">ssh</option>
+                                <option value="rdp">rdp</option>
+                                <option value="telnet">telnet</option>
+                                <option value="vnc">vnc</option>
+                            </select>
+                        </div>
+                        <input type="text" v-model="item.value"
+                               style="height: 30px;width: 560px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                        <div v-show="index===(protoData.length-1)" class="add_less_btn_style"
+                             style="background-color: #fd9d9f;" @click="onRemoveProtoData(index)">-
+                        </div>
+                        <div v-show="index===(protoData.length-1)" class="add_less_btn_style"
+                             style="background-color: #00b144;" @click="onAddProtoData">+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -114,7 +144,11 @@
             <div style="display: flex;flex-direction: column;">
                 <div class="base_title_content">
                     <span class="base_title_f">账号管理</span>
-                    <assert-account-selector></assert-account-selector>
+                    <div>
+                        <select name="adminUser" v-model="adminUser" style="width: 790px;height: 30px;border: 1px solid #d7d7d7;">
+                            <option v-for="item in adminUsers" :value="item.id">{{item.name}}</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
@@ -124,18 +158,20 @@
             <div style="display: flex;flex-direction: column;">
                 <div class="base_title_content">
                     <span class="base_title_f">状态</span>
-                    <input class="btn-switch large" type="checkbox" :checked="state" id="btn-switch-state" @click.prevent="setState">
+                    <input class="btn-switch large" type="checkbox" :checked="state" id="btn-switch-state"
+                           @click.prevent="setState">
                 </div>
                 <div class="base_title_content">
                     <span class="base_title_f">备注</span>
-                    <input type="text" v-model="maskStr" style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="text" v-model="maskStr"
+                           style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </div>
             </div>
         </div>
         <div style="width: 100%;display: flex;justify-content: center;margin-top: 10px;">
-            <div class="sure-btn" @click="onSave">保存</div>
+            <div class="sure-btn" @click="onSave" v-if="pageState == 2">保存</div>
+            <div class="sure-btn" @click="onUpdate" v-else>保存</div>
         </div>
-        
     </div>
 </div>
 
@@ -178,27 +214,27 @@
     </div>
     <div v-else>
         <div style="width: 100%;margin-top: 10px;height: 650px;overflow-x: auto; overflow-y: auto;">
-            <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <table id="tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
                 <thead>
-                    <tr align="center">
-                        <th class='table-head-bg' style="width: 340px;" >用户名</th>
-                        <th class='table-head-bg' style="width: 310px;" >姓名</th>
-                        <th class='table-head-bg' style="width: 400px;" >邮箱</th>
-                        <th class='table-head-bg' style="width: 120px;" >操作</th>
-                    </tr>
+                <tr align="center">
+                    <th class='table-head-bg' style="width: 340px;">用户名</th>
+                    <th class='table-head-bg' style="width: 310px;">姓名</th>
+                    <th class='table-head-bg' style="width: 400px;">邮箱</th>
+                    <th class='table-head-bg' style="width: 120px;">操作</th>
+                </tr>
                 </thead>
                 <tbody id='tableBody'>
-                    <tr align="center" style="height: 40px;" v-for="item in userData" >
-                        <td>{{item.value1}}</td>
-                        <td>{{item.value2}}</td>
-                        <td>{{item.value3}}</td>
-                        <td>
-                            <div class="edit_btn" @click="onDeleteAuthAccount(item.id)">删除</div>
-                        </td>
-                    </tr>
+                <tr align="center" style="height: 40px;" v-for="item in userData">
+                    <td>{{item.value1}}</td>
+                    <td>{{item.value2}}</td>
+                    <td>{{item.value3}}</td>
+                    <td>
+                        <div class="edit_btn" @click="onDeleteAuthAccount(item.id)">删除</div>
+                    </td>
+                </tr>
                 </tbody>
             </table>
-        </div>    
+        </div>
     </div>
 </div>
 
@@ -208,7 +244,8 @@
             <span style="font-size: 16px;margin-right: 10px;cursor: pointer;" @click="onCloseAuth">X</span>
         </div>
         <span style="font-size: 14px;color:#333;padding: 0 20px;">请输入被授权账号邮箱，多个请以换行符相隔 (不可重复)：</span>
-        <textarea style="margin: 5px 20px;width: 400px;height: 170px;border: 1px solid #d7d7d7;resize: none;" v-model="authValue" ></textarea>
+        <textarea style="margin: 5px 20px;width: 400px;height: 170px;border: 1px solid #d7d7d7;resize: none;"
+                  v-model="authValue"></textarea>
         <div style="width: 100%;display: flex;justify-content: center;margin-top: 10px;">
             <div class="sure-btn" @click="onSaveAuth">确认</div>
         </div>

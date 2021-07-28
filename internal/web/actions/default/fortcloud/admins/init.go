@@ -12,7 +12,9 @@ func init() {
 			Helper(helpers.NewUserMustAuth("")).
 			Data("teaMenu", "admins").
 			Prefix("/fortcloud/admins").
-			Get("", new(IndexAction)).
+			GetPost("", new(IndexAction)).
+			Post("/update", new(UpdateAction)).
+			Post("/delete", new(DeleteAction)).
 			EndAll()
 	})
 }

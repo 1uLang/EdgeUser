@@ -2,17 +2,17 @@ package sessions
 
 import (
 	"fmt"
-	sessions_model "github.com/1uLang/zhiannet-api/jumpserver/model/sessions"
 	jumpserver_server "github.com/1uLang/zhiannet-api/jumpserver/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud"
+	"github.com/iwind/TeaGo/actions"
 )
 
-type IndexAction struct {
+type MonitorAction struct {
 	actionutils.ParentAction
 }
 
-func (this *IndexAction) checkAndNewServerRequest() (*jumpserver_server.Request, error) {
+func (this *MonitorAction) checkAndNewServerRequest() (*jumpserver_server.Request, error) {
 	if fortcloud.ServerUrl == "" {
 		err := fortcloud.InitAPIServer()
 		if err != nil {
@@ -23,31 +23,24 @@ func (this *IndexAction) checkAndNewServerRequest() (*jumpserver_server.Request,
 	return fortcloud.NewServerRequest(username, "dengbao-"+username)
 	//return fortcloud.NewServerRequest("admin", "21ops.com")
 }
-func (this *IndexAction) RunGet(params struct {
-	PageSize int
-	PageNo   int
+func (this *MonitorAction) RunPost(params struct {
+	Id   string
+	Must *actions.Must
 }) {
+
+	params.Must.
+		Field("id", params.Id).
+		Require("请选择需要回放的会话")
+
 	req, err := this.checkAndNewServerRequest()
 	if err != nil {
 		this.ErrorPage(fmt.Errorf("堡垒机组件错误:" + err.Error()))
 		return
 	}
-	var online, offline []map[string]interface{}
-	list, err := req.Session.List(&sessions_model.ListReq{
-		UserId: uint64(this.UserId()),
-	})
+	err = req.Session.Monitor(params.Id)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	for _, item := range list {
-		if !item["is_finished"].(bool) {
-			online = append(online, item)
-		} else {
-			offline = append(offline, item)
-		}
-	}
-	this.Data["online"] = online
-	this.Data["offline"] = offline
-	this.Show()
+	this.Success()
 }
