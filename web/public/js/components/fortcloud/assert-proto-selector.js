@@ -8,15 +8,14 @@ Vue.component("assert-proto-selector", {
 		// 		that.assemblys = resp.data.assemblys
 		// 	})
 	},
-	props: ["v-assembly-id"],
+	props: ["v-proto"],
 	data: function () {
-		let assemblyType = this.vAssemblyId
-		if (assemblyType == null) {
-			assemblyType = -1
+		let proto = this.vProto
+		if (proto == null) {
+			proto = "ssh"
 		}
 		return {
-			assemblys: [],
-			assemblyType: assemblyType,
+			proto: proto,
 		}
 	},
 	watch:{
@@ -27,9 +26,11 @@ Vue.component("assert-proto-selector", {
 		// }
 	},
 	template: `<div>
-	<select name="assemblyType" v-model="assemblyType" style="width: 110px;height: 30px;border: 1px solid #d7d7d7;">
-		<option value="-1">SSH</option>
-		<option v-for="assembly in assemblys" :value="assembly.id">{{assembly.name}}</option>
+	<select name="assemblyType" v-model="proto" style="width: 110px;height: 30px;border: 1px solid #d7d7d7;">
+		<option value="ssh">ssh</option>
+		<option value="rdp">rdp</option>
+		<option value="telnet">telnet</option>
+		<option value="vnc">vnc</option>
 	</select>
 </div>`
 })

@@ -2,7 +2,6 @@
 {$layout}
 {$var "header"}
 {$end}
-
 <div v-if="pageState==1">
     <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
         <div style="cursor: pointer;margin-top: 10px;" @click="onChangeState(2)">[添加账号]</div>
@@ -20,16 +19,16 @@
                 </tr>
             </thead>
             <tbody id='tableBody'>
-                <tr align="center" style="height: 40px;" v-for="(item,index) in tableData" >
+                <tr align="center" style="height: 40px;" v-for="(item,index) in adminUsers" >
                     <td>
-                        <u @click="onOpenDetail(item)" style="color: #169BD5;cursor: pointer;">{{item.value1}}</u>
+                        <u @click="onOpenDetail(item)" style="color: #169BD5;cursor: pointer;">{{item.name}}</u>
                     </td>
-                    <td>{{item.value2}}</td>
-                    <td>{{item.value3}}</td>
-                    <td>{{item.value4}}</td>
+                    <td>{{item.username}}</td>
+                    <td>{{item.assets_amount}}</td>
+                    <td>{{item.comment}}</td>
                     <td>
                         <div style="display: flex;justify-content: space-around;padding: 4px 0;">
-                            <div class="edit_btn" @click="onEdit(item.id)">修改</div>
+                            <div class="edit_btn" @click="onEdit(item)">修改</div>
                             <div class="edit_btn" @click="onDelete(item.id)">删除</div>
                         </div>
                     </td>
@@ -39,7 +38,7 @@
     </div>    
 </div>
 
-<div v-else-if="pageState==2">
+<div v-else-if="pageState==2 || pageState==5">
     <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
         <div style="display: inline-flex;margin-top: 10px;">
             <span style="cursor: pointer;" @click="onChangeState(1)">账号列表</span>
@@ -59,7 +58,7 @@
                 </div>
                 <div class="base_title_content">
                     <span class="base_title_f">密码*</span>
-                    <input type="text" v-model="password" style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="password" v-model="password" style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </div>
                 <div class="base_title_content" style="height: auto;">
                     <span class="base_title_f">备注</span>
@@ -69,7 +68,8 @@
         </div>
         
         <div style="width: 100%;display: flex;justify-content: center;margin-top: 10px;">
-            <div class="sure-btn" @click="onSave">保存</div>
+            <div class="sure-btn" @click="onSave" v-if="pageState===2">保存</div>
+            <div class="sure-btn" @click="onUpdate" v-else>保存</div>
         </div>
         
     </div>
@@ -103,7 +103,7 @@
     </div>
     <div v-else>
         <div style="width: 100%;margin-top: 10px;height: 650px;overflow-x: auto; overflow-y: auto;">
-            <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <table  class="ui table selectable celled" border="1" style="border-collapse: collapse;">
                 <thead>
                     <tr align="center">
                         <th class='table-head-bg' style="width: 235px;" >主机名</th>
@@ -113,7 +113,7 @@
                         <th class='table-head-bg' style="width: 235px;" >更新时间</th>
                     </tr>
                 </thead>
-                <tbody id='tableBody'>
+                <tbody >
                     <tr align="center" style="height: 40px;" v-for="item in hostData" >
                         <td>{{item.value1}}</td>
                         <td>{{item.value2}}</td>
