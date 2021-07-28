@@ -49,20 +49,29 @@
         <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
                 <tr align="center">
-                    <th class='table-head-bg' style="width: 560px;" >命令</th>
-                    <th class='table-head-bg' style="width: 110px;" >风险等级</th>
-                    <th class='table-head-bg' style="width: 130px;" >用户</th>
-                    <th class='table-head-bg' style="width: 180px;" >资产</th>
-                    <th class='table-head-bg' style="width: 170px;" >日期</th>
+                    <th class='table-head-bg' style="min-width: 560px;max-width: 560px;">命令</th>
+                    <th class='table-head-bg' style="min-width: 110px;max-width: 110px;">风险等级</th>
+                    <th class='table-head-bg' style="min-width: 130px;max-width: 130px;">用户</th>
+                    <th class='table-head-bg' style="min-width: 180px;max-width: 180px;">资产</th>
+                    <th class='table-head-bg' style="min-width: 170px;max-width: 170px;">日期</th>
                 </tr>
             </thead>
-            <tbody id='tableBody'>
-                <tr align="center" style="height: 40px;" v-for="item in tableData" >
-                    <td>{{item.value1}}</td>
+            <tbody id='tableBody' v-for="item in tableData" >
+                <tr align="center" style="height: 40px;" @click="onOpenItemDetail(item.id,tableData)">
+                    <td>
+                        <div style="display: inline-flex;">
+                            <span v-show="!item.bOpen">&#9658;</span>
+                            <span v-show="item.bOpen">&#9660;</span>
+                            <span class="txt-overflow" style="margin-left: 5px;min-width: 520px;max-width: 520px;">{{item.value1}}</span>
+                        </div>
+                    </td>
                     <td>{{getDangerLevel(item.value2)}}</td>
                     <td>{{item.value3}}</td>
                     <td>{{item.value4}}</td>
                     <td>{{onChangeTimeFormat(item.value5)}}</td>
+                </tr>
+                <tr v-show="item.bOpen" style="height: 40px;">
+                    <td colspan="9">{{item.value1}}</td>
                 </tr>
             </tbody>
         </table>

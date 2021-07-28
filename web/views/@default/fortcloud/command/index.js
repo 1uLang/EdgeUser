@@ -43,11 +43,21 @@ Tea.context(function () {
         return resultTime;
       };
 
+    this.onOpenItemDetail = function (id,table) {
+        if(id && table){
+            for(var index = 0;index<table.length;index++){
+                if(table[index].id == id){
+                    table[index].bOpen = !table[index].bOpen
+                    break
+                }
+            }
+        }
+    }
     this.tableData = [
-        {id:1,value1:"[dby_web@Server-a4e6d510-e580-48a2-af92-48ce81ae860b ~]$ cd /etc/passwd",value2:1,value3:"luobing(luobing)",value4:"等保云demo服务器",value5:"2021-06-23T16:00:00.312"},
-        {id:2,value1:"[dby_web@Server-a4e6d510-e580-48a2-af92-48ce81ae860b ~]$ cd /etc/passwd",value2:1,value3:"luobing(luobing)",value4:"等保云demo服务器",value5:"2021-06-23T16:00:00.312"},
-        {id:3,value1:"[dby_web@Server-a4e6d510-e580-48a2-af92-48ce81ae860b ~]$ cd /etc/passwd",value2:1,value3:"luobing(luobing)",value4:"等保云demo服务器",value5:"2021-06-23T16:00:00.312"},
-        {id:4,value1:"[dby_web@Server-a4e6d510-e580-48a2-af92-48ce81ae860b ~]$ cd /etc/passwd",value2:1,value3:"luobing(luobing)",value4:"等保云demo服务器",value5:"2021-06-23T16:00:00.312"},
-        {id:5,value1:"[dby_web@Server-a4e6d510-e580-48a2-af92-48ce81ae860b ~]$ cd /etc/passwd",value2:1,value3:"luobing(luobing)",value4:"等保云demo服务器",value5:"2021-06-23T16:00:00.312"},
+        {id:1,value1:"[dby_web@Server-a4e6d510-e580-48a2-af92-48ce81ae860b ~]$ cd /etc/passwd [dby_web@Server-a4e6d510-e580-48a2-af92-48ce81ae860b ~]$ cd /etc/passwd ",value2:1,value3:"luobing(luobing)",value4:"等保云demo服务器",value5:"2021-06-23T16:00:00.312",bOpen:false},
+        {id:2,value1:"[dby_web@Server-a4e6d510-e580-48a2-af92-48ce81ae860b ~]$ cd /etc/passwd",value2:1,value3:"luobing(luobing)",value4:"等保云demo服务器",value5:"2021-06-23T16:00:00.312",bOpen:false},
+        {id:3,value1:"[dby_web@Server-a4e6d510-e580-48a2-af92-48ce81ae860b ~]$ cd /etc/passwd",value2:1,value3:"luobing(luobing)",value4:"等保云demo服务器",value5:"2021-06-23T16:00:00.312",bOpen:false},
+        {id:4,value1:"[dby_web@Server-a4e6d510-e580-48a2-af92-48ce81ae860b ~]$ cd /etc/passwd",value2:1,value3:"luobing(luobing)",value4:"等保云demo服务器",value5:"2021-06-23T16:00:00.312",bOpen:false},
+        {id:5,value1:"[dby_web@Server-a4e6d510-e580-48a2-af92-48ce81ae860b ~]$ cd /etc/passwd",value2:1,value3:"luobing(luobing)",value4:"等保云demo服务器",value5:"2021-06-23T16:00:00.312",bOpen:false},
     ]
 })

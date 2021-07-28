@@ -43,3 +43,9 @@
     line-height: 30px;
     cursor: pointer;
 }
+
+.txt-overflow{
+    overflow:  hidden ;
+    text-overflow: ellipsis;
+    white-space:  nowrap ;
+}
