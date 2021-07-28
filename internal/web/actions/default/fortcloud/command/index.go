@@ -74,7 +74,7 @@ func (this *IndexAction) RunGet(params struct {
 	args.Date_to = params.DayTo
 
 	//指定该用户下
-	//args.User, _ = this.UserName()
+	args.User, _ = this.UserName()
 
 	commands, err := req.Command.List(args)
 	if err != nil {
