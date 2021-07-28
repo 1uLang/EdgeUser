@@ -11,19 +11,57 @@ Tea.context(function () {
     }
 
 
+    this.getSendTime = function (cycle,cycleType,send_time) {
+        switch (cycle) {
+            case 1:
+                return "每天 "+send_time
+            case 2:
+                return "每周 "+cycleType+" "+send_time
+            case 3:
+                return "每月 "+cycleType+" "+send_time
+            default:
+                return "未知"
+        }
+    }
+    this.getFormat = function (format) {
+        switch (format) {
+            case 1:
+                return "pdf"
+            case 2:
+                return "html"
+            default:
+                return "未知"
+        }
+    }
+
+    this.getAssets = function (type) {
+        switch (type) {
+            case 1:
+                return "数据库"
+            case 2:
+                return "主机"
+            case 3:
+                return "应用"
+            default:
+                return "全部"
+        }
+    }
     this.onEdit = function (id) {
-        teaweb.popup(Tea.url(".createPopup"), {
+        teaweb.popup(Tea.url(".createPopup",{id:id}), {
 			height: "400px",
             width:"520px",
 			callback: function () {
-				
+                window.location = "/audit/report"
 			}
 		})
     }
 
     this.onDelete = function (id) {
         teaweb.confirm("确定要删除该订阅任务？", function () {
-
+            this.$post("/audit/report/delete").params({
+                Opt: "delete",
+                id: id,
+            }).refresh()
         })
     }
 

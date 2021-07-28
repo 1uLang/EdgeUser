@@ -8,28 +8,33 @@ Vue.component("sql-ver-selector", {
 		// 		that.assemblys = resp.data.assemblys
 		// 	})
 	},
-	props: ["v-assembly-id"],
+	props: ["v-assembly-ver"],
 	data: function () {
-		let assemblyType = this.vAssemblyId
-		if (assemblyType == null) {
-			assemblyType = -1
+		let assemblyVer = this.vAssemblyVer
+		if (assemblyVer == null) {
+			assemblyVer = -1
 		}
+		let assemblys = [
+			{"name":"5.5"},
+			{"name":"5.7"},
+			{"name":"8.0"},
+		]
 		return {
-			assemblys: [],
-			assemblyType: assemblyType,
+			assemblys: assemblys,
+			assemblyVer: assemblyVer,
 		}
 	},
 	watch:{
-		// assemblyType(newVal, oldVale) {
-        //     if (newVal !== oldVale) {
-        //         this.$emit("update:vAssemblyId", newVal)
-        //     }
-        // },
+		assemblyVer(newVal, oldVale) {
+            if (newVal !== oldVale) {
+                this.$emit("update:vAssemblyVer", newVal)
+            }
+        },
 	},
 	template: `<div>
-	<select name="assemblyType" v-model="assemblyType" style="width: 250px;height: 30px;padding: 0 0 0 5px;line-height: 30px;font-size: 13px;border: 1px solid #d7d7d7;">
+	<select name="assemblyVer" v-model="assemblyVer" style="width: 250px;height: 30px;padding: 0 0 0 5px;line-height: 30px;font-size: 13px;border: 1px solid #d7d7d7;">
 		<option value="-1">请选择</option>
-		<option v-for="assembly in assemblys" :value="assembly.id">{{assembly.name}}</option>
+		<option v-for="assembly in assemblys" :value="assembly.name">{{assembly.name}}</option>
 	</select>
 </div>`
 })

@@ -13,7 +13,7 @@
             <tr>
                 <td class="title">收件人邮箱*</td>
                 <td>
-                    <input type="text" v-model="emails" style="height: 30px;width: 320px;line-height: 30px;border: 1px solid #d7d7d7;" placeholder="可输入多个邮箱地址，用“,”分割"></input>
+                    <input type="text" v-model="email" style="height: 30px;width: 320px;line-height: 30px;border: 1px solid #d7d7d7;" placeholder="可输入多个邮箱地址，用“,”分割"></input>
                 </td>
             </tr>
             <tr>
@@ -21,11 +21,11 @@
                 <td>
                     <div style="display: inline-flex;">
                         <div style="width: 120px;cursor: null;" @click="onSelectTableType">
-                            <input type="radio" name="tableSelect" v-model="tableSelect" :value="1" />
+                            <input type="radio" name="format" v-model="format" :value="1" />
                             <span style="margin-left: 10px;font-size: 14px;">HTML</span>
                         </div>
                         <div style="width: 120px;cursor: null;" @click="onSelectTableType">
-                            <input type="radio" name="tableSelect"  v-model="tableSelect" :value="2" />
+                            <input type="radio" name="format"  v-model="format" :value="2" />
                             <span style="margin-left: 10px;font-size: 14px;">PDF</span>
                         </div>
                     </div>
@@ -35,50 +35,54 @@
                 <td class="title">资产</td>
                 <td>
                     <div style="display: inline-flex;">
-                        <report-restype-selector :v-assembly-id.sync="resTypeIndex"></report-restype-selector>
-                        <report-resname-selector :v-assembly-id.sync="resNameIndex"></report-resname-selector>
+                        <report-restype-selector :v-assembly-type.sync="assets_type"></report-restype-selector>
+                        <report-resname-selector :v-assembly-id.sync="assets_id" :v-assembly-type="assets_type"></report-resname-selector>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td class="title">任务周期</td>
                 <td>
-                    <report-timeloop-selector :v-assembly-id.sync="loopTimeIndex"></report-timeloop-selector>
+                    <report-timeloop-selector :v-cycle.sync="cycle"></report-timeloop-selector>
                 </td>
             </tr>
 
             <tr>
                 <td class="title">发送时间</td>
                 <td>
-                    <div v-show="loopTimeIndex!=1" style="display: inline-flex;">
-                        <div v-show="loopTimeIndex==2">
-                            <select name="weekIndex" v-model="weekIndex" 
+                    <div v-show="cycle!=1" style="display: inline-flex;">
+                        <div v-show="cycle==2">
+                            <select name="cycle_day" v-model="cycle_day"
                                     style="width: 160px;height: 30px;padding: 0 0 0 5px;line-height: 30px;font-size: 13px;border: 1px solid #d7d7d7;">
                                 <option v-for="item in weekData" :value="item.id">{{item.name}}</option>
                             </select>
                         </div>
-                        <div v-show="loopTimeIndex==3">
-                            <select name="monthIndex" v-model="monthIndex" 
+                        <div v-show="cycle==3">
+                            <select name="cycle_day" v-model="cycle_day"
                                     style="width: 160px;height: 30px;padding: 0 0 0 5px;line-height: 30px;font-size: 13px;border: 1px solid #d7d7d7;">
                                 <option v-for="item in monthData" :value="item.id">{{item.name}}</option>
                             </select>
                         </div>
-                        <select name="timeIndex" v-model="timeIndex" 
+                        <select name="send_time" v-model="send_time"
                                 style="width: 160px;height: 30px;padding: 0 0 0 5px;line-height: 30px;font-size: 13px;border: 1px solid #d7d7d7;">
-                            <option v-for="item in timeData" :value="item.id">{{item.name}}</option>
+                            <option v-for="item in timeData" :value="item.name">{{item.name}}</option>
                         </select>
                     </div>
-                    <div v-show="loopTimeIndex==1">
-                        <select name="timeIndex" v-model="timeIndex" 
+                    <div v-show="cycle==1">
+                        <select name="send_time" v-model="send_time"
                                 style="width: 320px;height: 30px;padding: 0 0 0 5px;line-height: 30px;font-size: 13px;border: 1px solid #d7d7d7;">
-                            <option v-for="item in timeData" :value="item.id">{{item.name}}</option>
+                            <option v-for="item in timeData" :value="item.name">{{item.name}}</option>
                         </select>
                     </div>
                 </td>
             </tr>
         </table>
         <div style="width: 100%;display: flex;align-items: center;justify-content: center;">
-            <submit-btn></submit-btn>
+
+            <input type="hidden" name="id" v-model="id">
+            <button class="ui button small" @click="onSave" type="button">保存</button>
+
+            <!--<submit-btn></submit-btn>-->
         </div>
         
     </form>

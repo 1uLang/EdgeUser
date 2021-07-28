@@ -7,26 +7,26 @@
             <tr>
                 <td class="title">名称*</td>
                 <td>
-                    <input type="text" v-model="name" style="height: 30px;width: 250px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="text" name="name" v-model="name" style="height: 30px;width: 250px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </td>
             </tr>
             <tr>
-                <td class="title">IP*</td>
+                <td class="title">类型*</td>
                 <td>
-                    <sql-type-selector :v-assembly-id.sync="typeSelect"></sql-type-selector>
+                    <sql-type-selector :v-assembly-type.sync="typeSelect"></sql-type-selector>
                 </td>
             </tr>
             <tr>
                 <td class="title">版本*</td>
                 <td>
-                    <sql-ver-selector :v-assembly-id.sync="verSelect"></sql-ver-selector>
+                    <sql-ver-selector :v-assembly-ver.sync="verSelect"></sql-ver-selector>
                 </td>
             </tr>
             <tr>
                 <td class="title">IP端口*</td>
                 <td>
-                    <input type="text" v-model="ip" style="height: 30px;width: 250px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
-                    <input type="text" v-model="port" style="margin-left: 20px;height: 30px;width: 80px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="text" name="ip" v-model="ip" style="height: 30px;width: 250px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="text" name="port" v-model="port" style="margin-left: 20px;height: 30px;width: 80px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </td>
             </tr>
             <tr>
@@ -38,7 +38,7 @@
                             <span style="margin-left: 10px;font-size: 14px;">Linux</span>
                         </div>
                         <div style="width: 120px;" @click="onSelectSystem">
-                            <input type="radio" name="systemSelect"  v-model="systemSelect" :value="2" />
+                            <input type="radio" name="systemSelect"  v-model="systemSelect" :value="0" />
                             <span style="margin-left: 10px;font-size: 14px;">Windows</span>
                         </div>
                     </div>
@@ -53,7 +53,7 @@
                             <span style="margin-left: 10px;font-size: 14px;">启用</span>
                         </div>
                         <div style="width: 120px;cursor: null;" @click="onSelectOpenState">
-                            <input type="radio" name="openState"  v-model="openState" :value="2" />
+                            <input type="radio" name="openState"  v-model="openState" :value="0" />
                             <span style="margin-left: 10px;font-size: 14px;">禁用</span>
                         </div>
                     </div>
@@ -61,7 +61,10 @@
             </tr>
         </table>
         <div style="width: 100%;display: flex;align-items: center;justify-content: center;">
-            <submit-btn></submit-btn>
+            <!--<submit-btn></submit-btn>-->
+            <input type="hidden" name="id" v-model="id">
+            <button class="ui button small" @click="onSave" type="button">保存</button>
+
         </div>
         
     </form>
