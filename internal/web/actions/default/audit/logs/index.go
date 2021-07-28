@@ -7,6 +7,7 @@ import (
 	"github.com/1uLang/zhiannet-api/audit/server/audit_host"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/maps"
 
 	"time"
 )
@@ -30,7 +31,11 @@ func (this *IndexAction) RunGet() {
 			UserId: uint64(this.UserId()),
 		},
 	})
-	this.Data["dbList"] = dblist.Data.List
+	if dblist != nil && len(dblist.Data.List) > 0 {
+		this.Data["dbList"] = dblist.Data.List
+	} else {
+		this.Data["dbList"] = []maps.Map{}
+	}
 
 	//主机
 	hostlist, _ := audit_host.GetAuditHostList(&audit_host.ReqSearch{
@@ -40,7 +45,11 @@ func (this *IndexAction) RunGet() {
 			UserId: uint64(this.UserId()),
 		},
 	})
-	this.Data["hostList"] = hostlist.Data.List
+	if hostlist != nil && len(hostlist.Data.List) > 0 {
+		this.Data["hostList"] = hostlist.Data.List
+	} else {
+		this.Data["hostList"] = []maps.Map{}
+	}
 
 	//应用
 	applist, _ := audit_app.GetAuditAppList(&audit_app.ReqSearch{
@@ -50,7 +59,12 @@ func (this *IndexAction) RunGet() {
 			UserId: uint64(this.UserId()),
 		},
 	})
-	this.Data["appList"] = applist.Data.List
+	//this.Data["appList"] = applist.Data.List
+	if applist != nil && len(applist.Data.List) > 0 {
+		this.Data["appList"] = applist.Data.List
+	} else {
+		this.Data["appList"] = []maps.Map{}
+	}
 	this.Show()
 }
 
@@ -87,6 +101,7 @@ func (this *IndexAction) RunPost(params struct {
 	if len(params.AuditId) == 0 {
 		params.AuditId = []string{"0"}
 	}
+	this.Data["list"] = []maps.Map{}
 	switch params.LogType {
 	case 1:
 		list, _ := audit_db.GetDbLog(&audit_db.DbLogReq{
@@ -105,6 +120,9 @@ func (this *IndexAction) RunPost(params struct {
 				UserId: uint64(this.UserId()),
 			},
 		})
+		if list == nil {
+			break
+		}
 		if params.Export {
 			this.Data["filepath"] = list.Data.Filename
 		} else {
@@ -124,6 +142,9 @@ func (this *IndexAction) RunPost(params struct {
 				UserId: uint64(this.UserId()),
 			},
 		})
+		if list == nil {
+			break
+		}
 		if params.Export {
 			this.Data["filepath"] = list.Data.Filename
 		} else {
@@ -143,6 +164,9 @@ func (this *IndexAction) RunPost(params struct {
 				UserId: uint64(this.UserId()),
 			},
 		})
+		if list == nil {
+			break
+		}
 		if params.Export {
 			this.Data["filepath"] = list.Data.Filename
 		} else {
