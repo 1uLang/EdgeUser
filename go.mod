@@ -2,10 +2,11 @@ module github.com/TeaOSLab/EdgeUser
 
 go 1.15
 
+replace github.com/1uLang/zhiannet-api => ../zhiannet-api
 replace github.com/TeaOSLab/EdgeCommon => ../EdgeCommon
 
 require (
-	github.com/1uLang/zhiannet-api v0.0.0-20210715075046-8c29ee77d4d3
+	github.com/1uLang/zhiannet-api v0.0.0-20210726090728-b191d4da8676
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/TeaOSLab/EdgeCommon v0.0.0-00010101000000-000000000000
 	github.com/cespare/xxhash v1.1.0
