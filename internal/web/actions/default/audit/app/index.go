@@ -1,11 +1,11 @@
 package app
 
 import (
-	"fmt"
 	"github.com/1uLang/zhiannet-api/audit/request"
 	"github.com/1uLang/zhiannet-api/audit/server/audit_app"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/maps"
 )
 
 type IndexAction struct {
@@ -39,9 +39,12 @@ func (this *IndexAction) RunGet(params struct {
 			UserId: uint64(this.UserId()),
 		},
 	})
-	this.Data["appList"] = list.Data.List
-	fmt.Println("params==", params)
-	fmt.Println("list==", list)
+	//this.Data["appList"] = list.Data.List
+	if list != nil && len(list.Data.List) > 0 {
+		this.Data["appList"] = list.Data.List
+	} else {
+		this.Data["appList"] = []maps.Map{}
+	}
 	if params.Json {
 		this.Success()
 	}
