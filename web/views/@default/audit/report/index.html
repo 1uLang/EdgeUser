@@ -22,14 +22,14 @@
                 </tr>
             </thead>
             <tbody id='tableBody'>
-                <tr align="center" style="height: 40px;" v-for="item in tableData" >
-                    <td>{{item.value1}}</td>
-                    <td>{{item.value2}}</td>
-                    <td>{{item.value3}}</td>
-                    <td>{{item.value4}}</td>
-                    <td>{{item.value5}}</td>
+                <tr align="center" style="height: 40px;" v-for="item in fromList" >
+                    <td>{{item.name}}</td>
+                    <td>{{getSendTime(item.cycle, item.cycle_day, item.send_time)}}</td>
+                    <td>{{getFormat(item.format)}}</td>
+                    <td>{{getAssets(item.assets_type)}}</td>
+                    <td>{{item.assets_name}}</td>
                     <td style="overflow: hidden">
-                        {{item.value6}}
+                        {{item.email}}
                     </td>
                     <td>
                         <div style="display: flex;justify-content: space-around;padding: 4px 0;">

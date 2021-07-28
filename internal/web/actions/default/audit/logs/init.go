@@ -12,7 +12,7 @@ func init() {
 			Helper(helpers.NewUserMustAuth("")).
 			Data("teaMenu", "logs").
 			Prefix("/audit/logs").
-			Get("", new(IndexAction)).
+			GetPost("", new(IndexAction)).
 			GetPost("/export", new(ExportAction)).
 			EndAll()
 	})

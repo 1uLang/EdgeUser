@@ -31,46 +31,46 @@
                 </tr>
             </thead>
             <tbody id='tableBody'>
-                <tr align="center" style="height: 40px;" v-for="item in tableData" >
+                <tr align="center" style="height: 40px;" v-for="item in dbList" >
                     <td>
                         <div style="padding: 4px 0;">
-                            {{item.value1}}
+                            {{item.name}}
                         </div>
                     </td>
                     <td>
                         <div style="padding: 4px 0;">
-                            {{item.value2}}
+                            {{item.ip}}
                         </div>
                     </td>
                     <td>
                         <div style="padding: 4px 0;">
-                            {{item.value3}}
+                            {{item.port}}
                         </div>
                     </td>
                     <td>
                         <div style="padding: 4px 0;">
-                            {{item.value4}}
+                            {{getTypeName(item.type)}}
                         </div>
                     </td>
                     <td>
                         <div style="padding: 4px 0;">
-                            {{item.value5}}
+                            {{item.version}}
                         </div>
                     </td>
                     <td>
                         <div style="padding: 4px 0;">
-                            {{item.value6}}
+                            {{getSystemName(item.system)}}
                         </div>
                     </td>
                     <td>
-                        <div :class="{'status-open':item.value7=='1','status-close':item.value7=='0'}">
-                            {{getStatus(item.value7)}}
+                        <div :class="{'status-open':item.status=='1','status-close':item.status=='0'}">
+                            {{getStatus(item.status)}}
                         </div>
                     </td>
                     <td>
                         <div style="display: flex;justify-content: space-around;padding: 4px 0;">
                             <div class="edit_btn" @click="onOpenAuth(item.id)">授权</div>
-                            <div class="edit_btn" @click="onEdit(item.id)">修改</div>
+                            <div class="edit_btn" @click="onEdit(item)">修改</div>
                             <div class="del-btn" @click="onDelete(item.id)">删除</div>
                         </div>
                     </td>

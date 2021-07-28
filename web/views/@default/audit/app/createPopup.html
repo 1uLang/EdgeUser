@@ -19,7 +19,7 @@
             <tr>
                 <td class="title">类型*</td>
                 <td>
-                    <host-type-selector :v-assembly-id.sync="typeSelect"></-type-selector>
+                    <host-type-selector :v-assembly-type.sync="typeSelect"></host-type-selector>
                 </td>
             </tr>
             <tr>
@@ -31,7 +31,7 @@
                             <span style="margin-left: 10px;font-size: 14px;">启用</span>
                         </div>
                         <div style="width: 120px;cursor: null;" @click="onSelectOpenState">
-                            <input type="radio" name="openState"  v-model="openState" :value="2" />
+                            <input type="radio" name="openState"  v-model="openState" :value="0" />
                             <span style="margin-left: 10px;font-size: 14px;">禁用</span>
                         </div>
                     </div>
@@ -39,7 +39,9 @@
             </tr>
         </table>
         <div style="width: 100%;display: flex;align-items: center;justify-content: center;">
-            <submit-btn></submit-btn>
+            <!--<submit-btn></submit-btn>-->
+            <input type="hidden" name="id" v-model="id">
+            <button class="ui button small" @click="onSave" type="button">保存</button>
         </div>
         
     </form>

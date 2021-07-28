@@ -1,6 +1,8 @@
 package app
 
 import (
+	"github.com/1uLang/zhiannet-api/audit/request"
+	"github.com/1uLang/zhiannet-api/audit/server/audit_app"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 )
 
@@ -9,15 +11,20 @@ type DeleteAction struct {
 }
 
 func (this *DeleteAction) RunPost(params struct {
-	AccessKeyId int64
+	Id uint64
 }) {
-	//defer this.CreateLogInfo("删除AccessKey %d", params.AccessKeyId)
-	//
-	//_, err := this.RPC().UserAccessKeyRPC().DeleteUserAccessKey(this.UserContext(), &pb.DeleteUserAccessKeyRequest{UserAccessKeyId: params.AccessKeyId})
-	//if err != nil {
-	//	this.ErrorPage(err)
-	//	return
-	//}
+	res, err := audit_app.DelApp(&audit_app.DelAppReq{
+		User: &request.UserReq{
+			UserId: uint64(this.UserId()),
+		},
+		Id: params.Id,
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+
+	defer this.CreateLogInfo("删除安全审计-应用 %v", res.Msg)
 
 	this.Success()
 }

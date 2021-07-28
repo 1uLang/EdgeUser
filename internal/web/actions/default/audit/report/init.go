@@ -1,4 +1,4 @@
-package db
+package report
 
 import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/helpers"
@@ -15,6 +15,7 @@ func init() {
 			Get("", new(IndexAction)).
 			GetPost("/createPopup", new(CreatePopupAction)).
 			GetPost("/delete", new(DeleteAction)).
+			GetPost("/assets", new(AssetsAction)).
 			EndAll()
 	})
 }
