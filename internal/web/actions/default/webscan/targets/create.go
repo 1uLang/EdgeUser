@@ -1,8 +1,13 @@
 package targets
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/awvs/model/targets"
 	targets_server "github.com/1uLang/zhiannet-api/awvs/server/targets"
+
+	"github.com/1uLang/zhiannet-api/nessus/model/scans"
+	scans_server "github.com/1uLang/zhiannet-api/nessus/server/scans"
+
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan"
 	"github.com/iwind/TeaGo/actions"
@@ -19,6 +24,7 @@ func (this *CreateAction) RunGet(params struct{}) {
 func (this *CreateAction) RunPost(params struct {
 	Address string
 	Desc    string
+	Type 	int
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
@@ -34,16 +40,34 @@ func (this *CreateAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	req := &targets.AddReq{Address: params.Address, UserId: uint64(this.UserId())}
-	req.Description = params.Desc
-	//req.AdminUserId = uint64(this.AdminId())
+	if params.Type == 1 {
+		req := &targets.AddReq{Address: params.Address, UserId: uint64(this.UserId())}
+		req.Description = params.Desc
 
-	_, err = targets_server.Add(req)
-	if err != nil {
-		this.ErrorPage(err)
+		_, err = targets_server.Add(req)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+		// 日志
+		this.CreateLogInfo("WEB漏洞扫描 - 创建任务目标:[%v]成功", params.Address)
+	} else if params.Type == 2{
+
+		req := &scans.AddReq{}
+		req.UserId = uint64(this.UserId())
+		req.Settings.Name = params.Address
+		req.Settings.Text_targets = params.Address
+		req.Settings.Description = params.Desc
+		err = scans_server.Create(req)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+		// 日志
+		this.CreateLogInfo("主机漏洞扫描 - 创建任务目标:[%v]成功", params.Address)
+	}else {
+		this.ErrorPage(fmt.Errorf("漏洞扫描类型参数错误"))
 		return
 	}
-	// 日志
-	this.CreateLogInfo("WEB漏洞扫描 - 创建任务目标:[%v]成功", params.Address)
 	this.Success()
 }

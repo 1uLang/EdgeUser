@@ -3,6 +3,8 @@ package scans
 import (
 	"github.com/1uLang/zhiannet-api/awvs/model/scans"
 	scans_server "github.com/1uLang/zhiannet-api/awvs/server/scans"
+	nessus_scans_model "github.com/1uLang/zhiannet-api/nessus/model/scans"
+	nessus_scans_server "github.com/1uLang/zhiannet-api/nessus/server/scans"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan"
 )
@@ -23,7 +25,6 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["scans"] = make([]interface{}, 0)
 	err := webscan.InitAPIServer()
 	if err != nil {
-		//this.ErrorPage(err)
 		this.Data["nodeErr"] = "web扫描节点错误"
 		this.Show()
 		return
@@ -37,11 +38,20 @@ func (this *IndexAction) RunGet(params struct {
 	list, err := scans_server.List(&scans.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, UserId: uint64(this.UserId())})
 	if err != nil && list != nil {
 		this.ErrorPage(err)
-		this.Show()
 		return
 	}
+	var scansMaps []interface{}
 	if lists, ok := list["scans"]; ok {
-		this.Data["scans"] = lists
+		scansMaps = lists.([]interface{})
+	}
+	nessus_list, err := nessus_scans_server.List(&nessus_scans_model.ListReq{ UserId: uint64(this.UserId()),Scan: true})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	scansMaps = append(scansMaps, nessus_list...)
+	if len(nessus_list) > 0 || len(scansMaps)> 0{
+		this.Data["scans"] = scansMaps
 	}
 	this.Show()
 }
@@ -67,8 +77,18 @@ func (this *IndexAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
+	var scansMaps []interface{}
 	if lists, ok := list["scans"]; ok {
-		this.Data["scans"] = lists
+		scansMaps = lists.([]interface{})
+	}
+	nessus_list, err := nessus_scans_server.List(&nessus_scans_model.ListReq{ UserId: uint64(this.UserId()),Scan: true})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	scansMaps = append(scansMaps, nessus_list...)
+	if len(nessus_list) > 0 || len(scansMaps)> 0{
+		this.Data["scans"] = scansMaps
 	}
 	this.Success()
 }

@@ -96,15 +96,6 @@ Tea.context(function () {
         delBtn.style.cursor = "pointer";
     };
 
-    /* 数据模版
-      var scanData = [
-          {'id':1,'ip':'192.168.0.1','disc':'test','type':'web','loophole':{'red':1,'yellow':2,'blue':3,'green':4},'lastStatus':'已完成','lastTime':'2021-06-11 09:29:23'},
-          {'id':2,'ip':'192.168.1.1','disc':'test','type':'web','loophole':{'red':1,'yellow':3,'blue':4,'green':2},'lastStatus':'未完成','lastTime':'2021-06-12 09:29:23'},
-          {'id':3,'ip':'192.168.5.1','disc':'test','type':'web','loophole':{'red':3,'yellow':2,'blue':1,'green':4},'lastStatus':'进行中','lastTime':'2021-06-13 09:29:23'},
-          {'id':4,'ip':'192.168.6.1','disc':'test','type':'web','loophole':{'red':6,'yellow':5,'blue':1,'green':4},'lastStatus':'进行中','lastTime':'2021-06-14 09:29:23'},
-      ]
-      */
-
     this.clickCheckbox = function () {
         var checkDomArr = document.querySelectorAll(
             ".multi-table tbody input[type=checkbox]:checked"
@@ -170,7 +161,8 @@ Tea.context(function () {
             let itemInfo = this.getItemInfo(id)
             if (itemInfo && (itemInfo.last_scan_session_status == "aborted" ||
                 itemInfo.last_scan_session_status == "completed" ||
-                itemInfo.last_scan_session_status == null)) {
+                itemInfo.last_scan_session_status == null ||
+                itemInfo.last_scan_session_status == "empty")) {
                 this.scanValues.push(id)
             }
         }
@@ -213,12 +205,16 @@ Tea.context(function () {
             switch (status) {
                 case "aborted":
                     return "已停止";
+                case "pausing":
+                    return "已停止";
                 case "completed":
                     return "已完成";
                 case "processing":
                     return "扫描中";
+                case "running":
+                    return "扫描中";
                 default:
-                    return status;
+                    return "未扫描";
             }
         } else {
             return "未扫描"

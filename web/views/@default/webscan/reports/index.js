@@ -150,4 +150,15 @@ Tea.context(function () {
             }
         })
     }
+    //主机漏洞扫描报表
+    this.exportFile = function (id,format) {
+        this.$post(".export").params({
+            id: id,
+            format:format,
+        }).success(resp => {
+            if (resp.code === 200) {
+                window.open(resp.data.url)
+            }
+        })
+    }
 });

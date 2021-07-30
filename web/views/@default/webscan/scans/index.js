@@ -10,14 +10,15 @@ Tea.context(function () {
     this.nShowState = 1   //三个界面的状态控制 1 2 3
     this.vulnerabilities = []
     this.statistics = {}
-    this.severity = 0
+    this.severity = ""
+    this.scanSeverity = 0
     this.checkPer = "12%"
     this.Address = ""
     this.scans_vulns = []
     this.scanId = ""
     this.scanSessionId = ""
     this.bLoopholeDetail = false    //漏洞详情是否显示
-
+    this.hostVulFlag = false //主机漏洞扫描
     this.bShowDetail = false
 
     this.showDetailItem = null
@@ -64,7 +65,7 @@ Tea.context(function () {
             return false
 
         for (item of this.scans) {
-            if (item.current_session.status === "processing" ||
+            if (item.current_session.status === "processing" || item.current_session.status === "running" ||
                 item.current_session.status === "queued" ||
                 item.current_session.status === "aborting") {
                 return true
@@ -198,7 +199,7 @@ Tea.context(function () {
             let id = this.checkValues[idx]
             let tid = this.checkTargetValues[idx]
             let itemInfo = this.getItemInfo(id)
-            if (itemInfo && itemInfo.current_session.status == "processing") {
+            if (itemInfo && (itemInfo.current_session.status == "processing" || itemInfo.current_session.status == "running")) {
                 this.stopValues.push(id)
                 this.stopTargetValues.push(tid)
             } else if (itemInfo && itemInfo.current_session.status == "completed") {
@@ -243,12 +244,29 @@ Tea.context(function () {
             this.nShowState = 3;
             this.severity = ""
             this.vulnerabilities = this.scans_vulns
-        }else if(state === 2){
-            if(this.showDetailItem)
+        } else if (state === 2) {
+            if (this.showDetailItem)
                 this.onShowDetail(this.showDetailItem)
-        }else{
+        } else {
             window.location.reload()
         }
+    }
+    //主机漏洞列表
+    this.onHostShowDetail = function (item) {
+        this.showDetailItem = item
+        this.scanId = item.scan_id
+        this.scanSessionId = item.target.address
+        this.hostVulFlag = true
+        this.$get(".vulnerabilities").params({
+            scanId: this.scanId,
+        }).success(resp => {
+            this.scans_vulns = []
+            if (resp.code === 200) {
+                this.scans_vulns = resp.data.data
+                this.vulnerabilities = this.scans_vulns
+            }
+            this.nShowState = 3
+        })
     }
 
     this.onShowDetail = function (item) {
@@ -261,30 +279,31 @@ Tea.context(function () {
             ScanSessionId: item.current_session.scan_session_id
         }).success(resp => {
             if (resp.code === 200) {
-                this.severity = resp.data.severity
-                this.statistics.status = this.onChangeStatusFormat(resp.data.statistics.status)
-                this.statistics.severity_counts = item.current_session.severity_counts
-                this.statistics.event_level = resp.data.statistics.scanning_app.wvs.event_level
-                this.statistics.host = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].host
-                this.statistics.os = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].target_info.os
-                this.statistics.responsive = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].target_info.responsive ? '是' : '否'
-                this.statistics.server = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].target_info.server
-                this.statistics.technologies = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].target_info.technologies
-                this.statistics.request_count = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].web_scan_status.request_count
-                this.statistics.avg_response_time = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].web_scan_status.avg_response_time
-                this.statistics.locations = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].web_scan_status.locations
+                this.scanSeverity = resp.data.severity
+                // this.statistics.status = this.onChangeStatusFormat(resp.data.statistics.status)
+                // this.statistics.severity_counts = item.current_session.severity_counts
+                // this.statistics.event_level = resp.data.statistics.scanning_app.wvs.event_level
+                // this.statistics.host = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].host
+                // this.statistics.os = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].target_info.os
+                // this.statistics.responsive = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].target_info.responsive ? '是' : '否'
+                // this.statistics.server = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].target_info.server
+                // this.statistics.technologies = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].target_info.technologies
+                // this.statistics.request_count = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].web_scan_status.request_count
+                // this.statistics.avg_response_time = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].web_scan_status.avg_response_time
+                // this.statistics.locations = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].web_scan_status.locations
                 this.statistics.vulns = resp.data.statistics.scanning_app.wvs.main.vulns
-
                 this.scans_vulns = this.statistics.vulns
-                this.statistics.duration = resp.data.statistics.scanning_app.wvs.main.duration
-                this.statistics.progress = resp.data.statistics.scanning_app.wvs.main.progress
-                this.statistics.messages = resp.data.statistics.scanning_app.wvs.main.messages
-                this.nShowState = 2
+                this.vulnerabilities = this.scans_vulns
+                // this.statistics.duration = resp.data.statistics.scanning_app.wvs.main.duration
+                // this.statistics.progress = resp.data.statistics.scanning_app.wvs.main.progress
+                // this.statistics.messages = resp.data.statistics.scanning_app.wvs.main.messages
+                // this.nShowState = 2
+                this.nShowState = 3
             }
         }).done(function () {
             if (this.statistics.progress != 100) {
                 this.$delay(function () {
-                    if(this.nShowState === 2)
+                    if (this.nShowState === 2)
                         this.onShowDetail(item)
                 }, 5000)
             }
@@ -321,6 +340,8 @@ Tea.context(function () {
                 case "completed":
                     return "已完成";
                 case "processing":
+                    return "正在进行";
+                case "running":
                     return "正在进行";
                 case "queued":
                     return "队列中";
@@ -359,26 +380,43 @@ Tea.context(function () {
                 return '中危'
             case 1:
                 return '低危'
-            default:
+            case 0:
                 return '信息'
+            default:
+                return "危机"
         }
         return resultSeverity;
     };
     this.getDetailInfo = function (vul) {
         this.detailInfo = null
-        this.$get(".vulnerabilities").params({
-            vulId: vul.vuln_id,
-            scanId: this.scanId,
-            scanSessionId: this.scanSessionId,
-        }).success(resp => {
-            if (resp.code === 200) {
-                this.detailInfo = resp.data.data
-                this.detailInfo.affects_url = "URL:           " + this.detailInfo.affects_url
-                this.bShowDetail = true
-            } else {
-                this.bShowDetail = false
-            }
-        })
+        if(!this.hostVulFlag){
+            this.$get(".vulnerabilities").params({
+                vulId: vul.vuln_id,
+                scanId: this.scanId,
+                scanSessionId: this.scanSessionId,
+            }).success(resp => {
+                if (resp.code === 200) {
+                    this.detailInfo = resp.data.data
+                    this.detailInfo.affects_url = "URL:           " + this.detailInfo.affects_url
+                    this.bShowDetail = true
+                } else {
+                    this.bShowDetail = false
+                }
+            })
+        }else{
+            this.$get("/webscan/vulnerabilities/details").params({
+                vulId: vul.plugin_id,
+                scanId: this.scanId,
+            }).success(resp => {
+                if (resp.code === 200) {
+                    this.detailInfo = resp.data.data
+                    this.detailInfo.affects_url = "URL:           " + this.scanSessionId
+                    this.bShowDetail = true
+                } else {
+                    this.bShowDetail = false
+                }
+            })
+        }
     }
 })
 ;

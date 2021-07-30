@@ -6,7 +6,7 @@
 <!-- 漏洞详情js-->
 <p class="comment" v-if="nodeErr != ''">请先添加web漏洞扫描节点</p>
 
-<div class="btn-contain" v-if="scans.length > 0">
+<div class="btn-contain" v-if="scans.length > 0 &&nShowState===1">
     <div id="stop-btn" @click="onStopScan()">停止扫描</div>
     <div id="create-btn" @click="onCreateReport()">生成报告</div>
     <div id="del-btn" @click="onDelete()">删除</div>
@@ -14,7 +14,7 @@
 
 <div v-if="nShowState!=1" style="display: inline-flex;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
     <div class="define-menu" @click.prevent="onChangeState(1)" style="cursor: pointer;font-size: 16px;">任务列表</div>
-    <div :class="{'select-menu':nShowState===2, 'define-menu':nShowState!=2}" @click.prevent="onChangeState(2)" style="cursor: pointer;font-size: 16px;">扫描信息</div>
+<!--    <div :class="{'select-menu':nShowState===2, 'define-menu':nShowState!=2}" @click.prevent="onChangeState(2)" style="cursor: pointer;font-size: 16px;">扫描信息</div>-->
     <div :class="{'select-menu':nShowState===3, 'define-menu':nShowState!=3}" @click.prevent="onChangeState(3)" style="cursor: pointer;font-size: 16px;">漏洞</div>
 </div>
 
@@ -42,17 +42,30 @@
                     <input type="checkbox" name="select" :value="item.scan_id" :data="item.target_id" @click="clickCheckbox">
                 </td>
                 <td @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)">
-                    <u v-show="index===curIndex" @click="onShowDetail(item)" style="color: #169BD5;cursor: pointer;">{{item.target.address}}</u>
+                    <u v-show="index===curIndex" @click="onHostShowDetail(item)" style="color: #169BD5;cursor: pointer;" v-if="item.owner">{{item.target.address}}</u>
+                    <u v-show="index===curIndex" @click="onShowDetail(item)" style="color: #169BD5;cursor: pointer;" v-else>{{item.target.address}}</u>
                     <span v-show="index!=curIndex">{{item.target.address}}</span>
                 </td>
                 <td>{{item.target.description}}</td>
-                <td>Web</td>
+                <td v-if="item.owner">Host</td>
+                <td v-else>Web</td>
                 <td>
-                    <div style="display: flex;justify-content: center;">
+                    <div style="display: flex;justify-content: center;" v-if="item.current_session.severity_counts">
+                        <div class="vulnerable-num" style="background-color: red;">
+                            <span v-if="item.current_session.severity_counts.critical">{{item.current_session.severity_counts.critical}}</span>
+                            <span v-else>0</span>
+                        </div>
                         <div class="vulnerable-num" style="background-color: #ec808d;">{{item.current_session.severity_counts.high}}</div>
                         <div class="vulnerable-num" style="background-color: #fcc77d;">{{item.current_session.severity_counts.medium}}</div>
                         <div class="vulnerable-num" style="background-color: #3abee8;">{{item.current_session.severity_counts.low}}</div>
                         <div class="vulnerable-num" style="background-color: #00b144;">{{item.current_session.severity_counts.info}}</div>
+                    </div>
+                    <div style="display: flex;justify-content: center;" v-else>
+                        <div class="vulnerable-num" style="background-color: red;">0</div>
+                        <div class="vulnerable-num" style="background-color: #ec808d;">0</div>
+                        <div class="vulnerable-num" style="background-color: #fcc77d;">0</div>
+                        <div class="vulnerable-num" style="background-color: #3abee8;">0</div>
+                        <div class="vulnerable-num" style="background-color: #00b144;">0</div>
                     </div>
                 </td>
                 <td>{{onChangeStatusFormat(item.current_session.status)}}</td>
@@ -69,10 +82,10 @@
                 <h2>威胁等级</h2>
                 <div style="margin-left: 5px;">{{severity}}</div>
             </div>
-            <div v-if="severity == 0">威胁级别尚不可用。</div>
-            <div v-if="severity == 1">扫描程序发现了一个或多个低危类型漏洞。</div>
-            <div v-if="severity == 2">扫描程序发现了一个或多个中危类型漏洞。您应调查每个漏洞以确保它们不会发展成为更严重的问题。</div>
-            <div v-if="severity == 3">扫描程序发现了一个或多个高危类型漏洞。恶意用户可以利用这些漏洞并破坏后端数据库和/或损坏您的网站。</div>
+            <div v-if="scanSeverity == 0">威胁级别尚不可用。</div>
+            <div v-if="scanSeverity == 1">扫描程序发现了一个或多个低危类型漏洞。</div>
+            <div v-if="scanSeverity == 2">扫描程序发现了一个或多个中危类型漏洞。您应调查每个漏洞以确保它们不会发展成为更严重的问题。</div>
+            <div v-if="scanSeverity == 3">扫描程序发现了一个或多个高危类型漏洞。恶意用户可以利用这些漏洞并破坏后端数据库和/或损坏您的网站。</div>
         </div>
         <div class="card-box" style="flex: 1;">
             <div style="display: inline-flex;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 5px;justify-content: space-between;">
@@ -235,7 +248,7 @@
                     </thead>
                     <tbody>
                     <tr align="center" style="height: 50px;cursor: pointer;" v-for="item in vulnerabilities" @click="getDetailInfo(item)" >
-                        <td :class="{'red-color':item.severity===3, 'yellow-color':item.severity===2,'blue-color':item.severity===1,'green-color':item.severity===0}">{{onChangeSeverityFormat(item.severity)}}</td>
+                        <td :class="{'red0-color':item.severity>3,'red-color':item.severity===3, 'yellow-color':item.severity===2,'blue-color':item.severity===1,'green-color':item.severity===0}">{{onChangeSeverityFormat(item.severity)}}</td>
                         <td>{{item.name}}</td>
                         <td>{{item.target_info.host}}</td>
                         <td>{{item.time}}</td>
@@ -255,8 +268,8 @@
                 <h2>漏洞描述</h2>
                 {{detailInfo.description}}
                 <div>发现者：<span style="font-weight: bold">{{detailInfo.vt_name}}</span></div>
-                <h2>此漏洞的影响</h2>
-                <div>{{detailInfo.impact}}</div>
+<!--                <h2>此漏洞的影响</h2>-->
+<!--                <div>{{detailInfo.impact}}</div>-->
                 <h2>如何修复此漏洞</h2>
                 <div>{{detailInfo.recommendation}}</div>
             </div>

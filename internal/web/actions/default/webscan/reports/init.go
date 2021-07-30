@@ -17,6 +17,7 @@ func init() {
 			Post("/create", new(CreateAction)).
 			Post("/delete", new(DeleteAction)).
 			Get("/download", new(DownloadAction)).
+			Post("/export", new(ExportAction)).
 			EndAll()
 	})
 }

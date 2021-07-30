@@ -2,9 +2,12 @@ package vulnerabilities
 
 import (
 	vulnerabilities_server "github.com/1uLang/zhiannet-api/awvs/server/vulnerabilities"
+	nessus_scans_model "github.com/1uLang/zhiannet-api/nessus/model/scans"
+	nessus_scans_server "github.com/1uLang/zhiannet-api/nessus/server/scans"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan"
 	"github.com/iwind/TeaGo/actions"
+	"strings"
 )
 
 type DetailAction struct {
@@ -12,20 +15,38 @@ type DetailAction struct {
 }
 
 func (this *DetailAction) RunGet(params struct {
-	VulId string
-
-	Must *actions.Must
+	VulId  string
+	ScanId string
+	Must   *actions.Must
 }) {
 	params.Must.
-		Field("macCode", params.VulId).
+		Field("vulId", params.VulId).
 		Require("请输入漏洞id")
+	params.Must.
+		Field("scanId", params.ScanId).
+		Require("请输入扫描id")
+
+	hostScan := strings.HasSuffix(params.ScanId, "-host")
 
 	if err := webscan.InitAPIServer(); err != nil {
 		this.ErrorPage(err)
 		return
 	}
 
-	info, err := vulnerabilities_server.Details(params.VulId)
+	var detail_func func() (interface{}, error)
+
+	if !hostScan {
+		detail_func = func() (interface{}, error) {
+			return vulnerabilities_server.Details(params.VulId)
+		}
+	} else {
+		detail_func = func() (interface{}, error) {
+			req := &nessus_scans_model.PluginsReq{ScanId: strings.TrimSuffix(params.ScanId, "-host"), VulId: params.VulId}
+			return nessus_scans_server.Plugins(req)
+		}
+	}
+
+	info, err := detail_func()
 	if err != nil {
 		this.ErrorPage(err)
 		return
