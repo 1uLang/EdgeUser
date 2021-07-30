@@ -1,6 +1,7 @@
 package db
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/audit/request"
 	"github.com/1uLang/zhiannet-api/audit/server/audit_db"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
@@ -29,9 +30,9 @@ func (this *CreatePopupAction) RunGet(params struct {
 	if !params.Edit && params.Type == 0 {
 		params.Type = -1
 	}
-	if params.Version == "" {
-		params.Version = "-1"
-	}
+	//if params.Version == "" {
+	//	params.Version = "-1"
+	//}
 	if !params.Edit {
 		params.System = 1
 		params.Status = 1
@@ -50,10 +51,10 @@ func (this *CreatePopupAction) RunGet(params struct {
 
 func (this *CreatePopupAction) RunPost(params struct {
 	Name    string
-	Type    uint
+	Type    int
 	Version string
 	Ip      string
-	Port    string
+	Port    int
 	System  uint
 	Status  uint
 	Id      uint64
@@ -64,22 +65,39 @@ func (this *CreatePopupAction) RunPost(params struct {
 	params.Must.
 		Field("name", params.Name).
 		Require("请输入名称")
+
+	params.Must.
+		Field("type", params.Type).
+		In([]int{1, 2}, "请选择类型")
+
+	params.Must.
+		Field("version", params.Version).
+		Require("请选择版本")
+
 	params.Must.
 		Field("ip", params.Ip).
-		Require("请输入ip")
+		Require("请输入ip").
+		Match("[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\\.?", "请输入正确的ip")
+
 	params.Must.
 		Field("port", params.Port).
 		Require("请输入port")
+
+	params.Must.
+		Field("port", params.Port).
+		Gt(0, "端口必须大于0").
+		Lte(65535, "端口必须小于65535")
+
 	if params.Id == 0 {
 		res, err := audit_db.AddDb(&audit_db.DBReq{
 			User: &request.UserReq{
 				UserId: uint64(this.UserId()),
 			},
 			Name:    params.Name,
-			Type:    params.Type,
+			Type:    uint(params.Type),
 			Version: params.Version,
 			IP:      params.Ip,
-			Port:    params.Port,
+			Port:    fmt.Sprint("%v", params.Port),
 			System:  params.System,
 			Status:  params.Status,
 		})

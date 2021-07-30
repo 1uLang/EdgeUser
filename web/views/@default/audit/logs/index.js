@@ -216,7 +216,7 @@ Tea.context(function () {
                 }else{
                     //文件下载路径
                     let filepath = resp.data.filepath
-
+                    window.location.href = filepath
                 }
 
 

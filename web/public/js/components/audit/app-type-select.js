@@ -1,4 +1,4 @@
-Vue.component("host-type-selector", {
+Vue.component("app-type-selector", {
 	mounted: function () {
 		let that = this
 
