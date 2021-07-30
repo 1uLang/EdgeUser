@@ -5,7 +5,8 @@ Tea.context(function () {
 			height: "400px",
             width:"520px",
 			callback: function () {
-				
+				   window.location = "/audit/report"
+
 			}
 		})
     }

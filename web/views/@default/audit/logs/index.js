@@ -23,9 +23,18 @@ Tea.context(function () {
     this.hostLogList = []
     this.appLogList = []
 
+    this.maxCount = 0
+    this.pageCount = 20
+    this.maxPage = 0
+    this.curPage = 1
+    this.inputPage = ""
+
+
     this.$delay(function () {
         teaweb.datepicker("day-from-picker")
         teaweb.datepicker("day-to-picker")
+        this.onChangeCheckTime('month')
+        this.onSearch("false")
     })
 
     this.onChangeCheckTime = function (index) {
@@ -55,6 +64,7 @@ Tea.context(function () {
         }
 
         this.sSelectSqlName = []
+        this.onSearch("false")
     }
 
     this.getDangerLevel = function (status) {
@@ -184,19 +194,54 @@ Tea.context(function () {
 
     //搜索
     this.onSearch = function (exp) {
+        let sSelectSqlName = this.sSelectSqlName
+        if(sSelectSqlName.length == 0){
+            switch (this.pageState) {
+                case 1:
+                    sSelectSqlName = []
+                    var x = 0;
+                    var len = this.dbList.length;
+                    for (; x < len;) {
+                        sSelectSqlName.push(this.dbList[x].audit_id)
+                        x++
+                    }
+
+                    break;
+                case 2:
+                    sSelectSqlName = []
+                    var x = 0;
+                    var len = this.hostList.length;
+                    for (; x < len;) {
+                        sSelectSqlName.push(this.hostList[x].audit_id)
+                        x++
+                    }
+                    break;
+                case 3:
+                    sSelectSqlName = []
+                    var x = 0;
+                    var len = this.appList.length;
+                    for (; x < len;) {
+                        sSelectSqlName.push(this.appList[x].audit_id)
+                        x++
+                    }
+                    break;
+                default:
+
+            }
+        }
         this.$post(".").params({
             timeType: this.timeSelectIndex,
             startTime: this.dayFrom,
             endTime: this.dayTo,
-            auditId: this.sSelectSqlName,
+            auditId: sSelectSqlName,
             cIp: this.clientIp,
             user: this.sqlName,
             risk: this.sSelectDangerLevel,
             message: this.searchKey,
             logType: this.pageState,
             export: exp,//导出
-            pageNum: 1,
-            pageSize: 100,
+            pageNum: this.curPage,
+            pageSize: 20,
         }).success(resp => {
             if (resp.code === 200 && resp.data.list) {
                 if(exp == "false"){
@@ -213,6 +258,11 @@ Tea.context(function () {
                         default:
                             this.list = []
                     }
+
+                    this.maxCount = resp.data.total
+//                    this.pageCount = 20
+                    this.maxPage = Math.ceil(resp.data.total/20)
+//                    this.curPage = resp.data.page
                 }else{
                     //文件下载路径
                     let filepath = resp.data.filepath
@@ -226,6 +276,17 @@ Tea.context(function () {
         })
     }
 
+    //重置
+    this.onReset = function(){
+        this.sSelectSqlName = [];
+        this.onChangeCheckTime('5min')
+        this.dayFrom = ""
+        this.dayTo = ""
+        this.clientIp = ""
+        this.sqlName = ""
+        this.sSelectDangerLevel = []
+        this.searchKey = ""
+    }
     this.tableData1 = [
         {
             id: 1,
@@ -377,4 +438,74 @@ Tea.context(function () {
         // {id:4,name:"严重",value:"严重"},
         // {id:5,name:"正常",value:"正常"},
     ]
+
+    this.getPageTable = function(curPage,maxPage){
+        let showTable = []
+        if(curPage+4>=maxPage){
+            let startIndex = maxPage-8+1
+            if(startIndex<1){
+                startIndex =1
+            }
+            for(var i =startIndex;i<=maxPage;i++){
+                showTable.push(i)
+            }
+        }else
+        {
+            if(maxPage<=8){
+                let startIndex = maxPage-8+1
+                if(startIndex<1){
+                    startIndex =1
+                }
+                for(var i =startIndex;i<=maxPage;i++){
+                    showTable.push(i)
+                }
+            }else{
+                let startIndex = curPage-2
+                let endIndex = curPage+3
+                if(startIndex<1){
+                    startIndex =1
+                }
+                let indexSpace = endIndex-startIndex+1
+                if(indexSpace<6){
+                    endIndex = endIndex+6-indexSpace
+                }
+                for(var i =startIndex;i<=endIndex;i++){
+                    showTable.push(i)
+                }
+                showTable.push("...")
+                showTable.push(maxPage)
+            }
+        }
+//        console.log(showTable)
+        return showTable
+    }
+
+    this.onSelectPage = function (page){
+        if(typeof(page)=="number"){
+            this.curPage = page
+        }
+        this.onSearch("false")
+    }
+
+    this.onLessPage = function (){
+        if(this.curPage>1){
+            this.curPage = this.curPage-1
+        }
+        this.onSearch("false")
+    }
+
+    this.onAddPage = function(){
+        if(this.curPage<this.maxPage){
+            this.curPage = this.curPage+1
+        }
+        this.onSearch("false")
+    }
+
+    this.onGoToPage = function (){
+        let curInputPage = Number(this.inputPage)
+        if(curInputPage>=1 && curInputPage<=this.inputPage && curInputPage!=this.curPage){
+            this.curPage = curInputPage
+        }
+        this.onSearch("false")
+    }
 })

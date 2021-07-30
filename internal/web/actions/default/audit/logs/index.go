@@ -65,6 +65,15 @@ func (this *IndexAction) RunGet() {
 	} else {
 		this.Data["appList"] = []maps.Map{}
 	}
+	page := this.NewPage(int64(0))
+	this.Data["page"] = page.AsHTML()
+
+	offset := page.Offset
+	end := offset + page.Size
+	if end > page.Total {
+		end = page.Total
+	}
+	this.Data["commands"] = []interface{}{}
 	this.Show()
 }
 
@@ -127,6 +136,8 @@ func (this *IndexAction) RunPost(params struct {
 			this.Data["filepath"] = list.Data.Filename
 		} else {
 			this.Data["list"] = list.Data.Log
+			this.Data["total"] = list.Data.Total
+			this.Data["page"] = list.Data.Page
 		}
 	case 2:
 		list, _ := audit_host.GetHostLog(&audit_host.HostLogReq{
@@ -149,6 +160,8 @@ func (this *IndexAction) RunPost(params struct {
 			this.Data["filepath"] = list.Data.Filename
 		} else {
 			this.Data["list"] = list.Data.Log
+			this.Data["total"] = list.Data.Total
+			this.Data["page"] = list.Data.Page
 		}
 	case 3:
 		list, _ := audit_app.GetAppLog(&audit_app.AppLogReq{
@@ -171,6 +184,8 @@ func (this *IndexAction) RunPost(params struct {
 			this.Data["filepath"] = list.Data.Filename
 		} else {
 			this.Data["list"] = list.Data.Log
+			this.Data["total"] = list.Data.Total
+			this.Data["page"] = list.Data.Page
 		}
 	}
 
