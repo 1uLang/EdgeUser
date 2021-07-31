@@ -49,35 +49,34 @@ Tea.context(function () {
     }
 
     this.onDownLoadLocalFile=function(downUrl,headToken){
-        function sucHandle(res){
-            console.log('sucHandle')
-            console.log(res)
-        }
-        function failHandle(){
-            console.log('failHandle')
-        }
-        Tea.openDownloadUrl("post",downUrl,headToken,sucHandle,failHandle)
-        // let xhr = new XMLHttpRequest()
-        // xhr.open("post",downUrl,true)
-        // xhr.setRequestHeader("Authorization","Bearer "+headToken)
-        // xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded")
-        // xhr.setRequestHeader("Access-Control-Allow-Origin","*")
-        // xhr.setRequestHeader("Access-Control-Allow-Headers","Origin, X-Requested-With, Content-Type, Accept ")
-        // xhr.send()
-        // xhr.responseType="blob"
-        // xhr.onload=function(){
-        //     if(this.status==200){
-        //         let tempBlob = this.response
-        //         let tempReader = new FileReader()
-        //         tempReader.onload=function(){
-        //             let link = document.createElement("a")
-        //             link.href=URL.createObjectURL(tempBlob)
-        //             link.setAttribute("download","text.pdf")
-        //             link.click()
-        //             link=null
-        //         }
-        //     }
+        // function sucHandle(res){
+        //     console.log('sucHandle')
+        //     console.log(res)
         // }
+        // function failHandle(){
+        //     console.log('failHandle')
+        // }
+        // Tea.openDownloadUrl("post",downUrl,headToken,sucHandle,failHandle)
+        let xhr = new XMLHttpRequest()
+        xhr.open("post",downUrl,true)
+        xhr.setRequestHeader("Authorization",headToken)
+        xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded")
+        xhr.send()
+        xhr.responseType="blob"
+        xhr.onload=function(){
+            if(this.status==200){
+                let tempBlob = this.response
+                let tempReader = new FileReader()
+                reatempReaderder.readAsDataURL(tempBlob);
+                tempReader.onload=function(e){
+                    let link = document.createElement("a")
+                    link.href = e.target.result
+                    link.setAttribute("download","test")
+                    link.click()
+                    link=null
+                }
+            }
+        }
     }
 
     // this.onuploadFile = function (file) {
