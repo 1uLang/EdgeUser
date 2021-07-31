@@ -683,7 +683,7 @@ window.Tea.openDownloadUrl=function(reqMethod,downUrl,headToken,sucHandle,failHa
         url:downUrl,
         headers:{
             "X-Requested-With": "XMLHttpRequest",
-            "Authorization":"Bearer "+headToken
+            "Authorization":headToken
         }
     })
     .then((res)=>{
