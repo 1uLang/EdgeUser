@@ -20,7 +20,7 @@ func (this *DeleteAction) RunPost(params struct {
 	// 获取token
 	req := model.LoginReq{
 		User:     "admin",
-		Password: "admin",
+		Password: "Dengbao123!@#",
 	}
 	token := request.GenerateToken(&req)
 
