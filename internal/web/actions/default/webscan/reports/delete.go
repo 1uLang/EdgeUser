@@ -5,6 +5,7 @@ import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan"
 	"github.com/iwind/TeaGo/actions"
+	"strings"
 )
 
 type DeleteAction struct {
@@ -26,7 +27,14 @@ func (this *DeleteAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	for _, reportId := range params.ReportIds {
+
+	webscan_ids := []string{}
+	for _,v := range params.ReportIds {
+		if !strings.HasSuffix(v,"-host"){//去掉主机漏洞扫描
+			webscan_ids = append(webscan_ids, v)
+		}
+	}
+	for _, reportId := range webscan_ids {
 		err = reports_server.Delete(reportId)
 		if err != nil {
 			this.ErrorPage(err)

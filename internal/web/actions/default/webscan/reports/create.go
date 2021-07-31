@@ -6,6 +6,7 @@ import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan"
 	"github.com/iwind/TeaGo/actions"
+	"strings"
 )
 
 //任务目标
@@ -31,11 +32,18 @@ func (this *CreateAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
+	webscan_ids := []string{}
+	for _,v := range params.Ids {
+		if !strings.HasSuffix(v,"-host"){//去掉主机漏洞扫描
+			webscan_ids = append(webscan_ids, v)
+		}
+	}
+
 	req := &reports.CreateResp{
 		Source: struct {
 			IDS  []string `json:"id_list"`
 			Type string   `json:"list_type"`
-		}{IDS: params.Ids, Type: "scans"},
+		}{IDS: webscan_ids, Type: "scans"},
 		TemplateId:  "11111111-1111-1111-1111-111111111112", //快速
 		UserId: uint64(this.UserId()),
 	}

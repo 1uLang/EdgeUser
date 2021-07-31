@@ -74,7 +74,7 @@ func (this *IndexAction) RunGet(params struct {
 	args.Date_to = params.DayTo
 
 	//指定该用户下
-	//args.User, _ = this.UserName()
+	args.User, _ = this.UserName()
 
 	commands, err := req.Command.List(args)
 	if err != nil {
@@ -92,7 +92,12 @@ func (this *IndexAction) RunGet(params struct {
 	if end > page.Total {
 		end = page.Total
 	}
-	this.Data["commands"] = commands[offset:end]
+	//命令过长收缩字段
+	comms := commands[offset:end]
+	for k := range comms{
+		comms[k]["bOpen"] = false
+	}
+	this.Data["commands"] = comms
 	this.Data["assets"] = assets
 
 	this.Data["index"] = params.Index

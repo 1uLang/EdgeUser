@@ -41,7 +41,7 @@ func (this *CreatePopupAction) RunGet(params struct {
 
 func (this *CreatePopupAction) RunPost(params struct {
 	Name   string
-	Type   uint
+	Type   int
 	Ip     string
 	Status uint
 	Id     uint64
@@ -53,14 +53,18 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Require("请输入名称")
 	params.Must.
 		Field("ip", params.Ip).
-		Require("请输入ip")
+		Require("请输入ip").
+		Match("[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\\.?", "请输入正确的ip")
+	params.Must.
+		Field("type", params.Type).
+		In([]int{0, 1}, "请选择类型")
 	if params.Id == 0 {
 		res, err := audit_app.AddApp(&audit_app.AppReq{
 			User: &request.UserReq{
 				UserId: uint64(this.UserId()),
 			},
 			Name:    params.Name,
-			AppType: params.Type,
+			AppType: uint(params.Type),
 			IP:      params.Ip,
 			Status:  params.Status,
 		})

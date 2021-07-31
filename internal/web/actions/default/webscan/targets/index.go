@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"github.com/1uLang/zhiannet-api/awvs/model/targets"
 	targets_server "github.com/1uLang/zhiannet-api/awvs/server/targets"
+
+	nessus_scans_model "github.com/1uLang/zhiannet-api/nessus/model/scans"
+	nessus_scans_server "github.com/1uLang/zhiannet-api/nessus/server/scans"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan"
 )
@@ -38,12 +41,22 @@ func (this *IndexAction) RunGet(params struct {
 		params.PageSize = 20
 	}
 	list, err := targets_server.List(&targets.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, UserId: uint64(this.UserId())})
-	if err != nil && list != nil {
+	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
+	var targetsMaps []interface{}
 	if lists, ok := list["targets"]; ok {
-		this.Data["targets"] = lists
+		targetsMaps = lists.([]interface{})
+	}
+	nessus_list, err := nessus_scans_server.List(&nessus_scans_model.ListReq{ UserId: uint64(this.UserId()),Targets: true})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	targetsMaps = append(targetsMaps, nessus_list...)
+	if len(nessus_list) > 0 || len(targetsMaps)> 0{
+		this.Data["targets"] = targetsMaps
 	}
 	if params.Show == 1 {
 		this.Success()

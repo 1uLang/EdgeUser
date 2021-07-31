@@ -68,3 +68,17 @@
     text-overflow: ellipsis;
     white-space:  nowrap ;
 }
+
+.page-box{
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    cursor:pointer;
+}
+.page-box-define{
+    color: #333;
+}
+.page-box-select{
+    color: #169bd5;
+}

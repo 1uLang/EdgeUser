@@ -69,9 +69,9 @@ Tea.context(function () {
                 id: this.id,
             })
             .success(function () {
-                // this.success("保存成功", function () {
-                //     window.location = "/audit/host"
-                // })
+                 this.success("保存成功", function () {
+                     window.location = "/audit/report"
+                 })
             })
     }
 })

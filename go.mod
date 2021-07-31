@@ -3,6 +3,7 @@ module github.com/TeaOSLab/EdgeUser
 go 1.15
 
 replace github.com/1uLang/zhiannet-api => ../zhiannet-api
+
 replace github.com/TeaOSLab/EdgeCommon => ../EdgeCommon
 
 require (
@@ -16,7 +17,6 @@ require (
 	github.com/miekg/dns v1.1.35
 	github.com/shirou/gopsutil v3.21.5+incompatible
 	github.com/tklauser/go-sysconf v0.3.6 // indirect
-	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
 	golang.org/x/sys v0.0.0-20210616094352-59db8d763f22
 	google.golang.org/genproto v0.0.0-20210617175327-b9e0b3197ced // indirect
 	google.golang.org/grpc v1.38.0
