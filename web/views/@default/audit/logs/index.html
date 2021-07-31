@@ -113,28 +113,37 @@
         <table v-if="pageState===1" id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
                 <tr align="center">
-                    <th class='table-head-bg' style="width: 110px;" >数据库名称</th>
-                    <th class='table-head-bg' style="width: 120px;" >服务端IP</th>
-                    <th class='table-head-bg' style="width: 120px;" >客户端IP</th>
-                    <th class='table-head-bg' style="width: 100px;" >数据库账号</th>
-                    <th class='table-head-bg' style="width: 100px;" >数据库类型</th>
-                    <th class='table-head-bg' style="width: 290px;" >SQL语句</th>
-                    <th class='table-head-bg' style="width: 80px;" >风险等级</th>
-                    <th class='table-head-bg' style="width: 110px;" >风险类型</th>
-                    <th class='table-head-bg' style="width: 140px;" >记录时间</th>
+                    <th class='table-head-bg' style="min-width: 120px;max-width: 120px;">数据库名称</th>
+                    <th class='table-head-bg' style="min-width: 120px;max-width: 120px;">服务端IP</th>
+                    <th class='table-head-bg' style="min-width: 120px;max-width: 120px;">客户端IP</th>
+                    <th class='table-head-bg' style="min-width: 100px;max-width: 100px;">数据库账号</th>
+                    <th class='table-head-bg' style="min-width: 100px;max-width: 100px;">数据库类型</th>
+                    <th class='table-head-bg' style="min-width: 280px;max-width: 280px;">SQL语句</th>
+                    <th class='table-head-bg' style="min-width: 80px;max-width: 80px;">风险等级</th>
+                    <th class='table-head-bg' style="min-width: 110px;max-width: 110px;">风险类型</th>
+                    <th class='table-head-bg' style="min-width: 140px;max-width: 140px;">记录时间</th>
                 </tr>
             </thead>
-            <tbody id='tableBody'>
-                <tr align="center" style="height: 40px;" v-for="item in dbLogList" >
-                    <td>{{item.db}}</td>
+            <tbody id='tableBody' v-for="item in dbLogList">
+                <tr align="center" style="height: 40px;" @click="onOpenItemDetail(item._id,dbLogList)">
+                    <td>
+                        <div style="display: inline-flex;">
+                            <span v-show="!item.bOpen">&#9658;</span>
+                            <span v-show="item.bOpen">&#9660;</span>
+                            <span style="margin-left: 5px;">{{item.db}}</span>
+                        </div>
+                    </td>
                     <td>{{item.sip}}</td>
                     <td>{{item.cip}}</td>
                     <td>{{item.user}}</td>
                     <td>{{item.type}}</td>
-                    <td>{{item.sql}}</td>
+                    <td class="txt-overflow" style="min-width: 280px;max-width: 280px;">{{item.sql}}</td>
                     <td>{{getDangerLevel(item.risk)}}</td>
                     <td>{{getDangerType(item.risk)}}</td>
                     <td>{{onChangeTimeFormat(item.timestamp)}}</td>
+                </tr>
+                <tr v-show="item.bOpen" style="min-height: 40px;">
+                    <td colspan="9">{{item.sql}}</td>
                 </tr>
             </tbody>
         </table>
@@ -142,20 +151,29 @@
         <table v-if="pageState===2" id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
                 <tr align="center">
-                    <th class='table-head-bg' style="width: 120px;" >主机IP</th>
-                    <th class='table-head-bg' style="width: 120px;" >主机类型</th>
-                    <th class='table-head-bg' style="width: 670px;" >报文</th>
-                    <th class='table-head-bg' style="width: 100px;" >日志类型</th>
-                    <th class='table-head-bg' style="width: 140px;" >记录时间</th>
+                    <th class='table-head-bg' style="min-width: 140px;max-width: 140px;">主机IP</th>
+                    <th class='table-head-bg' style="min-width: 120px;max-width: 120px;">主机类型</th>
+                    <th class='table-head-bg' style="min-width: 650px;max-width: 650px;">报文</th>
+                    <th class='table-head-bg' style="min-width: 100px;max-width: 100px;">日志类型</th>
+                    <th class='table-head-bg' style="min-width: 140px;max-width: 140px;">记录时间</th>
                 </tr>
             </thead>
-            <tbody id='tableBody'>
-                <tr align="center" style="height: 40px;" v-for="item in hostLogList" >
-                    <td>{{item.server}}</td>
+            <tbody id='tableBody' v-for="item in hostLogList">
+                <tr align="center" style="height: 40px;" @click="onOpenItemDetail(item._id,hostLogList)">
+                    <td>
+                        <div style="display: inline-flex;">
+                            <span v-show="!item.bOpen">&#9658;</span>
+                            <span v-show="item.bOpen">&#9660;</span>
+                            <span style="margin-left: 5px;">{{item.server}}</span>
+                        </div>
+                    </td>
                     <td>{{item.event_src}}</td>
-                    <td style="overflow: hidden">{{item.message}}</td>
+                    <td class="txt-overflow" style="min-width: 280px;max-width: 280px;">{{item.message}}</td>
                     <td>{{item.event_name}}</td>
-                    <td>{{item.timestamp}}</td>
+                    <td>{{onChangeTimeFormat(item.timestamp)}}</td>
+                </tr>
+                <tr v-show="item.bOpen" style="min-height: 40px;">
+                    <td colspan="9">{{item.message}}</td>
                 </tr>
             </tbody>
         </table>
@@ -163,22 +181,31 @@
         <table v-if="pageState===3" id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
                 <tr align="center">
-                    <th class='table-head-bg' style="width: 110px;" >应用IP</th>
-                    <th class='table-head-bg' style="width: 110px;" >应用类型</th>
-                    <th class='table-head-bg' style="width: 540px;" >报文</th>
-                    <th class='table-head-bg' style="width: 100px;" >请求方式</th>
-                    <th class='table-head-bg' style="width: 100px;" >请求状态</th>
-                    <th class='table-head-bg' style="width: 140px;" >记录时间</th>
+                    <th class='table-head-bg' style="min-width: 120px;max-width: 120px;">应用IP</th>
+                    <th class='table-head-bg' style="min-width: 110px;max-width: 110px;">应用类型</th>
+                    <th class='table-head-bg' style="min-width: 530px;max-width: 530px;">报文</th>
+                    <th class='table-head-bg' style="min-width: 100px;max-width: 100px;">请求方式</th>
+                    <th class='table-head-bg' style="min-width: 100px;max-width: 100px;">请求状态</th>
+                    <th class='table-head-bg' style="min-width: 140px;max-width: 140px;">记录时间</th>
                 </tr>
             </thead>
-            <tbody id='tableBody'>
-                <tr align="center" style="height: 40px;" v-for="item in appLogList" >
-                    <td>{{item.server}}</td>
+            <tbody id='tableBody' v-for="item in appLogList">
+                <tr align="center" style="height: 40px;" @click="onOpenItemDetail(item._id,appLogList)">
+                    <td>
+                        <div style="display: inline-flex;">
+                            <span v-show="!item.bOpen">&#9658;</span>
+                            <span v-show="item.bOpen">&#9660;</span>
+                            <span style="margin-left: 5px;">{{item.server}}</span>
+                        </div>
+                    </td>
                     <td>{{item.event_src}}</td>
-                    <td style="overflow: hidden">{{item.message}}</td>
+                    <td class="txt-overflow" style="min-width: 280px;max-width: 280px;">{{item.message}}</td>
                     <td>{{item.method}}</td>
                     <td>{{item.status}}</td>
-                    <td>{{item.timestamp}}</td>
+                    <td>{{onChangeTimeFormat(item.timestamp)}}</td>
+                </tr>
+                <tr v-show="item.bOpen" style="min-height: 40px;">
+                    <td colspan="9">{{item.message}}</td>
                 </tr>
             </tbody>
         </table>

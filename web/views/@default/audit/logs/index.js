@@ -508,4 +508,15 @@ Tea.context(function () {
         }
         this.onSearch("false")
     }
+
+    this.onOpenItemDetail = function (id,table) {
+        if(id && table){
+            for(var index = 0;index<table.length;index++){
+                if(table[index]._id == id){
+                    table[index].bOpen = !table[index].bOpen
+                    break
+                }
+            }
+        }
+    }
 })

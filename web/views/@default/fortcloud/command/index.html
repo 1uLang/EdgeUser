@@ -65,13 +65,22 @@
                     <th class='table-head-bg' style="min-width: 170px;max-width: 170px;">日期</th>
                 </tr>
             </thead>
-            <tbody id='tableBody'>
-                <tr align="center" style="height: 40px;" v-for="item in commands" >
-                    <td>{{item.input}}</td>
+            <tbody id='tableBody' v-for="item in commands" >
+                <tr align="center" style="height: 40px;" @click="onOpenItemDetail(item._id,commands)">
+                    <td>
+                        <div style="display: inline-flex;">
+                            <span v-show="!item.bOpen">&#9658;</span>
+                            <span v-show="item.bOpen">&#9660;</span>
+                            <span class="txt-overflow" style="margin-left: 5px;min-width: 520px;max-width: 520px;">{{item.input}}</span>
+                        </div>
+                    </td>
                     <td>{{item.risk_level_display}}</td>
                     <td>{{item.user}}</td>
                     <td>{{item.asset}}</td>
                     <td>{{onChangeTimeFormat(item.timestamp)}}</td>
+                </tr>
+                <tr v-show="item.bOpen" style="height: 40px;">
+                    <td colspan="9">{{item.input}}</td>
                 </tr>
             </tbody>
         </table>

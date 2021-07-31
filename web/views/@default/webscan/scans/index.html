@@ -7,8 +7,8 @@
 <p class="comment" v-if="nodeErr != ''">请先添加web漏洞扫描节点</p>
 
 <div class="btn-contain" v-if="scans.length > 0 &&nShowState===1">
-    <div id="stop-btn" @click="onStopScan()">停止扫描</div>
-    <div id="create-btn" @click="onCreateReport()">生成报告</div>
+    <!-- <div id="stop-btn" @click="onStopScan()">停止扫描</div>
+    <div id="create-btn" @click="onCreateReport()">生成报告</div> -->
     <div id="del-btn" @click="onDelete()">删除</div>
 </div>
 
@@ -25,15 +25,17 @@
         <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;" v-if="scans.length > 0">
             <thead>
             <tr align="center">
-                <th class='table-head-bg' style="width: 72px;">
+                <th class='table-head-bg' style="width: 70px;">
                     <input id="js-all-checkbox" type="checkbox" @click="checkAll">
                 </th>
-                <th class='table-head-bg' style="width: 185px;">目标</th>
-                <th class='table-head-bg' style="width: 150px;">目标描述</th>
-                <th class='table-head-bg' style="width: 167px;">类型</th>
-                <th class='table-head-bg' style="width: 282px;">漏洞</th>
-                <th class='table-head-bg' style="width: 129px;">状态</th>
-                <th class='table-head-bg' style="width: 214px;">扫描时间</th>
+                <th class='table-head-bg' style="width: 155px;">目标</th>
+                <th class='table-head-bg' style="width: 130px;">目标描述</th>
+                <th class='table-head-bg' style="width: 142px;">类型</th>
+                <th class='table-head-bg' style="width: 240px;">漏洞</th>
+                <th class='table-head-bg' style="width: 110px;">状态</th>
+                <th class='table-head-bg' style="width: 175px;">扫描时间</th>
+                <th class='table-head-bg' style="width: 145px;">操作</th>
+
             </tr>
             </thead>
             <tbody>
@@ -70,6 +72,10 @@
                 </td>
                 <td>{{onChangeStatusFormat(item.current_session.status)}}</td>
                 <td>{{onChangeTimeFormat(item.current_session.start_date)}}</td>
+                <td>
+                    <div v-show="item.current_session.status=='completed'||item.current_session.status=='aborted'" style="color: #169BD5;cursor: pointer;" @click="onCreateReport(item)">生成报告</div>
+                    <div v-show="item.current_session.status=='processing" style="color: #ec808d;cursor: pointer;" @click="onStopScan(item)">停止扫描</div>
+                </td>
             </tr>
             </tbody>
         </table>

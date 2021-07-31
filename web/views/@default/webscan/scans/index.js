@@ -74,25 +74,38 @@ Tea.context(function () {
         return false
     }
 
-    this.onStopScan = function () {
-        if (this.stopValues.length > 0) {
-            let that = this
-            let scan_ids = JSON.parse(JSON.stringify(this.stopValues))
-            teaweb.confirm("确定要停止这个扫描吗？", function () {
-                that.$post(".stop")
-                    .params({
-                        ScanIds: scan_ids
-                    }).success(function () {
+    this.onStopScan = function (item) {
+        let curValue = [item.scan_id]
+        let that = this
+        let scan_ids = JSON.parse(JSON.stringify(curValue))
+        teaweb.confirm("确定要停止这个扫描吗？", function () {
+            that.$post(".stop")
+                .params({
+                    ScanIds: scan_ids
+                }).success(function () {
                     window.location.reload()
-                })
             })
-        }
+        })
+        // if (this.stopValues.length > 0) {
+        //     let that = this
+        //     let scan_ids = JSON.parse(JSON.stringify(this.stopValues))
+        //     teaweb.confirm("确定要停止这个扫描吗？", function () {
+        //         that.$post(".stop")
+        //             .params({
+        //                 ScanIds: scan_ids
+        //             }).success(function () {
+        //             window.location.reload()
+        //         })
+        //     })
+        // }
     };
-    this.onCreateReport = function () {
+    this.onCreateReport = function (item) {
+        let curValue = [item.scan_id]
+        let curTargetValue = [item.target_id]
         if (this.createValues.length > 0) {
             let that = this
-            let scan_ids = JSON.parse(JSON.stringify(this.createValues))
-            let tarId = JSON.parse(JSON.stringify(this.createTargetValues))
+            let scan_ids = JSON.parse(JSON.stringify(curValue))
+            let tarId = JSON.parse(JSON.stringify(curTargetValue))
             teaweb.confirm("确定要生成这个扫描的报表吗？", function () {
                 that.$post("/webscan/reports/create")
                     .params({
@@ -103,6 +116,20 @@ Tea.context(function () {
                 })
             })
         }
+        // if (this.createValues.length > 0) {
+        //     let that = this
+        //     let scan_ids = JSON.parse(JSON.stringify(this.createValues))
+        //     let tarId = JSON.parse(JSON.stringify(this.createTargetValues))
+        //     teaweb.confirm("确定要生成这个扫描的报表吗？", function () {
+        //         that.$post("/webscan/reports/create")
+        //             .params({
+        //                 Ids: scan_ids,
+        //                 TarIds: tarId,
+        //             }).success(function () {
+        //             window.location.href = "/webscan/reports"
+        //         })
+        //     })
+        // }
     };
 
     this.onDelete = function () {
@@ -186,8 +213,8 @@ Tea.context(function () {
     }
     this.updateBtnStatus = function () {
 
-        const stopBtn = document.getElementById("stop-btn");
-        const createBtn = document.getElementById("create-btn");
+        // const stopBtn = document.getElementById("stop-btn");
+        // const createBtn = document.getElementById("create-btn");
         const delBtn = document.getElementById("del-btn");
 
         this.stopValues = []
@@ -214,20 +241,20 @@ Tea.context(function () {
             delBtn.style.backgroundColor = "#AAAAAA";
             delBtn.style.cursor = null;
         }
-        if (this.stopValues.length > 0) {
-            stopBtn.style.backgroundColor = "#14539A";
-            stopBtn.style.cursor = "pointer";
-        } else {
-            stopBtn.style.backgroundColor = "#AAAAAA";
-            stopBtn.style.cursor = null;
-        }
-        if (this.createValues.length > 0) {
-            createBtn.style.backgroundColor = "#14539A";
-            createBtn.style.cursor = "pointer";
-        } else {
-            createBtn.style.backgroundColor = "#AAAAAA";
-            createBtn.style.cursor = null;
-        }
+        // if (this.stopValues.length > 0) {
+        //     stopBtn.style.backgroundColor = "#14539A";
+        //     stopBtn.style.cursor = "pointer";
+        // } else {
+        //     stopBtn.style.backgroundColor = "#AAAAAA";
+        //     stopBtn.style.cursor = null;
+        // }
+        // if (this.createValues.length > 0) {
+        //     createBtn.style.backgroundColor = "#14539A";
+        //     createBtn.style.cursor = "pointer";
+        // } else {
+        //     createBtn.style.backgroundColor = "#AAAAAA";
+        //     createBtn.style.cursor = null;
+        // }
     };
 
     this.onChangeTimeFormat = function (time) {
