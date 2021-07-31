@@ -97,7 +97,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 			Type:    uint(params.Type),
 			Version: params.Version,
 			IP:      params.Ip,
-			Port:    fmt.Sprint("%v", params.Port),
+			Port:    fmt.Sprintf("%v", params.Port),
 			System:  params.System,
 			Status:  params.Status,
 		})
