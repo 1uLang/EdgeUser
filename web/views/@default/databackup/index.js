@@ -58,7 +58,7 @@ Tea.context(function () {
         }
         // Tea.openDownloadUrl("post",downUrl,headToken,sucHandle,failHandle)
         let xhr = new XMLHttpRequest()
-        xhr.open("post",downUrl,true)
+        xhr.open("get",downUrl,true)
         // xhr.setRequestHeader("Authorization","Bearer "+headToken)
         // xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded")
         // xhr.setRequestHeader("Access-Control-Allow-Origin","*")
