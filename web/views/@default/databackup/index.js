@@ -49,16 +49,8 @@ Tea.context(function () {
     }
 
     this.onDownLoadLocalFile=function(downUrl,headToken){
-        // function sucHandle(res){
-        //     console.log('sucHandle')
-        //     console.log(res)
-        // }
-        // function failHandle(){
-        //     console.log('failHandle')
-        // }
-        // Tea.openDownloadUrl("post",downUrl,headToken,sucHandle,failHandle)
         let xhr = new XMLHttpRequest()
-        xhr.open("post",downUrl,true)
+        xhr.open("get",downUrl,true)
         xhr.setRequestHeader("Authorization",headToken)
         xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded")
         xhr.send()
