@@ -677,6 +677,22 @@ window.Tea.Action = function (action, params) {
     };
 };
 
+window.Tea.openDownloadUrl=function(reqMethod,downUrl,headToken,sucHandle,failHandle){
+    axios({
+        method:reqMethod,
+        url:downUrl,
+        headers:{
+            "X-Requested-With": "XMLHttpRequest",
+            "Authorization":"Bearer "+headToken
+        }
+    })
+    .then((res)=>{
+        sucHandle(res)
+    })
+    .catch(()=>{
+        failHandle()
+    })
+}
 /**
  * 取得Action对象
  *
