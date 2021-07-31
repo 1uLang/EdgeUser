@@ -2,7 +2,7 @@ module github.com/TeaOSLab/EdgeUser
 
 go 1.15
 
-// replace github.com/1uLang/zhiannet-api => ../zhiannet-api
+replace github.com/1uLang/zhiannet-api => ../zhiannet-api
 
 replace github.com/TeaOSLab/EdgeCommon => ../EdgeCommon
 

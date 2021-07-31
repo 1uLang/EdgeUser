@@ -11,8 +11,10 @@ func init() {
 			Helper(helpers.NewUserMustAuth("")).
 			Data("teaMenu", "databackup").
 			Prefix("/databackup").
-			Get("", new(IndexAction)).
-			Get("create", new(CreateAction)).
+			GetPost("", new(IndexAction)).
+			Get("/create", new(CreateAction)).
+			Post("/delete", new(DeleteAction)).
+			Get("/download", new(DownLoadAction)).
 			EndAll()
 	})
 }
