@@ -1,6 +1,7 @@
 {$layout}
 {$var "header"}
 {$end}
+
 <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
     <div :class="{'menu-select-color':pageState===1,'menu-define-color':pageState!=1}" @click="onChangeState(1)">平台管理</div>
     <div :class="{'menu-select-color':pageState===2,'menu-define-color':pageState!=2}" @click="onChangeState(2)">上传文件</div>
@@ -11,23 +12,24 @@
         <thead>
             <tr align="center">
                 <th class='table-head-bg' style="width: 390px;" >文件名</th>
-                <th class='table-head-bg' style="width: 350px;" >描述</th>
+                <th class='table-head-bg' style="width: 350px;" >类型</th>
                 <th class='table-head-bg' style="width: 110px;" >尺寸</th>
                 <th class='table-head-bg' style="width: 150px;" >上传时间</th>
                 <th class='table-head-bg' style="width: 175px;" >操作</th>
             </tr>
         </thead>
         <tbody id='tableBody'>
-            <tr align="center" style="height: 40px;" v-for="item in tableData" >
-                <td>{{item.value1}}</td>
-                <td>{{item.value2}}</td>
-                <td>{{item.value3}}</td>
-                <td>{{onChangeTimeFormat(item.value4)}}</td>
+            <tr align="center" style="height: 40px;" v-for="item in list" >
+                <td>{{item.name}}</td>
+                <td>{{item.content_type}}</td>
+                <td>{{item.used_bytes}}</td>
+                <!-- <td>{{onChangeTimeFormat(item.last_modified)}}</td> -->
+                <td>{{item.last_modified}}</td>
                 <td>
                     <div style="display: flex;justify-content: space-around;padding: 4px 0;">
-                        <div class="edit_btn" @click="onDownFile(item.id)">下载</div>
-                        <div class="edit_btn" @click="onEdit(item.id)">修改</div>
-                        <div class="del-btn" @click="onDelete(item.id)">删除</div>
+                        <div class="edit_btn" @click="onDownFile(item.name)">下载</div>
+                        <!-- <div class="edit_btn" @click="onEdit(item.name)">修改</div> -->
+                        <div class="del-btn" @click="onDelete(item.name)">删除</div>
                     </div>
                 </td>
             </tr>
@@ -35,7 +37,8 @@
     </table>
 </div>
 <div v-if="pageState===2" style="margin-top: 10px;">
-    <form class="ui form" method="post" data-tea-action="$" data-tea-success="success">
+    <form class="ui form" method="post" data-tea-action="$" data-tea-success="success" enctype="multipart/form-data">
+        <csrf-token></csrf-token>
         <table class="ui table definition selectable">
             <tr>
                 <td class="title">文件描述</td>
@@ -46,13 +49,15 @@
             <tr>
                 <td class="title">选择文件*</td>
                 <td>
-                    <input type="file" name="filename" value="选择文件"/>
+                    <input type="file" name="uploadFile" value="选择文件"/>
+                    <p class="comment">同名同类型文件将会被覆盖</p>
                 </td>
             </tr>
         </table>
-        <div style="width: 100%;display: flex;align-items: center;justify-content: center;">
-            <div class="save-btn" @click="">保存</div>
-        </div>
+        <submit-btn></submit-btn>
+        <!-- <div style="width: 100%;display: flex;align-items: center;justify-content: center;">
+            <div class="save-btn" @click="onuploadFile(uploadFile)">保存</div>
+        </div> -->
         
     </form>
 
