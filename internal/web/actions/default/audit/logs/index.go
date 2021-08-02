@@ -8,7 +8,6 @@ import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
-
 	"time"
 )
 
@@ -188,5 +187,6 @@ func (this *IndexAction) RunPost(params struct {
 			this.Data["page"] = list.Data.Page
 		}
 	}
+
 	this.Success()
 }

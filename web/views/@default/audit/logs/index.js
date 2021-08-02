@@ -47,7 +47,13 @@ Tea.context(function () {
     }
 
     this.onTimeChange = function () {
-
+        let startTime = document.getElementById("day-from-picker").value
+        let endTime = document.getElementById("day-to-picker").value
+        if(this.dayFrom != startTime || this.dayTo != endTime) {
+            this.dayFrom = startTime
+            this.dayTo = endTime
+        }
+        console.log(this.dayFrom)
     }
 
     this.onChangeState = function (id) {
@@ -519,7 +525,7 @@ Tea.context(function () {
     this.onOpenItemDetail = function (id,table) {
         if(id && table){
             for(var index = 0;index<table.length;index++){
-                if(table[index]._id == id){
+                if(table[index].id == id){
                     table[index].bOpen = !table[index].bOpen
                     break
                 }

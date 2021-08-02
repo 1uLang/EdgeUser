@@ -125,7 +125,7 @@
                 </tr>
             </thead>
             <tbody id='tableBody' v-for="item in dbLogList">
-                <tr align="center" style="height: 40px;" @click="onOpenItemDetail(item._id,dbLogList)">
+                <tr align="center" style="height: 40px;" @click="onOpenItemDetail(item.id,dbLogList)">
                     <td>
                         <div style="display: inline-flex;">
                             <span v-show="!item.bOpen">&#9658;</span>
@@ -159,7 +159,7 @@
                 </tr>
             </thead>
             <tbody id='tableBody' v-for="item in hostLogList">
-                <tr align="center" style="height: 40px;" @click="onOpenItemDetail(item._id,hostLogList)">
+                <tr align="center" style="height: 40px;" @click="onOpenItemDetail(item.id,hostLogList)">
                     <td>
                         <div style="display: inline-flex;">
                             <span v-show="!item.bOpen">&#9658;</span>
@@ -190,7 +190,7 @@
                 </tr>
             </thead>
             <tbody id='tableBody' v-for="item in appLogList">
-                <tr align="center" style="height: 40px;" @click="onOpenItemDetail(item._id,appLogList)">
+                <tr align="center" style="height: 40px;" @click="onOpenItemDetail(item.id,appLogList)">
                     <td>
                         <div style="display: inline-flex;">
                             <span v-show="!item.bOpen">&#9658;</span>
