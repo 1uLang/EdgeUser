@@ -41,6 +41,9 @@ Tea.context(function () {
         if (this.timeSelectIndex != index) {
             this.timeSelectIndex = index
         }
+
+        this.dayTo = ""
+        this.dayFrom = ""
     }
 
     this.onTimeChange = function () {
@@ -229,8 +232,12 @@ Tea.context(function () {
 
             }
         }
+        let timeType = this.timeSelectIndex
+        if(this.dayFrom != "" || this.dayTo != ""){
+            timeType = "diy"
+        }
         this.$post(".").params({
-            timeType: this.timeSelectIndex,
+            timeType: timeType,
             startTime: this.dayFrom,
             endTime: this.dayTo,
             auditId: sSelectSqlName,

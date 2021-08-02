@@ -188,6 +188,5 @@ func (this *IndexAction) RunPost(params struct {
 			this.Data["page"] = list.Data.Page
 		}
 	}
-
 	this.Success()
 }
