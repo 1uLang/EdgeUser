@@ -18,14 +18,14 @@ func (this *DeleteAction) RunPost(params struct {
 	Name string
 }) {
 	// 获取token
-	req := model.LoginReq{
-		User:     "admin",
-		Password: "Dengbao123!@#",
+	token, err := model.QueryTokenByUID(this.UserId())
+	if err != nil {
+		this.ErrorPage(err)
+		return
 	}
-	token := request.GenerateToken(&req)
 
 	// 删除文件
-	err := request.DeleteFile(token, params.Name)
+	err = request.DeleteFile(token, params.Name)
 	if err != nil {
 		this.ErrorPage(err)
 		return

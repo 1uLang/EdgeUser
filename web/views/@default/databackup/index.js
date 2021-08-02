@@ -1,5 +1,5 @@
 Tea.context(function () {
-    this.success = NotifyReloadSuccess("保存成功")
+    this.uploadFileSuccess = NotifyReloadSuccess("保存成功")
     this.pageState = 1
 
     this.fileDesc = ""
@@ -19,12 +19,12 @@ Tea.context(function () {
         return resultTime;
       };
 
-    this.onDownFile = function (name) {
+    this.onDownFile = function (fileName,fileType) {
         teaweb.confirm("确定下载该文件？",function() {
             this.$get("/databackup/download").params({
-                name: name,
+                name: fileName,
             }).success((res)=>{
-                this.onDownLoadLocalFile(res.data.url,res.data.token)
+                this.onTestDownload(res,fileType)
             })
         })
     }
@@ -48,34 +48,44 @@ Tea.context(function () {
         })
     }
 
-    this.onDownLoadLocalFile=function(downUrl,headToken){
-        let xhr = new XMLHttpRequest()
-        xhr.open("get",downUrl,true)
-        xhr.setRequestHeader("Authorization",headToken)
-        xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded")
-        xhr.send()
-        xhr.responseType="blob"
-        xhr.onload=function(){
-            if(this.status==200){
-                let tempBlob = this.response
-                let tempReader = new FileReader()
-                reatempReaderder.readAsDataURL(tempBlob);
-                tempReader.onload=function(e){
-                    let link = document.createElement("a")
-                    link.href = e.target.result
-                    link.setAttribute("download","test")
-                    link.click()
-                    link=null
-                }
-            }
+
+    this.onTestDownload = function(res,fileType){
+        var bstr = atob(res.data.body)
+        let n = bstr.length
+        let u8arr =new Uint8Array(n)
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+
+        const blob = new Blob([u8arr], { type:fileType});
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onload = (e) => {
+          const a = document.createElement('a');
+          a.download = res.data.fileName;
+          a.href = e.target.result;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
         }
     }
 
-    // this.onuploadFile = function (file) {
-    //     this.$post("/databackup").params({
-    //         uploadFile: file
-    //     }).success()
-    // }
+    this.onuploadFile = function () {
+        let that = this
+        var uploadFile = document.getElementById("uploadFile");
+        if(uploadFile.value==""){
+            teaweb.warn("请选择上传文件")
+            return
+        }
+        var fm = document.getElementById('formData');
+        var fd = new FormData(fm);
+
+        this.$post("/databackup").params(fd)
+        .success(()=>{
+            that.uploadFileSuccess()
+            return true
+        })
+    }
 
     this.tableData = [
         {id:1,value1:"数据库agent.exe",value2:"CloudShield用户手册V1.0",value3:"100K",value4:"2021-06-30T21:52:20.123"}

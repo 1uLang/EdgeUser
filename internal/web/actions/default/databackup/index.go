@@ -2,7 +2,6 @@ package databackup
 
 import (
 	"bytes"
-	"log"
 
 	"github.com/1uLang/zhiannet-api/nextcloud/model"
 	"github.com/1uLang/zhiannet-api/nextcloud/request"
@@ -21,11 +20,11 @@ func (this *IndexAction) Init() {
 
 func (this *IndexAction) RunGet(params struct{}) {
 	// 获取token
-	req := model.LoginReq{
-		User:     "admin",
-		Password: "Dengbao123!@#",
+	token, err := model.QueryTokenByUID(this.UserId())
+	if err != nil {
+		this.ErrorPage(err)
+		return
 	}
-	token := request.GenerateToken(&req)
 
 	// 文件列表（不包含目录）
 	list, err := request.ListFolders(token)
@@ -41,12 +40,12 @@ func (this *IndexAction) RunPost(params struct {
 	UploadFile *actions.File `json:"uploadFile"`
 }) {
 	// 获取token
-	req := model.LoginReq{
-		User:     "admin",
-		Password: "Dengbao123!@#",
+	token, err := model.QueryTokenByUID(this.UserId())
+	if err != nil {
+		this.ErrorPage(err)
+		return
 	}
-	token := request.GenerateToken(&req)
-	log.Println(123)
+
 	// 上传文件
 	if params.UploadFile == nil {
 		this.Fail("请选择要上传的文件")
@@ -66,4 +65,5 @@ func (this *IndexAction) RunPost(params struct {
 	defer this.CreateLog(oplogs.LevelInfo, "上传nextcloud文件 %v", name)
 
 	this.Success()
+	// this.Show()
 }

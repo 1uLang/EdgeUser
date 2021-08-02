@@ -27,18 +27,19 @@
                 <td>{{item.last_modified}}</td>
                 <td>
                     <div style="display: flex;justify-content: space-around;padding: 4px 0;">
-                        <div class="edit_btn" @click="onDownFile(item.name)">下载</div>
+                        <div class="edit_btn" @click="onDownFile(item.name,item.content_type)">下载</div>
                         <!-- <div class="edit_btn" @click="onEdit(item.name)">修改</div> -->
                         <div class="del-btn" @click="onDelete(item.name)">删除</div>
                     </div>
+                    
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
 <div v-if="pageState===2" style="margin-top: 10px;">
-    <form class="ui form" method="post" data-tea-action="$" data-tea-success="success" enctype="multipart/form-data">
-        <csrf-token></csrf-token>
+    <form class="ui form" id="formData">
+        <!-- <csrf-token></csrf-token> -->
         <table class="ui table definition selectable">
             <tr>
                 <td class="title">文件描述</td>
@@ -49,15 +50,14 @@
             <tr>
                 <td class="title">选择文件*</td>
                 <td>
-                    <input type="file" name="uploadFile" value="选择文件"/>
+                    <input type="file" name="uploadFile" id="uploadFile" value="选择文件"/>
                     <p class="comment">同名同类型文件将会被覆盖</p>
                 </td>
             </tr>
         </table>
-        <submit-btn></submit-btn>
-        <!-- <div style="width: 100%;display: flex;align-items: center;justify-content: center;">
-            <div class="save-btn" @click="onuploadFile(uploadFile)">保存</div>
-        </div> -->
+        <div style="width: 100%;display: flex;align-items: center;">
+            <div class="save-btn" @click="onuploadFile()">保存</div>
+        </div>
         
     </form>
 
