@@ -303,6 +303,11 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"url":  "/audit/report",
 					"code": "command",
 				},
+				{
+					"name": "agent",
+					"url":  "/audit/agent",
+					"code": "command",
+				},
 			},
 		},
 		{
@@ -322,6 +327,24 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			//		"code": "admins",
 			//	},
 			//},
+		},
+		{
+			"code": "platform",
+			"url":  "/platform/user",
+			"name": "平台管理",
+			"icon": "ioxhost",
+			"subItems": []maps.Map{
+				{
+					"name": "用户列表",
+					"url":  "/platform/user",
+					"code": "assets",
+				},
+				{
+					"name": "操作日志",
+					"url":  "/platform/logs",
+					"code": "admins",
+				},
+			},
 		},
 	}
 
