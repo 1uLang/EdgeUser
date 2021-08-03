@@ -336,18 +336,13 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"subItems": []maps.Map{
 				{
 					"name": "用户列表",
-					"url":  "/platform/users",
-					"code": "users",
+					"url":  "/platform/user",
+					"code": "user",
 				},
 				{
 					"name": "操作日志",
-					"url":  "/platform/log",
-					"code": "log",
-				},
-				{
-					"name": "安全策略",
-					"url":  "/platform/safe",
-					"code": "safe",
+					"url":  "/platform/logs",
+					"code": "logs",
 				},
 				{
 					"name": "安全策略",
