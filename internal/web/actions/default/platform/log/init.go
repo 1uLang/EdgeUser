@@ -9,7 +9,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth("")).
-			Prefix("/platform/safe").
+			Prefix("/platform/log").
 			Get("", new(IndexAction)).
 			EndAll()
 	})

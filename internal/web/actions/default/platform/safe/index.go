@@ -6,10 +6,6 @@ type IndexAction struct {
 	actionutils.ParentAction
 }
 
-func (this *IndexAction) Init() {
-	this.Nav("", "", "create")
-}
-
 func (this *IndexAction) RunGet(params struct{}) {
 
 	this.Show()

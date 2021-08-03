@@ -3,7 +3,7 @@ package users
 import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/manage/users/userutils"
+	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/users/userutils"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/maps"
