@@ -10,7 +10,7 @@ type IndexAction struct {
 }
 
 func (this *IndexAction) Init() {
-	this.Nav("", "audit", "index")
+	this.Nav("", "platform", "index")
 }
 
 func (this *IndexAction) RunGet(params struct {
