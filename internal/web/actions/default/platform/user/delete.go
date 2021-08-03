@@ -1,4 +1,4 @@
-package users
+package user
 
 import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"

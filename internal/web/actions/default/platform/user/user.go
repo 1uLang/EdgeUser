@@ -1,9 +1,9 @@
-package users
+package user
 
 import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/users/userutils"
+	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/user/userutils"
 	"github.com/iwind/TeaGo/maps"
 )
 

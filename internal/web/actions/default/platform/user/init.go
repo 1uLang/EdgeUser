@@ -1,4 +1,4 @@
-package safe
+package user
 
 import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/helpers"
@@ -9,8 +9,11 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth("")).
-			Prefix("/platform/safe").
+			Prefix("/platform/user").
 			Get("", new(IndexAction)).
+			GetPost("/user", new(UserAction)).
+			GetPost("/create", new(CreateAction)).
+			GetPost("/features", new(FeaturesAction)).
 			EndAll()
 	})
 }

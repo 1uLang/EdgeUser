@@ -40,9 +40,6 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/lb/server/settings/tls"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/logout"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/messages"
-	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/log"
-	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/safe"
-	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/users"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/cache"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/certs"
@@ -89,7 +86,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/databackup"
 
 	//平台管理
-	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/log"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/logs"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/strategy"
-	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/users"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/user"
 )
