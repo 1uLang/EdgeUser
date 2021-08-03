@@ -20,32 +20,32 @@ Tea.context(function () {
             this.pageState = state
         }
     }
-	this.createUser = function () {
-		teaweb.popup(Tea.url(".create"), {
-			height: "680px",
+    this.createUser = function () {
+        teaweb.popup(Tea.url(".create"), {
+            height: "680px",
             width:"650px",
-			callback: function () {
-				teaweb.success("保存成功", function () {
-					teaweb.reload()
-				})
-			}
-		})
-	}
+            callback: function () {
+                teaweb.success("保存成功", function () {
+                    teaweb.reload()
+                })
+            }
+        })
+    }
 
     this.onOpenDetail = function(userId){
         this.onChangeShowState(2)
     }
 
-	this.onDelete = function (userId) {
-		let that = this
-		teaweb.confirm("确定要删除这个用户吗？", function () {
-			// that.$post(".delete")
-			// 	.params({
-			// 		userId: userId
-			// 	})
-			// 	.refresh()
-		})
-	}
+    this.onDelete = function (userId) {
+        let that = this
+        teaweb.confirm("确定要删除这个用户吗？", function () {
+            // that.$post(".delete")
+            // 	.params({
+            // 		userId: userId
+            // 	})
+            // 	.refresh()
+        })
+    }
 
     this.getStatus = function (status) {
         switch (status) {
@@ -68,12 +68,12 @@ Tea.context(function () {
     }
 
     this.onSaveEdit = function(){
-        // this.editUserName 
-        // this.editPassword 
+        // this.editUserName
+        // this.editPassword
         // this.editPasswordConfirm
         // this.editFullName
-        // this.editPhone 
-        // this.editEmail 
+        // this.editPhone
+        // this.editEmail
         // this.editRemark
         // this.editEnabled
     }
