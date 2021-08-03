@@ -87,12 +87,9 @@ import (
 
 	//数据备份
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/databackup"
-<<<<<<< HEAD
-=======
 
 	//平台管理
-	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/logs"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/log"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/strategy"
-	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/user"
->>>>>>> 4d44ab4f6b9f71ff9bbf31dc749c178f3a7a3418
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/users"
 )
