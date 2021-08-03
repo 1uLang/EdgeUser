@@ -4,6 +4,7 @@ Tea.context(function () {
 
     this.fileDesc = ""
 
+    this.bShowDialog = false
     this.onChangeState=function (id) {
         if(this.pageState!=id){
             this.pageState = id
@@ -24,7 +25,7 @@ Tea.context(function () {
             this.$get("/databackup/download").params({
                 name: fileName,
             }).success((res)=>{
-                this.onTestDownload(res,fileType)
+                this.onDownloadFlie(res,fileType)
             })
         })
     }
@@ -49,7 +50,7 @@ Tea.context(function () {
     }
 
 
-    this.onTestDownload = function(res,fileType){
+    this.onDownloadFlie = function(res,fileType){
         var bstr = atob(res.data.body)
         let n = bstr.length
         let u8arr =new Uint8Array(n)
@@ -77,14 +78,26 @@ Tea.context(function () {
             teaweb.warn("请选择上传文件")
             return
         }
+        this.onShowLoading()
         var fm = document.getElementById('formData');
         var fd = new FormData(fm);
 
         this.$post("/databackup").params(fd)
         .success(()=>{
+            this.onHideLoading()
             that.uploadFileSuccess()
             return true
+        }).done(()=>{
+            this.onHideLoading()
         })
+    }
+    this.onShowLoading =  function() {
+        this.bShowDialog = true
+    }
+     
+     
+    this.onHideLoading = function () {
+        this.bShowDialog = false
     }
 
     this.tableData = [
