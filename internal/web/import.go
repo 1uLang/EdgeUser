@@ -11,6 +11,7 @@ import (
 	//堡垒机
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/admins"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/assets"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/audit"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/command"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/sessions"
 
@@ -39,6 +40,9 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/lb/server/settings/tls"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/logout"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/messages"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/log"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/safe"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/users"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/cache"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/certs"
@@ -75,7 +79,6 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan/vulnerabilities"
 
 	//安全审计
-	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/agent"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/app"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/db"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/host"
@@ -84,8 +87,4 @@ import (
 
 	//数据备份
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/databackup"
-
-	//平台管理
-	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/logs"
-	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/user"
 )

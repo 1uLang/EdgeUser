@@ -23,7 +23,7 @@
             <tr align="center" style="height: 40px;" v-for="(item,index) in assets">
                 <td @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)">
                     <div style="padding: 4px 0;">
-                        <u v-show="index===curIndex" @click="onOpenDetail(item)"
+                        <u v-show="index===curIndex" @click="onOpenDetail(item.id)"
                            style="color: #169BD5;cursor: pointer;">{{item.hostname}}</u>
                         <span v-show="index!=curIndex" style="color: #000;">{{item.hostname}}</span>
                     </div>
@@ -65,7 +65,6 @@
         </table>
     </div>
 </div>
-
 <!-- 添加主机 -->
 <div v-else-if="pageState==2 || pageState==5">
     <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
@@ -126,7 +125,7 @@
                                 <option value="vnc">vnc</option>
                             </select>
                         </div>
-                        <input type="text" v-model="item.value"
+                        <input type="number" v-model="item.value" id="protoValue"
                                style="height: 30px;width: 560px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                         <div v-show="index===(protoData.length-1)" class="add_less_btn_style"
                              style="background-color: #fd9d9f;" @click="onRemoveProtoData(index)">-
@@ -146,7 +145,7 @@
                     <span class="base_title_f">账号管理</span>
                     <div>
                         <select name="adminUser" v-model="adminUser" style="width: 790px;height: 30px;border: 1px solid #d7d7d7;">
-                            <option v-for="item in adminUsers" :value="item.id">{{item.name}}</option>
+                            <option v-for="item in adminUsers" :value="item.id">{{item.name}}({{item.username}})</option>
                         </select>
                     </div>
                 </div>
@@ -224,10 +223,10 @@
                 </tr>
                 </thead>
                 <tbody id='tableBody'>
-                <tr align="center" style="height: 40px;" v-for="item in userData">
-                    <td>{{item.value1}}</td>
-                    <td>{{item.value2}}</td>
-                    <td>{{item.value3}}</td>
+                <tr align="center" style="height: 40px;" v-for="item in users">
+                    <td>{{item.username}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.email}}</td>
                     <td>
                         <div class="edit_btn" @click="onDeleteAuthAccount(item.id)">删除</div>
                     </td>

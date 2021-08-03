@@ -21,7 +21,6 @@ func (this *IndexAction) checkAndNewServerRequest() (*jumpserver_server.Request,
 	}
 	username, _ := this.UserName()
 	return fortcloud.NewServerRequest(username, "dengbao-"+username)
-	//return fortcloud.NewServerRequest("admin", "21ops.com")
 }
 func (this *IndexAction) RunGet(params struct {
 	PageSize int
@@ -32,22 +31,14 @@ func (this *IndexAction) RunGet(params struct {
 		this.ErrorPage(fmt.Errorf("堡垒机组件错误:" + err.Error()))
 		return
 	}
-	var online, offline []map[string]interface{}
-	list, err := req.Session.List(&sessions_model.ListReq{
+	online, err := req.Session.List(&sessions_model.ListReq{
+		Is_finished:"0",
 		UserId: uint64(this.UserId()),
 	})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	for _, item := range list {
-		if !item["is_finished"].(bool) {
-			online = append(online, item)
-		} else {
-			offline = append(offline, item)
-		}
-	}
 	this.Data["online"] = online
-	this.Data["offline"] = offline
 	this.Show()
 }

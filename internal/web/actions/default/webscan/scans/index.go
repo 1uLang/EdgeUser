@@ -36,19 +36,19 @@ func (this *IndexAction) RunGet(params struct {
 		params.PageSize = 20
 	}
 	list, err := scans_server.List(&scans.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, UserId: uint64(this.UserId())})
-	if err != nil && list != nil {
-		this.ErrorPage(err)
-		return
-	}
+	//if err != nil && list != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
 	var scansMaps []interface{}
 	if lists, ok := list["scans"]; ok {
 		scansMaps = lists.([]interface{})
 	}
-	nessus_list, err := nessus_scans_server.List(&nessus_scans_model.ListReq{ UserId: uint64(this.UserId()),Scan: true})
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
+	nessus_list, err := nessus_scans_server.History(&nessus_scans_model.HistoryReq{ UserId: uint64(this.UserId())})
+	//if err != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
 	scansMaps = append(scansMaps, nessus_list...)
 	if len(nessus_list) > 0 || len(scansMaps)> 0{
 		this.Data["scans"] = scansMaps
@@ -73,19 +73,19 @@ func (this *IndexAction) RunPost(params struct {
 		params.PageSize = 20
 	}
 	list, err := scans_server.List(&scans.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, UserId: uint64(this.UserId())})
-	if err != nil && list != nil {
-		this.ErrorPage(err)
-		return
-	}
+	//if err != nil && list != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
 	var scansMaps []interface{}
 	if lists, ok := list["scans"]; ok {
 		scansMaps = lists.([]interface{})
 	}
-	nessus_list, err := nessus_scans_server.List(&nessus_scans_model.ListReq{ UserId: uint64(this.UserId()),Scan: true})
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
+	nessus_list, err := nessus_scans_server.History(&nessus_scans_model.HistoryReq{ UserId: uint64(this.UserId())})
+	//if err != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
 	scansMaps = append(scansMaps, nessus_list...)
 	if len(nessus_list) > 0 || len(scansMaps)> 0{
 		this.Data["scans"] = scansMaps

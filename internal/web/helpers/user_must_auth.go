@@ -150,11 +150,11 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 				},
 			},
 		},
-		//{
-		//	"code": "lb",
-		//	"name": "负载均衡",
-		//	"icon": "paper plane",
-		//},
+		{
+			"code": "lb",
+			"name": "负载均衡",
+			"icon": "paper plane",
+		},
 		{
 			"code": "waf",
 			"name": "WAF安全",
@@ -251,9 +251,9 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"code": "sessions",
 				},
 				{
-					"name": "命令记录",
-					"url":  "/fortcloud/command",
-					"code": "command",
+					"name": "运维审计",
+					"url":  "/fortcloud/audit",
+					"code": "audit",
 				},
 			},
 		},
@@ -330,19 +330,24 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 		},
 		{
 			"code": "platform",
-			"url":  "/platform/user",
+			"url":  "/platform/users",
 			"name": "平台管理",
 			"icon": "ioxhost",
 			"subItems": []maps.Map{
 				{
 					"name": "用户列表",
-					"url":  "/platform/user",
-					"code": "assets",
+					"url":  "/platform/users",
+					"code": "users",
 				},
 				{
 					"name": "操作日志",
-					"url":  "/platform/logs",
-					"code": "admins",
+					"url":  "/platform/log",
+					"code": "log",
+				},
+				{
+					"name": "安全策略",
+					"url":  "/platform/safe",
+					"code": "safe",
 				},
 			},
 		},

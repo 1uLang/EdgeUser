@@ -38,21 +38,22 @@ func (this *IndexAction) RunGet(params struct {
 		params.PageSize = 20
 	}
 	list, err := reports_server.List(&reports.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, UserId: uint64(this.UserId())})
-	if err != nil && list == nil {
-		this.ErrorPage(err)
-		return
-	}
+	//if err != nil && list == nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
 	var reports []interface{}
 	if lists, ok := list["reports"]; ok {
 		reports = lists.([]interface{})
 	}
-	nessus_list, err := nessus_scans_server.List(&nessus_scans_model.ListReq{ UserId: uint64(this.UserId()),Report: true})
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
+	nessus_list, err := nessus_scans_server.ListReport(&nessus_scans_model.ScansListReq{UserId: uint64(this.UserId())})
+	//if err != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
 	reports = append(reports, nessus_list...)
-	if len(nessus_list) > 0 || len(reports)> 0{
+
+	if len(nessus_list) > 0 || len(reports) > 0 {
 		this.Data["reports"] = reports
 	}
 	this.Show()
@@ -66,7 +67,7 @@ func (this *IndexAction) RunPost(params struct {
 	this.Data["reports"] = make([]interface{}, 0)
 	err := webscan.InitAPIServer()
 	if err != nil {
-		this.ErrorPage(fmt.Errorf("web漏洞扫描节点错误:%v",err))
+		this.ErrorPage(fmt.Errorf("web漏洞扫描节点错误:%v", err))
 		return
 	}
 	if params.PageNo < 0 {
@@ -76,13 +77,23 @@ func (this *IndexAction) RunPost(params struct {
 		params.PageSize = 20
 	}
 	list, err := reports_server.List(&reports.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, UserId: uint64(this.UserId())})
-	if err != nil && list == nil {
-		this.ErrorPage(err)
-		return
-	}
-	//this.Data["reports"] = list["reports"]
+	//if err != nil && list == nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
+	var reports []interface{}
 	if lists, ok := list["reports"]; ok {
-		this.Data["reports"] = lists
+		reports = lists.([]interface{})
 	}
-	this.Show()
+	nessus_list, err := nessus_scans_server.ListReport(&nessus_scans_model.ScansListReq{UserId: uint64(this.UserId())})
+	//if err != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
+	reports = append(reports, nessus_list...)
+
+	if len(reports) > 0 {
+		this.Data["reports"] = reports
+	}
+	this.Success()
 }

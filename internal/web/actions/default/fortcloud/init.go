@@ -1,8 +1,8 @@
 package fortcloud
 
 import (
-	jumpserver_server "github.com/1uLang/zhiannet-api/jumpserver/server"
 	"fmt"
+	jumpserver_server "github.com/1uLang/zhiannet-api/jumpserver/server"
 )
 
 var ServerUrl = "" //"https://scan-web.zhiannet.com"
@@ -18,10 +18,9 @@ func InitAPIServer() error {
 	Username = info.Username
 	Password = info.Password
 	ServerUrl = info.Addr
-
+	fmt.Println(info)
 	return nil
 }
-func NewServerRequest(username, password string) ( *jumpserver_server.Request,error ){
-	return jumpserver_server.NewServerRequest(ServerUrl,username,password)
+func NewServerRequest(username, password string) (*jumpserver_server.Request, error) {
+	return jumpserver_server.NewServerRequest(ServerUrl, username, password)
 }
-

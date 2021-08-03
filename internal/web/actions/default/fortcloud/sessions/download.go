@@ -21,7 +21,6 @@ func (this *DownloadAction) checkAndNewServerRequest() (*jumpserver_server.Reque
 	}
 	username, _ := this.UserName()
 	return fortcloud.NewServerRequest(username, "dengbao-"+username)
-	//return fortcloud.NewServerRequest("admin", "21ops.com")
 }
 func (this *DownloadAction) RunPost(params struct {
 	Id   string

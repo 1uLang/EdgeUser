@@ -49,7 +49,7 @@
                     <span v-show="index!=curIndex">{{item.target.address}}</span>
                 </td>
                 <td>{{item.target.description}}</td>
-                <td v-if="item.owner">Host</td>
+                <td v-if="item.owner">主机</td>
                 <td v-else>Web</td>
                 <td>
                     <div style="display: flex;justify-content: center;" v-if="item.current_session.severity_counts">
@@ -73,8 +73,8 @@
                 <td>{{onChangeStatusFormat(item.current_session.status)}}</td>
                 <td>{{onChangeTimeFormat(item.current_session.start_date)}}</td>
                 <td>
-                    <div v-show="item.current_session.status=='completed'||item.current_session.status=='aborted'" style="color: #169BD5;cursor: pointer;" @click="onCreateReport(item)">生成报告</div>
-                    <div v-show="item.current_session.status=='processing" style="color: #ec808d;cursor: pointer;" @click="onStopScan(item)">停止扫描</div>
+                    <div v-show="item.current_session.status=='completed'||item.current_session.status=='canceled'||item.current_session.status=='aborted'" style="color: #169BD5;cursor: pointer;" @click="onCreateReport(item)">生成报告</div>
+                    <div v-show="item.current_session.status=='processing' || item.current_session.status=='running'" style="color: #ec808d;cursor: pointer;" @click="onStopScan(item)">停止扫描</div>
                 </td>
             </tr>
             </tbody>

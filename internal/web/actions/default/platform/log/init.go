@@ -1,4 +1,4 @@
-package logs
+package safe
 
 import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/helpers"
@@ -9,9 +9,8 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth("")).
-			Data("teaMenu", "platform").
-			Prefix("/platform/logs").
-			GetPost("", new(IndexAction)).
+			Prefix("/platform/safe").
+			Get("", new(IndexAction)).
 			EndAll()
 	})
 }

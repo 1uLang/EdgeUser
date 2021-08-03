@@ -8,6 +8,8 @@ import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud"
 	"github.com/iwind/TeaGo/actions"
+	"strconv"
+	"strings"
 )
 
 type IndexAction struct {
@@ -22,21 +24,44 @@ func (this *IndexAction) checkAndNewServerRequest() (*jumpserver_server.Request,
 	if fortcloud.ServerUrl == "" {
 		err := fortcloud.InitAPIServer()
 		if err != nil {
-			return nil,err
+			return nil, err
 		}
 	}
 	username, _ := this.UserName()
 	return fortcloud.NewServerRequest(username, "dengbao-"+username)
 }
 func (this *IndexAction) RunGet(params struct {
-	PageSize int
-	PageNo   int
+	PageSize  int
+	PageNo    int
+	PageState int
+	Asset     string
+
+	Must *actions.Must
 }) {
+	if params.PageState == 0 {
+		params.PageState = 1
+	}
 	req, err := this.checkAndNewServerRequest()
 	if err != nil {
 		this.ErrorPage(fmt.Errorf("堡垒机组件错误:" + err.Error()))
 		return
 	}
+
+	//已授权用户列表
+	if params.PageState == 4 {
+		params.Must.
+			Field("asset", params.Asset).
+			Require("请选择资产")
+		users, err := req.Assets.AuthorizeList(&assets_model.AuthorizeListReq{
+			Asset: params.Asset,
+		})
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+		this.Data["users"] = users
+	}
+
 	adminUsers, err := req.AdminUser.List(&admin_users_model.ListReq{
 		UserId: uint64(this.UserId()),
 	})
@@ -52,7 +77,9 @@ func (this *IndexAction) RunGet(params struct {
 		return
 	}
 	this.Data["adminUsers"] = adminUsers
+	this.Data["users"] = nil
 	this.Data["assets"] = list
+	this.Data["pageState"] = params.PageState
 	this.Show()
 }
 
@@ -65,7 +92,7 @@ func (this *IndexAction) RunPost(params struct {
 	AdminUser string
 	Comment   string
 	PublicIp  string
-
+	Proto     string
 	Must      *actions.Must
 }) {
 
@@ -78,21 +105,50 @@ func (this *IndexAction) RunPost(params struct {
 		Require("请输入认证账号")
 
 	params.Must.
+		Field("platform", params.Platform).
+		Require("请选择系统平台")
+
+	params.Must.
 		Field("ip", params.Ip).
 		Require("请输入主机地址").
 		Match("[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\\.?", "请输入正确的主机地址")
 
-	params.Must.
-		Field("publicIp", params.PublicIp).
-		Require("请输入公网ip").
-		Match("[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\\.?", "请输入正确的公网ip")
+	checkProtocols := func() bool {
+		if len(params.Protocols) == 0 {
+			return true
+		}
 
+		for _, v := range params.Protocols {
+			tmp := strings.Split(v, "/")
+			///1-65535
+			if len(tmp) == 1 {
+				return true
+			} else {
+				port, err := strconv.Atoi(tmp[1])
+				if err != nil || port < 1 || port > 65535 {
+					return true
+				}
+			}
+		}
+		return false
+	}
+	if checkProtocols() {
+
+		params.Must.
+			Field("proto", params.Proto).
+			Require("请设置协议组")
+	}
+
+	if params.PublicIp != "" {
+		params.Must.
+			Field("publicIp", params.PublicIp).
+			Match("[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\\.?", "请输入正确的公网ip")
+	}
 	req, err := this.checkAndNewServerRequest()
 	if err != nil {
 		this.ErrorPage(fmt.Errorf("堡垒机组件错误:" + err.Error()))
 		return
 	}
-	fmt.Println(params)
 	args := &assets_model.CreateReq{}
 	args.HostName = params.HostName
 	args.IP = params.Ip
