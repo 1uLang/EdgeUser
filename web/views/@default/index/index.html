@@ -41,7 +41,7 @@
 						<input type="password" v-model="password" placeholder="请输入密码" maxlength="200" @input="changePassword()" ref="passwordRef"/>
 					</div>
 				</div>
-				<div class="ui field">
+				<!-- <div class="ui field">
 					<a href="" @click.prevent="showMoreOptions()">更多选项 <i class="icon angle" :class="{down:!moreOptionsVisible, up:moreOptionsVisible}"></i> </a>
 				</div>
 				<div class="ui field" v-show="moreOptionsVisible">
@@ -49,7 +49,7 @@
 						<input type="checkbox" name="remember" value="1" checked="checked"/>
 						<label>在这个电脑上记住登录（14天）</label>
 					</div>
-				</div>
+				</div> -->
 
 				<button class="ui button primary fluid" type="submit" v-if="!isSubmitting">登录</button>
 				<button class="ui button primary fluid disabled" type="submit" v-if="isSubmitting">登录中...</button>
