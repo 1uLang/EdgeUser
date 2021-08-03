@@ -1,4 +1,4 @@
-package logs
+package strategy
 
 import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"

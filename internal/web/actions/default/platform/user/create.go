@@ -10,7 +10,7 @@ type CreateAction struct {
 }
 
 func (this *CreateAction) Init() {
-	this.Nav("", "", "create")
+	this.Nav("", "platform", "create")
 }
 
 func (this *CreateAction) RunGet(params struct{}) {

@@ -344,6 +344,11 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"url":  "/platform/logs",
 					"code": "admins",
 				},
+				{
+					"name": "安全策略",
+					"url":  "/platform/strategy",
+					"code": "admins",
+				},
 			},
 		},
 	}
