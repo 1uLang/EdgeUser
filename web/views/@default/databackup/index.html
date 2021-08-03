@@ -60,5 +60,10 @@
         </div>
         
     </form>
-
+    <div v-if="bShowDialog" class="dialog-style" @click.stop>
+        <div class="dialog-bg-style" style="display: flex;flex-direction: column;align-items: center;justify-content: center;">
+            <img src='/images/waitting-dialog.gif' width="80px" height="80px"/>
+            <div style='text-align:center;height:40px;margin-top: 15px;color: #fff;'>正在上传...</div>
+        </div>
+    </div>
 </div>
