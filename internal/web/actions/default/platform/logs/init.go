@@ -9,6 +9,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth("")).
+			Data("teaMenu", "logs").
 			Prefix("/platform/logs").
 			Get("", new(IndexAction)).
 			Get("/exportExcel", new(ExportExcelAction)).

@@ -10,8 +10,7 @@ func init() {
 		server.
 			Helper(helpers.NewUserMustAuth("")).
 			Helper(new(Helper)).
-			Data("teaMenu", "servers").
-			Data("teaSubMenu", "certs").
+			Data("teaMenu", "certs").
 			Prefix("/servers/certs").
 			Data("leftMenuItem", "cert").
 			Get("", new(IndexAction)).

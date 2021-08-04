@@ -9,8 +9,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth("")).
-			Data("teaMenu", "waf").
-			Data("teaSubMenu", "wafLogs").
+			Data("teaMenu", "wafLogs").
 			Prefix("/waf/logs").
 			Get("", new(IndexAction)).
 

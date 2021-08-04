@@ -76,6 +76,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan/vulnerabilities"
 
 	//安全审计
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/agent"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/app"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/db"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/host"
