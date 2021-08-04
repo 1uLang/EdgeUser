@@ -36,8 +36,8 @@
             </td>
             <td>{{item.address}}</td>
             <td>{{item.description}}</td>
-            <td v-if="item.owner">主机</td>
-            <td v-else>Web</td>
+            <td v-if="item.owner">主机漏洞扫描</td>
+            <td v-else>Web漏洞扫描</td>
             <td>
                 <div style="display: flex;justify-content: center;" v-if="item.severity_counts">
                     <div class="vulnerable-num" style="background-color: #ec808d;">{{item.severity_counts.high}}</div>
