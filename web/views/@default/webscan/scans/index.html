@@ -53,17 +53,12 @@
                 <td v-else>Web</td>
                 <td>
                     <div style="display: flex;justify-content: center;" v-if="item.current_session.severity_counts">
-                        <div class="vulnerable-num" style="background-color: red;">
-                            <span v-if="item.current_session.severity_counts.critical">{{item.current_session.severity_counts.critical}}</span>
-                            <span v-else>0</span>
-                        </div>
                         <div class="vulnerable-num" style="background-color: #ec808d;">{{item.current_session.severity_counts.high}}</div>
                         <div class="vulnerable-num" style="background-color: #fcc77d;">{{item.current_session.severity_counts.medium}}</div>
                         <div class="vulnerable-num" style="background-color: #3abee8;">{{item.current_session.severity_counts.low}}</div>
                         <div class="vulnerable-num" style="background-color: #00b144;">{{item.current_session.severity_counts.info}}</div>
                     </div>
                     <div style="display: flex;justify-content: center;" v-else>
-                        <div class="vulnerable-num" style="background-color: red;">0</div>
                         <div class="vulnerable-num" style="background-color: #ec808d;">0</div>
                         <div class="vulnerable-num" style="background-color: #fcc77d;">0</div>
                         <div class="vulnerable-num" style="background-color: #3abee8;">0</div>
