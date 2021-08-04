@@ -62,7 +62,7 @@ var (
 		{
 			Name:        "数据备份",
 			Code:        "databackup",
-			Description: "开启审计备份组件功能",
+			Description: "开启数据备份组件功能",
 		},
 	}
 )
