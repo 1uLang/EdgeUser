@@ -169,7 +169,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"code": "servers",
 			"name": "WAF服务",
 			"url":  "/servers",
-			"icon": "clone outline",
+			"icon": "skyatlas",
 			"subItems": []maps.Map{
 				{
 					"name": "域名管理",
