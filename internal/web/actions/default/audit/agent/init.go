@@ -13,7 +13,10 @@ func init() {
 			Data("teaMenu", "agent").
 			Prefix("/audit/agent").
 			GetPost("", new(IndexAction)).
-			//GetPost("/createPopup", new(CreatePopupAction)).
+			// Post("/delete", new(DeleteAction)).
+			Get("/download", new(DownLoadAction)).
+			// GetPost("/create", new(CreateAction)).
+			// Get("/create", new(CreatePopupAction)).
 			//GetPost("/auth", new(AuthAction)).
 			//GetPost("/delete", new(DeleteAction)).
 			EndAll()
