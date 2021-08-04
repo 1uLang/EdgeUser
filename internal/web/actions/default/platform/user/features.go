@@ -1,7 +1,8 @@
 package user
 
 import (
-	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/1uLang/zhiannet-api/edgeUsers/model"
+	"github.com/1uLang/zhiannet-api/edgeUsers/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/user/userutils"
 	"github.com/iwind/TeaGo/actions"
@@ -13,34 +14,19 @@ type FeaturesAction struct {
 	actionutils.ParentAction
 }
 
-func (this *FeaturesAction) Init() {
-	this.Nav("", "", "feature")
-}
-
 func (this *FeaturesAction) RunGet(params struct {
 	UserId int64
 }) {
-	err := userutils.InitUser(this.Parent(), params.UserId)
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
+	allFeatures := userutils.FindAllUserFeatures()
 
-	featuresResp, err := this.RPC().UserRPC().FindAllUserFeatureDefinitions(this.UserContext(), &pb.FindAllUserFeatureDefinitionsRequest{})
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	allFeatures := featuresResp.Features
-
-	userFeaturesResp, err := this.RPC().UserRPC().FindUserFeatures(this.UserContext(), &pb.FindUserFeaturesRequest{UserId: params.UserId})
+	features, err := server.FindUserFeatures(&model.FindUserFeaturesReq{UserId: params.UserId})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
 	userFeatureCodes := []string{}
-	for _, userFeature := range userFeaturesResp.Features {
-		userFeatureCodes = append(userFeatureCodes, userFeature.Code)
+	for _, userFeature := range features {
+		userFeatureCodes = append(userFeatureCodes, userFeature)
 	}
 
 	featureMaps := []maps.Map{}
@@ -55,29 +41,24 @@ func (this *FeaturesAction) RunGet(params struct {
 
 	this.Data["features"] = featureMaps
 
-	this.Show()
+	this.Success()
 }
 
 func (this *FeaturesAction) RunPost(params struct {
 	UserId int64
-	Codes  []string
+	Codes  string
 
 	Must *actions.Must
-	CSRF *actionutils.CSRF
 }) {
 	defer this.CreateLogInfo("设置用户 %d 的功能列表", params.UserId)
 
-	_, err := this.RPC().UserRPC().UpdateUserFeatures(this.UserContext(), &pb.UpdateUserFeaturesRequest{
-		UserId:       params.UserId,
-		FeatureCodes: params.Codes,
+	err := server.UpdateUserFeatures(&model.UpdateUserFeaturesReq{
+		UserId:   params.UserId,
+		Features: params.Codes,
 	})
 	if err != nil {
 		this.ErrorPage(err)
 		return
-	}
-	moduleCodes := map[string]bool{}
-	for _, code := range params.Codes {
-		moduleCodes[code] = true
 	}
 	this.Success()
 }

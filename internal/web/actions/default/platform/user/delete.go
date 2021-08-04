@@ -1,7 +1,8 @@
 package user
 
 import (
-	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/1uLang/zhiannet-api/edgeUsers/model"
+	"github.com/1uLang/zhiannet-api/edgeUsers/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 )
 
@@ -10,17 +11,16 @@ type DeleteAction struct {
 }
 
 func (this *DeleteAction) RunPost(params struct {
-	UserId int64
+	UserId uint64
 }) {
 	defer this.CreateLogInfo("删除用户 %d", params.UserId)
 
-	// TODO 检查用户是否有未完成的业务
+	// TODO 关联组件的账号是否需要删除
 
-	_, err := this.RPC().UserRPC().DeleteUser(this.UserContext(), &pb.DeleteUserRequest{UserId: params.UserId})
+	err := server.DeleteUser(&model.DeleteUserReq{UserId: params.UserId})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-
 	this.Success()
 }

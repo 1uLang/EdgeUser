@@ -11,7 +11,8 @@ func init() {
 			Helper(helpers.NewUserMustAuth("")).
 			Prefix("/platform/user").
 			Get("", new(IndexAction)).
-			GetPost("/user", new(UserAction)).
+			Post("/update", new(UpdateAction)).
+			Post("/delete", new(DeleteAction)).
 			GetPost("/create", new(CreateAction)).
 			GetPost("/features", new(FeaturesAction)).
 			EndAll()

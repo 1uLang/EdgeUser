@@ -1,11 +1,10 @@
 package user
 
 import (
-	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
+	"github.com/1uLang/zhiannet-api/edgeUsers/model"
+	"github.com/1uLang/zhiannet-api/edgeUsers/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/user/userutils"
 	"github.com/iwind/TeaGo/actions"
-	"github.com/iwind/TeaGo/maps"
 )
 
 type UpdateAction struct {
@@ -16,88 +15,23 @@ func (this *UpdateAction) Init() {
 	this.Nav("", "", "update")
 }
 
-func (this *UpdateAction) RunGet(params struct {
-	UserId int64
-}) {
-	err := userutils.InitUser(this.Parent(), params.UserId)
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-
-	userResp, err := this.RPC().UserRPC().FindEnabledUser(this.UserContext(), &pb.FindEnabledUserRequest{UserId: params.UserId})
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	user := userResp.User
-	if user == nil {
-		this.NotFound("user", params.UserId)
-		return
-	}
-
-	// AccessKey数量
-	countAccessKeyResp, err := this.RPC().UserAccessKeyRPC().CountAllEnabledUserAccessKeys(this.UserContext(), &pb.CountAllEnabledUserAccessKeysRequest{UserId: params.UserId})
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	countAccessKeys := countAccessKeyResp.Count
-
-	this.Data["user"] = maps.Map{
-		"id":              user.Id,
-		"username":        user.Username,
-		"fullname":        user.Fullname,
-		"email":           user.Email,
-		"tel":             user.Tel,
-		"remark":          user.Remark,
-		"mobile":          user.Mobile,
-		"isOn":            user.IsOn,
-		"countAccessKeys": countAccessKeys,
-	}
-
-	this.Data["clusterId"] = 0
-	if user.NodeCluster != nil {
-		this.Data["clusterId"] = user.NodeCluster.Id
-	}
-
-	this.Show()
-}
-
 func (this *UpdateAction) RunPost(params struct {
-	UserId    int64
-	Username  string
-	Pass1     string
-	Pass2     string
-	Fullname  string
-	Mobile    string
-	Tel       string
-	Email     string
-	Remark    string
-	IsOn      bool
-	ClusterId int64
+	UserId   uint64
+	Pass1    string
+	Pass2    string
+	Fullname string
+	Mobile   string
+	Email    string
+	Remark   string
+	IsOn     uint8
 
 	Must *actions.Must
-	CSRF *actionutils.CSRF
 }) {
 	defer this.CreateLogInfo("修改用户 %d", params.UserId)
 
 	params.Must.
-		Field("username", params.Username).
-		Require("请输入用户名").
-		Match(`^[a-zA-Z0-9_]+$`, "用户名中只能含有英文、数字和下划线")
-
-	checkUsernameResp, err := this.RPC().UserRPC().CheckUserUsername(this.UserContext(), &pb.CheckUserUsernameRequest{
-		UserId:   params.UserId,
-		Username: params.Username,
-	})
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	if checkUsernameResp.Exists {
-		this.FailField("username", "此用户名已经被占用，请换一个")
-	}
+		Field("userId", params.UserId).
+		Require("请选择用户")
 
 	if len(params.Pass1) > 0 {
 		params.Must.
@@ -123,17 +57,14 @@ func (this *UpdateAction) RunPost(params struct {
 			Email("请输入正确的电子邮箱")
 	}
 
-	_, err = this.RPC().UserRPC().UpdateUser(this.UserContext(), &pb.UpdateUserRequest{
-		UserId:        params.UserId,
-		Username:      params.Username,
+	err := server.UpdateUser(&model.UpdateUserReq{
+		Id:        params.UserId,
+		Name:      params.Fullname,
 		Password:      params.Pass1,
-		Fullname:      params.Fullname,
 		Mobile:        params.Mobile,
-		Tel:           params.Tel,
 		Email:         params.Email,
 		Remark:        params.Remark,
 		IsOn:          params.IsOn,
-		NodeClusterId: params.ClusterId,
 	})
 	if err != nil {
 		this.ErrorPage(err)

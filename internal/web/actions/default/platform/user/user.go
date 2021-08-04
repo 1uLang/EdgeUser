@@ -3,7 +3,6 @@ package user
 import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
-	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/user/userutils"
 	"github.com/iwind/TeaGo/maps"
 )
 
@@ -18,11 +17,6 @@ func (this *UserAction) Init() {
 func (this *UserAction) RunGet(params struct {
 	UserId int64
 }) {
-	err := userutils.InitUser(this.Parent(), params.UserId)
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
 
 	userResp, err := this.RPC().UserRPC().FindEnabledUser(this.UserContext(), &pb.FindEnabledUserRequest{UserId: params.UserId})
 	if err != nil {
