@@ -65,3 +65,11 @@ func (this *UserShouldAuth) UserId() int64 {
 func (this *UserShouldAuth) Logout() {
 	this.action.Session().Delete()
 }
+
+func (this *UserShouldAuth) SetUpdatePwdToken(value string) {
+	this.action.Session().Write("update_pwd_username", value)
+}
+
+func (this *UserShouldAuth) GetUpdatePwdToken() string {
+	return this.action.Session().GetString("update_pwd_username")
+}

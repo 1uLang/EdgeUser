@@ -8,16 +8,17 @@
 <form class="ui form" style="margin-top: 10px;">
   <div class="ui fields inline">
     <div class="ui field">
-      <input type="text" placeholder="开始日期" v-model="dayFrom" value="" style="width:8em" id="day-from-picker"/>
+      <input type="text" placeholder="开始日期" name="dayFrom" v-model="dayFrom" value="" style="width:8em" id="day-from-picker"/>
     </div>
     <div class="ui field">
-      <input type="text" placeholder="结束日期" v-model="dayTo" value="" style="width:8em" id="day-to-picker"/>
+      <input type="text" placeholder="结束日期" name="dayTo" v-model="dayTo" value="" style="width:8em" id="day-to-picker"/>
     </div>
     <div class="ui field">
-      <input type="text" style="width:10em" v-model="keyword" placeholder="关键词"/>
+      <input type="text" style="width:10em" name="keyword" v-model="keyword" placeholder="关键词"/>
     </div>
     <div class="ui field">
-      <div class="ui button" @click="onSearch">查询</div>
+<!--      <div class="ui button" @click="onSearch">查询</div>-->
+      <button type="submit" class="ui button">查询</button>
     </div>
     <div class="ui field">
       <a href="" @click.prevent="exportExcel">[导出到Excel]</a>
