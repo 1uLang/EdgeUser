@@ -1,4 +1,4 @@
-package safe
+package logs
 
 import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/helpers"
@@ -11,6 +11,7 @@ func init() {
 			Helper(helpers.NewUserMustAuth("")).
 			Prefix("/platform/logs").
 			Get("", new(IndexAction)).
+			Get("/exportExcel", new(ExportExcelAction)).
 			EndAll()
 	})
 }

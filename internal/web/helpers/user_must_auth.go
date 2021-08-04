@@ -2,8 +2,11 @@ package helpers
 
 import (
 	"errors"
+	"fmt"
+	"github.com/1uLang/zhiannet-api/common/cache"
 	"net/http"
 	"reflect"
+	"time"
 
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/configloaders"
@@ -102,7 +105,24 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 	if initMethod.IsValid() {
 		initMethod.Call([]reflect.Value{})
 	}
-
+	fmt.Println("每次都执行的事件url=", action.Request.RequestURI, userId)
+	taskUrl := []string{
+		"/clusters/tasks/check", "/dns/tasks/check", "/messages/badge",
+	}
+	for _, v := range taskUrl {
+		if action.Request.RequestURI == v {
+			break
+		}
+		res, _ := cache.GetInt(fmt.Sprintf("login_success_userid_%v", userId))
+		if res == 0 {
+			//30分钟没有操作  自动退出
+			session.Delete()
+			this.login(action)
+			return false
+		}
+		//续期
+		cache.Incr(fmt.Sprintf("login_success_userid_%v", userId), time.Minute*30)
+	}
 	return true
 }
 
@@ -304,7 +324,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"code": "command",
 				},
 				{
-					"name": "agent",
+					"name": "Agent管理",
 					"url":  "/audit/agent",
 					"code": "command",
 				},
@@ -330,7 +350,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 		},
 		{
 			"code": "platform",
-			"url":  "/platform/users",
+			"url":  "/platform/user",
 			"name": "平台管理",
 			"icon": "ioxhost",
 			"subItems": []maps.Map{

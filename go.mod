@@ -16,6 +16,7 @@ require (
 	github.com/iwind/TeaGo v0.0.0-20210720011303-fc255c995afa
 	github.com/miekg/dns v1.1.35
 	github.com/shirou/gopsutil v3.21.5+incompatible
+	github.com/tealeg/xlsx/v3 v3.2.3
 	github.com/tklauser/go-sysconf v0.3.6 // indirect
 	golang.org/x/sys v0.0.0-20210616094352-59db8d763f22
 	google.golang.org/genproto v0.0.0-20210617175327-b9e0b3197ced // indirect
