@@ -355,7 +355,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"icon": "ioxhost",
 			"subItems": []maps.Map{
 				{
-					"name": "用户列表",
+					"name": "子账号管理",
 					"url":  "/platform/user",
 					"code": "user",
 				},

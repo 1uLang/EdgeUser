@@ -3,7 +3,7 @@ package logs
 import (
 	"fmt"
 	"github.com/1uLang/zhiannet-api/common/model/edge_logs"
-	edge_logs_server "github.com/1uLang/zhiannet-api/common/server/edge_logs"
+	edge_logs_server "github.com/1uLang/zhiannet-api/common/server/edge_logs_server"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/lists"
