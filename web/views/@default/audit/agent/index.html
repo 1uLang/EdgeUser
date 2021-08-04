@@ -1,6 +1,67 @@
-<!-- 审计-agent-->
 {$layout}
 {$var "header"}
 {$end}
 
-agent list
+<div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+    <div :class="{'menu-select-color':pageState===1,'menu-define-color':pageState!=1}" @click="onChangeState(1)">平台管理</div>
+    <div :class="{'menu-select-color':pageState===2,'menu-define-color':pageState!=2}" @click="onChangeState(2)">上传文件</div>
+</div>
+
+<div v-if="pageState===1"  style="width: 100%;height: 600px;margin-top: 10px;overflow-x: auto; overflow-y: auto;">
+    <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <thead>
+            <tr align="center">
+                <th class='table-head-bg' style="width: 390px;" >文件名</th>
+                <th class='table-head-bg' style="width: 350px;" >文件描述</th>
+                <th class='table-head-bg' style="width: 110px;" >尺寸</th>
+                <th class='table-head-bg' style="width: 150px;" >上传时间</th>
+                <th class='table-head-bg' style="width: 175px;" >操作</th>
+            </tr>
+        </thead>
+        <tbody id='tableBody'>
+            <tr align="center" style="height: 40px;" v-for="item in list" >
+                <td>{{item.name}}</td>
+                <td>{{item.describe}}</td>
+                <td>{{item.size}}</td>
+                <td>{{item.created_at}}</td>
+                <td>
+                    <div style="display: flex;justify-content: space-around;padding: 4px 0;">
+                        <div class="edit_btn" @click="onDownFile(item.id,item.content_type,item.name)">下载</div>
+                         <!-- <div class="edit_btn" @click="onEdit(item.id)">修改</div>
+                        <div class="del-btn" @click="onDelete(item.id)">删除</div> -->
+                    </div>
+                    
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!-- <div v-if="pageState===2" style="margin-top: 10px;">
+    <form class="ui form" id="formData">
+        <table class="ui table definition selectable">
+            <tr>
+                <td class="title">文件描述</td>
+                <td>
+                    <input type="text" name="fileDesc" v-model="fileDesc" style="height: 40px;line-height: 40px;border: 1px solid #d7d7d7;"></input>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">选择文件*</td>
+                <td>
+                    <input type="file" name="uploadFile" id="uploadFile" value="选择文件"/>
+                </td>
+            </tr>
+        </table>
+        <div style="width: 100%;display: flex;align-items: center;">
+            <div class="save-btn" @click="onuploadFile()">保存</div>
+        </div>
+        
+    </form>
+
+    <div v-if="bShowDialog" class="dialog-style" @click.stop>
+        <div class="dialog-bg-style" style="display: flex;flex-direction: column;align-items: center;justify-content: center;">
+            <img src='/images/waitting-dialog.gif' width="80px" height="80px"/>
+            <div style='text-align:center;height:40px;margin-top: 15px;color: #fff;'>{{nDialogTxt}}</div>
+        </div>
+    </div>
+</div> -->
