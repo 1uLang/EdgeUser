@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/1uLang/zhiannet-api/common/cache"
+	"github.com/TeaOSLab/EdgeUser/internal/utils"
 	"net/http"
 	"reflect"
 	"time"
@@ -105,14 +106,8 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 	if initMethod.IsValid() {
 		initMethod.Call([]reflect.Value{})
 	}
-	fmt.Println("每次都执行的事件url=", action.Request.RequestURI, userId)
-	taskUrl := []string{
-		"/clusters/tasks/check", "/dns/tasks/check", "/messages/badge",
-	}
-	for _, v := range taskUrl {
-		if action.Request.RequestURI == v {
-			break
-		}
+	//fmt.Println("每次都执行的事件url=", action.Request.RequestURI, userId)
+	if !utils.UrlIn(action.Request.RequestURI) {
 		res, _ := cache.GetInt(fmt.Sprintf("login_success_userid_%v", userId))
 		if res == 0 {
 			//30分钟没有操作  自动退出
@@ -123,6 +118,7 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 		//续期
 		cache.Incr(fmt.Sprintf("login_success_userid_%v", userId), time.Minute*30)
 	}
+
 	return true
 }
 

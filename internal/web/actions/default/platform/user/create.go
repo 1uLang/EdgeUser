@@ -1,6 +1,7 @@
 package user
 
 import (
+	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
 	"github.com/1uLang/zhiannet-api/edgeUsers/model"
 	"github.com/1uLang/zhiannet-api/edgeUsers/server"
 	"github.com/TeaOSLab/EdgeUser/internal/utils/numberutils"
@@ -127,15 +128,15 @@ func (this *CreateAction) RunPost(params struct {
 	//}
 
 	userId, err := server.CreateUser(&model.CreateUserReq{
-		UserId:  		uint64(this.UserId()),
-		Username:      params.Username,
-		Password:      params.Pass1,
-		Fullname:      params.Fullname,
-		Mobile:        params.Mobile,
-		Tel:           params.Tel,
-		Email:         params.Email,
-		Remark:        params.Remark,
-		Source:        "user:" + numberutils.FormatInt64(this.UserId()),
+		UserId:   uint64(this.UserId()),
+		Username: params.Username,
+		Password: params.Pass1,
+		Fullname: params.Fullname,
+		Mobile:   params.Mobile,
+		Tel:      params.Tel,
+		Email:    params.Email,
+		Remark:   params.Remark,
+		Source:   "user:" + numberutils.FormatInt64(this.UserId()),
 	})
 	if err != nil {
 		this.ErrorPage(err)
@@ -143,6 +144,7 @@ func (this *CreateAction) RunPost(params struct {
 	}
 	defer this.CreateLogInfo("创建用户 %d", userId)
 
+	edge_users_server.UpdatePwdAt(uint64(this.UserId()))
 	////关联账号
 	//_, err = audit_user_relation.Add(&audit_user_relation.AuditReq{
 	//	UserId:      userId,

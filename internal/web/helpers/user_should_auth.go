@@ -1,6 +1,8 @@
 package helpers
 
 import (
+	"fmt"
+	"github.com/1uLang/zhiannet-api/common/cache"
 	teaconst "github.com/TeaOSLab/EdgeUser/internal/const"
 	"github.com/TeaOSLab/EdgeUser/internal/utils/numberutils"
 	"github.com/iwind/TeaGo/actions"
@@ -63,13 +65,14 @@ func (this *UserShouldAuth) UserId() int64 {
 }
 
 func (this *UserShouldAuth) Logout() {
+	cache.DelKey(fmt.Sprintf("login_success_userid_%v", this.UserId()))
 	this.action.Session().Delete()
 }
 
-func (this *UserShouldAuth) SetUpdatePwdToken(value string) {
-	this.action.Session().Write("update_pwd_username", value)
+func (this *UserShouldAuth) SetUpdatePwdToken(value int64) {
+	this.action.Session().Write("update_pwd_user_id", numberutils.FormatInt64(value))
 }
 
-func (this *UserShouldAuth) GetUpdatePwdToken() string {
-	return this.action.Session().GetString("update_pwd_username")
+func (this *UserShouldAuth) GetUpdatePwdToken() int64 {
+	return this.action.Session().GetInt64("update_pwd_user_id")
 }
