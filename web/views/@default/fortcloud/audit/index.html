@@ -1,0 +1,41 @@
+<!-- 扫描报告 -->
+{$layout}
+{$var "header"}
+{$end}
+<div style="width: 100%;height: 650px;margin-top: 10px;overflow-x: auto; overflow-y: auto;">
+    <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <thead>
+        <tr align="center">
+            <th class='table-head-bg' style="width: 50px;">ID</th>
+            <th class='table-head-bg' style="width: 120px;">用户</th>
+            <th class='table-head-bg' style="width: 155px;">目标</th>
+            <th class='table-head-bg' style="width: 145px;">远端地址</th>
+            <th class='table-head-bg' style="width: 90px;">协议</th>
+            <th class='table-head-bg' style="width: 150px;">登录来源</th>
+            <th class='table-head-bg' style="width: 70px;">命令</th>
+            <th class='table-head-bg' style="width: 175px;">开始日期</th>
+            <th class='table-head-bg' style="width: 105px;">时长</th>
+            <th class='table-head-bg' style="width: 120px;">操作</th>
+        </tr>
+        </thead>
+        <tbody id='tableBody'>
+        <tr align="center" style="height: 40px;" v-for="(item,index) in offline">
+            <td>{{index+1}}</td>
+            <td>{{item.user}}</td>
+            <td>{{item.asset}}</td>
+            <td>{{item.remote_addr}}</td>
+            <td>{{item.protocol}}</td>
+            <td>{{item.login_from_display}}</td>
+            <td>{{item.command_amount}}</td>
+            <td>{{onChangeTimeFormat(item.date_start)}}</td>
+            <td>{{getTimeLong(item.date_start,item.date_end)}}</td>
+            <td>
+                <div style="display: flex;justify-content: space-around;">
+                    <div class="edit_btn" @click="onReplay(item)" v-if="item.can_replay">回放</div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>    
+

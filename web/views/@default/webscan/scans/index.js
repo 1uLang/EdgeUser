@@ -17,6 +17,7 @@ Tea.context(function () {
     this.scans_vulns = []
     this.scanId = ""
     this.scanSessionId = ""
+    this.scanAddr = ""
     this.bLoopholeDetail = false    //漏洞详情是否显示
     this.hostVulFlag = false //主机漏洞扫描
     this.bShowDetail = false
@@ -75,7 +76,14 @@ Tea.context(function () {
     }
 
     this.onStopScan = function (item) {
-        let curValue = [item.scan_id]
+
+        let curValue = []
+        if(item.owner){
+            curValue = [item.target_id]
+        }else{
+            curValue = [item.scan_id]
+        }
+
         let that = this
         let scan_ids = JSON.parse(JSON.stringify(curValue))
         teaweb.confirm("确定要停止这个扫描吗？", function () {
@@ -83,63 +91,38 @@ Tea.context(function () {
                 .params({
                     ScanIds: scan_ids
                 }).success(function () {
-                    window.location.reload()
+                window.location.reload()
             })
         })
-        // if (this.stopValues.length > 0) {
-        //     let that = this
-        //     let scan_ids = JSON.parse(JSON.stringify(this.stopValues))
-        //     teaweb.confirm("确定要停止这个扫描吗？", function () {
-        //         that.$post(".stop")
-        //             .params({
-        //                 ScanIds: scan_ids
-        //             }).success(function () {
-        //             window.location.reload()
-        //         })
-        //     })
-        // }
     };
     this.onCreateReport = function (item) {
+
         let curValue = [item.scan_id]
         let curTargetValue = [item.target_id]
-        if (this.createValues.length > 0) {
-            let that = this
-            let scan_ids = JSON.parse(JSON.stringify(curValue))
-            let tarId = JSON.parse(JSON.stringify(curTargetValue))
-            teaweb.confirm("确定要生成这个扫描的报表吗？", function () {
-                that.$post("/webscan/reports/create")
-                    .params({
-                        Ids: scan_ids,
-                        TarIds: tarId,
-                    }).success(function () {
-                    window.location.href = "/webscan/reports"
-                })
+        let that = this
+        let scan_ids = JSON.parse(JSON.stringify(curValue))
+        let tarId = JSON.parse(JSON.stringify(curTargetValue))
+        teaweb.confirm("确定要生成这个扫描的报表吗？", function () {
+            that.$post("/webscan/reports/create")
+                .params({
+                    Ids: scan_ids,
+                    TarIds: tarId,
+                }).success(function () {
+                window.location.href = "/webscan/reports"
             })
-        }
-        // if (this.createValues.length > 0) {
-        //     let that = this
-        //     let scan_ids = JSON.parse(JSON.stringify(this.createValues))
-        //     let tarId = JSON.parse(JSON.stringify(this.createTargetValues))
-        //     teaweb.confirm("确定要生成这个扫描的报表吗？", function () {
-        //         that.$post("/webscan/reports/create")
-        //             .params({
-        //                 Ids: scan_ids,
-        //                 TarIds: tarId,
-        //             }).success(function () {
-        //             window.location.href = "/webscan/reports"
-        //         })
-        //     })
-        // }
+        })
     };
 
     this.onDelete = function () {
         if (this.checkValues.length > 0) {
             let that = this
             let scan_ids = JSON.parse(JSON.stringify(this.checkValues))
+            let ids = JSON.parse(JSON.stringify(this.checkTargetValues))
             teaweb.confirm("确定要删除这个扫描吗？", function () {
                 that.$post(".delete")
                     .params({
-                        ScanIds: scan_ids
+                        ScanIds: scan_ids,
+                        ids: ids,
                     }).success(function () {
                     window.location.reload()
                 })
@@ -282,10 +265,12 @@ Tea.context(function () {
     this.onHostShowDetail = function (item) {
         this.showDetailItem = item
         this.scanId = item.scan_id
-        this.scanSessionId = item.target.address
+        this.scanSessionId = item.target_id
+        this.scanAddr = item.target.address
         this.hostVulFlag = true
         this.$get(".vulnerabilities").params({
             scanId: this.scanId,
+            scanSessionId: item.target_id,
         }).success(resp => {
             this.scans_vulns = []
             if (resp.code === 200) {
@@ -364,6 +349,8 @@ Tea.context(function () {
             switch (status) {
                 case "aborted":
                     return "已中止";
+                case "canceled":
+                    return "已中止";
                 case "completed":
                     return "已完成";
                 case "processing":
@@ -372,6 +359,8 @@ Tea.context(function () {
                     return "正在进行";
                 case "queued":
                     return "队列中";
+                case "stopping":
+                    return "停止中";
                 case "aborting":
                     return "停止中";
             }
@@ -416,7 +405,7 @@ Tea.context(function () {
     };
     this.getDetailInfo = function (vul) {
         this.detailInfo = null
-        if(!this.hostVulFlag){
+        if (!this.hostVulFlag) {
             this.$get(".vulnerabilities").params({
                 vulId: vul.vuln_id,
                 scanId: this.scanId,
@@ -430,14 +419,15 @@ Tea.context(function () {
                     this.bShowDetail = false
                 }
             })
-        }else{
+        } else {
             this.$get("/webscan/vulnerabilities/details").params({
                 vulId: vul.plugin_id,
                 scanId: this.scanId,
+                scanSessionId: this.scanSessionId,
             }).success(resp => {
                 if (resp.code === 200) {
                     this.detailInfo = resp.data.data
-                    this.detailInfo.affects_url = "URL:           " + this.scanSessionId
+                    this.detailInfo.affects_url = "URL:           " + this.scanAddr
                     this.bShowDetail = true
                 } else {
                     this.bShowDetail = false

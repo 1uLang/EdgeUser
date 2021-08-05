@@ -15,6 +15,7 @@ func init() {
 			GetPost("", new(IndexAction)).
 			Post("/update", new(UpdateAction)).
 			Post("/delete", new(DeleteAction)).
+			Post("/assetsList", new(AssetsListAction)).
 			EndAll()
 	})
 }

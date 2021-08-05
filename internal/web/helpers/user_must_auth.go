@@ -2,8 +2,11 @@ package helpers
 
 import (
 	"errors"
+	"fmt"
+	"github.com/1uLang/zhiannet-api/common/cache"
 	"net/http"
 	"reflect"
+	"time"
 
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/configloaders"
@@ -102,7 +105,24 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 	if initMethod.IsValid() {
 		initMethod.Call([]reflect.Value{})
 	}
-
+	fmt.Println("每次都执行的事件url=", action.Request.RequestURI, userId)
+	taskUrl := []string{
+		"/clusters/tasks/check", "/dns/tasks/check", "/messages/badge",
+	}
+	for _, v := range taskUrl {
+		if action.Request.RequestURI == v {
+			break
+		}
+		res, _ := cache.GetInt(fmt.Sprintf("login_success_userid_%v", userId))
+		if res == 0 {
+			//30分钟没有操作  自动退出
+			session.Delete()
+			this.login(action)
+			return false
+		}
+		//续期
+		cache.Incr(fmt.Sprintf("login_success_userid_%v", userId), time.Minute*30)
+	}
 	return true
 }
 
@@ -128,10 +148,28 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"url":  "/dashboard",
 		},
 		{
+			"code": "waf",
+			"name": "态势感知",
+			"icon": "shield",
+			"url":  "/waf",
+			"subItems": []maps.Map{
+				{
+					"name": "安全概览",
+					"code": "waf",
+					"url":  "/waf",
+				},
+				{
+					"name": "拦截日志",
+					"code": "wafLogs",
+					"url":  "/waf/logs",
+				},
+			},
+		},
+		{
 			"code": "servers",
-			"name": "CDN加速",
+			"name": "WAF服务",
 			"url":  "/servers",
-			"icon": "clone outline",
+			"icon": "skyatlas",
 			"subItems": []maps.Map{
 				{
 					"name": "域名管理",
@@ -150,28 +188,11 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 				},
 			},
 		},
-		//{
-		//	"code": "lb",
-		//	"name": "负载均衡",
-		//	"icon": "paper plane",
-		//},
 		{
-			"code": "waf",
-			"name": "WAF安全",
-			"icon": "shield",
-			"url":  "/waf",
-			"subItems": []maps.Map{
-				{
-					"name": "安全概览",
-					"code": "waf",
-					"url":  "/waf",
-				},
-				{
-					"name": "拦截日志",
-					"code": "wafLogs",
-					"url":  "/waf/logs",
-				},
-			},
+			"code": "lb",
+			"name": "负载均衡",
+			"icon": "paper plane",
+			"url":  "/lb",
 		},
 		{
 			"code": "hids",
@@ -229,34 +250,34 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 				},
 			},
 		},
-		{
-			"code": "fortcloud",
-			"url":  "/fortcloud/assets",
-			"name": "堡垒机",
-			"icon": "ioxhost",
-			"subItems": []maps.Map{
-				{
-					"name": "资产管理",
-					"url":  "/fortcloud/assets",
-					"code": "assets",
-				},
-				{
-					"name": "管理账号",
-					"url":  "/fortcloud/admins",
-					"code": "admins",
-				},
-				{
-					"name": "会话管理",
-					"url":  "/fortcloud/sessions",
-					"code": "sessions",
-				},
-				{
-					"name": "命令记录",
-					"url":  "/fortcloud/command",
-					"code": "command",
-				},
-			},
-		},
+		//{
+		//	"code": "fortcloud",
+		//	"url":  "/fortcloud/assets",
+		//	"name": "堡垒机",
+		//	"icon": "ioxhost",
+		//	"subItems": []maps.Map{
+		//		{
+		//			"name": "资产管理",
+		//			"url":  "/fortcloud/assets",
+		//			"code": "assets",
+		//		},
+		//		{
+		//			"name": "管理账号",
+		//			"url":  "/fortcloud/admins",
+		//			"code": "admins",
+		//		},
+		//		{
+		//			"name": "会话管理",
+		//			"url":  "/fortcloud/sessions",
+		//			"code": "sessions",
+		//		},
+		//		{
+		//			"name": "运维审计",
+		//			"url":  "/fortcloud/audit",
+		//			"code": "audit",
+		//		},
+		//	},
+		//},
 		//{
 		//	"code": "finance",
 		//	"name": "费用账单",
@@ -276,37 +297,37 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"code": "audit",
 			"url":  "/audit/db",
 			"name": "安全审计",
-			"icon": "ioxhost",
+			"icon": "sellsy",
 			"subItems": []maps.Map{
 				{
 					"name": "数据库管理",
 					"url":  "/audit/db",
-					"code": "assets",
+					"code": "db",
 				},
 				{
 					"name": "主机管理",
 					"url":  "/audit/host",
-					"code": "admins",
+					"code": "host",
 				},
 				{
 					"name": "应用管理",
 					"url":  "/audit/app",
-					"code": "sessions",
+					"code": "app",
 				},
 				{
 					"name": "审计日志",
 					"url":  "/audit/logs",
-					"code": "command",
+					"code": "logs",
 				},
 				{
 					"name": "订阅报告",
 					"url":  "/audit/report",
-					"code": "command",
+					"code": "report",
 				},
 				{
-					"name": "agent",
+					"name": "Agent管理",
 					"url":  "/audit/agent",
-					"code": "command",
+					"code": "agent",
 				},
 			},
 		},
@@ -314,7 +335,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"code": "databackup",
 			"url":  "/databackup",
 			"name": "数据备份",
-			"icon": "ioxhost",
+			"icon": "copy",
 			//"subItems": []maps.Map{
 			//	{
 			//		"name": "文件管理",
@@ -332,22 +353,22 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"code": "platform",
 			"url":  "/platform/user",
 			"name": "平台管理",
-			"icon": "ioxhost",
+			"icon": "sitemap",
 			"subItems": []maps.Map{
 				{
-					"name": "用户列表",
+					"name": "子账号管理",
 					"url":  "/platform/user",
-					"code": "assets",
+					"code": "user",
 				},
 				{
 					"name": "操作日志",
 					"url":  "/platform/logs",
-					"code": "admins",
+					"code": "logs",
 				},
 				{
 					"name": "安全策略",
 					"url":  "/platform/strategy",
-					"code": "admins",
+					"code": "strategy",
 				},
 			},
 		},

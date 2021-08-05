@@ -27,11 +27,11 @@ func (this *VulnerabilitiesAction) RunGet(params struct {
 	params.Must.
 		Field("scanId", params.ScanId).
 		Require("请输入扫描id")
+	params.Must.
+		Field("scanSessionId", params.ScanSessionId).
+		Require("请输入扫描会话id")
 
 	if !hostscans{
-		params.Must.
-			Field("scanSessionId", params.ScanSessionId).
-			Require("请输入扫描会话id")
 		params.Must.
 			Field("vulId", params.VulId).
 			Require("请输入漏洞id")
@@ -54,7 +54,9 @@ func (this *VulnerabilitiesAction) RunGet(params struct {
 		}
 	}else {
 		vul_func = func() (interface{}, error) {
-			req := &nessus_scans_model.VulnerabilitiesReq{ID: strings.TrimSuffix(params.ScanId,"-host")}
+			req := &nessus_scans_model.VulnerabilitiesReq{
+				ID: strings.TrimSuffix(params.ScanSessionId,"-host"),
+				HistoryId: strings.TrimSuffix(params.ScanId,"-host")}
 			return nessus_scans_server.Vulnerabilities(req)
 		}
 	}

@@ -4,23 +4,21 @@ Tea.context(function () {
 
     this.pageState = 1
 
+    this.id = ""
     this.name = ""
     this.username = ""
     this.password = ""
     this.maskStr = ""
+    this.assetsList = []
 
 
     this.getLinkStatus = function (status) {
-        switch (status) {
-            case 1:
-                return "可连接"
-            case 0:
-                return "不可连接"
-            default:
-                return "未知"
+        if (status !=="failed") {
+            return "可连接"
+        } else {
+            return "不可连接"
         }
     }
-
     this.onChangeTimeFormat = function (time) {
         var resultTime = "";
         if (time) {
@@ -31,12 +29,25 @@ Tea.context(function () {
     };
 
     this.onChangeState = function (id) {
+        let that = this
+        if (id === 4) {//资产列表
+            this.assetsList = []
+            this.$post(".assetsList")
+                .params({
+                    Id: that.id
+                }).success(resp => {
+                if (resp.code === 200) {
+                    that.assetsList = resp.data.assetsList
+                }
+            })
+        }
         if (this.pageState != id) {
             this.pageState = id
         }
     }
 
     this.onOpenDetail = function (item) {
+        this.id = item.id
         this.accountData[0].value = item.id
         this.accountData[1].value = item.name
         this.accountData[2].value = item.username
@@ -79,14 +90,15 @@ Tea.context(function () {
     }
     this.onUpdate = function () {
 
+        let that = this
         teaweb.confirm("确定要修改该管理用户信息吗？", function () {
             this.$post(".update")
                 .params({
-                    id: this.id,
-                    name: this.name,
-                    username: this.username,
-                    password: this.password,
-                    Comment: this.maskStr,
+                    id: that.id,
+                    name: that.name,
+                    username: that.username,
+                    password: that.password,
+                    Comment: that.maskStr,
                 })
                 .refresh()
         })
@@ -95,33 +107,6 @@ Tea.context(function () {
     this.onDeleteAuthAccount = function (id) {
 
     }
-
-    this.hostData = [
-        {
-            id: 1,
-            value1: "智安-安全审计系统服务器",
-            value2: "182.150.0.104",
-            value3: "root",
-            value4: 1,
-            value5: "2021-03-12T09:00:11.034"
-        },
-        {
-            id: 2,
-            value1: "智安-安全审计系统服务器",
-            value2: "182.150.0.104",
-            value3: "root",
-            value4: 0,
-            value5: "2021-03-12T09:00:11.034"
-        },
-        {
-            id: 3,
-            value1: "智安-安全审计系统服务器",
-            value2: "182.150.0.104",
-            value3: "root",
-            value4: 1,
-            value5: "2021-03-12T09:00:11.034"
-        },
-    ]
     this.accountData = [
         {key: "ID:", value: "42f167c2-d91a-4f20-99b1-3d56dabd896a"},
         {key: "名称:", value: "智安-安全审计系统服务器"},

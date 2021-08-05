@@ -1,152 +1,147 @@
 {$layout}
-
-
 <div style="display: flex;height: 40px;border-bottom: 1px #d7d7d7 solid;width: 100%;padding-bottom: 10px;margin-bottom: 15px;">
-    <div v-show="pageState==1">
-        <div style="cursor: pointer;margin-top: 10px;" @click="createUser">创建</div>
-    </div>
-    <div v-show="pageState!=1" style="display: inline-flex;justify-content: end;margin-top: 10px;">
-        <div style="cursor: pointer;padding-right: 10px;border-right: 1px #333 solid;margin-right: 10px;" @click="onChangeShowState(1)">用户列表</div>
-        <div :class="{'menu-select-color':pageState===2,'menu-define-color':pageState!=2}" style="cursor: pointer;" @click="onChangeShowState(2)">修改</div>
-        <div :class="{'menu-select-color':pageState===3,'menu-define-color':pageState!=3}" style="cursor: pointer;" @click="onChangeShowState(3)">权限</div>
-    </div>
+  <div v-show="pageState==1">
+    <div style="cursor: pointer;margin-top: 10px;" @click="createUser">创建</div>
+  </div>
+  <div v-show="pageState!=1" style="display: inline-flex;justify-content: end;margin-top: 10px;">
+    <div style="cursor: pointer;padding-right: 10px;border-right: 1px #333 solid;margin-right: 10px;" @click="onChangeShowState(1)">用户列表</div>
+    <div :class="{'menu-select-color':pageState===2,'menu-define-color':pageState!=2}" style="cursor: pointer;" @click="onChangeShowState(2)">修改</div>
+    <div :class="{'menu-select-color':pageState===3,'menu-define-color':pageState!=3}" style="cursor: pointer;" @click="onChangeShowState(3)">权限</div>
+  </div>
 </div>
-
-
-
 <div v-if="pageState==1">
-    <p class="comment" v-if="users.length == 0">暂时还没有用户。</p>
-    <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
-        <thead>
-            <tr align="center">
-                <th class='table-head-bg' style="width: 200px;" >用户名</th>
-                <th class='table-head-bg' style="width: 200px;" >全名</th>
-                <th class='table-head-bg' style="width: 200px;" >手机号</th>
-                <th class='table-head-bg' style="width: 400px;" >注册时间</th>
-                <th class='table-head-bg' style="width: 200px;" >状态</th>
-                <th class='table-head-bg' style="width: 200px;" >操作</th>
-            </tr>
-        </thead>
-        <tbody id='tableBody'>
-            <tr align="center" style="height: 40px;" v-for="item in users" >
-                <td>
-                    <div style="padding: 4px 0;">
-                        {{item.username}}
-                    </div>
-                </td>
-                <td>
-                    <div style="padding: 4px 0;">
-                        {{item.fullname}}
-                    </div>
-                </td>
-                <td>
-                    <div style="padding: 4px 0;">
-                        {{item.mobile}}
-                    </div>
-                </td>
-                <td>
-                    <div style="padding: 4px 0;">
-                        {{item.createdTime}}
-                    </div>
-                </td>
-                <td>
-                    <div :class="{'status-open':item.status=='1','status-close':item.status=='0'}">
-                        {{getStatus(item.status)}}
-                    </div>
-                </td>
-                <td>
-                    <div style="display: flex;justify-content: space-around;padding: 4px 0;">
-                        <div class="edit_btn" @click="onOpenDetail(item.id)">详情</div>
-                        <div class="del-btn" @click="onDelete(item.id)">删除</div>
-                    </div>
-                    
-                </td>
-            </tr>
-        </tbody>
-    </table>
+  <p class="comment" v-if="users.length == 0">暂时还没有用户。</p>
+  <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+    <thead>
+    <tr align="center">
+      <th class='table-head-bg' style="width: 200px;" >用户名</th>
+      <th class='table-head-bg' style="width: 200px;" >全名</th>
+      <th class='table-head-bg' style="width: 200px;" >手机号</th>
+      <th class='table-head-bg' style="width: 400px;" >注册时间</th>
+      <th class='table-head-bg' style="width: 200px;" >状态</th>
+      <th class='table-head-bg' style="width: 200px;" >操作</th>
+    </tr>
+    </thead>
+    <tbody id='tableBody'>
+    <tr align="center" style="height: 40px;" v-for="item in users" >
+      <td>
+        <div style="padding: 4px 0;">
+          {{item.username}}
+        </div>
+      </td>
+      <td>
+        <div style="padding: 4px 0;">
+          {{item.fullname}}
+        </div>
+      </td>
+      <td>
+        <div style="padding: 4px 0;">
+          {{item.mobile}}
+        </div>
+      </td>
+      <td>
+        <div style="padding: 4px 0;">
+          {{item.createdTime}}
+        </div>
+      </td>
+      <td>
+        <div :class="{'status-open':item.isOn=='1','status-close':item.isOn=='0'}">
+          {{getStatus(item.isOn)}}
+        </div>
+      </td>
+      <td>
+        <div style="display: flex;justify-content: space-around;padding: 4px 0;">
+          <div class="edit_btn" @click="onOpenDetail(item)">详情</div>
+          <div class="del-btn" @click="onDelete(item.id)">删除</div>
+        </div>
 
-    <div class="page" v-html="page"></div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="page" v-html="page"></div>
 </div>
 
 <div v-if="pageState==2">
-    <form class="ui form">
-        <table class="ui table definition selectable">
-            <tr>
-                <td class="title">用户名 *</td>
-                <td>
-                    <input disabled type="text" v-model="editUserName" style="background-color: #dfdfdf;color: #333;"/>
-                </td>
-            </tr>
-            <tr>
-                <td>密码</td>
-                <td>
-                    <input type="password" v-model="editPassword" maxlength="100"/>
-                    <p class="comment">留空表示不修改。密码规则：8-30个字符,必须包含大小写字母、数字、特殊字符</p>
-                </td>
-            </tr>
-            <tr>
-                <td>确认密码</td>
-                <td>
-                    <input type="password" v-model="editPasswordConfirm" maxlength="100"/>
-                </td>
-            </tr>
-            <tr>
-                <td>全名</td>
-                <td>
-                    <input type="text" v-model="editFullName" maxlength="100"/>
-                    <p class="comment">用户姓名或者昵称等等。</p>
-                </td>
-            </tr>
-            <tr>
-                <td>手机号</td>
-                <td>
-                    <input type="text" v-model="editPhone" maxlength="11"/>
-                </td>
-            </tr>
-            <tr>
-                <td>电子邮箱</td>
-                <td>
-                    <input type="text" v-model="editEmail" maxlength="100"/>
-                </td>
-            </tr>
-            <tr>
-                <td>备注</td>
-                <td>
-                    <textarea rows="3" model="editRemark" style="resize: none;"></textarea>
-                </td>
-            </tr>
-            <tr>
-                <td>是否启用</td>
-                <td>
-                    <input id="editCheckBox" type="checkbox" value="" :checked="editEnabled==1" @change="onListenEditCheckBox"/>
-                </td>
-            </tr>
-        </table>
-        <div style="width: 100%;display: flex;align-items: center;">
-            <div class="save-btn" @click="onSaveEdit">保存</div>
-        </div>
-    </form>
+  <form class="ui form">
+    <table class="ui table definition selectable">
+      <tr>
+        <td class="title">用户名 *</td>
+        <td>
+          <input disabled type="text" v-model="editUserName" style="background-color: #dfdfdf;color: #333;"/>
+        </td>
+      </tr>
+      <tr>
+        <td>密码</td>
+        <td>
+          <input type="password" v-model="editPassword" maxlength="100"/>
+          <p class="comment">留空表示不修改。密码规则：8-30个字符,必须包含大小写字母、数字、特殊字符</p>
+        </td>
+      </tr>
+      <tr>
+        <td>确认密码</td>
+        <td>
+          <input type="password" v-model="editPasswordConfirm" maxlength="100"/>
+        </td>
+      </tr>
+      <tr>
+        <td>全名</td>
+        <td>
+          <input type="text" v-model="editFullName" maxlength="100"/>
+          <p class="comment">用户姓名或者昵称等等。</p>
+        </td>
+      </tr>
+      <tr>
+        <td>手机号</td>
+        <td>
+          <input type="text" v-model="editPhone" maxlength="11"/>
+        </td>
+      </tr>
+      <tr>
+        <td>电子邮箱</td>
+        <td>
+          <input type="text" v-model="editEmail" maxlength="100"/>
+        </td>
+      </tr>
+      <tr>
+        <td>备注</td>
+        <td>
+          <textarea rows="3" v-model="editRemark" style="resize: none;"></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td>是否启用</td>
+        <td>
+          <input id="editCheckBox" type="checkbox" value="" :checked="editEnabled==1" @change="onListenEditCheckBox"/>
+        </td>
+      </tr>
+    </table>
+    <div style="width: 100%;display: flex;align-items: center;">
+      <div class="save-btn" @click="onSaveEdit">保存</div>
+    </div>
+  </form>
 </div>
 
 <div v-if="pageState==3">
-    <form class="ui form">
-        <table class="ui table definition selectable">
-            <tr>
-                <td class="title">权限列表</td>
-                <td>
-                    <div v-for="item in authData" style="margin-bottom: 10px;">
-                        <div style="display: inline-flex;align-items: center;">
-                            <input name="authCheckBox" type="checkbox" :value="item.id" :checked="item.checkState==1">
-                            <span>{{item.name}}</span>
-                        </div>
-                        <p style="color: rgba(0, 0, 0, 0.4);font-size: 1em;">{{item.subName}}</p>
-                    </div>
-                    
-                </td>
-            </tr>
-        </table>
-        <div style="width: 100%;display: flex;align-items: center;">
-            <div class="save-btn" @click="onSaveAuth">保存</div>
-        </div>
-    </form>
+  <form class="ui form">
+    <table class="ui table definition selectable">
+      <tr>
+        <td class="title">权限列表</td>
+        <td>
+          <div v-for="item in features" style="margin-bottom: 10px;">
+            <div style="display: inline-flex;align-items: center;">
+              <input name="authCheckBox" type="checkbox" :value="item.code" :checked="item.isChecked">
+              <span>{{item.name}}</span>
+            </div>
+            <p style="color: rgba(0, 0, 0, 0.4);font-size: 1em;">{{item.description}}</p>
+          </div>
+
+        </td>
+      </tr>
+    </table>
+    <div style="width: 100%;display: flex;align-items: center;">
+      <div class="save-btn" @click="onSaveAuth">保存</div>
+    </div>
+  </form>
 </div>

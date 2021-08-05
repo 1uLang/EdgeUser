@@ -81,11 +81,6 @@ Tea.context(function () {
             },
         });
     };
-    this.save = function () {
-        const tempAddress = console.log(document.getElementById("key").value);
-        const tempDesc = console.log(document.getElementById("value").value);
-    };
-
     this.handleOnCheck = function () {
         const scanBtn = document.getElementById("scan-btn");
         scanBtn.style.backgroundColor = "#14539A";

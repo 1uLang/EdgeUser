@@ -2,8 +2,6 @@ Tea.context(function () {
 
     this.curIndex = -1
 
-    this.pageState = 1
-
     this.id = ""
     this.adminUser = ""
     this.platform = ""
@@ -51,13 +49,56 @@ Tea.context(function () {
         this.curIndex = index
     }
     this.onChangeState = function (id) {
+
+        if (id === 2) {
+            //初始化变量
+            this.host = ""
+            this.post = ""
+            this.platform = ""
+            this.pubHost = ""
+            this.protoData = [{value: "", proto: "ssh"}]
+            this.adminUser = ""
+            this.state = false
+            this.maskStr = ""
+        }else if (id === 4){
+            window.location = "/fortcloud/assets?pageState=4&asset="+this.id
+        }
+
         if (this.pageState != id) {
             this.pageState = id
         }
     }
 
-    this.onOpenDetail = function (item) {
-        this.onChangeState(3)
+    this.onOpenDetail = function (id) {
+        this.id = id
+        this.$post(".details")
+            .params({
+                Id: id
+            }).success(resp => {
+            if (resp.code === 200) {
+                let details = resp.data.details
+                this.resData[0].value = details.id
+                this.resData[1].value = details.hostname
+                this.resData[2].value = details.ip
+                this.resData[3].value = details.protocols
+                this.resData[4].value = details.public_ip
+                this.resData[5].value = details.admin_user_display
+                this.resData[6].value = details.vendor
+                this.resData[7].value = details.model
+                this.resData[8].value = details.cpu_model
+                this.resData[9].value = details.memory
+                this.resData[10].value = details.disk_info
+                this.resData[11].value = details.platform
+                this.resData[12].value = details.os_arch
+                this.resData[13].value = details.is_active ? '是' : '否'
+                this.resData[14].value = details.sn
+                this.resData[15].value = details.date_created
+                this.resData[16].value = details.created_by
+                this.resData[17].value = details.comment
+                this.onChangeState(3)
+            }
+        })
+
     }
 
     this.onConnect = function (id) {
@@ -66,9 +107,7 @@ Tea.context(function () {
                 Id: id
             }).success(resp => {
             if (resp.code === 200) {
-                let token = resp.data.token
-                let url = resp.data.url
-                console.log(token, url)
+                window.open(resp.data.url)
             }
         })
     }
@@ -86,9 +125,13 @@ Tea.context(function () {
         this.$post(".authorize")
             .params({
                 Id: this.id,
-                emails:this.authValue,
-            })
-            .refresh()
+                emails: this.authValue,
+            }).success(resp =>{
+                if(resp.code === 200){
+                    this.authValue = ""
+                    teaweb.success("授权成功")
+                }
+        })
 
         this.onCloseAuth()
     }
@@ -183,64 +226,39 @@ Tea.context(function () {
     }
 
     this.onDeleteAuthAccount = function (id) {
-
+        teaweb.confirm("确定要删除该资产授权吗？", function () {
+            this.$post(".delAuthorize")
+                .params({
+                    Id: id
+                })
+                .refresh()
+        })
     }
 
     this.onResRefresh = function () {
-
+        this.$post(".refresh")
+            .params({
+                Id: this.id,
+            }).success(resp => {
+            if (resp.code === 200) {
+                console.log(resp.data.url)
+                window.open(resp.data.url)
+            }
+        })
     }
 
     this.onResTest = function () {
 
+        this.$post(".checkLink")
+            .params({
+                Id: this.id,
+            }).success(resp => {
+            if (resp.code === 200) {
+                console.log(resp.data.url)
+                window.open(resp.data.url)
+            }
+        })
     }
-
-    this.tableData = [
-        {
-            id: 1,
-            value1: "智安安全审计系统服务器",
-            value2: "47.108.234.195",
-            value3: "8 Core 7.82 G 49.0 G",
-            value4: 1,
-            value5: 1,
-            value6: "2021-06-16T09:29:23.140",
-            bAuth: 1
-        },
-        {
-            id: 2,
-            value1: "智安安全审计系统服务器",
-            value2: "47.108.234.195",
-            value3: "8 Core 7.82 G 49.0 G",
-            value4: 2,
-            value5: 0,
-            value6: "2021-06-16T09:29:23.140",
-            bAuth: 0
-        },
-        {
-            id: 3,
-            value1: "智安安全审计系统服务器",
-            value2: "47.108.234.195",
-            value3: "8 Core 7.82 G 49.0 G",
-            value4: 0,
-            value5: 1,
-            value6: "2021-06-16T09:29:23.140",
-            bAuth: 1
-        },
-        {
-            id: 4,
-            value1: "智安安全审计系统服务器",
-            value2: "47.108.234.195",
-            value3: "8 Core 7.82 G 49.0 G",
-            value4: 1,
-            value5: 0,
-            value6: "2021-06-16T09:29:23.140",
-            bAuth: 0
-        },
-    ]
-    this.userData = [
-        {id: 1, value1: "luobing", value2: "罗兵", value3: "uobing@zhiannet.com"},
-        {id: 2, value1: "luobing", value2: "罗兵", value3: "uobing@zhiannet.com"},
-        {id: 3, value1: "luobing", value2: "罗兵", value3: "uobing@zhiannet.com"},
-    ]
     this.resData = [
         {key: "ID:", value: "42f167c2-d91a-4f20-99b1-3d56dabd896a"},
         {key: "主机名:", value: "智安-安全审计系统服务器"},

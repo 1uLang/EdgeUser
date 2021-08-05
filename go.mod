@@ -11,11 +11,13 @@ require (
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/TeaOSLab/EdgeCommon v0.0.0-00010101000000-000000000000
 	github.com/cespare/xxhash v1.1.0
+	github.com/dlclark/regexp2 v1.4.0
 	github.com/go-ole/go-ole v1.2.5 // indirect
 	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/iwind/TeaGo v0.0.0-20210720011303-fc255c995afa
 	github.com/miekg/dns v1.1.35
 	github.com/shirou/gopsutil v3.21.5+incompatible
+	github.com/tealeg/xlsx/v3 v3.2.3
 	github.com/tklauser/go-sysconf v0.3.6 // indirect
 	golang.org/x/sys v0.0.0-20210616094352-59db8d763f22
 	google.golang.org/genproto v0.0.0-20210617175327-b9e0b3197ced // indirect

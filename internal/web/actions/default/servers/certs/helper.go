@@ -18,8 +18,6 @@ func (this *Helper) BeforeAction(action *actions.ActionObject) {
 		return
 	}
 
-	action.Data["teaMenu"] = "servers"
-
 	action.Data["leftMenuItems"] = []maps.Map{
 		{
 			"name":     "证书",

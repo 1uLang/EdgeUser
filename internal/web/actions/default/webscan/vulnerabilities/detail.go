@@ -17,6 +17,7 @@ type DetailAction struct {
 func (this *DetailAction) RunGet(params struct {
 	VulId  string
 	ScanId string
+	ScanSessionId string
 	Must   *actions.Must
 }) {
 	params.Must.
@@ -25,6 +26,9 @@ func (this *DetailAction) RunGet(params struct {
 	params.Must.
 		Field("scanId", params.ScanId).
 		Require("请输入扫描id")
+	params.Must.
+		Field("scanSessionId", params.ScanSessionId).
+		Require("请输入扫描会话id")
 
 	hostScan := strings.HasSuffix(params.ScanId, "-host")
 
@@ -41,7 +45,8 @@ func (this *DetailAction) RunGet(params struct {
 		}
 	} else {
 		detail_func = func() (interface{}, error) {
-			req := &nessus_scans_model.PluginsReq{ScanId: strings.TrimSuffix(params.ScanId, "-host"), VulId: params.VulId}
+			req := &nessus_scans_model.PluginsReq{HistoryId: strings.TrimSuffix(params.ScanId, "-host"), VulId: params.VulId,
+				ID: strings.TrimSuffix(params.ScanSessionId, "-host")}
 			return nessus_scans_server.Plugins(req)
 		}
 	}

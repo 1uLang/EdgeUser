@@ -40,7 +40,11 @@ func (this *InstallAction) RunGet(params struct {
 		return
 	}
 	//172.18.200.29 替换
-	linux = strings.Replace(linux, "https://172.18.200.29", "https://user.cloudhids.net", 1)
+	url := hids.ServerAddr
+	if url == "" {
+		url = "https://hids.zhiannet.com"
+	}
+	linux = strings.Replace(linux, "https://172.18.200.29", url, 1)
 	linux = strings.ReplaceAll(linux, "172.18.200.29", "156.240.95.243")
 
 	windows = strings.Replace(windows, "172.18.200.29", "156.240.95.243", 1)

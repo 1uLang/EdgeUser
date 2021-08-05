@@ -1,8 +1,11 @@
 package user
 
 import (
+	"github.com/1uLang/zhiannet-api/edgeUsers/model"
+	"github.com/1uLang/zhiannet-api/edgeUsers/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
-	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/maps"
+	timeutil "github.com/iwind/TeaGo/utils/time"
 )
 
 type IndexAction struct {
@@ -10,40 +13,43 @@ type IndexAction struct {
 }
 
 func (this *IndexAction) Init() {
-	this.Nav("", "platform", "index")
+	this.Nav("", "user", "index")
 }
+func (this *IndexAction) RunGet() {
+	this.Data["users"] = []map[string]interface{}{}
+	count, err := server.CountAllEnabledUsers(&model.GetNumReq{UserId: uint64(this.UserId())})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	page := this.NewPage(count)
+	this.Data["page"] = page.AsHTML()
 
-func (this *IndexAction) RunGet(params struct {
-	PageNum  int
-	PageSize int
-	Type     string
-	Ip       string
-	Name     string
-	Status   string
-	Json     bool
-
-	Must *actions.Must
-	//CSRF *actionutils.CSRF
-}) {
-	//list, _ := audit_app.GetAuditAppList(&audit_app.ReqSearch{
-	//	PageSize: params.PageSize,
-	//	PageNum:  params.PageNum,
-	//	AppType:  params.Type,
-	//	Ip:       params.Ip,
-	//	Name:     params.Name,
-	//	Status:   params.Status,
-	//	User: &request.UserReq{
-	//		AdminUserId: uint64(this.AdminId()),
-	//	},
-	//})
-	////this.Data["appList"] = list.Data.List
-	//if list != nil && len(list.Data.List) > 0 {
-	//	this.Data["appList"] = list.Data.List
-	//} else {
-	//	this.Data["appList"] = []maps.Map{}
-	//}
-	//if params.Json {
-	//	this.Success()
-	//}
+	list, err := server.ListEnabledUsers(&model.ListReq{
+		UserId: uint64(this.UserId()),
+		Offset: int(page.Offset),
+		Size:   int(page.Size),
+	})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	if len(list) > 0 {
+		userMaps := []maps.Map{}
+		for _, user := range list {
+			userMaps = append(userMaps, maps.Map{
+				"id":          user.Id,
+				"username":    user.Username,
+				"isOn":        user.IsOn,
+				"fullname":    user.Name,
+				"email":       user.Email,
+				"mobile":      user.Mobile,
+				"tel":         user.Tel,
+				"remark":      user.Remark,
+				"createdTime": timeutil.FormatTime("Y-m-d H:i:s", user.CreatedAt),
+			})
+		}
+		this.Data["users"] = userMaps
+	}
 	this.Show()
 }

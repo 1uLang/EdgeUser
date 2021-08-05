@@ -2,6 +2,9 @@ package index
 
 import (
 	"fmt"
+	"github.com/1uLang/zhiannet-api/common/cache"
+	"github.com/1uLang/zhiannet-api/common/server/edge_admins_server"
+	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/configloaders"
@@ -97,6 +100,10 @@ func (this *IndexAction) RunPost(params struct {
 	if err != nil {
 		this.Fail("服务器出了点小问题：" + err.Error())
 	}
+	//登录限制检查
+	if res, _ := edge_admins_server.LoginCheck(fmt.Sprintf("user_%v", params.Username)); res {
+		this.FailField("refresh", "账号已被锁定（请 30分钟后重试）")
+	}
 	resp, err := rpcClient.UserRPC().LoginUser(rpcClient.Context(0), &pb.LoginUserRequest{
 		Username: params.Username,
 		Password: params.Password,
@@ -116,10 +123,16 @@ func (this *IndexAction) RunPost(params struct {
 		if err != nil {
 			utils.PrintError(err)
 		}
-
+		//登录次数+1
+		edge_admins_server.LoginErrIncr(fmt.Sprintf("user_%v", params.Username))
 		this.Fail("请输入正确的用户名密码")
 	}
-
+	//密码过期检查
+	this.Data["from"] = ""
+	if res, _ := edge_users_server.CheckPwdInvalid(uint64(resp.UserId)); res {
+		params.Auth.SetUpdatePwdToken(params.Username)
+		this.Data["from"] = "/updatePwd"
+	}
 	userId := resp.UserId
 	params.Auth.StoreUser(userId, params.Remember)
 
@@ -128,6 +141,7 @@ func (this *IndexAction) RunPost(params struct {
 	if err != nil {
 		utils.PrintError(err)
 	}
-
+	//记录登录成功30分钟
+	cache.SetNx(fmt.Sprintf("login_success_userid_%v", userId), time.Minute*30)
 	this.Success()
 }

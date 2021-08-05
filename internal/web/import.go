@@ -11,6 +11,7 @@ import (
 	//堡垒机
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/admins"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/assets"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/audit"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/command"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/sessions"
 

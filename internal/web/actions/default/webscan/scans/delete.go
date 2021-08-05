@@ -16,6 +16,7 @@ type DeleteAction struct {
 
 func (this *DeleteAction) RunPost(params struct {
 	ScanIds []string
+	Ids     []string
 	Must    *actions.Must
 }) {
 
@@ -28,20 +29,18 @@ func (this *DeleteAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	var delFunc func(string) (err error)
 
-	for _, scanid := range params.ScanIds {
+	for k, scanid := range params.ScanIds {
 
 		//主机漏洞扫描
 		if strings.HasSuffix(scanid, "-host") {
-			delFunc = func(id string) (err error) {
-				return nessus_scans_server.Delete(&nessus_scans_model.DeleteReq{ID: strings.TrimSuffix(id, "-host")})
-			}
+			err = nessus_scans_server.DelHistory(&nessus_scans_model.DelHistoryReq{
+				ID:        strings.TrimSuffix(params.Ids[k], "-host"),
+				HistoryId: strings.TrimSuffix(scanid, "-host"),
+			})
 		} else {
-			delFunc = scans_server.Delete
+			err = scans_server.Delete(scanid)
 		}
-
-		err = delFunc(scanid)
 		if err != nil {
 			this.ErrorPage(err)
 			return

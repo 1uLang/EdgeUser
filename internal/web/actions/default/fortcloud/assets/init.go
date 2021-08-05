@@ -16,7 +16,11 @@ func init() {
 			Post("/update", new(UpdateAction)).
 			Post("/delete", new(DeleteAction)).
 			Post("/authorize", new(AuthorizeAction)).
+			Post("/delAuthorize", new(DelAuthorizeAction)).
 			Post("/link", new(LinkAction)).
+			Post("/checkLink", new(CheckLinkAction)).
+			Post("/refresh", new(RefreshAction)).
+			Post("/details", new(DetailsAction)).
 			EndAll()
 	})
 }

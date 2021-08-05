@@ -5,16 +5,17 @@ import (
 	"github.com/iwind/TeaGo"
 )
 
-//平台管理-用户
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth("")).
-			Data("teaMenu", "platform").
+			Data("teaMenu", "user").
 			Prefix("/platform/user").
-			GetPost("", new(IndexAction)).
+			Get("", new(IndexAction)).
+			Post("/update", new(UpdateAction)).
+			Post("/delete", new(DeleteAction)).
 			GetPost("/create", new(CreateAction)).
-			//GetPost("/delete", new(DeleteAction)).
+			GetPost("/features", new(FeaturesAction)).
 			EndAll()
 	})
 }

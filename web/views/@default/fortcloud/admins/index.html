@@ -114,12 +114,12 @@
                     </tr>
                 </thead>
                 <tbody >
-                    <tr align="center" style="height: 40px;" v-for="item in hostData" >
-                        <td>{{item.value1}}</td>
-                        <td>{{item.value2}}</td>
-                        <td>{{item.value3}}</td>
-                        <td>{{getLinkStatus(item.value4)}}</td>
-                        <td>{{onChangeTimeFormat(item.value5)}}</td>
+                    <tr align="center" style="height: 40px;" v-for="item in assetsList" >
+                        <td>{{item.asset_name}}</td>
+                        <td>{{item.asset_ip}}</td>
+                        <td>{{item.systemuser_display}}</td>
+                        <td>{{getLinkStatus(item.connectivity)}}</td>
+                        <td>{{item.date_verified}}</td>
                     </tr>
                 </tbody>
             </table>
