@@ -19,7 +19,9 @@ function reqApi(method,url,data,param,sucHandle,failHandle,doneHandle){
             if(failHandle && typeof(failHandle) === "function"){
                 failHandle(response)
             }else{
-                teaweb.warn(response.message)
+                if(response.message && response.message.length>0){
+                    teaweb.warn(response.message)
+                }
             }
         }
     })
