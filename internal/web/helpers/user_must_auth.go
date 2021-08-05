@@ -144,10 +144,28 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"url":  "/dashboard",
 		},
 		{
+			"code": "waf",
+			"name": "态势感知",
+			"icon": "shield",
+			"url":  "/waf",
+			"subItems": []maps.Map{
+				{
+					"name": "安全概览",
+					"code": "waf",
+					"url":  "/waf",
+				},
+				{
+					"name": "拦截日志",
+					"code": "wafLogs",
+					"url":  "/waf/logs",
+				},
+			},
+		},
+		{
 			"code": "servers",
-			"name": "CDN加速",
+			"name": "WAF服务",
 			"url":  "/servers",
-			"icon": "clone outline",
+			"icon": "skyatlas",
 			"subItems": []maps.Map{
 				{
 					"name": "域名管理",
@@ -171,24 +189,6 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"name": "负载均衡",
 			"icon": "paper plane",
 			"url":  "/lb",
-		},
-		{
-			"code": "waf",
-			"name": "态势感知",
-			"icon": "shield",
-			"url":  "/waf",
-			"subItems": []maps.Map{
-				{
-					"name": "安全概览",
-					"code": "waf",
-					"url":  "/waf",
-				},
-				{
-					"name": "拦截日志",
-					"code": "wafLogs",
-					"url":  "/waf/logs",
-				},
-			},
 		},
 		{
 			"code": "hids",
@@ -364,7 +364,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 				{
 					"name": "安全策略",
 					"url":  "/platform/strategy",
-					"code": "admins",
+					"code": "strategy",
 				},
 			},
 		},

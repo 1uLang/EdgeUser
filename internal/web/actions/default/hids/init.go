@@ -20,6 +20,7 @@ func init() {
 			EndAll()
 	})
 }
+var ServerAddr string
 func InitAPIServer() error {
 
 	info, err := server.GetHideInfo()
@@ -31,6 +32,7 @@ func InitAPIServer() error {
 	if err != nil {
 		return err
 	}
+	ServerAddr = info.Addr
 	//初始化 awvs 系统管理员账号apikeys
 	err = server.SetAPIKeys(&request.APIKeys{
 		AppId:  info.AppId,  //"39rkz",

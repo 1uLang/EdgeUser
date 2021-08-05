@@ -44,6 +44,7 @@ func (this *DownLoadAction) RunGet(params struct {
 		this.ErrorPage(fmt.Errorf("下载文件失败：%w", err))
 		return
 	}
+
 	defer rsp.Body.Close()
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {

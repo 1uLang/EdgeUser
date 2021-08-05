@@ -54,6 +54,16 @@ var (
 			Code:        "fort",
 			Description: "开启堡垒机组件功能",
 		},
+		{
+			Name:        "安全审计",
+			Code:        "audit",
+			Description: "开启安全审计组件功能",
+		},
+		{
+			Name:        "数据备份",
+			Code:        "databackup",
+			Description: "开启数据备份组件功能",
+		},
 	}
 )
 
