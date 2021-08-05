@@ -73,12 +73,17 @@ func (this *IndexAction) RunPost(params struct {
 	Auth     *helpers.UserShouldAuth
 	CSRF     *actionutils.CSRF
 }) {
-	params.Must.
-		Field("username", params.Username).
-		Require("请输入用户名").
-		Field("password", params.Password).
-		Require("请输入密码")
 
+	this.Data["from"] = ""
+	//params.Must.
+	//	Field("username", params.Username).
+	//	Require("请输入用户名").
+	//	Field("password", params.Password).
+	//	Require("请输入密码")
+
+	if params.Username == "" {
+		this.FailField("username", "请输入用户名")
+	}
 	if params.Password == stringutil.Md5("") {
 		this.FailField("password", "请输入密码")
 	}
@@ -130,8 +135,9 @@ func (this *IndexAction) RunPost(params struct {
 	//密码过期检查
 	this.Data["from"] = ""
 	if res, _ := edge_users_server.CheckPwdInvalid(uint64(resp.UserId)); res {
-		params.Auth.SetUpdatePwdToken(params.Username)
+		params.Auth.SetUpdatePwdToken(resp.UserId)
 		this.Data["from"] = "/updatePwd"
+		this.Fail("密码已过期，请立即修改")
 	}
 	userId := resp.UserId
 	params.Auth.StoreUser(userId, params.Remember)
