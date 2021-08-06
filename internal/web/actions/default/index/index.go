@@ -1,9 +1,11 @@
 package index
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/1uLang/zhiannet-api/common/cache"
 	"github.com/1uLang/zhiannet-api/common/server/edge_admins_server"
+	"github.com/1uLang/zhiannet-api/common/server/edge_logins_server"
 	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
@@ -15,8 +17,11 @@ import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/helpers"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/maps"
 	"github.com/iwind/TeaGo/types"
 	stringutil "github.com/iwind/TeaGo/utils/string"
+
+	"github.com/xlzd/gotp"
 	"time"
 )
 
@@ -29,9 +34,9 @@ type IndexAction struct {
 var TokenSalt = stringutil.Rand(32)
 
 func (this *IndexAction) RunGet(params struct {
-	From string
-
-	Auth *helpers.UserShouldAuth
+	From  string
+	Token string
+	Auth  *helpers.UserShouldAuth
 }) {
 	// 已登录跳转到dashboard
 	if params.Auth.IsUser() {
@@ -59,7 +64,9 @@ func (this *IndexAction) RunGet(params struct {
 		this.Data["version"] = teaconst.Version
 	}
 	this.Data["faviconFileId"] = config.FaviconFileId
-
+	if params.Token != "" {
+		this.Success()
+	}
 	this.Show()
 }
 
@@ -69,16 +76,23 @@ func (this *IndexAction) RunPost(params struct {
 	Username string
 	Password string
 	Remember bool
-	Must     *actions.Must
-	Auth     *helpers.UserShouldAuth
-	CSRF     *actionutils.CSRF
-}) {
-	params.Must.
-		Field("username", params.Username).
-		Require("请输入用户名").
-		Field("password", params.Password).
-		Require("请输入密码")
+	OtpCode  string
 
+	Must *actions.Must
+	Auth *helpers.UserShouldAuth
+	CSRF *actionutils.CSRF
+}) {
+
+	this.Data["from"] = ""
+	//params.Must.
+	//	Field("username", params.Username).
+	//	Require("请输入用户名").
+	//	Field("password", params.Password).
+	//	Require("请输入密码")
+
+	if params.Username == "" {
+		this.FailField("username", "请输入用户名")
+	}
 	if params.Password == stringutil.Md5("") {
 		this.FailField("password", "请输入密码")
 	}
@@ -127,11 +141,34 @@ func (this *IndexAction) RunPost(params struct {
 		edge_admins_server.LoginErrIncr(fmt.Sprintf("user_%v", params.Username))
 		this.Fail("请输入正确的用户名密码")
 	}
+	// 检查OTP-*/
+	otpInfo, err := edge_logins_server.GetInfoByUid(uint64(resp.UserId))
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	if otpInfo != nil && otpInfo.IsOn == 1 {
+		loginParams := maps.Map{}
+		err = json.Unmarshal([]byte(otpInfo.Params), &loginParams)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+		secret := loginParams.GetString("secret")
+		if gotp.NewDefaultTOTP(secret).Now() != params.OtpCode {
+			this.Fail("请输入正确的OTP动态密码")
+		}
+	}
 	//密码过期检查
 	this.Data["from"] = ""
 	if res, _ := edge_users_server.CheckPwdInvalid(uint64(resp.UserId)); res {
-		params.Auth.SetUpdatePwdToken(params.Username)
+		params.Auth.SetUpdatePwdToken(resp.UserId)
 		this.Data["from"] = "/updatePwd"
+		this.Fail("密码已过期，请立即修改")
 	}
 	userId := resp.UserId
 	params.Auth.StoreUser(userId, params.Remember)

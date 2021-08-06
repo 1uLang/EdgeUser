@@ -3,7 +3,7 @@
 {$end}
 
 <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
-    <div :class="{'menu-select-color':pageState===1,'menu-define-color':pageState!=1}" @click="onChangeState(1)">平台管理</div>
+    <div :class="{'menu-select-color':pageState===1,'menu-define-color':pageState!=1}" @click="onChangeState(1)">文件列表</div>
     <div :class="{'menu-select-color':pageState===2,'menu-define-color':pageState!=2}" @click="onChangeState(2)">上传文件</div>
 </div>
 
@@ -60,10 +60,11 @@
         </div>
         
     </form>
-    <div v-if="bShowDialog" class="dialog-style" @click.stop>
-        <div class="dialog-bg-style" style="display: flex;flex-direction: column;align-items: center;justify-content: center;">
-            <img src='/images/waitting-dialog.gif' width="80px" height="80px"/>
-            <div style='text-align:center;height:40px;margin-top: 15px;color: #fff;'>正在上传...</div>
-        </div>
+</div>
+
+<div v-if="bShowDialog" class="dialog-style" @click.stop>
+    <div class="dialog-bg-style" style="display: flex;flex-direction: column;align-items: center;justify-content: center;">
+        <img src='/images/waitting-dialog.gif' width="80px" height="80px"/>
+        <div style='text-align:center;height:40px;margin-top: 15px;color: #fff;'>{{nDialogTxt}}</div>
     </div>
 </div>
