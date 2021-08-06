@@ -55,7 +55,7 @@
 					</span>
                 </a>
                 <div v-if="module.subItems && module.subItems.length>0 && curSelectCode == module.code" class="sub-items">
-					<a class="item" v-for="subItem in module.subItems" v-if="subItem.isOn !== false" :href="onChangeUrl(subItem.url)">
+					<a class="item" v-for="subItem in module.subItems" v-if="subItem.isOn !== false" :href="onChangeUrl(subItem.url)" style="padding: 0.9em 1em;">
                         <i class="icon angle right" style="margin: 0;float: left;" v-if="subItem.code == teaMenu"></i> 
                         <span class="module-name">{{subItem.name}}</span>
                     </a>
