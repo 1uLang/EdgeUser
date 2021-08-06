@@ -295,7 +295,7 @@
 		tempFormData.append("csrfToken",tempCsrfToke)
 		reqApi("post","/updatePwd",tempFormData,null,
 				(res)=>{
-					teaweb.success("修改成功",function(){
+					teaweb.warn("修改成功",function(){
 							var loginPart =  document.getElementById("loginPart")
 							var resetPwdPart =  document.getElementById("resetPart")
 							document.getElementById('password').value = ""
