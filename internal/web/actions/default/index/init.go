@@ -9,6 +9,7 @@ func init() {
 		server.Prefix("/").
 			GetPost("", new(IndexAction)).
 			GetPost("updatePwd", new(UpdatePwdAction)).
+			GetPost("checkOTP", new(CheckOTPAction)).
 			EndAll()
 	})
 }

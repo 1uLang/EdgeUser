@@ -137,7 +137,7 @@
 				</div>
 				<div class="inputBox-style">
 					 <img src="/images/user_blue.svg" width="18px" height="20px">
-					<input class="input-style" type="text" id="username" name="username" placeholder="请输入用户名" maxlength="200"/>
+					<input class="input-style" type="text" id="username" name="username" placeholder="请输入用户名" maxlength="200" onchange="onRefreshShowOpt()"/>
 				</div>
 				<div class="inputBox-style">
 					<img src="/images/pwd_blue.svg" width="18px" height="20px">
@@ -264,7 +264,11 @@
 		 					onGetToken()
 						})
 					}else{
-						teaweb.warn(res.message)
+						teaweb.warn(res.message,function(){
+							onGetRefreshToken()
+							onGetToken()
+						})
+						// teaweb.warn(res.message)
 					}
 				}
 			)

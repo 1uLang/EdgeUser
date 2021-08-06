@@ -1,9 +1,11 @@
 package index
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/1uLang/zhiannet-api/common/cache"
 	"github.com/1uLang/zhiannet-api/common/server/edge_admins_server"
+	"github.com/1uLang/zhiannet-api/common/server/edge_logins_server"
 	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
@@ -15,8 +17,11 @@ import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/helpers"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/maps"
 	"github.com/iwind/TeaGo/types"
 	stringutil "github.com/iwind/TeaGo/utils/string"
+
+	"github.com/xlzd/gotp"
 	"time"
 )
 
@@ -71,9 +76,11 @@ func (this *IndexAction) RunPost(params struct {
 	Username string
 	Password string
 	Remember bool
-	Must     *actions.Must
-	Auth     *helpers.UserShouldAuth
-	CSRF     *actionutils.CSRF
+	OtpCode  string
+
+	Must *actions.Must
+	Auth *helpers.UserShouldAuth
+	CSRF *actionutils.CSRF
 }) {
 
 	this.Data["from"] = ""
@@ -133,6 +140,28 @@ func (this *IndexAction) RunPost(params struct {
 		//登录次数+1
 		edge_admins_server.LoginErrIncr(fmt.Sprintf("user_%v", params.Username))
 		this.Fail("请输入正确的用户名密码")
+	}
+	// 检查OTP-*/
+	otpInfo, err := edge_logins_server.GetInfoByUid(uint64(resp.UserId))
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	if otpInfo != nil && otpInfo.IsOn == 1 {
+		loginParams := maps.Map{}
+		err = json.Unmarshal([]byte(otpInfo.Params), &loginParams)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+		secret := loginParams.GetString("secret")
+		if gotp.NewDefaultTOTP(secret).Now() != params.OtpCode {
+			this.Fail("请输入正确的OTP动态密码")
+		}
 	}
 	//密码过期检查
 	this.Data["from"] = ""
