@@ -115,4 +115,9 @@ Tea.context(function () {
         {key: "创建日期:", value: "2021/6/4 18:04:46"},
         {key: "创建者:", value: "Administrator"},
     ]
+
+    this.adminUsers = [//authState 1 自己的资产 0 被授权的
+        {id:1,name:"凭证名称1",username:"用户名1",authCount:5,createTime:"2021-12-10 15:35:12",authState:1},
+        {id:1,name:"凭证名称2",username:"用户名2",authCount:2,createTime:"2021-10-10 15:35:12",authState:0}
+    ]
 })

@@ -7,6 +7,7 @@ Tea.context(function () {
     this.platform = ""
     this.host = ""
     this.post = ""
+    this.port = ""
     this.pubHost = ""
     this.maskStr = ""
     this.state = false
@@ -14,6 +15,13 @@ Tea.context(function () {
 
     this.bShowhAuth = false
     this.authValue = ""
+
+    this.accountType = 1
+    this.inputAuthUserName = ""
+    this.inputAuthPassword = ""
+    this.selectAuthCer=1
+
+    this.pageState = 1
 
     this.getLinkStatus = function (status) {
         switch (status) {
@@ -27,9 +35,9 @@ Tea.context(function () {
     }
     this.getStatus = function (status) {
         if (status) {
-            return "已启用"
+            return "运行中"
         } else {
-            return "已停用"
+            return "不可用"
         }
     }
 
@@ -70,34 +78,35 @@ Tea.context(function () {
     }
 
     this.onOpenDetail = function (id) {
-        this.id = id
-        this.$post(".details")
-            .params({
-                Id: id
-            }).success(resp => {
-            if (resp.code === 200) {
-                let details = resp.data.details
-                this.resData[0].value = details.id
-                this.resData[1].value = details.hostname
-                this.resData[2].value = details.ip
-                this.resData[3].value = details.protocols
-                this.resData[4].value = details.public_ip
-                this.resData[5].value = details.admin_user_display
-                this.resData[6].value = details.vendor
-                this.resData[7].value = details.model
-                this.resData[8].value = details.cpu_model
-                this.resData[9].value = details.memory
-                this.resData[10].value = details.disk_info
-                this.resData[11].value = details.platform
-                this.resData[12].value = details.os_arch
-                this.resData[13].value = details.is_active ? '是' : '否'
-                this.resData[14].value = details.sn
-                this.resData[15].value = details.date_created
-                this.resData[16].value = details.created_by
-                this.resData[17].value = details.comment
-                this.onChangeState(3)
-            }
-        })
+        this.onChangeState(3)
+        // this.id = id
+        // this.$post(".details")
+        //     .params({
+        //         Id: id
+        //     }).success(resp => {
+        //     if (resp.code === 200) {
+        //         let details = resp.data.details
+        //         this.resData[0].value = details.id
+        //         this.resData[1].value = details.hostname
+        //         this.resData[2].value = details.ip
+        //         this.resData[3].value = details.protocols
+        //         this.resData[4].value = details.public_ip
+        //         this.resData[5].value = details.admin_user_display
+        //         this.resData[6].value = details.vendor
+        //         this.resData[7].value = details.model
+        //         this.resData[8].value = details.cpu_model
+        //         this.resData[9].value = details.memory
+        //         this.resData[10].value = details.disk_info
+        //         this.resData[11].value = details.platform
+        //         this.resData[12].value = details.os_arch
+        //         this.resData[13].value = details.is_active ? '是' : '否'
+        //         this.resData[14].value = details.sn
+        //         this.resData[15].value = details.date_created
+        //         this.resData[16].value = details.created_by
+        //         this.resData[17].value = details.comment
+        //         this.onChangeState(3)
+        //     }
+        // })
 
     }
 
@@ -259,6 +268,240 @@ Tea.context(function () {
             }
         })
     }
+
+    this.onSelectHttpType = function (value) {
+        let radioList = document.getElementsByName("httpType")
+        for(var index=0;index<radioList.length;index++){
+            if(radioList[index].value==value){
+                radioList[index].checked = true
+                this.onListenHttpTypeChange(value)
+                break
+            }
+        }
+    }
+
+    this.onListenHttpTypeChange=function (value) {
+        var portMap={
+            SSH:"22",
+            RDP:"3389",
+            VNC:"5900",
+            TeInet:"23"
+        }
+        if(portMap[value]){
+            this.port = portMap[value]
+        }else{
+            this.port = "22"
+        }
+        
+    }
+
+    this.onUpdateAuthPeople=function () {
+        console.log("onUpdateAuthPeople")
+    }
+
+    this.noAuthPeopleListData = [
+        {id:1,name:"未授权1"},
+        {id:2,name:"未授权2"},
+        {id:3,name:"未授权3"},
+        {id:4,name:"未授权4"},
+        {id:5,name:"未授权5"},
+        {id:6,name:"未授权6"},
+        {id:7,name:"未授权7"},
+        {id:8,name:"未授权8"},
+        {id:9,name:"未授权9"},
+        {id:10,name:"未授权10"},
+    ]
+    this.authPeopleListData = [
+        {id:51,name:"已授权51"},
+        {id:52,name:"已授权52"},
+        {id:53,name:"已授权53"},
+        {id:54,name:"已授权54"},
+        {id:55,name:"已授权55"},
+        {id:56,name:"已授权56"},
+        {id:57,name:"已授权57"},
+        {id:58,name:"已授权58"},
+        {id:59,name:"已授权59"},
+        {id:60,name:"已授权60"},
+    ]
+
+    this.selectNoAuthPeopleListData = []
+    this.selectAuthPeopleListData=[]
+
+    this.onGetAuthPeopleItemInfo = function (id,table) {
+        if(table && id && table.length>0 && id>0){
+            for(var index=0;index<table.length;index++){
+                if(table[index].id==id){
+                    return table[index]
+                }
+            }
+        }
+        return null
+    }
+    this.onCheckHadValue = function (id,table) {
+        if(table && id && table.length>0 && id>0){
+            for(var index=0;index<table.length;index++){
+                if(table[index].id==id){
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    //添加操作
+    this.onCheckSelectAllNoAuth = function () {
+        var tempElement = document.getElementById("noAuth-allSelect")
+        for(var index=0;index<this.noAuthPeopleListData.length;index++){
+            if(!this.onCheckHadValue(this.noAuthPeopleListData[index].id,this.selectNoAuthPeopleListData)){
+                tempElement.checked = false
+                return
+            }
+        }
+        tempElement.checked = true
+    }
+
+    this.selectAllNoAuth = function () {
+        var tempElement = document.getElementById("noAuth-allSelect")
+        if(tempElement.checked){
+            let noAuthList = document.getElementsByName("noAuthSelect")
+            for(var index=0;index<noAuthList.length;index++){
+                if(!noAuthList[index].checked){
+                    noAuthList[index].checked = true
+                    this.onAddSelectNoAuth(noAuthList[index].value,noAuthList[index].data)
+                }
+            }
+        }else{
+            let noAuthList = document.getElementsByName("noAuthSelect")
+            for(var index=0;index<noAuthList.length;index++){
+                if(noAuthList[index].checked){
+                    noAuthList[index].checked = false
+                    this.onRemoveSelectNoAuth(noAuthList[index].value)
+                }
+            }
+        }
+        
+    }
+    this.onListenClickNoAuthChange = function (id,name) {
+        console.log(id)
+        let noAuthList = document.getElementsByName("noAuthSelect")
+        for(var index=0;index<noAuthList.length;index++){
+            console.log(noAuthList[index].value)
+            if(noAuthList[index].value==id){
+                if(noAuthList[index].checked){
+                    noAuthList[index].checked = false
+                    this.onRemoveSelectNoAuth(id)
+                }else{
+                    noAuthList[index].checked = true
+                    this.onAddSelectNoAuth(id,name)
+                }
+                break
+            }
+        }
+        this.onCheckSelectAllNoAuth()
+    }
+    this.onListenSelectNoAuthChange = function (id,name) {
+        var hadSelect = this.onCheckHadValue(id,this.selectNoAuthPeopleListData)
+        if(hadSelect){
+            this.onRemoveSelectNoAuth(id)
+        }else{
+            this.onAddSelectNoAuth(id,name)
+        }
+        this.onCheckSelectAllNoAuth()
+    }
+    this.onAddSelectNoAuth = function (id,name) {
+        if(id && name){
+            var tempData = {id:id,name:name}
+            this.selectNoAuthPeopleListData.push(tempData)
+        }
+    }
+    this.onRemoveSelectNoAuth = function (id) {
+        this.selectNoAuthPeopleListData.splice(this.selectNoAuthPeopleListData.findIndex(i => i.id === id), 1);
+    }
+
+    this.onAddAuthPeople =function () {
+        if(this.selectNoAuthPeopleListData.length>0){
+            this.selectNoAuthPeopleListData.forEach(element => {
+                this.authPeopleListData.push(element)
+                this.noAuthPeopleListData.splice(this.noAuthPeopleListData.findIndex(i => i.id === element.id), 1);
+            });
+            this.selectNoAuthPeopleListData = []
+        }
+        let noAuthList = document.getElementsByName("noAuthSelect")
+        for(var index=0;index<noAuthList.length;index++){
+            noAuthList[index].checked = false
+        }
+    }
+
+
+    //移除操作
+    this.onCheckSelectAllAuth = function () {
+        var tempElement = document.getElementById("auth-allSelect")
+        for(var index=0;index<this.authPeopleListData.length;index++){
+            if(!this.onCheckHadValue(this.authPeopleListData[index].id,this.selectAuthPeopleListData)){
+                tempElement.checked = false
+                return
+            }
+        }
+        tempElement.checked = true
+    }
+    this.selectAllAuth = function () {
+        let authList = document.getElementById("auth-allSelect")
+        for(var index=0;index<authList.length;index++){
+            if(!authList[index].checked){
+                authList[index].checked = true
+                this.onAddSelectAuth(authList[index].value,authList[index].data)
+            }
+        }
+    }
+    this.onListenClickAuthChange = function (id,name) {
+        let authList = document.getElementsByName("authSelect")
+        for(var index=0;index<authList.length;index++){
+            if(authList[index].value==id){
+                if(authList[index].checked){
+                    authList[index].checked = false
+                    this.onRemoveSelectAuth(id)
+                }else{
+                    authList[index].checked = true
+                    this.onAddSelectAuth(id,name)
+                }
+                break
+            }
+        }
+        this.onCheckSelectAllAuth()
+    }
+    this.onListenSelectAuthChange = function (id,name) {
+        var hadSelect = this.onCheckHadValue(id,this.selectAuthPeopleListData)
+        if(hadSelect){
+            this.onRemoveSelectAuth(id)
+        }else{
+            this.onAddSelectAuth(id,name)
+        }
+        this.onCheckSelectAllAuth()
+    }
+
+    this.onAddSelectAuth = function (id,name) {
+        if(id && name){
+            var tempData = {id:id,name:name}
+            this.selectAuthPeopleListData.push(tempData)
+        }
+    }
+    this.onRemoveSelectAuth = function (id) {
+        this.selectAuthPeopleListData.splice(this.selectAuthPeopleListData.findIndex(i => i.id === id), 1);
+    }
+
+    this.onRemoveAuthPeople =function () {
+        if(this.selectAuthPeopleListData.length>0){
+            this.selectAuthPeopleListData.forEach(element => {
+                this.noAuthPeopleListData.push(element)
+                this.authPeopleListData.splice(this.authPeopleListData.findIndex(i => i.id === element.id), 1);
+            });
+            this.selectAuthPeopleListData = []
+        }
+        let authList = document.getElementsByName("authSelect")
+        for(var index=0;index<authList.length;index++){
+            authList[index].checked = false
+        }
+    }
+
     this.resData = [
         {key: "ID:", value: "42f167c2-d91a-4f20-99b1-3d56dabd896a"},
         {key: "主机名:", value: "智安-安全审计系统服务器"},
@@ -279,5 +522,21 @@ Tea.context(function () {
         {key: "创建日期:", value: "2021/6/4 18:08:47"},
         {key: "创建者:", value: "Administrator"},
         {key: "备注:", value: "这是备注"},
+    ]
+
+    this.assets = [//authState 1 自己的资产 0 被授权的
+        {id:1,hostname:"我的资产",hardware_info:"SSH",is_active:1,authCount:20,connectivity:{datetime:"2021-12-12 12:15:36 +"},authState:1},
+        {id:2,hostname:"别人的资产",hardware_info:"RDP",is_active:0,authCount:25,connectivity:{datetime:"2021-10-12 12:15:36 +"},authState:0},
+    ]
+    
+    this.accountTypeData=[
+        {id:1,name:"密码"},{id:2,name:"授权"},
+    ]
+
+    this.authCerData=[
+        {id:1,name:"创建的授权1"},
+        {id:2,name:"创建的授权2"},
+        {id:3,name:"给予的授权1"},
+        {id:4,name:"给予的授权2"},
     ]
 })

@@ -4,19 +4,18 @@
 {$end}
 <div v-if="pageState==1">
     <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
-        <div style="cursor: pointer;margin-top: 10px;" @click="onChangeState(2)">[添加主机]</div>
+        <div style="cursor: pointer;margin-top: 10px;" @click="onChangeState(2)">[添加资产]</div>
     </div>
     <div style="width: 100%;height: 650px;margin-top: 10px;overflow-x: auto; overflow-y: auto;">
         <table  class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
             <tr align="center">
-                <th class='table-head-bg' style="width: 248px;">主机名</th>
-                <th class='table-head-bg' style="width: 165px;">IP</th>
-                <th class='table-head-bg' style="width: 220px;">硬件信息</th>
-                <th class='table-head-bg' style="width: 123px;">连接状态</th>
-                <th class='table-head-bg' style="width: 113px;">状态</th>
-                <th class='table-head-bg' style="width: 161px;">更新时间</th>
-                <th class='table-head-bg' style="width: 151px;">操作</th>
+                <th class='table-head-bg' style="width: 250px;">资产名称</th>
+                <th class='table-head-bg' style="width: 100px;">连接协议</th>
+                <th class='table-head-bg' style="width: 100px;">状态</th>
+                <th class='table-head-bg' style="width: 100px;">授权人数</th>
+                <th class='table-head-bg' style="width: 200px;">创建日期</th>
+                <th class='table-head-bg' style="width: 200px;">操作</th>
             </tr>
             </thead>
             <tbody >
@@ -30,17 +29,7 @@
                 </td>
                 <td>
                     <div style="padding: 4px 0;">
-                        {{item.ip}}
-                    </div>
-                </td>
-                <td>
-                    <div style="padding: 4px 0;">
                         {{item.hardware_info}}
-                    </div>
-                </td>
-                <td>
-                    <div style="padding: 4px 0;">
-                        {{getLinkStatus(item.connectivity.status)}}
                     </div>
                 </td>
                 <td>
@@ -51,13 +40,19 @@
                         {{getStatus(item.is_active)}}
                     </div>
                 </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.authCount}}
+                    </div>
+                </td>
                 <td>{{onChangeTimeFormat(item.connectivity.datetime)}}</td>
                 <td>
                     <div style="display: flex;justify-content: space-around;padding: 4px 0;">
-                        <div v-if="item.is_active && item.connectivity.status === 1" class="edit_btn" @click="onConnect(item.id)">连接</div>
-                        <div class="edit_btn" @click="onOpenAuth(item.id)">授权</div>
-                        <div class="edit_btn" @click="onEdit(item)">编辑</div>
-                        <div class="edit_btn" @click="onDelete(item.id)">删除</div>
+                        <!-- <div v-if="item.is_active && item.connectivity.status === 1" class="edit_btn" @click="onConnect(item.id)">连接</div> -->
+                        <div class="edit_btn" @click="onConnect(item.id)">连接</div>
+                        <div v-show="item.authState==1" class="edit_btn" @click="onOpenAuth(item.id)">授权</div>
+                        <div v-show="item.authState==1" class="edit_btn" @click="onEdit(item)">编辑</div>
+                        <div v-show="item.authState==1" class="edit_btn" @click="onDelete(item.id)">删除</div>
                     </div>
                 </td>
             </tr>
@@ -78,7 +73,7 @@
             <h2>基本</h2>
             <div style="display: flex;flex-direction: column;">
                 <div class="base_title_content">
-                    <span class="base_title_f">主机名*</span>
+                    <span class="base_title_f">资产名称*</span>
                     <input type="text" v-model="host"
                            style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </div>
@@ -87,7 +82,7 @@
                     <input type="text" v-model="post"
                            style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </div>
-                <div class="base_title_content">
+                <!-- <div class="base_title_content">
                     <span class="base_title_f">系统平台*</span>
                     <div>
                         <select name="platform" v-model="platform" style="width: 790px;height: 30px;border: 1px solid #d7d7d7;">
@@ -105,49 +100,99 @@
                     <span class="base_title_f">公网IP</span>
                     <input type="text" v-model="pubHost"
                            style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
-                </div>
+                </div> -->
             </div>
         </div>
 
         <div style="border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-top: 10px;">
             <h2>协议组</h2>
-            <div class="base_title_content" style="height: auto;align-items: flex-start;">
-                <span class="base_title_f">协议组</span>
-                <div style="display: flex;flex-direction: column;">
-                    <div v-for="(item,index) in protoData"
-                         style="display: inline-flex;align-items: center;margin-bottom: 5px;">
-<!--                        <assert-proto-selector :v-proto="item.proto"></assert-proto-selector>-->
-                        <div>
-                            <select name="proto" v-model="item.proto" style="width: 110px;height: 30px;border: 1px solid #d7d7d7;">
-                                <option value="ssh">ssh</option>
-                                <option value="rdp">rdp</option>
-                                <option value="telnet">telnet</option>
-                                <option value="vnc">vnc</option>
-                            </select>
+            <div style="display: flex;flex-direction: column;">
+                <div class="base_title_content" style="height: auto;align-items: flex-start;">
+                    <span class="base_title_f">接入协议*</span>
+                    <div style="display: inline-flex;">
+                        <div class="radio-box-style" @click="onSelectHttpType('SSH')">
+                            <input name="httpType" type="radio" value="SSH" @change="onListenHttpTypeChange('SSH')"/>
+                            <span style="margin-left: 5px;">SSH</span>
                         </div>
-                        <input type="number" v-model="item.value" id="protoValue"
-                               style="height: 30px;width: 560px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
-                        <div v-show="index===(protoData.length-1)" class="add_less_btn_style"
-                             style="background-color: #fd9d9f;" @click="onRemoveProtoData(index)">-
+                        <div class="radio-box-style" @click="onSelectHttpType('RDP')">
+                            <input name="httpType" type="radio" value="RDP" @change="onListenHttpTypeChange('RDP')"/>
+                            <span style="margin-left: 5px;">RDP</span>
                         </div>
-                        <div v-show="index===(protoData.length-1)" class="add_less_btn_style"
-                             style="background-color: #00b144;" @click="onAddProtoData">+
+                        <div class="radio-box-style" @click="onSelectHttpType('VNC')">
+                            <input name="httpType" type="radio" value="VNC" @change="onListenHttpTypeChange('VNC')"/>
+                            <span style="margin-left: 5px;">VNC</span>
+                        </div>
+                        <div class="radio-box-style" @click="onSelectHttpType('TeInet')">
+                            <input name="httpType" type="radio" value="TeInet" @change="onListenHttpTypeChange('TeInet')"/>
+                            <span style="margin-left: 5px;">TeInet</span>
                         </div>
                     </div>
+                    <!-- <span class="base_title_f">协议组</span>
+                    <div style="display: flex;flex-direction: column;">
+                        <div v-for="(item,index) in protoData"
+                             style="display: inline-flex;align-items: center;margin-bottom: 5px;">
+                            <div>
+                                <select name="proto" v-model="item.proto" style="width: 110px;height: 30px;border: 1px solid #d7d7d7;">
+                                    <option value="ssh">ssh</option>
+                                    <option value="rdp">rdp</option>
+                                    <option value="telnet">telnet</option>
+                                    <option value="vnc">vnc</option>
+                                </select>
+                            </div>
+                            <input type="number" v-model="item.value" id="protoValue"
+                                   style="height: 30px;width: 560px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                            <div v-show="index===(protoData.length-1)" class="add_less_btn_style"
+                                 style="background-color: #fd9d9f;" @click="onRemoveProtoData(index)">-
+                            </div>
+                            <div v-show="index===(protoData.length-1)" class="add_less_btn_style"
+                                 style="background-color: #00b144;" @click="onAddProtoData">+
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="base_title_content">
+                    <span class="base_title_f">端口号*</span>
+                    <input type="text" v-model="port"
+                           style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </div>
             </div>
+            
         </div>
 
         <div style="border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-top: 10px;">
             <h2>认证</h2>
             <div style="display: flex;flex-direction: column;">
-                <div class="base_title_content">
+                <!-- <div class="base_title_content">
                     <span class="base_title_f">账号管理</span>
                     <div>
                         <select name="adminUser" v-model="adminUser" style="width: 790px;height: 30px;border: 1px solid #d7d7d7;">
                             <option v-for="item in adminUsers" :value="item.id">{{item.name}}({{item.username}})</option>
                         </select>
                     </div>
+                </div> -->
+                <div class="base_title_content">
+                    <span class="base_title_f">账户类型*</span>
+                    <div>
+                        <select name="accountType" v-model="accountType" style="width: 790px;height: 30px;border: 1px solid #d7d7d7;">
+                            <option v-for="item in accountTypeData" :value="item.id">{{item.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div v-show="accountType==1" class="base_title_content">
+                    <span class="base_title_f">授权账户*</span>
+                    <input type="text" v-model="inputAuthUserName"
+                           style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                </div>
+                <div v-show="accountType==1" class="base_title_content">
+                    <span class="base_title_f">密码*</span>
+                    <input type="password" v-model="inputAuthPassword"
+                           style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                </div>
+                <div v-show="accountType==2" class="base_title_content">
+                    <span class="base_title_f">授权凭证*</span>
+                    <select name="selectAuthCer" v-model="selectAuthCer" style="width: 790px;height: 30px;border: 1px solid #d7d7d7;">
+                        <option v-for="item in authCerData" :value="item.id">{{item.name}}</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -155,11 +200,11 @@
         <div style="width: 100%;padding-bottom: 10px;margin-top: 10px;">
             <h2>其他</h2>
             <div style="display: flex;flex-direction: column;">
-                <div class="base_title_content">
+                <!-- <div class="base_title_content">
                     <span class="base_title_f">状态</span>
                     <input class="btn-switch large" type="checkbox" :checked="state" id="btn-switch-state"
                            @click.prevent="setState">
-                </div>
+                </div> -->
                 <div class="base_title_content">
                     <span class="base_title_f">备注</span>
                     <input type="text" v-model="maskStr"
@@ -239,14 +284,48 @@
 
 <div v-if="bShowhAuth" class="dialog-style" @click.stop>
     <div class="dialog-bg-style" style="display: flex;flex-direction: column;">
-        <div style="width: 100%;display: flex;flex-direction: row;justify-content: flex-end;">
-            <span style="font-size: 16px;margin-right: 10px;cursor: pointer;" @click="onCloseAuth">X</span>
+        <div style="width: 100%;margin-top: 10px;display: flex;flex-direction: row;justify-content: space-between;border-bottom: 1px solid #d7d7d7;padding-bottom: 10px;">
+            <span style="font-size: 14px;color:#333;padding: 0 20px;">更新资源【
+                <span style="color: #0090cb;cursor: pointer;" @click="onUpdateAuthPeople">智安安全审计系统</span>
+                】的授权人</span>
+            <span style="font-size: 16px;margin-right: 10px;cursor: pointer;color: #d7d7d7;" @click="onCloseAuth">X</span>
         </div>
-        <span style="font-size: 14px;color:#333;padding: 0 20px;">请输入被授权账号邮箱，多个请以换行符相隔 (不可重复)：</span>
-        <textarea style="margin: 5px 20px;width: 400px;height: 170px;border: 1px solid #d7d7d7;resize: none;"
-                  v-model="authValue"></textarea>
-        <div style="width: 100%;display: flex;justify-content: center;margin-top: 10px;">
+        <div style="width: 100%;margin:23px 0;display: flex;flex-direction: row;justify-content: center;align-items: center;">
+            <div class="auth-people-box-style">
+                <div class="auth-people-title-style">
+                    <input id="noAuth-allSelect" type="checkbox" @click="selectAllNoAuth">
+                    <span>未授权</span>
+                </div>
+                <div style="width: 100%;height: 215px;overflow-x: auto; overflow-y: auto;">
+                    <div class="auth-people-content-style" v-for="item in noAuthPeopleListData" @click.stop="onListenClickNoAuthChange(item.id,item.name)">
+                        <input type="checkbox" name="noAuthSelect" :value="item.id" :data="item.name" @click.stop="onListenSelectNoAuthChange(item.id,item.name)">
+                        <span style="margin-left: 5px;">{{item.name}}</span>
+                    </div>
+                </div>
+                
+            </div>
+            <div style="height: 250px;display: flex;flex-direction: column;justify-content: center;align-items: center;margin: 0 10px;">
+                <div class="auth-middle-btn-stype" style="margin-bottom: 30px;" @click="onAddAuthPeople">授权 ></div>
+                <div class="auth-middle-btn-stype" @click="onRemoveAuthPeople">< 移除</div>
+            </div>
+            <div class="auth-people-box-style">
+                <div class="auth-people-title-style">
+                    <input id="auth-allSelect" type="checkbox" @click="selectAllAuth">
+                    <span>已授权</span>
+                </div>
+                <div style="width: 100%;height: 215px;overflow-x: auto; overflow-y: auto;">
+                    <div class="auth-people-content-style" v-for="item in authPeopleListData" @click.stop="onListenClickAuthChange(item.id,item.name)">
+                        <input type="checkbox" name="authSelect" :value="item.id" :data="item.name" @click.stop="onListenSelectAuthChange(item.id,item.name)">
+                        <span style="margin-left: 5px;">{{item.name}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="width: 100%;display: flex;justify-content: center;margin-top: 10px;border-top: 1px solid #d7d7d7;padding-top: 10px;">
+            <div class="clean-btn" style="margin-right: 30px;" @click="onCloseAuth">取消</div>
             <div class="sure-btn" @click="onSaveAuth">确认</div>
+            
         </div>
     </div>
 </div>
