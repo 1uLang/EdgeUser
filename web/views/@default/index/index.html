@@ -264,7 +264,10 @@
 		 					onGetToken()
 						})
 					}else{
-						teaweb.warn(res.message)
+						teaweb.warn(res.message,function(){
+							onGetRefreshToken()
+		 					onGetToken()
+						})
 					}
 				}
 			)
