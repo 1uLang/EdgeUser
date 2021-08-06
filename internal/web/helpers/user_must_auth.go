@@ -250,34 +250,34 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 				},
 			},
 		},
-		//{
-		//	"code": "fortcloud",
-		//	"url":  "/fortcloud/assets",
-		//	"name": "堡垒机",
-		//	"icon": "ioxhost",
-		//	"subItems": []maps.Map{
-		//		{
-		//			"name": "资产管理",
-		//			"url":  "/fortcloud/assets",
-		//			"code": "assets",
-		//		},
-		//		{
-		//			"name": "管理账号",
-		//			"url":  "/fortcloud/admins",
-		//			"code": "admins",
-		//		},
-		//		{
-		//			"name": "会话管理",
-		//			"url":  "/fortcloud/sessions",
-		//			"code": "sessions",
-		//		},
-		//		{
-		//			"name": "运维审计",
-		//			"url":  "/fortcloud/audit",
-		//			"code": "audit",
-		//		},
-		//	},
-		//},
+		{
+			"code": "fortcloud",
+			"url":  "/fortcloud/assets",
+			"name": "堡垒机",
+			"icon": "ioxhost",
+			"subItems": []maps.Map{
+				{
+					"name": "资产管理",
+					"url":  "/fortcloud/assets",
+					"code": "assets",
+				},
+				{
+					"name": "授权凭证",
+					"url":  "/fortcloud/admins",
+					"code": "admins",
+				},
+				{
+					"name": "会话管理",
+					"url":  "/fortcloud/sessions",
+					"code": "sessions",
+				},
+				{
+					"name": "运维审计",
+					"url":  "/fortcloud/audit",
+					"code": "audit",
+				},
+			},
+		},
 		//{
 		//	"code": "finance",
 		//	"name": "费用账单",
