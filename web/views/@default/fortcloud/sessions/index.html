@@ -21,14 +21,12 @@
         <tbody>
         <tr align="center" style="height: 40px;" v-for="(item,index) in online">
             <td>{{index+1}}</td>
-            <td>{{item.user}}</td>
-            <td>{{item.asset}}</td>
-            <td>{{item.remote_addr}}</td>
+            <td>{{item.username}}</td>
+            <td>{{item.assetName}}</td>
+            <td>{{item.clientIp}}</td>
             <td>{{item.protocol}}</td>
-            <!-- <td>{{item.login_from_display}}</td> -->
-            <!-- <td>{{item.command_amount}}</td> -->
-            <td>{{onChangeTimeFormat(item.date_start)}}</td>
-            <td>{{getTimeLong(item.data_start,item.date_end)}}</td>
+            <td>{{item.connectedTime}}</td>
+            <td>{{getTimeLong(item.connectedTime)}}</td>
             <td>
                 <div style="display: flex;justify-content: space-around;">
                     <div class="edit_btn" @click="onStart(item.id)">监控</div>

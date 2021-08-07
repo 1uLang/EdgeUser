@@ -6,37 +6,37 @@
     <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
         <div style="cursor: pointer;margin-top: 10px;" @click="onChangeState(2)">[添加凭证]</div>
     </div>
-    
+
     <div style="width: 100%;height: 650px;margin-top: 10px;overflow-x: auto; overflow-y: auto;">
-        <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <table id="tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
-                <tr align="center">
-                    <th class='table-head-bg' style="width: 320px;" >名称</th>
-                    <th class='table-head-bg' style="width: 215px;" >用户名</th>
-                    <th class='table-head-bg' style="width: 100px;" >授权人数</th>
-                    <th class='table-head-bg' style="width: 200px;" >创建时间</th>
-                    <th class='table-head-bg' style="width: 200px;" >操作</th>
-                </tr>
+            <tr align="center">
+                <th class='table-head-bg' style="width: 320px;">名称</th>
+                <th class='table-head-bg' style="width: 215px;">用户名</th>
+                <th class='table-head-bg' style="width: 100px;">授权人数</th>
+                <th class='table-head-bg' style="width: 200px;">创建时间</th>
+                <th class='table-head-bg' style="width: 200px;">操作</th>
+            </tr>
             </thead>
             <tbody id='tableBody'>
-                <tr align="center" style="height: 40px;" v-for="(item,index) in adminUsers" >
-                    <td>
-                        <u @click="onOpenDetail(item)" style="color: #169BD5;cursor: pointer;">{{item.name}}</u>
-                    </td>
-                    <td>{{item.username}}</td>
-                    <td>{{item.authCount}}</td>
-                    <td>{{item.createTime}}</td>
-                    <td>
-                        <div style="display: flex;justify-content: space-around;padding: 4px 0;">
-                            <div class="edit_btn" @click="onAuth(item)">授权</div>
-                            <div v-show="item.authState==1" class="edit_btn" @click="onEdit(item)">修改</div>
-                            <div v-show="item.authState==1" class="edit_btn" @click="onDelete(item.id)">删除</div>
-                        </div>
-                    </td>
-                </tr>
+            <tr align="center" style="height: 40px;" v-for="(item,index) in certs">
+                <td>
+                    {{item.name}}
+                </td>
+                <td>{{item.username}}</td>
+                <td>{{item.count}}</td>
+                <td>{{item.created}}</td>
+                <td>
+                    <div style="display: flex;justify-content: space-around;padding: 4px 0;">
+                        <div class="edit_btn" @click="onAuth(item)">授权</div>
+                        <div v-show="!item.auth" class="edit_btn" @click="onEdit(item)">修改</div>
+                        <div v-show="!item.auth" class="edit_btn" @click="onDelete(item.id)">删除</div>
+                    </div>
+                </td>
+            </tr>
             </tbody>
         </table>
-    </div>    
+    </div>
 </div>
 
 <div v-else-if="pageState==2 || pageState==5">
@@ -51,28 +51,27 @@
             <div style="display: flex;flex-direction: column;justify-content: flex-start;">
                 <div class="base_title_content">
                     <span class="base_title_f">名称*</span>
-                    <input type="text" v-model="name" style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="text" v-model="name"
+                           style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </div>
                 <div class="base_title_content">
                     <span class="base_title_f">用户名*</span>
-                    <input type="text" v-model="username" style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="text" v-model="username"
+                           style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </div>
                 <div class="base_title_content">
                     <span class="base_title_f">密码*</span>
-                    <input type="password" v-model="password" style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="password" v-model="password"
+                           style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </div>
-                <!-- <div class="base_title_content" style="height: auto;">
-                    <span class="base_title_f">备注</span>
-                    <textarea type="text" v-model="maskStr" style="resize: none;height: 100px;width: 790px;border: 1px solid #d7d7d7;"></textarea>
-                </div> -->
             </div>
         </div>
-        
+
         <div style="width: 100%;display: flex;justify-content: center;margin-top: 10px;">
             <div class="sure-btn" @click="onSave" v-if="pageState===2">保存</div>
             <div class="sure-btn" @click="onUpdate" v-else>保存</div>
         </div>
-        
+
     </div>
 </div>
 
@@ -104,26 +103,26 @@
     </div>
     <div v-else>
         <div style="width: 100%;margin-top: 10px;height: 650px;overflow-x: auto; overflow-y: auto;">
-            <table  class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
                 <thead>
-                    <tr align="center">
-                        <th class='table-head-bg' style="width: 235px;" >主机名</th>
-                        <th class='table-head-bg' style="width: 235px;" >IP</th>
-                        <th class='table-head-bg' style="width: 235px;" >管理用户</th>
-                        <th class='table-head-bg' style="width: 235px;" >连接状态</th>
-                        <th class='table-head-bg' style="width: 235px;" >更新时间</th>
-                    </tr>
+                <tr align="center">
+                    <th class='table-head-bg' style="width: 235px;">主机名</th>
+                    <th class='table-head-bg' style="width: 235px;">IP</th>
+                    <th class='table-head-bg' style="width: 235px;">管理用户</th>
+                    <th class='table-head-bg' style="width: 235px;">连接状态</th>
+                    <th class='table-head-bg' style="width: 235px;">更新时间</th>
+                </tr>
                 </thead>
-                <tbody >
-                    <tr align="center" style="height: 40px;" v-for="item in assetsList" >
-                        <td>{{item.asset_name}}</td>
-                        <td>{{item.asset_ip}}</td>
-                        <td>{{item.systemuser_display}}</td>
-                        <td>{{getLinkStatus(item.connectivity)}}</td>
-                        <td>{{item.date_verified}}</td>
-                    </tr>
+                <tbody>
+                <tr align="center" style="height: 40px;" v-for="item in assetsList">
+                    <td>{{item.asset_name}}</td>
+                    <td>{{item.asset_ip}}</td>
+                    <td>{{item.systemuser_display}}</td>
+                    <td>{{getLinkStatus(item.connectivity)}}</td>
+                    <td>{{item.date_verified}}</td>
+                </tr>
                 </tbody>
             </table>
-        </div>    
+        </div>
     </div>
 </div>

@@ -2,46 +2,50 @@ package assets
 
 import (
 	"fmt"
-	jumpserver_server "github.com/1uLang/zhiannet-api/jumpserver/server"
+	asset_model "github.com/1uLang/zhiannet-api/next-terminal/model/asset"
+	next_terminal_server "github.com/1uLang/zhiannet-api/next-terminal/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud"
 	"github.com/iwind/TeaGo/actions"
 )
 
-type LinkAction struct {
+type ConnectAction struct {
 	actionutils.ParentAction
 }
 
-func (this *LinkAction) checkAndNewServerRequest() (*jumpserver_server.Request, error) {
+func (this *ConnectAction) checkAndNewServerRequest() (*next_terminal_server.Request, error) {
 	if fortcloud.ServerUrl == "" {
 		err := fortcloud.InitAPIServer()
 		if err != nil {
 			return nil, err
 		}
 	}
-	username, _ := this.UserName()
-	return fortcloud.NewServerRequest(username, "dengbao-"+username)
+	return fortcloud.NewServerRequest(fortcloud.Username, fortcloud.Password)
 }
-func (this *LinkAction) RunPost(params struct {
+
+func (this *ConnectAction) RunPost(params struct {
 	Id   string
 	Must *actions.Must
 }) {
 
 	params.Must.
 		Field("id", params.Id).
-		Require("请选择需要连接的资产")
+		Require("请选择资产")
 
 	req, err := this.checkAndNewServerRequest()
 	if err != nil {
 		this.ErrorPage(fmt.Errorf("堡垒机组件错误:" + err.Error()))
 		return
 	}
-	url, token, err := req.Assets.Link(params.Id)
+	args := &asset_model.ConnectReq{}
+	args.Id = params.Id
+	url,err := req.Assets.Connect(args)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
 	this.Data["url"] = fortcloud.ServerUrl+url
-	this.Data["token"] = token
+	// 日志
+	this.CreateLogInfo("堡垒机 - 连接资产:[%v]成功", params.Id)
 	this.Success()
 }

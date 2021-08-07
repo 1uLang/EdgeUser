@@ -33,7 +33,7 @@ func (this *IndexAction) RunGet(params struct {
 		params.PageNo = 0
 	}
 	if params.PageSize <= 0 {
-		params.PageSize = 20
+		params.PageSize = 999
 	}
 	list, err := scans_server.List(&scans.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, UserId: uint64(this.UserId())})
 	//if err != nil && list != nil {
@@ -70,7 +70,7 @@ func (this *IndexAction) RunPost(params struct {
 		params.PageNo = 0
 	}
 	if params.PageSize <= 0 {
-		params.PageSize = 20
+		params.PageSize = 999
 	}
 	list, err := scans_server.List(&scans.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, UserId: uint64(this.UserId())})
 	//if err != nil && list != nil {

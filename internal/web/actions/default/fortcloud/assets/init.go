@@ -15,11 +15,8 @@ func init() {
 			GetPost("", new(IndexAction)).
 			Post("/update", new(UpdateAction)).
 			Post("/delete", new(DeleteAction)).
-			Post("/authorize", new(AuthorizeAction)).
-			Post("/delAuthorize", new(DelAuthorizeAction)).
-			Post("/link", new(LinkAction)).
-			Post("/checkLink", new(CheckLinkAction)).
-			Post("/refresh", new(RefreshAction)).
+			GetPost("/authorize", new(AuthorizeAction)).
+			Post("/connect", new(ConnectAction)).
 			Post("/details", new(DetailsAction)).
 			EndAll()
 	})

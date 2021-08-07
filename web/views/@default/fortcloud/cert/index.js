@@ -13,7 +13,7 @@ Tea.context(function () {
 
 
     this.getLinkStatus = function (status) {
-        if (status !=="failed") {
+        if (status !== "failed") {
             return "可连接"
         } else {
             return "不可连接"
@@ -60,15 +60,23 @@ Tea.context(function () {
 
     this.onEdit = function (item) {
         this.id = item.id
-        this.name = item.name
-        this.username = item.username
-        this.password = item.password
-        this.maskStr = item.comment
+        this.$post(".details")
+            .params({
+                id: item.id,
+            }).success(resp => {
+            if (resp.code === 200) {
+                let cert = resp.data.cert
+                this.name = cert.name
+                this.username = cert.username
+                this.password = cert.password
+            }
+        })
+
         //赋值
         this.onChangeState(5)
     }
     this.onDelete = function (id) {
-        teaweb.confirm("确定要删除该管理用户吗？", function () {
+        teaweb.confirm("确定要删除该授权凭证吗？", function () {
             this.$post(".delete")
                 .params({
                     Id: id
@@ -84,21 +92,19 @@ Tea.context(function () {
                 name: this.name,
                 username: this.username,
                 password: this.password,
-                Comment: this.maskStr,
             })
             .refresh()
     }
     this.onUpdate = function () {
 
         let that = this
-        teaweb.confirm("确定要修改该管理用户信息吗？", function () {
+        teaweb.confirm("确定要修改该授权凭证信息吗？", function () {
             this.$post(".update")
                 .params({
                     id: that.id,
                     name: that.name,
                     username: that.username,
                     password: that.password,
-                    Comment: that.maskStr,
                 })
                 .refresh()
         })
@@ -107,17 +113,4 @@ Tea.context(function () {
     this.onDeleteAuthAccount = function (id) {
 
     }
-    this.accountData = [
-        {key: "ID:", value: "42f167c2-d91a-4f20-99b1-3d56dabd896a"},
-        {key: "名称:", value: "智安-安全审计系统服务器"},
-        {key: "用户名:", value: "root"},
-        {key: "SSH指纹:", value: "ssh/22"},
-        {key: "创建日期:", value: "2021/6/4 18:04:46"},
-        {key: "创建者:", value: "Administrator"},
-    ]
-
-    this.adminUsers = [//authState 1 自己的资产 0 被授权的
-        {id:1,name:"凭证名称1",username:"用户名1",authCount:5,createTime:"2021-12-10 15:35:12",authState:1},
-        {id:1,name:"凭证名称2",username:"用户名2",authCount:2,createTime:"2021-10-10 15:35:12",authState:0}
-    ]
 })

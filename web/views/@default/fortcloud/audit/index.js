@@ -10,12 +10,12 @@ Tea.context(function () {
     }
 
     this.getTimeLong = function (start, end) {
-        //格式： 2021-07-27 17:50:16 +0800
+        //格式： 2021-07-27 17:50:16
         if (start == null || end == null) {
             return ""
         }
-        let st = new Date(start.substring(0, start.indexOf(" +")))
-        let et = new Date(end.substring(0, end.indexOf(" +")))
+        let st = new Date(start)
+        let et = new Date(end)
 
         if (et.getTime() === st.getTime()) {
             return ""
@@ -41,16 +41,12 @@ Tea.context(function () {
         return resultTime;
     };
 
-    //中断
-    this.onStop = function (id) {
-
-    }
 
     //监控
-    this.onStart = function (id) {
+    this.onDelete = function (id) {
 
-        teaweb.confirm("确定要监控该会话吗？", function () {
-            this.$post(".monitor")
+        teaweb.confirm("确定要删除该会话吗？", function () {
+            this.$post(".delete")
                 .params({
                     Id: id
                 })

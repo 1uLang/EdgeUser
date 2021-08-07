@@ -21,17 +21,16 @@
         <tbody id='tableBody'>
         <tr align="center" style="height: 40px;" v-for="(item,index) in offline">
             <!-- <td>{{index+1}}</td> -->
-            <td>{{item.user}}</td>
-            <td>{{item.asset}}</td>
-            <td>{{item.remote_addr}}</td>
+            <td>{{item.username}}</td>
+            <td>{{item.assetName}}</td>
+            <td>{{item.clientIp}}</td>
             <td>{{item.protocol}}</td>
-            <!-- <td>{{item.login_from_display}}</td>
-            <td>{{item.command_amount}}</td> -->
-            <td>{{onChangeTimeFormat(item.date_start)}}</td>
-            <td>{{getTimeLong(item.date_start,item.date_end)}}</td>
+            <td>{{item.connectedTime}}</td>
+            <td>{{getTimeLong(item.connectedTime,item.disconnectedTime)}}</td>
             <td>
                 <div style="display: flex;justify-content: space-around;">
-                    <div class="edit_btn" @click="onReplay(item)" v-if="item.can_replay">回放</div>
+                    <div class="edit_btn" @click="onReplay(item)" >回放</div>
+                    <div class="edit_btn" @click="onDelete(item.id)" >删除</div>
                 </div>
             </td>
         </tr>

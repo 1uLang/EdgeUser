@@ -9,13 +9,13 @@ Tea.context(function () {
         }
     }
 
-    this.getTimeLong = function (start, end) {
-        //格式： 2021-07-27 17:50:16 +0800
-        if (start == null || end == null) {
+    this.getTimeLong = function (start) {
+        //格式： 2021-07-27 17:50:16
+        if (start == null ) {
             return ""
         }
-        let st = new Date(start.substring(0, start.indexOf(" +")))
-        let et = new Date(end.substring(0, end.indexOf(" +")))
+        let st = new Date(start)
+        let et = new Date()
 
         if (et.getTime() === st.getTime()) {
             return ""
@@ -44,6 +44,14 @@ Tea.context(function () {
     //中断
     this.onStop = function (id) {
 
+        teaweb.confirm("确定要断开该会话吗？", function () {
+            this.$post(".disconnect")
+                .params({
+                    Id: id
+                })
+                .refresh()
+        })
+
     }
 
     //监控
@@ -56,23 +64,5 @@ Tea.context(function () {
                 })
                 .refresh()
         })
-    }
-
-    //回放
-    this.onReplay = function (item) {
-        if (item.can_replay) {
-            teaweb.confirm("确定要回放该会话吗？", function () {
-                this.$post(".replay")
-                    .params({
-                        Id: item.id
-                    }).success(resp => {
-                    if (resp.code === 200) {
-                        let token = resp.data.token
-                        let url = resp.data.url
-                        console.log(token, url)
-                    }
-                })
-            })
-        }
     }
 })

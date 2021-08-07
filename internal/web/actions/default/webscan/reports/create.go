@@ -61,7 +61,8 @@ func (this *CreateAction) RunPost(params struct {
 				IDS  []string `json:"id_list"`
 				Type string   `json:"list_type"`
 			}{IDS: webscan_ids, Type: "scans"},
-			TemplateId: "11111111-1111-1111-1111-111111111112", //快速
+			//TemplateId: "11111111-1111-1111-1111-111111111112", //快速
+			TemplateId: "11111111-1111-1111-1111-111111111126", //综合分析报表
 			UserId:     uint64(this.UserId()),
 		}
 		_, err = reports_server.Create(req)

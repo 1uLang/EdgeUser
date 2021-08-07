@@ -13,9 +13,10 @@ func init() {
 			Data("teaMenu", "sessions").
 			Prefix("/fortcloud/sessions").
 			Get("", new(IndexAction)).
-			Post("/replay", new(ReplayAction)).
-			Post("/download", new(DownloadAction)).
-			Post("/monitor", new(MonitorAction)).
+			Post("/disconnect", new(DisConnectAction)).
+			//Post("/replay", new(ReplayAction)).
+			//Post("/download", new(DownloadAction)).
+			//Post("/monitor", new(MonitorAction)).
 			EndAll()
 	})
 }

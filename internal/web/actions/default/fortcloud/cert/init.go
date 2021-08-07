@@ -1,4 +1,4 @@
-package admins
+package cert
 
 import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/helpers"
@@ -10,12 +10,13 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth("")).
-			Data("teaMenu", "admins").
-			Prefix("/fortcloud/admins").
+			Data("teaMenu", "cert").
+			Prefix("/fortcloud/cert").
 			GetPost("", new(IndexAction)).
 			Post("/update", new(UpdateAction)).
 			Post("/delete", new(DeleteAction)).
-			Post("/assetsList", new(AssetsListAction)).
+			GetPost("/authorize",new(AuthorizeAction)).
+			Post("/details",new(DetailsAction)).
 			EndAll()
 	})
 }
