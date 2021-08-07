@@ -1,13 +1,16 @@
 package user
 
 import (
-	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
+	"github.com/1uLang/zhiannet-api/common/model/edge_logins"
+	"github.com/1uLang/zhiannet-api/common/server/edge_logins_server"
 	"github.com/1uLang/zhiannet-api/edgeUsers/model"
 	"github.com/1uLang/zhiannet-api/edgeUsers/server"
 	"github.com/TeaOSLab/EdgeUser/internal/utils/numberutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/dlclark/regexp2"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/maps"
+	"github.com/xlzd/gotp"
 )
 
 type CreateAction struct {
@@ -32,6 +35,7 @@ func (this *CreateAction) RunPost(params struct {
 	Tel      string
 	Email    string
 	Remark   string
+	OtpIsOn  bool
 
 	Must *actions.Must
 	CSRF *actionutils.CSRF
@@ -144,7 +148,6 @@ func (this *CreateAction) RunPost(params struct {
 	}
 	defer this.CreateLogInfo("创建用户 %d", userId)
 
-	edge_users_server.UpdatePwdAt(uint64(this.UserId()))
 	////关联账号
 	//_, err = audit_user_relation.Add(&audit_user_relation.AuditReq{
 	//	UserId:      userId,
@@ -161,5 +164,25 @@ func (this *CreateAction) RunPost(params struct {
 	//	this.ErrorPage(err)
 	//	return
 	//}
+	//otp认证
+	if params.OtpIsOn {
+		otpLogin := &edge_logins.EdgeLogins{
+			Id:   0,
+			Type: "otp",
+			Params: string(maps.Map{
+				"secret": gotp.RandomSecret(16), // TODO 改成可以设置secret长度
+			}.AsJSON()),
+			IsOn:    1,
+			AdminId: 0,
+			UserId:  uint64(userId),
+			State:   1,
+		}
+
+		_, err = edge_logins_server.Save(otpLogin)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+	}
 	this.Success()
 }

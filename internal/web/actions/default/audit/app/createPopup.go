@@ -36,6 +36,7 @@ func (this *CreatePopupAction) RunGet(params struct {
 	this.Data["ip"] = params.Ip
 	this.Data["openState"] = params.Status
 	this.Data["id"] = params.Id
+	this.Data["edit"] = params.Edit
 	this.Show()
 }
 

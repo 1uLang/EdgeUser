@@ -6,6 +6,7 @@ import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/maps"
 	timeutil "github.com/iwind/TeaGo/utils/time"
+	"github.com/tidwall/gjson"
 )
 
 type IndexAction struct {
@@ -37,6 +38,7 @@ func (this *IndexAction) RunGet() {
 	if len(list) > 0 {
 		userMaps := []maps.Map{}
 		for _, user := range list {
+			dom := gjson.Parse(user.OtpParams)
 			userMaps = append(userMaps, maps.Map{
 				"id":          user.Id,
 				"username":    user.Username,
@@ -46,7 +48,9 @@ func (this *IndexAction) RunGet() {
 				"mobile":      user.Mobile,
 				"tel":         user.Tel,
 				"remark":      user.Remark,
+				"otpIsOn":     user.OtpOn == 1,
 				"createdTime": timeutil.FormatTime("Y-m-d H:i:s", user.CreatedAt),
+				"otpParams":   dom.Get("secret").String(),
 			})
 		}
 		this.Data["users"] = userMaps

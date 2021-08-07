@@ -12,6 +12,8 @@ Tea.context(function () {
     this.editEmail = ""
     this.editRemark = ""
     this.editEnabled = 0
+    this.otpIsOn = false
+    this.otpParams = ""
     this.features = []
 
     this.onChangeShowState = function (state) {
@@ -52,6 +54,8 @@ Tea.context(function () {
         this.editPhone = item.mobile
         this.editEmail = item.email
         this.editEnabled = item.isOn
+        this.otpIsOn = item.otpIsOn
+        this.otpParams = item.otpParams
         this.editRemark = item.remark
         console.log(item.remark)
         this.onChangeShowState(2)
@@ -91,6 +95,15 @@ Tea.context(function () {
         }
     }
 
+    this.onListenEditCheckBoxOTP = function () {
+        let enabled = document.getElementById("otpIsOn").checked
+        if (enabled) {
+            this.otpIsOn = true
+        } else {
+            this.otpIsOn = false
+        }
+    }
+
     this.onSaveEdit = function () {
 
         let that = this
@@ -105,6 +118,7 @@ Tea.context(function () {
                     mobile: that.editPhone,
                     email: that.editEmail,
                     isOn: that.editEnabled,
+                    otpIsOn: that.otpIsOn,
                     remark: that.editRemark,
                 }).success(resp => {
                 if (resp.code === 200) {

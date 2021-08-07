@@ -33,7 +33,7 @@ Tea.context(function () {
     this.$delay(function () {
         teaweb.datepicker("day-from-picker")
         teaweb.datepicker("day-to-picker")
-        this.onChangeCheckTime('month')
+        this.onChangeCheckTime('5min')
         this.onSearch("false")
     })
 
@@ -59,6 +59,7 @@ Tea.context(function () {
     this.onChangeState = function (id) {
         if (this.pageState != id) {
             this.pageState = id
+            this.onReset()
         }
         switch (this.pageState) {
             case 1:
@@ -117,21 +118,33 @@ Tea.context(function () {
         return resultTime;
     };
 
-    this.getLogType = function (status) {
-        switch (status) {
-            case 1:
-                return "安全策略"
-            case 2:
-                return "文件修改"
-            case 3:
-                return "安全审计"
-            case 4:
-                return "其他"
-            case 0:
-                return "系统配置"
-            default:
-                return "系统配置"
+    this.getLogType = function (type,event_name) {
+        if(type == "windows"){
+            switch (event_name) {
+                case "system":
+                    return "系统日志"
+                case "application":
+                    return "应用日志"
+                case "security":
+                    return "安全事件"
+                case "operational":
+                    return "系统操作"
+                default:
+                    return "其它"
+            }
+        }else if(type == "linux"){
+            switch (event_name) {
+                case "system":
+                    return "系统日志"
+                case "file_integrity":
+                    return "文件完整性"
+                case "auditd":
+                    return "安全事件"
+                default:
+                    return "其它"
+            }
         }
+        return "其它"
     }
 
     this.onCloseDropMenu = function () {
@@ -531,5 +544,13 @@ Tea.context(function () {
                 }
             }
         }
+    }
+
+    this.getHostMessage = function(item){
+        if(item.message != undefined ){
+            return item.message
+        }
+        let msg = JSON.stringify(item)
+        return msg.substring(0,500)
     }
 })

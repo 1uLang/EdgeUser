@@ -13,13 +13,13 @@
             <tr>
                 <td class="title">IP*</td>
                 <td>
-                    <input type="text" v-model="ip" style="height: 30px;width: 250px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="text" v-model="ip" :disabled="edit" style="height: 30px;width: 250px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </td>
             </tr>
             <tr>
                 <td class="title">类型*</td>
                 <td>
-                    <app-type-selector :v-assembly-type.sync="typeSelect"></app-type-selector>
+                    <app-type-selector :v-assembly-type.sync="typeSelect" :v-assembly-edit="edit"></app-type-selector>
                 </td>
             </tr>
             <tr>

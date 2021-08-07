@@ -7,26 +7,26 @@
             <tr>
                 <td class="title">名称*</td>
                 <td>
-                    <input type="text" name="name" v-model="name" style="height: 30px;width: 250px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="text" name="name" v-model="name"  style="height: 30px;width: 250px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </td>
             </tr>
             <tr>
                 <td class="title">类型*</td>
                 <td>
-                    <sql-type-selector :v-assembly-type.sync="typeSelect"></sql-type-selector>
+                    <sql-type-selector :v-assembly-type.sync="typeSelect" :v-assembly-edit="edit"></sql-type-selector>
                 </td>
             </tr>
             <tr>
                 <td class="title">版本*</td>
                 <td>
-                    <sql-ver-selector :v-assembly-ver.sync="verSelect" :v-assembly-type="typeSelect"></sql-ver-selector>
+                    <sql-ver-selector :v-assembly-ver.sync="verSelect" :v-assembly-type="typeSelect" :v-assembly-edit="edit"></sql-ver-selector>
                 </td>
             </tr>
             <tr>
                 <td class="title">IP端口*</td>
                 <td>
-                    <input type="text" name="ip" v-model="ip" style="height: 30px;width: 250px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
-                    <input type="text" name="port" v-model="port" style="margin-left: 20px;height: 30px;width: 80px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="text" name="ip" :disabled="edit" v-model="ip" style="height: 30px;width: 250px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="text" name="port" :disabled="edit" v-model="port" style="margin-left: 20px;height: 30px;width: 80px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </td>
             </tr>
             <tr>
@@ -34,11 +34,11 @@
                 <td>
                     <div style="display: inline-flex;">
                         <div style="width: 120px;" @click="onSelectSystem">
-                            <input type="radio" name="systemSelect" v-model="systemSelect" :value="1" />
+                            <input type="radio" name="systemSelect" :disabled="edit" v-model="systemSelect" :value="1" />
                             <span style="margin-left: 10px;font-size: 14px;">Linux</span>
                         </div>
                         <div style="width: 120px;" @click="onSelectSystem">
-                            <input type="radio" name="systemSelect"  v-model="systemSelect" :value="0" />
+                            <input type="radio" name="systemSelect"  :disabled="edit" v-model="systemSelect" :value="0" />
                             <span style="margin-left: 10px;font-size: 14px;">Windows</span>
                         </div>
                     </div>

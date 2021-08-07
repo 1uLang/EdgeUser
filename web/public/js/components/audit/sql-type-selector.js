@@ -8,19 +8,22 @@ Vue.component("sql-type-selector", {
 		// 		that.assemblys = resp.data.assemblys
 		// 	})
 	},
-	props: ["v-assembly-type"],
+	props: ["v-assembly-type","v-assembly-edit"],
 	data: function () {
 		let assemblyType = this.vAssemblyType
 		if (assemblyType == null) {
 			assemblyType = -1
 		}
+		let isEdit = this.vAssemblyEdit
 		let assemblys = [
+			// {"name":"mariadb","id":"0"},
 			{"name":"mysql","id":"1"},
 			{"name":"sqlServer","id":"2"},
 		]
 		return {
 			assemblys: assemblys,
 			assemblyType: assemblyType,
+			isEdit:isEdit,
 		}
 	},
 	watch:{
@@ -31,7 +34,7 @@ Vue.component("sql-type-selector", {
         },
 	},
 	template: `<div>
-	<select name="assemblyType" v-model="assemblyType" style="width: 250px;height: 30px;padding: 0 0 0 5px;line-height: 30px;font-size: 13px;border: 1px solid #d7d7d7;">
+	<select name="assemblyType" v-model="assemblyType" :disabled="isEdit"  style="width: 250px;height: 30px;padding: 0 0 0 5px;line-height: 30px;font-size: 13px;border: 1px solid #d7d7d7;">
 		<option value="-1">请选择</option>
 		<option v-for="assembly in assemblys" :value="assembly.id">{{assembly.name}}</option>
 	</select>
