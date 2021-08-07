@@ -101,7 +101,7 @@
         </div>
         <div style="display: inline-flex;margin-top: 10px;">
             <div style="width: 70px;margin-right: 10px;text-align: right;height: 26px;line-height: 26px;">关键词：</div>
-            <input type="text" v-model="searchKey" style="height: 26px;width: 1045px;line-height: 26px;border: 1px solid #d7d7d7;" placeholder="请输入SQL语句关键词"></input>
+            <input type="text" v-model="searchKey" style="height: 26px;width: 1045px;line-height: 26px;border: 1px solid #d7d7d7;" placeholder="请输入关键词"></input>
             <button class="ui button small" @click="onSearch('false')" type="button">搜索</button>
             <button class="ui button small" @click="onReset()" type="button">重置</button>
             <button class="ui button small" @click="onSearch('true')" type="button">导出</button>
@@ -130,10 +130,10 @@
                         <div style="display: inline-flex;">
                             <span v-show="!item.bOpen">&#9658;</span>
                             <span v-show="item.bOpen">&#9660;</span>
-                            <span style="margin-left: 5px;">{{item.db}}</span>
+                            <span style="margin-left: 5px;">{{item.db_name}}</span>
                         </div>
                     </td>
-                    <td>{{item.sip}}</td>
+                    <td>{{item.db_ip}}</td>
                     <td>{{item.cip}}</td>
                     <td>{{item.user}}</td>
                     <td>{{item.type}}</td>
@@ -168,12 +168,12 @@
                         </div>
                     </td>
                     <td>{{item.event_src}}</td>
-                    <td class="txt-overflow" style="min-width: 280px;max-width: 280px;">{{item.message}}</td>
-                    <td>{{item.event_name}}</td>
+                    <td class="txt-overflow" style="min-width: 280px;max-width: 280px;">{{getHostMessage(item)}}</td>
+                    <td>{{getLogType(item.event_src,item.event_name)}}</td>
                     <td>{{onChangeTimeFormat(item.timestamp)}}</td>
                 </tr>
                 <tr v-show="item.bOpen" style="min-height: 40px;">
-                    <td colspan="9">{{item.message}}</td>
+                    <td colspan="9">{{getHostMessage(item)}}</td>
                 </tr>
             </tbody>
         </table>

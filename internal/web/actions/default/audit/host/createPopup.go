@@ -34,6 +34,7 @@ func (this *CreatePopupAction) RunGet(params struct {
 	this.Data["systemSelect"] = params.System
 	this.Data["openState"] = params.Status
 	this.Data["id"] = params.Id
+	this.Data["edit"] = params.Edit
 	this.Show()
 }
 

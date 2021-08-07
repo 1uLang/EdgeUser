@@ -13,7 +13,7 @@
             <tr>
                 <td class="title">主机IP*</td>
                 <td>
-                    <input type="text" v-model="ip" style="height: 30px;width: 250px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                    <input type="text" v-model="ip" :disabled="edit" style="height: 30px;width: 250px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
                 </td>
             </tr>
             <tr>
@@ -21,11 +21,11 @@
                 <td>
                     <div style="display: inline-flex;">
                         <div style="width: 120px;cursor: null;" @click="onSelectSystem">
-                            <input type="radio" name="systemSelect" v-model="systemSelect" :value="1" />
+                            <input type="radio" :disabled="edit" name="systemSelect" v-model="systemSelect" :value="1" />
                             <span style="margin-left: 10px;font-size: 14px;">Linux</span>
                         </div>
                         <div style="width: 120px;cursor: null;" @click="onSelectSystem">
-                            <input type="radio" name="systemSelect"  v-model="systemSelect" :value="0" />
+                            <input type="radio" :disabled="edit" name="systemSelect"  v-model="systemSelect" :value="0" />
                             <span style="margin-left: 10px;font-size: 14px;">Windows</span>
                         </div>
                     </div>

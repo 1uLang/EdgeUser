@@ -1,12 +1,16 @@
 package user
 
 import (
-	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
+	"fmt"
+	"github.com/1uLang/zhiannet-api/common/model/edge_logins"
+	"github.com/1uLang/zhiannet-api/common/server/edge_logins_server"
 	"github.com/1uLang/zhiannet-api/edgeUsers/model"
 	"github.com/1uLang/zhiannet-api/edgeUsers/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/dlclark/regexp2"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/maps"
+	"github.com/xlzd/gotp"
 )
 
 type UpdateAction struct {
@@ -26,6 +30,7 @@ func (this *UpdateAction) RunPost(params struct {
 	Email    string
 	Remark   string
 	IsOn     uint8
+	OtpIsOn  bool
 
 	Must *actions.Must
 }) {
@@ -35,7 +40,6 @@ func (this *UpdateAction) RunPost(params struct {
 		Field("userId", params.UserId).
 		Require("请选择用户")
 
-	var editPwd bool
 	if len(params.Pass1) > 0 {
 		params.Must.
 			Field("pass1", params.Pass1).
@@ -52,7 +56,7 @@ func (this *UpdateAction) RunPost(params struct {
 		if match, err := reg.FindStringMatch(params.Pass1); err != nil || match == nil {
 			this.FailField("pass1", "密码格式不正确")
 		}
-		editPwd = true
+
 	}
 
 	params.Must.
@@ -83,8 +87,47 @@ func (this *UpdateAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	if editPwd {
-		edge_users_server.UpdatePwdAt(uint64(this.UserId()))
+	//otp认证
+	otpLogin, err := edge_logins_server.GetInfoByUid(uint64(params.UserId))
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	fmt.Println("otpLogin.is", params.OtpIsOn)
+	fmt.Println("otpLogin", otpLogin)
+	if params.OtpIsOn {
+		if otpLogin == nil || otpLogin.Id == 0 {
+			otpLogin = &edge_logins.EdgeLogins{
+				Id:   0,
+				Type: "otp",
+				Params: string(maps.Map{
+					"secret": gotp.RandomSecret(16), // TODO 改成可以设置secret长度
+				}.AsJSON()),
+				IsOn:    1,
+				AdminId: 0,
+				UserId:  uint64(params.UserId),
+				State:   1,
+			}
+		} else {
+			// 如果已经有了，就覆盖，这样可以保留既有的参数
+			otpLogin.IsOn = 1
+		}
+
+		_, err = edge_logins_server.Save(otpLogin)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+	} else {
+		fmt.Println("otp=====", otpLogin)
+		if otpLogin != nil && otpLogin.Id > 0 {
+			_, err = edge_logins_server.UpdateOpt(uint64(otpLogin.Id), 0)
+			if err != nil {
+				this.ErrorPage(err)
+				return
+			}
+		}
+
 	}
 	this.Success()
 }

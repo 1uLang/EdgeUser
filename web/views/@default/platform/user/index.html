@@ -18,6 +18,7 @@
       <th class='table-head-bg' style="width: 200px;" >全名</th>
       <th class='table-head-bg' style="width: 200px;" >手机号</th>
       <th class='table-head-bg' style="width: 400px;" >注册时间</th>
+      <th class='table-head-bg' style="width: 200px;" >OTP认证</th>
       <th class='table-head-bg' style="width: 200px;" >状态</th>
       <th class='table-head-bg' style="width: 200px;" >操作</th>
     </tr>
@@ -43,6 +44,10 @@
         <div style="padding: 4px 0;">
           {{item.createdTime}}
         </div>
+      </td>
+      <td class="">
+        <span v-if="item.otpIsOn" class="green">Y</span>
+        <span v-else class="disabled">N</span>
       </td>
       <td>
         <div :class="{'status-open':item.isOn=='1','status-close':item.isOn=='0'}">
@@ -110,11 +115,33 @@
           <textarea rows="3" v-model="editRemark" style="resize: none;"></textarea>
         </td>
       </tr>
+
       <tr>
         <td>是否启用</td>
         <td>
           <input id="editCheckBox" type="checkbox" value="" :checked="editEnabled==1" @change="onListenEditCheckBox"/>
         </td>
+      </tr>
+      <tr>
+        <td>OTP认证</td>
+        <td>
+          <input id="otpIsOn" type="checkbox" value="" :checked="otpIsOn" @change="onListenEditCheckBoxOTP"/>
+          <p class="comment">启用OTP认证后，在用户登录的时候需要同时填写OTP动态密码。</p>
+        </td>
+      </tr>
+<!--      <tr v-if="otpIsOn">-->
+<!--        <td colspan="2"><more-options-indicator>更多信息</more-options-indicator></td>-->
+<!--      </tr>-->
+      <tr v-if="otpIsOn">
+        <td>认证二维码</td>
+        <td>
+          <img :src="'/platform/user/otpQrcode?userId=' + userid"/>
+          <p class="comment">可以通过二维码快速添加OTP认证信息到App中。</p>
+        </td>
+      </tr>
+      <tr v-if="otpIsOn">
+        <td>密钥</td>
+        <td>{{otpParams}}</td>
       </tr>
     </table>
     <div style="width: 100%;display: flex;align-items: center;">
