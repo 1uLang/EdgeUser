@@ -58,6 +58,16 @@
     line-height: 30px;
     cursor: pointer;
 }
+.clean-btn{
+    width: 60px;
+    height: 30px;
+    color: #333;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+    border: 1px solid #d7d7d7;
+}
 
 .sure-btn-min{
     width: 50px;
@@ -68,6 +78,15 @@
     text-align: center;
     line-height: 20px;
     cursor: pointer;
+}
+
+.radio-box-style{
+    width: 100px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    margin-right: 30px;
+    cursor: default;
 }
 
 .dialog-style{
@@ -83,8 +102,8 @@
 }
 
 .dialog-bg-style{
-    width: 445px;
-    height: 270px;
+    width: 600px;
+    height: 400px;
     background: inherit;
     background-color: rgba(255, 255, 255, 1);
     box-sizing: border-box;
@@ -94,6 +113,43 @@
     border-radius: 0px;
     box-shadow: none;
 }
+
+.auth-middle-btn-stype{
+    width: 80px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border: 1px solid #d7d7d7;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.auth-people-box-style{
+    width: 150px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #d7d7d7;
+}
+
+.auth-people-title-style{
+    border-bottom: 1px solid #d7d7d7;
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.auth-people-content-style{
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    cursor: default;
+}
+
 
 .btn-switch {
     cursor: pointer;
