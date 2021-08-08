@@ -146,7 +146,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 		{
 			"code": "waf",
 			"name": "态势感知",
-			"icon": "shield",
+			"icon": "ioxhost",
 			"url":  "/waf",
 			"subItems": []maps.Map{
 				{
@@ -227,7 +227,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"code": "webscan",
 			"url":  "/webscan/targets",
 			"name": "漏洞扫描",
-			"icon": "ioxhost",
+			"icon": "yelp",
 			"subItems": []maps.Map{
 				{
 					"name": "扫描目标",
@@ -250,7 +250,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"code": "fortcloud",
 			"url":  "/fortcloud/assets",
 			"name": "堡垒机",
-			"icon": "ioxhost",
+			"icon": "shield",
 			"subItems": []maps.Map{
 				{
 					"name": "资产管理",
