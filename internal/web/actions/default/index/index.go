@@ -181,5 +181,6 @@ func (this *IndexAction) RunPost(params struct {
 	}
 	//记录登录成功30分钟
 	cache.SetNx(fmt.Sprintf("login_success_userid_%v", userId), time.Minute*30)
+	cache.DelKey(fmt.Sprintf("user_%v", params.Username))
 	this.Success()
 }
