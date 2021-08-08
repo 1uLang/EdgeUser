@@ -12,7 +12,6 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/assets"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/audit"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/cert"
-	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/command"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/sessions"
 
 	//主机安全防护

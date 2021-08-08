@@ -56,19 +56,28 @@ Tea.context(function () {
 
     //回放
     this.onReplay = function (item) {
-        if (item.can_replay) {
-            teaweb.confirm("确定要回放该会话吗？", function () {
-                this.$post(".replay")
-                    .params({
-                        Id: item.id
-                    }).success(resp => {
-                    if (resp.code === 200) {
-                        let token = resp.data.token
-                        let url = resp.data.url
-                        console.log(token, url)
-                    }
-                })
-            })
-        }
+        teaweb.confirm("确定要回放该会话吗？", function () {
+            this.onTestReplay("http://192.168.137.8:8002/fortcloud/audit/repaly?id="+item.id)
+        })
+
+    }
+
+    this.bShowAudioPlayBox = false
+    this.onTestReplay = function (url) {
+        this.bShowAudioPlayBox = true
+        var RECORDING_URL = url;
+        var display = document.getElementById('display');
+        var tunnel = new Guacamole.StaticHTTPTunnel(RECORDING_URL);
+        var recording = new Guacamole.SessionRecording(tunnel);
+        var recordingDisplay = recording.getDisplay();
+        display.appendChild(recordingDisplay.getElement());
+        recording.connect();
+        recording.onplay = () => {
+            console.log("onPlayHandle")
+        };
+        recording.onpause = () => {
+            console.log("onPauseHandle")
+        };
+
     }
 })

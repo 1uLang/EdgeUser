@@ -1,6 +1,7 @@
 <!-- 扫描报告 -->
 {$layout}
 {$var "header"}
+<script type="text/javascript" src="/js/guacamole-common-js/guacamole-common.min.js"></script>
 {$end}
 <div style="width: 100%;height: 650px;margin-top: 10px;overflow-x: auto; overflow-y: auto;">
     <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
@@ -36,5 +37,14 @@
         </tr>
         </tbody>
     </table>
-</div>    
+</div>
 
+
+<div v-if="bShowAudioPlayBox" class="dialog-style" id="playAudio-dialog">
+    <div class="dialog-bg-style">
+        <div id="player">
+            <div id="display">
+            </div>
+        </div>
+    </div>
+</div>

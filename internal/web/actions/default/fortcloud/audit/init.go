@@ -14,7 +14,7 @@ func init() {
 			Prefix("/fortcloud/audit").
 			Get("", new(IndexAction)).
 			Post("/delete", new(DeleteAction)).
-			//Post("/replay", new(ReplayAction)).
+			Get("/replay", new(ReplayAction)).
 			//Post("/download", new(DownloadAction)).
 			//Post("/monitor", new(MonitorAction)).
 			EndAll()

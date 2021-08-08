@@ -146,24 +146,36 @@ Tea.context(function () {
         }
         this.selectNoAuthPeopleListData = []
         this.selectAuthPeopleListData = []
-      
+
     }
 
     this.onCloseAuth = function () {
         this.bShowhAuth = false
         this.id = ""
     }
+    this.onGetIdList = function (array){
+        var tempList = []
+        if(array && array.length>0){
+            for(var index=0;index<array.length;index++){
+                if(!this.onCheckHadValue(array[index].id,tempList)){
+                    tempList.push(array[index].id)
+                }
+            }
+        }
+        return tempList
+    }
     this.onSaveAuth = function () {
         //req
         this.$post(".authorize")
             .params({
                 Id: this.id,
-                Users: this.authUsers,
+                Users: this.onGetIdList(this.authUsers),
             }).success(resp => {
             if (resp.code === 200) {
                 teaweb.success("授权成功")
             }
-        }).refresh()
+        })
+            .refresh()
 
     }
     this.onEdit = function (id) {
@@ -198,8 +210,8 @@ Tea.context(function () {
                 .params({
                     Id: id
                 }).success(resp=>{
-                    if(resp.code===200)
-                        teaweb.success("删除成功")
+                if(resp.code===200)
+                    teaweb.success("删除成功")
             })
                 .refresh()
         })
@@ -329,7 +341,7 @@ Tea.context(function () {
         }
 
     }
-    
+
     this.selectNoAuthPeopleListData = []
     this.selectAuthPeopleListData = []
 
@@ -376,7 +388,7 @@ Tea.context(function () {
                 }
             }
         } else {
-            
+
             for (var index = 0; index < noAuthList.length; index++) {
                 if (noAuthList[index].checked && !noAuthList[index].disabled) {
                     noAuthList[index].checked = false
@@ -437,7 +449,7 @@ Tea.context(function () {
             if(!noAuthList[index].disabled){
                 noAuthList[index].checked = false
             }
-            
+
         }
     }
 
