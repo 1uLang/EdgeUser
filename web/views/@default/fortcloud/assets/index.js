@@ -296,9 +296,11 @@ Tea.context(function () {
         }
 
     }
-
+    
     this.selectNoAuthPeopleListData = []
     this.selectAuthPeopleListData = []
+
+    this.changePeopleList = []
 
     this.onGetAuthPeopleItemInfo = function (id, table) {
         if (table && id && table.length > 0 && id > 0) {
@@ -324,7 +326,7 @@ Tea.context(function () {
     this.onCheckSelectAllNoAuth = function () {
         var tempElement = document.getElementById("noAuth-allSelect")
         for (var index = 0; index < this.allUsers.length; index++) {
-            if (!this.onCheckHadValue(this.allUsers[index].id, this.selectNoAuthPeopleListData)) {
+            if (!this.allUsers[index].my &&!this.onCheckHadValue(this.allUsers[index].id, this.selectNoAuthPeopleListData)) {
                 tempElement.checked = false
                 return
             }
@@ -337,7 +339,7 @@ Tea.context(function () {
         if (tempElement.checked) {
             let noAuthList = document.getElementsByName("noAuthSelect")
             for (var index = 0; index < noAuthList.length; index++) {
-                if (!noAuthList[index].checked) {
+                if (!noAuthList[index].checked && !noAuthList[index].disabled) {
                     noAuthList[index].checked = true
                     this.onAddSelectNoAuth(noAuthList[index].value, noAuthList[index].data)
                 }
@@ -353,36 +355,37 @@ Tea.context(function () {
         }
 
     }
-    this.onListenClickNoAuthChange = function (id, name) {
-        console.log(id)
+    this.onListenClickNoAuthChange = function (item) {
+        if(item.my){
+            return
+        }
         let noAuthList = document.getElementsByName("noAuthSelect")
         for (var index = 0; index < noAuthList.length; index++) {
-            console.log(noAuthList[index].value)
-            if (noAuthList[index].value == id) {
+            if (noAuthList[index].value == item.id) {
                 if (noAuthList[index].checked) {
                     noAuthList[index].checked = false
-                    this.onRemoveSelectNoAuth(id)
+                    this.onRemoveSelectNoAuth(item.id)
                 } else {
                     noAuthList[index].checked = true
-                    this.onAddSelectNoAuth(id, name)
+                    this.onAddSelectNoAuth(item.id, item.name)
                 }
                 break
             }
         }
         this.onCheckSelectAllNoAuth()
     }
-    this.onListenSelectNoAuthChange = function (id, name) {
-        var hadSelect = this.onCheckHadValue(id, this.selectNoAuthPeopleListData)
+    this.onListenSelectNoAuthChange = function (item) {
+        var hadSelect = this.onCheckHadValue(item.id, this.selectNoAuthPeopleListData)
         if (hadSelect) {
-            this.onRemoveSelectNoAuth(id)
+            this.onRemoveSelectNoAuth(item.id)
         } else {
-            this.onAddSelectNoAuth(id, name)
+            this.onAddSelectNoAuth(item.id, item.name)
         }
         this.onCheckSelectAllNoAuth()
     }
     this.onAddSelectNoAuth = function (id, name) {
         if (id && name) {
-            var tempData = {id: id, name: name}
+            var tempData = {id: id, name: name,my:false}
             this.selectNoAuthPeopleListData.push(tempData)
         }
     }
@@ -400,7 +403,10 @@ Tea.context(function () {
         }
         let noAuthList = document.getElementsByName("noAuthSelect")
         for (var index = 0; index < noAuthList.length; index++) {
-            noAuthList[index].checked = false
+            if(!noAuthList[index].disabled){
+                noAuthList[index].checked = false
+            }
+            
         }
     }
 
@@ -425,35 +431,35 @@ Tea.context(function () {
             }
         }
     }
-    this.onListenClickAuthChange = function (id, name) {
+    this.onListenClickAuthChange = function (item) {
         let authList = document.getElementsByName("authSelect")
         for (var index = 0; index < authList.length; index++) {
             if (authList[index].value == id) {
                 if (authList[index].checked) {
                     authList[index].checked = false
-                    this.onRemoveSelectAuth(id)
+                    this.onRemoveSelectAuth(item.id)
                 } else {
                     authList[index].checked = true
-                    this.onAddSelectAuth(id, name)
+                    this.onAddSelectAuth(item.id, item.name)
                 }
                 break
             }
         }
         this.onCheckSelectAllAuth()
     }
-    this.onListenSelectAuthChange = function (id, name) {
-        var hadSelect = this.onCheckHadValue(id, this.selectAuthPeopleListData)
+    this.onListenSelectAuthChange = function (item) {
+        var hadSelect = this.onCheckHadValue(item.id, this.selectAuthPeopleListData)
         if (hadSelect) {
-            this.onRemoveSelectAuth(id)
+            this.onRemoveSelectAuth(item.id)
         } else {
-            this.onAddSelectAuth(id, name)
+            this.onAddSelectAuth(item.id, name)
         }
         this.onCheckSelectAllAuth()
     }
 
     this.onAddSelectAuth = function (id, name) {
         if (id && name) {
-            var tempData = {id: id, name: name}
+            var tempData = {id: id, name: name,my:false}
             this.selectAuthPeopleListData.push(tempData)
         }
     }
@@ -467,6 +473,7 @@ Tea.context(function () {
                 this.allUsers.push(element)
                 this.authUsers.splice(this.authUsers.findIndex(i => i.id === element.id), 1);
             });
+
             this.selectAuthPeopleListData = []
         }
         let authList = document.getElementsByName("authSelect")
