@@ -375,10 +375,10 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 	for _, m := range allMaps {
 
 		//默认展示该组件
-		if m.GetString("code") == "hids" || m.GetString("code") == "webscan" || m.GetString("code") == "fortcloud" {
-			result = append(result, m)
-			continue
-		}
+		//if m.GetString("code") == "hids" || m.GetString("code") == "webscan" || m.GetString("code") == "fortcloud" {
+		//	result = append(result, m)
+		//	continue
+		//}
 
 		//if m.GetString("code") == "finance" {
 		//
