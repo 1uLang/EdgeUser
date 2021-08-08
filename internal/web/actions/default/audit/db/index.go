@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	"github.com/1uLang/zhiannet-api/audit/request"
 	"github.com/1uLang/zhiannet-api/audit/server/audit_db"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
@@ -46,9 +45,6 @@ func (this *IndexAction) RunGet(params struct {
 	} else {
 		this.Data["dbList"] = []maps.Map{}
 	}
-
-	fmt.Println("params==", params)
-	fmt.Println("list==", list)
 	if params.Json {
 		this.Success()
 	}

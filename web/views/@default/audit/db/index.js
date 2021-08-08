@@ -3,6 +3,10 @@ Tea.context(function () {
     this.searchSQLName = ""
     this.searchSQLIp = ""
 
+    this.bShowhAuth = false
+    this.asset_name = ""
+    this.allUsers = []
+
     this.getStatus = function (status) {
         switch (status) {
             case 1:
