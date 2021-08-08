@@ -28,6 +28,7 @@ func (this *AuthAction) RunGet(params struct {
 		},
 	})
 	var email string
+	this.Data["userList"] = []interface{}{}
 	if err != nil || list == nil {
 
 	} else {
@@ -37,6 +38,7 @@ func (this *AuthAction) RunGet(params struct {
 			}
 
 		}
+		this.Data["userList"] = list.Data.UserList
 	}
 	email = strings.TrimSpace(email)
 	this.Data["authValue"] = email
