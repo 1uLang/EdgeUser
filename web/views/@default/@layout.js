@@ -100,7 +100,7 @@ Tea.context(function () {
         if(this.curSelectCode!=code){
             this.curSelectCode = code
         }
-		this.onOpenDialog()
+		// this.onOpenDialog()
         sessionStorage.setItem("leftSelectCode",this.curSelectCode)
     }
 
