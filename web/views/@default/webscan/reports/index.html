@@ -35,8 +35,8 @@
                 <td>
                     <!--主机漏洞扫描-->
                     <div style="display: inline-flex;" v-if="item.owner">
-                        <div class="pdf-style" @click="exportFile(item.id,'csv')">CSV</div>
-                        <div class="html-style" @click="exportFile(item.id,'html')">HTML</div>
+                        <div class="pdf-style" @click="exportFile(item,'csv')">CSV</div>
+                        <div class="html-style" @click="exportFile(item,'html')">HTML</div>
                     </div>
                     <div style="display: inline-flex;" v-else>
                         <div class="pdf-style" @click="downloadFile(item.download[1])">PDF</div>

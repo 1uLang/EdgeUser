@@ -1,10 +1,10 @@
-package assets
+package cert
 
 import (
 	"fmt"
 	"github.com/1uLang/zhiannet-api/edgeUsers/model"
 	"github.com/1uLang/zhiannet-api/edgeUsers/server"
-	asset_model "github.com/1uLang/zhiannet-api/next-terminal/model/asset"
+	cert_model "github.com/1uLang/zhiannet-api/next-terminal/model/cert"
 	next_terminal_server "github.com/1uLang/zhiannet-api/next-terminal/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud"
@@ -32,22 +32,22 @@ func (this *AuthorizeAction) RunGet(params struct {
 
 	params.Must.
 		Field("id", params.Id).
-		Require("请选择资产")
+		Require("请选择授权凭证")
 
 	req, err := this.checkAndNewServerRequest()
 	if err != nil {
 		this.ErrorPage(fmt.Errorf("堡垒机组件错误:" + err.Error()))
 		return
 	}
-	args := &asset_model.AuthorizeUserListReq{}
-	args.AssetId = params.Id
-	list, err := req.Assets.AuthorizeUserList(args)
+	args := &cert_model.AuthorizeUserListReq{}
+	args.ID = params.Id
+	list, err := req.Cert.AuthorizeUserList(args)
 	if err != nil {
 		this.ErrorPage(fmt.Errorf("堡垒机组件错误:" + err.Error()))
 		return
 	}
-	contain := map[string]bool{}
-	for _, v := range list {
+	contain := map[uint64]bool{}
+	for _, v := range list.UserIds {
 		contain[v] = true
 	}
 	users, err := server.ListEnabledUsers(&model.ListReq{
@@ -62,9 +62,9 @@ func (this *AuthorizeAction) RunGet(params struct {
 	allUsers := make([]map[string]interface{}, 0)
 	authUsers := make([]map[string]interface{}, 0)
 	for _, v := range users {
-		if _, isExist := contain[fmt.Sprintf("%v", v.Id)]; isExist {
+		if _, isExist := contain[v.Id]; isExist {
 			authUsers = append(authUsers, map[string]interface{}{
-				"name": fmt.Sprintf("%v(%v)",v.Name,v.Username),
+				"name": fmt.Sprintf("%v(%v)", v.Name, v.Username),
 				"id":   v.Id,
 			})
 		} else {
@@ -94,23 +94,22 @@ func (this *AuthorizeAction) RunPost(params struct {
 
 	params.Must.
 		Field("id", params.Id).
-		Require("请选择资产")
+		Require("请选择授权凭证")
 
 	req, err := this.checkAndNewServerRequest()
 	if err != nil {
 		this.ErrorPage(fmt.Errorf("堡垒机组件错误:" + err.Error()))
 		return
 	}
-	args := &asset_model.AuthorizeReq{}
-	args.AssetId = params.Id
+	args := &cert_model.AuthorizeReq{}
+	args.ID = params.Id
 	args.UserIds = params.Users
-	args.UserId = uint64(this.UserId())
-	err = req.Assets.Authorize(args)
+	err = req.Cert.Authorize(args)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
 	// 日志
-	this.CreateLogInfo("堡垒机 - 修改资产授权:[%v]成功", params.Id)
+	this.CreateLogInfo("堡垒机 - 修改凭证授权:[%v]成功", params.Id)
 	this.Success()
 }

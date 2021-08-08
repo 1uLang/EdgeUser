@@ -1,9 +1,9 @@
-package admins
+package cert
 
 import (
 	"fmt"
-	admin_users_model "github.com/1uLang/zhiannet-api/jumpserver/model/admin_users"
-	jumpserver_server "github.com/1uLang/zhiannet-api/jumpserver/server"
+	cert_model "github.com/1uLang/zhiannet-api/next-terminal/model/cert"
+	next_terminal_server "github.com/1uLang/zhiannet-api/next-terminal/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud"
 	"github.com/iwind/TeaGo/actions"
@@ -12,29 +12,24 @@ import (
 type UpdateAction struct {
 	actionutils.ParentAction
 }
-
-func (this *UpdateAction) checkAndNewServerRequest() (*jumpserver_server.Request, error) {
+func (this *UpdateAction) checkAndNewServerRequest() (*next_terminal_server.Request, error) {
 	if fortcloud.ServerUrl == "" {
 		err := fortcloud.InitAPIServer()
 		if err != nil {
 			return nil, err
 		}
 	}
-	username, _ := this.UserName()
-	return fortcloud.NewServerRequest(username, "dengbao-"+username)
+	return fortcloud.NewServerRequest(fortcloud.Username, fortcloud.Password)
 }
+
 func (this *UpdateAction) RunPost(params struct {
-	Id       string
+	Id   string
 	Name     string
 	Username string
 	Password string
-	Comment  string
 
 	Must *actions.Must
 }) {
-	params.Must.
-		Field("id", params.Id).
-		Require("请选择管理用户")
 
 	params.Must.
 		Field("name", params.Name).
@@ -54,19 +49,18 @@ func (this *UpdateAction) RunPost(params struct {
 		return
 	}
 
-	args := &admin_users_model.UpdateReq{}
+	args := &cert_model.UpdateReq{}
 	args.ID = params.Id
 	args.Name = params.Name
-	args.UserName = params.Username
+	args.Username = params.Username
 	args.Password = params.Password
-	args.Comment = params.Comment
 	args.UserId = uint64(this.UserId())
-	_, err = req.AdminUser.Update(args)
+	err = req.Cert.Update(args)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
 	// 日志
-	this.CreateLogInfo("堡垒机 - 修改管理用户:[%v]成功", params.Id)
+	this.CreateLogInfo("堡垒机 - 修改凭证:[%v]成功", params.Id)
 	this.Success()
 }

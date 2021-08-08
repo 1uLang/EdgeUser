@@ -1,29 +1,29 @@
-package assets
+package sessions
 
 import (
 	"fmt"
-	jumpserver_server "github.com/1uLang/zhiannet-api/jumpserver/server"
+	session_model "github.com/1uLang/zhiannet-api/next-terminal/model/session"
+	next_terminal_server "github.com/1uLang/zhiannet-api/next-terminal/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud"
 	"github.com/iwind/TeaGo/actions"
 )
 
-type RefreshAction struct {
-
+type DisConnectAction struct {
 	actionutils.ParentAction
 }
 
-func (this *RefreshAction) checkAndNewServerRequest() (*jumpserver_server.Request, error) {
+func (this *DisConnectAction) checkAndNewServerRequest() (*next_terminal_server.Request, error) {
 	if fortcloud.ServerUrl == "" {
 		err := fortcloud.InitAPIServer()
 		if err != nil {
 			return nil, err
 		}
 	}
-	username, _ := this.UserName()
-	return fortcloud.NewServerRequest(username, "dengbao-"+username)
+	return fortcloud.NewServerRequest(fortcloud.Username, fortcloud.Password)
 }
-func (this *RefreshAction) RunPost(params struct {
+
+func (this *DisConnectAction) RunPost(params struct {
 	Id   string
 	Must *actions.Must
 }) {
@@ -37,13 +37,14 @@ func (this *RefreshAction) RunPost(params struct {
 		this.ErrorPage(fmt.Errorf("堡垒机组件错误:" + err.Error()))
 		return
 	}
-	url,err := req.Assets.Refresh(params.Id)
+	args := &session_model.DisConnectReq{}
+	args.Id = params.Id
+	err = req.Session.DisConnect(args)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
 	// 日志
-	this.CreateLogInfo("堡垒机 - 更新硬件信息:%v成功", params.Id)
-	this.Data["url"] = url
+	this.CreateLogInfo("堡垒机 - 断开连接资产:[%v]成功", params.Id)
 	this.Success()
 }

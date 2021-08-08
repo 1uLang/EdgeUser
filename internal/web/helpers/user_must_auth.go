@@ -259,8 +259,8 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 				},
 				{
 					"name": "授权凭证",
-					"url":  "/fortcloud/admins",
-					"code": "admins",
+					"url":  "/fortcloud/cert",
+					"code": "cert",
 				},
 				{
 					"name": "会话管理",

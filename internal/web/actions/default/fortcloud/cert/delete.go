@@ -1,46 +1,50 @@
-package audit
+package cert
 
 import (
 	"fmt"
-	jumpserver_server "github.com/1uLang/zhiannet-api/jumpserver/server"
+	cert_model "github.com/1uLang/zhiannet-api/next-terminal/model/cert"
+	next_terminal_server "github.com/1uLang/zhiannet-api/next-terminal/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud"
 	"github.com/iwind/TeaGo/actions"
 )
 
-type MonitorAction struct {
+type DeleteAction struct {
 	actionutils.ParentAction
 }
 
-func (this *MonitorAction) checkAndNewServerRequest() (*jumpserver_server.Request, error) {
+func (this *DeleteAction) checkAndNewServerRequest() (*next_terminal_server.Request, error) {
 	if fortcloud.ServerUrl == "" {
 		err := fortcloud.InitAPIServer()
 		if err != nil {
 			return nil, err
 		}
 	}
-	username, _ := this.UserName()
-	return fortcloud.NewServerRequest(username, "dengbao-"+username)
-	//return fortcloud.NewServerRequest("admin", "21ops.com")
+	return fortcloud.NewServerRequest(fortcloud.Username, fortcloud.Password)
 }
-func (this *MonitorAction) RunPost(params struct {
+
+func (this *DeleteAction) RunPost(params struct {
 	Id   string
 	Must *actions.Must
 }) {
 
 	params.Must.
 		Field("id", params.Id).
-		Require("请选择需要回放的会话")
+		Require("请选择授权凭证")
 
 	req, err := this.checkAndNewServerRequest()
 	if err != nil {
 		this.ErrorPage(fmt.Errorf("堡垒机组件错误:" + err.Error()))
 		return
 	}
-	err = req.Session.Monitor(params.Id)
+	args := &cert_model.DeleteReq{}
+	args.ID = params.Id
+	err = req.Cert.Delete(args)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
+	// 日志
+	this.CreateLogInfo("堡垒机 - 删除凭证:[%v]成功", params.Id)
 	this.Success()
 }
