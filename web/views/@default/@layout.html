@@ -11,15 +11,15 @@
     {$end}
     <link rel="stylesheet" type="text/css" href="/_/@default/@layout.css" media="all"/>
     {$TEA.SEMANTIC}
-	<link rel="stylesheet" type="text/css" href="/_/@default/@layout_override.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="/_/@default/@layout_override.css" media="all"/>
 
     {$TEA.VUE}
     {$echo "header"}
     <script type="text/javascript" src="/_/@default/@layout.js"></script>
-	<script type="text/javascript" src="/ui/components.js?v=v{$.teaVersion}"></script>
-	<script type="text/javascript" src="/js/utils.js"></script>
-	<script type="text/javascript" src="/js/sweetalert2/dist/sweetalert2.all.min.js"></script>
-	<script type="text/javascript" src="/js/date.tea.js"></script>
+    <script type="text/javascript" src="/ui/components.js?v=v{$.teaVersion}"></script>
+    <script type="text/javascript" src="/js/utils.js"></script>
+    <script type="text/javascript" src="/js/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <script type="text/javascript" src="/js/date.tea.js"></script>
 </head>
 <body>
 
@@ -28,15 +28,15 @@
     <div class="ui menu top-nav blue inverted small borderless" v-cloak="">
         <a href="/" class="item">
             <i class="ui icon leaf" v-if="teaLogoFileId == 0"></i><img v-if="teaLogoFileId > 0" :src="'/ui/image/' + teaLogoFileId" style="width: auto;height: 1.6em"/> &nbsp; {{teaTitle}}&nbsp;<sup v-if="teaShowVersion">v{{teaVersion}}</sup> &nbsp;
-		</a>
+        </a>
 
         <div class="right menu">
-			<a href="/messages" class="item" :class="{active:teaMenu == 'message'}"><span :class="{'blink':globalMessageBadge > 0}"><i class="icon bell"></i>消息({{globalMessageBadge}}) </span></a>
-			<a href="/settings/profile" class="item">
-				<i class="icon user" v-if="teaUserAvatar.length == 0"></i>
-				<img class="avatar" alt="" :src="teaUserAvatar" v-if="teaUserAvatar.length > 0"/>
+            <a href="/messages" class="item" :class="{active:teaMenu == 'message'}"><span :class="{'blink':globalMessageBadge > 0}"><i class="icon bell"></i>消息({{globalMessageBadge}}) </span></a>
+            <a href="/settings/profile" class="item">
+                <i class="icon user" v-if="teaUserAvatar.length == 0"></i>
+                <img class="avatar" alt="" :src="teaUserAvatar" v-if="teaUserAvatar.length > 0"/>
                 {{teaUsername}}
-			</a>
+            </a>
             <a :href="Tea.url('logout')" class="item" title="安全退出登录"><i class="icon sign out"></i>退出</a>
         </div>
     </div>
@@ -44,10 +44,10 @@
     <!-- 左侧主菜单 -->
     <div class="main-menu" v-cloak="">
         <div class="ui labeled menu vertical blue inverted tiny borderless">
-			<div class="item"></div>
+            <div class="item"></div>
             <div v-for="module in teaModules">
                 <a v-if="module.subItems && module.subItems.length>0" class="item" :class="{active:curSelectCode===module.code}" :href="onChangeUrl(module.url)"
-                    @click="onSetLeftTouchCode(module.code)">
+                   @click="onSetLeftTouchCode(module.code)">
                     <span v-if="module.code.length > 0">
 						<i class="window restore outline icon" v-if="module.icon == null"></i>
 						<i class="ui icon" v-if="module.icon != null" :class="module.icon"></i>
@@ -55,13 +55,13 @@
 					</span>
                 </a>
                 <div v-if="module.subItems && module.subItems.length>0 && curSelectCode == module.code" class="sub-items">
-					<a class="item" v-for="subItem in module.subItems" v-if="subItem.isOn !== false" :href="onChangeUrl(subItem.url)" style="padding: 0.9em 1em;" @click="onOpenDialog">
-                        <i class="icon angle right" style="margin: 0;float: left;" v-if="subItem.code == teaMenu"></i> 
+                    <a class="item" v-for="subItem in module.subItems" v-if="subItem.isOn !== false" :href="onChangeUrl(subItem.url)" style="padding: 0.9em 1em;" @click="onOpenDialog">
+                        <i class="icon angle right" style="margin: 0;float: left;" v-if="subItem.code == teaMenu"></i>
                         <span class="module-name">{{subItem.name}}</span>
                     </a>
                 </div>
                 <a v-if="!module.subItems ||module.subItems.length==0" class="item" :href="onChangeUrl(module.url)"
-                    :class="{active:curSelectCode===module.code}" @click="onSetLeftTouchCode(module.code)">
+                   :class="{active:curSelectCode===module.code}" @click="onSetLeftTouchCode(module.code)">
 
                     <span v-if="module.code.length > 0">
 						<i class="window restore outline icon" v-if="module.icon == null"></i>
@@ -71,18 +71,18 @@
                 </a>
             </div>
             <!-- 模块 -->
-			<!-- <div v-for="module in teaModules">
-				<a class="item" :href="Tea.url(module.code)" :class="{active:teaMenu == module.code && teaSubMenu.length == 0, separator:module.code.length == 0}">
-					<span v-if="module.code.length > 0">
-						<i class="window restore outline icon" v-if="module.icon == null"></i>
-						<i class="ui icon" v-if="module.icon != null" :class="module.icon"></i>
-						<span>{{module.name}}</span>
-					</span>
-				</a>
-				<div v-if="teaMenu == module.code" class="sub-items">
-					<a class="item" v-for="subItem in module.subItems" :href="subItem.url" :class="{active:subItem.code == teaSubMenu}">{{subItem.name}}</a>
-				</div>
-			</div> -->
+            <!-- <div v-for="module in teaModules">
+                <a class="item" :href="Tea.url(module.code)" :class="{active:teaMenu == module.code && teaSubMenu.length == 0, separator:module.code.length == 0}">
+                    <span v-if="module.code.length > 0">
+                        <i class="window restore outline icon" v-if="module.icon == null"></i>
+                        <i class="ui icon" v-if="module.icon != null" :class="module.icon"></i>
+                        <span>{{module.name}}</span>
+                    </span>
+                </a>
+                <div v-if="teaMenu == module.code" class="sub-items">
+                    <a class="item" v-for="subItem in module.subItems" :href="subItem.url" :class="{active:subItem.code == teaSubMenu}">{{subItem.name}}</a>
+                </div>
+            </div> -->
         </div>
     </div>
 
@@ -97,23 +97,23 @@
 
         <!-- 功能区 -->
         {$TEA.VIEW}
-        <div class="dialog-style" id="waitting-dialog" style="display: none;">
-            <div class="dialog-bg-style">
-                <img src='/images/waitting_dialog2.gif' width="150px" height="150px"/>
-            </div>
-        </div>
+<!--        <div class="dialog-style" id="waitting-dialog" style="display: none;">-->
+<!--            <div class="dialog-bg-style">-->
+<!--                <img src='/images/waitting_dialog2.gif' width="150px" height="150px"/>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
 
-	<!-- 底部 -->
-	<div id="footer" class="ui menu inverted light-blue borderless small" v-if="teaShowOpenSourceInfo">
-		<a  href="/settings/upgrade" class="item" title="点击进入检查版本更新页面">{{teaName}} v{{teaVersion}}</a>
-		<a href="https://github.com/TeaOSLab/EdgeAdmin" target="_blank" class="item">GitHub</a>
-		<!--<a href="http://teaos.cn" target="_blank" class="item">官网</a>
-		<a href="http://teaos.cn/doc" target="_blank" class="item">文档</a>-->
-		<a href="https://github.com/TeaOSLab/EdgeAdmin/issues" target="_blank" class="item">提Bug</a>
-		<a class="item" @click.prevent="showQQGroupQrcode()">QQ讨论群：659832182 &nbsp;<i class="icon qrcode"></i> </a>
-		<a class="item right" href="http://teaos.cn/doc/donate/Index.md" target="_blank">捐赠作者</a>
-	</div>
+    <!-- 底部 -->
+    <div id="footer" class="ui menu inverted light-blue borderless small" v-if="teaShowOpenSourceInfo">
+        <a  href="/settings/upgrade" class="item" title="点击进入检查版本更新页面">{{teaName}} v{{teaVersion}}</a>
+        <a href="https://github.com/TeaOSLab/EdgeAdmin" target="_blank" class="item">GitHub</a>
+        <!--<a href="http://teaos.cn" target="_blank" class="item">官网</a>
+        <a href="http://teaos.cn/doc" target="_blank" class="item">文档</a>-->
+        <a href="https://github.com/TeaOSLab/EdgeAdmin/issues" target="_blank" class="item">提Bug</a>
+        <a class="item" @click.prevent="showQQGroupQrcode()">QQ讨论群：659832182 &nbsp;<i class="icon qrcode"></i> </a>
+        <a class="item right" href="http://teaos.cn/doc/donate/Index.md" target="_blank">捐赠作者</a>
+    </div>
 </div>
 
 {$echo "footer"}
