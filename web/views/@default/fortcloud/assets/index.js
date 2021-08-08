@@ -116,6 +116,39 @@ Tea.context(function () {
             }
         })
     }
+
+    this.onRefreshAuth = function () {
+        this.$get(".authorize")
+            .params({
+                Id: this.id,
+            }).success(resp => {
+            if (resp.code === 200) {
+                this.allUsers = resp.data.allUsers
+                this.authUsers = resp.data.authUsers
+                this.onResetAuthView()
+            }
+        })
+    }
+    this.onResetAuthView = function (params) {
+        var tempElement1 = document.getElementById("noAuth-allSelect")
+        tempElement1.checked = false
+        let noAuthList = document.getElementsByName("noAuthSelect")
+        for (var index = 0; index < noAuthList.length; index++) {
+            if (!noAuthList[index].disabled) {
+                noAuthList[index].checked = false
+            }
+        }
+        var tempElement2 = document.getElementById("auth-allSelect")
+        tempElement2.checked = false
+        let authList = document.getElementsByName("authSelect")
+        for (var index = 0; index < authList.length; index++) {
+            authList[index].checked = false
+        }
+        this.selectNoAuthPeopleListData = []
+        this.selectAuthPeopleListData = []
+      
+    }
+
     this.onCloseAuth = function () {
         this.bShowhAuth = false
         this.id = ""
@@ -300,8 +333,6 @@ Tea.context(function () {
     this.selectNoAuthPeopleListData = []
     this.selectAuthPeopleListData = []
 
-    this.changePeopleList = []
-
     this.onGetAuthPeopleItemInfo = function (id, table) {
         if (table && id && table.length > 0 && id > 0) {
             for (var index = 0; index < table.length; index++) {
@@ -336,8 +367,8 @@ Tea.context(function () {
 
     this.selectAllNoAuth = function () {
         var tempElement = document.getElementById("noAuth-allSelect")
+        let noAuthList = document.getElementsByName("noAuthSelect")
         if (tempElement.checked) {
-            let noAuthList = document.getElementsByName("noAuthSelect")
             for (var index = 0; index < noAuthList.length; index++) {
                 if (!noAuthList[index].checked && !noAuthList[index].disabled) {
                     noAuthList[index].checked = true
@@ -345,9 +376,9 @@ Tea.context(function () {
                 }
             }
         } else {
-            let noAuthList = document.getElementsByName("noAuthSelect")
+            
             for (var index = 0; index < noAuthList.length; index++) {
-                if (noAuthList[index].checked) {
+                if (noAuthList[index].checked && !noAuthList[index].disabled) {
                     noAuthList[index].checked = false
                     this.onRemoveSelectNoAuth(noAuthList[index].value)
                 }
@@ -423,11 +454,21 @@ Tea.context(function () {
         tempElement.checked = true
     }
     this.selectAllAuth = function () {
-        let authList = document.getElementById("auth-allSelect")
-        for (var index = 0; index < authList.length; index++) {
-            if (!authList[index].checked) {
-                authList[index].checked = true
-                this.onAddSelectAuth(authList[index].value, authList[index].data)
+        var tempElement = document.getElementById("auth-allSelect")
+        let authList = document.getElementsByName("authSelect")
+        if (tempElement.checked) {
+            for (var index = 0; index < authList.length; index++) {
+                if (!authList[index].checked) {
+                    authList[index].checked = true
+                    this.onAddSelectAuth(authList[index].value, authList[index].data)
+                }
+            }
+        } else {
+            for (var index = 0; index < authList.length; index++) {
+                if (authList[index].checked) {
+                    authList[index].checked = false
+                    this.onRemoveSelectAuth(noAuthList[index].value)
+                }
             }
         }
     }
