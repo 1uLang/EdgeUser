@@ -228,7 +228,7 @@
     <div class="dialog-bg-style" style="display: flex;flex-direction: column;">
         <div style="width: 100%;margin-top: 10px;display: flex;flex-direction: row;justify-content: space-between;border-bottom: 1px solid #d7d7d7;padding-bottom: 10px;">
             <span style="font-size: 14px;color:#333;padding: 0 20px;">更新资源【
-                <span style="color: #0090cb;" >{{asset_name}}</span>
+                <span style="color: #0090cb;cursor: pointer;" @click="onRefreshAuth">{{asset_name}}</span>
                 】的授权人</span>
             <span style="font-size: 16px;margin-right: 10px;cursor: pointer;color: #d7d7d7;" @click="onCloseAuth">X</span>
         </div>

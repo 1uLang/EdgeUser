@@ -1,7 +1,6 @@
 package logs
 
 import (
-	"fmt"
 	"github.com/1uLang/zhiannet-api/common/model/edge_logs"
 	edge_logs_server "github.com/1uLang/zhiannet-api/common/server/edge_logs_server"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
@@ -56,7 +55,7 @@ func (this *IndexAction) RunGet(params struct {
 		EndTime:   endTime,
 		Keyword:   params.Keyword,
 	})
-	fmt.Println("params===", total)
+	//fmt.Println("params===", total)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -64,7 +63,7 @@ func (this *IndexAction) RunGet(params struct {
 
 	page := this.NewPage(total)
 	this.Data["page"] = page.AsHTML()
-	fmt.Println("page====", page.Offset, page.Size)
+	//fmt.Println("page====", page.Offset, page.Size,int(page.Offset / page.Size)+1)
 	list := make([]*edge_logs.UserLogResp, 0)
 	if total > 0 {
 		list, _, err = edge_logs_server.GetLogList(&edge_logs.UserLogReq{
@@ -72,7 +71,7 @@ func (this *IndexAction) RunGet(params struct {
 			StartTime: startTime,
 			EndTime:   endTime,
 			Keyword:   params.Keyword,
-			PageNum:   int(page.Offset / page.Size),
+			PageNum:   int(page.Offset/page.Size) + 1,
 			PageSize:  int(page.Size),
 		})
 	}
@@ -81,7 +80,7 @@ func (this *IndexAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	fmt.Println("params===", len(list))
+	//fmt.Println("params===", len(list))
 	logMaps := []maps.Map{}
 	for _, log := range list {
 		regionName := ""

@@ -254,10 +254,10 @@
 		}
 		reqApi("post","",tempFormData,null,
 				(res)=>{
-					if (res.data.from.length == 0) {
-						window.location = "/dashboard";
-					} else {
+					if (res.data.from!=null && res.data.from.length > 0) {
 						window.location = this.data.from;
+					} else {
+						window.location = "/dashboard";
 					}
 				},
 				(res)=>{
