@@ -139,7 +139,8 @@ func (this *IndexAction) RunPost(params struct {
 		}
 		//登录次数+1
 		edge_admins_server.LoginErrIncr(fmt.Sprintf("user_%v", params.Username))
-		this.Fail("请输入正确的用户名密码")
+		num, _ := cache.GetInt(fmt.Sprintf("user_%v", params.Username))
+		this.Fail(fmt.Sprintf("请输入正确的用户名密码，您还可以尝试%v次，（账号将被临时锁定30分钟）", 5-num))
 	}
 	// 检查OTP-*/
 	otpInfo, err := edge_logins_server.GetInfoByUid(uint64(resp.UserId))
