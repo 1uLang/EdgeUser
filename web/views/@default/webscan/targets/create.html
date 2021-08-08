@@ -3,8 +3,8 @@
 <h3>添加目标</h3>
 
 <form class="ui form" method="post" data-tea-action="$" data-tea-success="success">
-	<csrf-token></csrf-token>
-	<table class="ui table definition selectable">
+    <csrf-token></csrf-token>
+    <table class="ui table definition selectable">
         <tr>
             <td class="title">地址 *</td>
             <td>
@@ -14,9 +14,10 @@
         <tr>
             <td class="title">类型 *</td>
             <td>
-                <radio name="type" :v-value="1" checked>Web漏洞扫描</radio>
-                &nbsp; &nbsp;
-                <radio name="type" :v-value="2">主机漏洞扫描</radio>
+                <div style="display: inline-flex;justify-content: start;">
+                    <input name="type" type="radio" :value="1" checked>Web漏洞扫描
+                    <input name="type" type="radio" :value="2" style="margin-left:20px">主机漏洞扫描
+                </div>
             </td>
         </tr>
         <tr>
@@ -25,6 +26,6 @@
                 <input type="text" name="desc" maxlength="100"/>
             </td>
         </tr>
-	</table>
-	<submit-btn></submit-btn>
+    </table>
+    <submit-btn></submit-btn>
 </form>
