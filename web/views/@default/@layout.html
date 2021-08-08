@@ -55,7 +55,7 @@
 					</span>
                 </a>
                 <div v-if="module.subItems && module.subItems.length>0 && curSelectCode == module.code" class="sub-items">
-					<a class="item" v-for="subItem in module.subItems" v-if="subItem.isOn !== false" :href="onChangeUrl(subItem.url)" style="padding: 0.9em 1em;">
+					<a class="item" v-for="subItem in module.subItems" v-if="subItem.isOn !== false" :href="onChangeUrl(subItem.url)" style="padding: 0.9em 1em;" @click="onOpenDialog">
                         <i class="icon angle right" style="margin: 0;float: left;" v-if="subItem.code == teaMenu"></i> 
                         <span class="module-name">{{subItem.name}}</span>
                     </a>
@@ -97,6 +97,11 @@
 
         <!-- 功能区 -->
         {$TEA.VIEW}
+        <div class="dialog-style" id="waitting-dialog" style="display: none;">
+            <div class="dialog-bg-style">
+                <img src='/images/waitting_dialog2.gif' width="150px" height="150px"/>
+            </div>
+        </div>
     </div>
 
 	<!-- 底部 -->

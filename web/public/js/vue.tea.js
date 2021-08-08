@@ -451,6 +451,15 @@ window.Tea.versionCompare = function compare(a, b) {
 };
 
 
+
+//打开和关闭等待框 value close:none  open:block
+window.Tea.dialogBoxEnabled = function (enabled) {
+    let dialogBox = document.getElementById("waitting-dialog")
+    if(dialogBox){
+        dialogBox.style.display=enabled
+    }
+}
+
 /**
  * 延时执行
  *
@@ -463,6 +472,7 @@ window.Tea.delay = function (fn, ms) {
     }
     setTimeout(function () {
         fn.call(Tea.Vue);
+        Tea.dialogBoxEnabled("none")
     }, ms);
 };
 
@@ -489,6 +499,7 @@ window.Tea.Action = function (action, params) {
     var _delay = 0;
     var _progressFn;
     var _refresh = false;
+    var _showDialog = false;
 
     this.params = function (params) {
         _params = params;
@@ -553,6 +564,10 @@ window.Tea.Action = function (action, params) {
 
         return this;
     };
+    this.showDialog = function (showDialog) {
+        _showDialog = showDialog;
+        return this;
+    }
 
     this._post = function () {
         var params = _params;
@@ -611,7 +626,9 @@ window.Tea.Action = function (action, params) {
                 config["data"] = formData;
             }
         }
-
+        if(_showDialog){
+            Tea.dialogBoxEnabled("block")
+        }
         axios(config)
             .then(function (response) {
                 response = response.data;
@@ -669,6 +686,9 @@ window.Tea.Action = function (action, params) {
                 }
             })
             .then(function () {
+                if(_showDialog){
+                    Tea.dialogBoxEnabled("none")
+                }
                 // console.log("done");
                 if (typeof(_doneFn) == "function") {
                     _doneFn.call(Tea.Vue, {});

@@ -102,10 +102,12 @@
         <div style="display: inline-flex;margin-top: 10px;">
             <div style="width: 70px;margin-right: 10px;text-align: right;height: 26px;line-height: 26px;">关键词：</div>
             <input type="text" v-model="searchKey" style="height: 26px;width: 1045px;line-height: 26px;border: 1px solid #d7d7d7;" placeholder="请输入关键词"></input>
-            <button class="ui button small" @click="onSearch('false')" type="button">搜索</button>
-            <button class="ui button small" @click="onReset()" type="button">重置</button>
-            <button class="ui button small" @click="onSearch('true')" type="button">导出</button>
-
+        </div>
+        
+        <div style="display:inline-flex;margin-top: 10px;margin-left: 50px;">
+            <div class="sure-btn" style="margin-left: 30px;" @click="onSearch('false')">搜索</div>
+            <div class="sure-btn" style="margin-left: 30px;" @click="onReset">重置</div>
+            <div class="sure-btn" style="margin-left: 30px;" @click="onSearch('true')">导出</div>
         </div>
     </div>
 
