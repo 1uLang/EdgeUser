@@ -42,9 +42,29 @@
 
 <div v-if="bShowAudioPlayBox" class="dialog-style" id="playAudio-dialog">
     <div class="dialog-bg-style">
-        <div id="player">
-            <div id="display">
+        <div style="width: 100%;display: flex;flex-direction: row;justify-content: space-between;align-items: center;">
+            <div style="font-size: 16px;padding: 10px;">
+                <span>会话回放 来源IP:</span>
+                <span>{{selectReplayItemData.clientIp}}</span>
+                <span> 用户昵称：</span>
+                <span>{{selectReplayItemData.creatorName}}</span>
+                <span> 资产名称：</span>
+                <span>{{selectReplayItemData.assetName}}</span>
+                <span> 网络：</span>
+                <span>{{`${selectReplayItemData.username}@${selectReplayItemData.clientIp}:${selectReplayItemData.port}`}}</span>
             </div>
+            <div style="font-size: 16px;width: 30px;height: 30px;line-height: 30px;text-align: center;cursor: pointer;"@click="onCloseReplay">X</div>
         </div>
+        <div id="audio-display-box" style="width: 100%;">
+        </div>
+        <div style="display: flex;flex-direction: row;margin-top: 5px;align-items: center;padding-left: 10px;margin-bottom: 10px;">
+            <img v-show="!isPlaying" src="/images/replay_play.png" width="25px" height="25px" style="cursor: pointer;" @click="onPlayReplay">
+            <img v-show="isPlaying" src="/images/replay_pause.png" width="25px" height="25px" style="cursor: pointer;" @click="onPauseReplay">
+            <input type="range" :disabled="bAudioDisabled" min="0" :max="maxDuration" v-model="percentDuration" @change="handleSliderChange" style="width: 1150px;margin: 0 10px;">
+            <span>
+                {{`${playPosition}/${playDuration}`}}
+            </span>
+        </div>
+        
     </div>
 </div>
