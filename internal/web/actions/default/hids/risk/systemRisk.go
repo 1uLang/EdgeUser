@@ -40,11 +40,7 @@ func (this *SystemRiskAction) RunGet(params struct {
 	req.PageSize = params.PageSize
 	req.PageNo = params.PageNo
 
-	req.UserName, err = this.UserName()
-	if err != nil {
-		this.Data["errorMessage"] = fmt.Errorf("获取用户信息失败：%v", err)
-		return
-	}
+	req.UserId = uint64(this.UserId())
 
 	//系统漏洞数汇总
 	risk, err := risk_server.SystemDistributed(req)

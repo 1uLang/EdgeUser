@@ -1,11 +1,21 @@
 Tea.context(function () {
 
     this.onOpenCommand = function () {
-        teaweb.popup(Tea.url(".install"),{
+        teaweb.popup(Tea.url(".install"), {
             height: "350px",
         });
     }
+    this.onOpenCreate = function () {
+        teaweb.popup(Tea.url(".create"), {
+            height: "180px",
+            callback: function () {
+                teaweb.success("保存成功", function () {
+                    teaweb.reload();
+                });
+            },
+        });
 
+    }
 
     this.$delay(function () {
 
@@ -43,7 +53,7 @@ Tea.context(function () {
     }
     this.checkScans = function () {
         for (item of this.agents) {
-            if (item.agentState == '1'||item.agentState == '3'||item.agentState == '5') {
+            if (item.agentState == '1' || item.agentState == '3' || item.agentState == '5') {
                 return true
             }
         }
@@ -55,7 +65,7 @@ Tea.context(function () {
                 .params({
                     MacCode: item.macCode,
                     Opt: 'enable',
-                }).success(function (){
+                }).success(function () {
                 window.location.reload()
             })
         })
@@ -68,7 +78,7 @@ Tea.context(function () {
                 .params({
                     MacCode: item.macCode,
                     Opt: 'disable',
-                }).success(function (){
+                }).success(function () {
                 window.location.reload()
             })
         })
@@ -81,24 +91,24 @@ Tea.context(function () {
                 .params({
                     MacCode: item.macCode,
                     Opt: 'delete',
-                }).success(function (){
+                }).success(function () {
                 window.location.reload()
             })
         })
     }
 
     this.getStateName = function (state) {
-        if(state == '1')
+        if (state == '1')
             return "启用中"
-        else if(state == '2')
+        else if (state == '2')
             return "已启用"
-        else if(state == '3')
+        else if (state == '3')
             return "停用中"
-        else if(state == '4')
+        else if (state == '4')
             return "已停用"
-        else if(state == '5')
+        else if (state == '5')
             return "卸载中"
-        else if(state == '6')
+        else if (state == '6')
             return "已卸载"
     }
 });

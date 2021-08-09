@@ -54,10 +54,17 @@ Tea.context(function () {
         })
     }
 
+    this.$delay(function () {
+        console.log(window.location.origin)
+        console.log(window.location.hostname)
+        console.log(window.location.host)
+        console.log(window.location.port)
+    })
     //回放
     this.onReplay = function (item) {
         teaweb.confirm("确定要回放该会话吗？", function () {
-            this.onTestReplay("http://192.168.137.8:8002/fortcloud/audit/repaly?id="+item.id)
+            let path = window.location.origin
+            this.onTestReplay(path+"/fortcloud/audit/repaly?id=" + item.id)
         })
 
     }

@@ -40,11 +40,7 @@ func (this *IndexAction) RunGet(params struct {
 		return
 	}
 	req := &baseline.SearchReq{}
-	req.UserName, err = this.UserName()
-	if err != nil {
-		this.Data["errorMessage"] = fmt.Sprintf("获取用户信息失败：%v", err)
-		return
-	}
+	req.UserId = uint64(this.UserId())
 	req.PageNo = params.PageNo
 	req.PageSize = params.PageSize
 	req.ResultState = params.ResultState
@@ -59,6 +55,7 @@ func (this *IndexAction) RunGet(params struct {
 		this.Data["errorMessage"] = fmt.Sprintf("获取主机合规基线列表失败：%v", err)
 		return
 	}
+	username,_ := this.UserName()
 	baselines := make([]map[string]interface{}, 0)
 	for k, v := range list.List {
 		if v["userName"] != req.UserName {
@@ -68,19 +65,19 @@ func (this *IndexAction) RunGet(params struct {
 		if isExist && overTime != "" && params.StartTime != "" && params.EndTime != "" && (overTime < params.StartTime || overTime > params.EndTime) {
 			continue
 		}
-		os, err := server.Info(v["serverIp"].(string), req.UserName)
+		os, err := server.Info(v["serverIp"].(string))
 		if err != nil {
 			this.Data["errorMessage"] = fmt.Sprintf("获取主机信息失败：%v", err)
 			return
 		}
 
 		//看当前主机是否保存了合规基线状态
-		_, isExist = gl_baseline_check_maps.Load(v["macCode"].(string) + v["userName"].(string))
+		_, isExist = gl_baseline_check_maps.Load(v["macCode"].(string) + username)
 		if isExist {
 			if v["state"].(float64) == 0 { //未检测  - 延迟 设置成检测中
 				list.List[k]["state"] = 1
 			} else { //已生效 删除该记录
-				gl_baseline_check_maps.Delete(v["macCode"].(string) + req.UserName)
+				gl_baseline_check_maps.Delete(v["macCode"].(string) + username)
 			}
 		}
 
@@ -118,11 +115,7 @@ func (this *IndexAction) RunPost(params struct {
 		return
 	}
 	req := &baseline.SearchReq{}
-	req.UserName, err = this.UserName()
-	if err != nil {
-		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
-		return
-	}
+	req.UserId = uint64(this.UserId())
 	req.PageNo = params.PageNo
 	req.PageSize = params.PageSize
 	req.ResultState = params.ResultState
@@ -145,7 +138,7 @@ func (this *IndexAction) RunPost(params struct {
 		if isExist && overTime != "" && params.StartTime != "" && params.EndTime != "" && overTime > params.StartTime && overTime < params.EndTime {
 			continue
 		}
-		os, err := server.Info(v["serverIp"].(string), req.UserName)
+		os, err := server.Info(v["serverIp"].(string))
 		if err != nil {
 			this.ErrorPage(fmt.Errorf("获取主机信息失败：%v", err))
 			return

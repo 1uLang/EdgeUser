@@ -39,11 +39,7 @@ func (this *IndexAction) RunGet(params struct {
 	req.ServerIp = params.ServerIp
 	req.PageSize = params.pageSize
 	req.PageNo = params.PageNo
-	req.UserName, err = this.UserName()
-	if err != nil {
-		this.Data["errorMessage"] = fmt.Sprintf("获取用户信息失败：%v", err)
-		return
-	}
+	req.UserId = uint64(this.UserId())
 	list, err := risk_server.AbnormalProcessList(req)
 	if err != nil {
 		this.Data["errorMessage"] = fmt.Sprintf("获取异常进程入侵威胁列表失败：%v", err)
@@ -54,13 +50,14 @@ func (this *IndexAction) RunGet(params struct {
 		if v["userName"] != req.UserName {
 			continue
 		}
-		os, err := server.Info(v["serverIp"].(string), req.UserName)
+		os, err := server.Info(v["serverIp"].(string))
 		if err != nil {
 			this.Data["errorMessage"] = fmt.Sprintf("获取主机信息失败：%v", err)
 			return
 		}
 		list.AbnormalProcessCountInfoList[k]["os"] = os
 	}
+	fmt.Println(list.AbnormalProcessCountInfoList)
 	this.Data["datas"] = list.AbnormalProcessCountInfoList
 	this.Data["serverIp"] = params.ServerIp
 }
@@ -154,10 +151,6 @@ func (this *DetailListAction) RunGet(params struct {
 	req := &risk.DetailReq{}
 	req.Req.PageSize = params.PageSize
 	req.Req.PageNo = params.PageNo
-	req.Req.UserName, err = this.UserName()
-	if err != nil {
-		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
-	}
 	req.MacCode = params.MacCode
 
 	var list1,list2 risk.DetailResp
@@ -184,7 +177,7 @@ func (this *DetailListAction) RunGet(params struct {
 	this.Data["ip"] = params.Ip
 	this.Data["macCode"] = params.MacCode
 	//os
-	os, err := server.Info(params.Ip, req.Req.UserName)
+	os, err := server.Info(params.Ip)
 	if err != nil {
 		this.ErrorPage(err)
 	}

@@ -33,12 +33,7 @@ func (this *SystemRiskListAction) RunGet(params struct {
 	req := &risk.SearchReq{}
 	req.PageSize = 1
 	req.PageNo = params.Page
-
-	req.UserName, err = this.UserName()
-	if err != nil {
-		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
-		return
-	}
+	req.UserId = uint64(this.UserId())
 
 	//待处理
 	req.ProcessState = 1
@@ -89,9 +84,11 @@ func (this *SystemRiskListAction) RunGet(params struct {
 	this.Data["ip"] = params.Ip
 	this.Data["macCode"] = params.MacCode
 	//os
-	os, err := server.Info(params.Ip, req.UserName)
+	os, err := server.Info(params.Ip)
 	if err != nil {
 		this.ErrorPage(err)
+	} else if os == nil{	//无主机信息
+		this.ErrorPage(fmt.Errorf("无主机信息"))
 	}
 	this.Data["os"] = os["osType"]
 	//最后扫描时间

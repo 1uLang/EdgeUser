@@ -1,7 +1,6 @@
 package agent
 
 import (
-	"fmt"
 	agent_server "github.com/1uLang/zhiannet-api/hids/server/agent"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids"
@@ -23,18 +22,13 @@ func (this *InstallAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	username, err := this.UserName()
-	if err != nil {
-		this.ErrorPage(fmt.Errorf("获取当前用户信息失败：%v", err))
-		return
-	}
-	linux, err := agent_server.Install(username, "Linux")
+	linux, err := agent_server.Install( "Linux")
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
 
-	windows, err := agent_server.Install(username, "Windows")
+	windows, err := agent_server.Install( "Windows")
 	if err != nil {
 		this.ErrorPage(err)
 		return

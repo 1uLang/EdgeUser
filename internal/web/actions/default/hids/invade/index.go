@@ -1,7 +1,6 @@
 package invade
 
 import (
-	"fmt"
 	"github.com/1uLang/zhiannet-api/hids/model/risk"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids"
@@ -50,11 +49,7 @@ func (this *IndexAction) RunGet(params struct{}) {
 	}
 	args := &risk.RiskSearchReq{}
 
-	args.UserName, err = this.UserName()
-	if err != nil {
-		this.Data["errorMessage"] = fmt.Sprintf("获取用户信息失败：%v", err)
-		return
-	}
+	args.UserId = uint64(this.UserId())
 	args.PageSize = 1
 
 	for idx, fn := range fns {

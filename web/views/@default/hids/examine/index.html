@@ -1,8 +1,8 @@
 <!-- <a href="/hids/examine/detail" class="item">详情</a> -->
 <!-- 主机体检 -->
 {$layout}
+{$template "/datepicker"}
 {$var "header"}
-<!-- {$template "/datepicker"} -->
 <script src="/js/timeFactory.js"></script>
 {$end}
 
@@ -69,7 +69,7 @@
         <tbody id='tableBody'>
         <tr align="center" v-for="(item, index) in datas">
             <td style="position: relative;" @mouseenter="enters(index)" @mouseleave="leaver(index)">
-                {{item.serverExamineResultInfo.serverIp}}
+                {{item.serverIp}}
                 <div v-show="curIndex===index" class="table-item-style">
                     <div>外网IP：{{item.os.serverIp}}</div>
                     <div>内网IP：{{parseServerLocalIp(item.os.serverLocalIp)}}</div>
@@ -82,26 +82,26 @@
             </td>
             <td>
                 <div class="Bar">
-                    <div :class="[checkShowColor(item.serverExamineResultInfo.progress,100) ? 'progress-green-bg-style' : 'progress-blue-bg-style']"
-                         :style="{width:getProgressPer(item.serverExamineResultInfo.progress,100,item.serverExamineResultInfo.serverIp,item.serverExamineResultInfo.state)}">
+                    <div :class="[checkShowColor(item.progress,100) ? 'progress-green-bg-style' : 'progress-blue-bg-style']"
+                         :style="{width:getProgressPer(item.progress,100,item.serverIp,item.state)}">
                     </div>
-                    <span>{{getProgressPerStr(item.serverExamineResultInfo.progress,100,item.serverExamineResultInfo.serverIp,item.serverExamineResultInfo.state)}}</span>
+                    <span>{{getProgressPerStr(item.progress,100,item.serverIp,item.state)}}</span>
                 </div>
             </td>
-            <td>{{getStatusName(item.serverExamineResultInfo.state)}}</td>
-            <td v-if="item.serverExamineResultInfo.state == 0">-</td>
-            <td v-else-if="item.serverExamineResultInfo.state == 1 || item.serverExamineResultInfo.state == 6">未得分</td>
-            <td v-else>{{item.serverExamineResultInfo.score}}分</td>
-            <td v-if="item.serverExamineResultInfo.state == 0">-</td>
-            <td v-else>{{item.serverExamineResultInfo.startTime}}</td>
-            <td v-if="item.serverExamineResultInfo.state == 2">{{item.serverExamineResultInfo.lastUpdateTime}}</td>
+            <td>{{getStatusName(item.state)}}</td>
+            <td v-if="item.state == 0">-</td>
+            <td v-else-if="item.state == 1 || item.state == 6">未得分</td>
+            <td v-else>{{item.score}}分</td>
+            <td v-if="item.state == 0">-</td>
+            <td v-else>{{item.startTime}}</td>
+            <td v-if="item.state == 2">{{item.lastUpdateTime}}</td>
             <td v-else>-</td>
             <td>
                 <div style="display: flex;justify-content: space-around;">
-                    <div v-show="item.serverExamineResultInfo.state==0 || item.serverExamineResultInfo.state==2" class="edit_btn" @click="onOpenCheck(item)">立即体检</div>
-                    <div v-show="item.serverExamineResultInfo.state==6" class="edit_btn" @click="onOpenCheck(item)">重新体检</div>
-                    <div v-show="item.serverExamineResultInfo.state==1" class="edit_btn" @click="onStopCheck(item)">取消体检</div>
-                    <div v-show="item.serverExamineResultInfo.state==2" class="edit_btn" @click="onOpenDetail(item)">详情</div>
+                    <div v-show="item.state==0 || item.state==2" class="edit_btn" @click="onOpenCheck(item)">立即体检</div>
+                    <div v-show="item.state==6" class="edit_btn" @click="onOpenCheck(item)">重新体检</div>
+                    <div v-show="item.state==1" class="edit_btn" @click="onStopCheck(item)">取消体检</div>
+                    <div v-show="item.state==2" class="edit_btn" @click="onOpenDetail(item)">详情</div>
                 </div>
             </td>
         </tr>
