@@ -33,6 +33,7 @@ Tea.context(function () {
             }
         }
     }
+    
     this.onChangeTimeFormat = function (time) {
         var resultTime = "";
         if (time) {
@@ -54,29 +55,150 @@ Tea.context(function () {
         })
     }
 
+    this.$delay(function () {
+        console.log(window.location.origin)
+        console.log(window.location.hostname)
+        console.log(window.location.host)
+        console.log(window.location.port)
+    })
     //回放
+    this.bShowAudioPlayBox = false
+    this.bAudioDisabled = true
+    this.selectReplayItemData = null
+    this.curProgress = 0
+    this.percentDuration = 0
+    this.maxDuration = 0
+    this.playDuration = 0
+    this.playPosition = 0
+    this.isPlaying = false
+    this.recording = null
+
+    this.getMaxDuration = function (start, end) {
+        //格式： 2021-07-27 17:50:16
+        if (start == null || end == null) {
+            return ""
+        }
+        let st = new Date(start)
+        let et = new Date(end)
+        return et.getTime() - st.getTime()
+    }
+    this.zeroPad = function (num, minLength) {
+
+        // Convert provided number to string
+        var str = num.toString();
+
+        // Add leading zeroes until string is long enough
+        while (str.length < minLength)
+            str = '0' + str;
+
+        return str;
+
+    };
+    this.formatTime = function(millis) {
+
+        // Calculate total number of whole seconds
+        var totalSeconds = Math.floor(millis / 1000);
+
+        // Split into seconds and minutes
+        var seconds = totalSeconds % 60;
+        var minutes = Math.floor(totalSeconds / 60);
+
+        // Format seconds and minutes as MM:SS
+        return this.zeroPad(minutes, 2) + ':' + this.zeroPad(seconds, 2);
+
+    };
+
     this.onReplay = function (item) {
         teaweb.confirm("确定要回放该会话吗？", function () {
-            this.onTestReplay("http://192.168.137.8:8002/fortcloud/audit/repaly?id="+item.id)
+            this.bShowAudioPlayBox = true
+            this.selectReplayItemData = item
+            this.maxDuration = this.getMaxDuration(item.connectedTime,item.disconnectedTime)
+            this.playDuration = this.formatTime(this.maxDuration)
+            this.percentDuration = 0
+            this.bAudioDisabled = true
         })
+    }
+
+    this.onCloseReplay = function () { 
+        this.bShowAudioPlayBox = false
+        this.recording = null
+    }
+
+    this.onPlayReplay = function () { 
+        if(this.bAudioDisabled && !this.recording){
+            let path = window.location.origin
+            this.onLoadReplay(path + "/fortcloud/audit/replay?id="+this.selectReplayItemData.id)
+        }else{
+            if(this.recording){
+                if(this.percentDuration>=this.maxDuration){
+                    this.percentDuration = 0
+                    this.recording.seek(0, () => {
+                        this.recording.play();
+                    });
+                }else{
+                    
+                    this.recording.play();
+                }
+            }
+            
+        }
+       
+    }
+
+    this.onPauseReplay = function(){
+        if(this.recording){
+            this.recording.pause();
+        }
+    }
+
+    this.handleSliderChange = function (){
+        if (this.recording) {
+            // Request seek
+            this.recording.seek(this.percentDuration, () => {
+                console.log('complete');
+            });
+        }
 
     }
 
-    this.bShowAudioPlayBox = false
-    this.onTestReplay = function (url) {
-        this.bShowAudioPlayBox = true
+
+    this.onLoadReplay = function (url) {
         var RECORDING_URL = url;
-        var display = document.getElementById('display');
+        var display = document.getElementById('audio-display-box');
         var tunnel = new Guacamole.StaticHTTPTunnel(RECORDING_URL);
-        var recording = new Guacamole.SessionRecording(tunnel);
-        var recordingDisplay = recording.getDisplay();
+        this.recording = new Guacamole.SessionRecording(tunnel);
+        var recordingDisplay = this.recording.getDisplay();
         display.appendChild(recordingDisplay.getElement());
-        recording.connect();
-        recording.onplay = () => {
-            console.log("onPlayHandle")
+        this.recording.connect();
+
+        recordingDisplay.onresize = function (width, height) {
+            console.log(width)
+            // Do not scale if display has no width
+            if (!width)
+                return;
+
+            // Scale display to fit width of container
+            recordingDisplay.scale(display.offsetWidth / width,display.offsetHeight / height);
         };
-        recording.onpause = () => {
+        this.recording.onplay = () => {
+            console.log("onPlayHandle")
+            this.isPlaying = true
+        };
+        this.recording.onpause = () => {
             console.log("onPauseHandle")
+            this.isPlaying = false
+        };
+        this.recording.onseek = (millis) => {
+            console.log("onseek")
+            this.playPosition=this.formatTime(millis)
+            this.percentDuration = millis
+        };
+
+        this.recording.onprogress = (millis) => {
+            if(millis>=this.maxDuration){
+                this.recording.play()
+                this.bAudioDisabled = false
+            }
         };
 
     }

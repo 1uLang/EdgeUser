@@ -88,23 +88,4 @@ func (this *TemplateDetailAction) RunGet(params struct {
 	//params.Must.
 	//	Field("templateId", params.TemplateId).
 	//	Require("请输入合规基线模板")
-
-	err := hids.InitAPIServer()
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	req := &baseline.TemplateDetailReq{}
-	req.Req.UserName = params.UserName
-	req.Req.PageNo = params.PageNo
-	req.Req.PageSize = params.PageSize
-	req.ID = params.TemplateId
-
-	list, err := baseline_server.TemplateDetail(req)
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	this.Data["data"] = list
-	this.Show()
 }

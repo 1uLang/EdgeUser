@@ -38,11 +38,7 @@ func (this *IndexAction) RunGet(params struct {
 	}
 
 	req := &agent.SearchReq{}
-	req.UserName, err = this.UserName()
-	if err != nil {
-		this.Data["errorMessage"] = fmt.Sprintf("获取用户信息失败：%v", err)
-		return
-	}
+	req.UserId = uint64(this.UserId())
 	req.PageNo = params.PageNo
 	req.PageSize = params.PageSize
 	req.ServerIp = params.ServerIp
@@ -72,11 +68,7 @@ func (this *IndexAction) RunPost(params struct {
 	}
 
 	req := &agent.SearchReq{}
-	req.UserName, err = this.UserName()
-	if err != nil {
-		this.ErrorPage(fmt.Errorf("获取用户信息失败：%v", err))
-		return
-	}
+	req.UserId = uint64(this.UserId())
 	req.PageNo = params.PageNo
 	req.PageSize = params.PageSize
 	req.ServerIp = params.ServerIp

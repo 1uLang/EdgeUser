@@ -6,10 +6,9 @@ Tea.context(function () {
     }
 
     this.$delay(function () {
-
+        console.log(this.errorMessage)
         if (this.errorMessage !== "" && this.errorMessage !== undefined) {
-            teaweb.warn(this.errorMessage, function () {
-            })
+            teaweb.warn(this.errorMessage)
         }
     })
     this.getCount = function (item) {

@@ -37,18 +37,19 @@
             </thead>
             <tbody id='tableBody'>
             <tr align="center" v-for="(item, index) in configDefects">
-                <td style="position: relative;" @mouseenter="enters(index)" @mouseleave="leaver(index)">
-                    {{item.serverIp}}
-                    <div v-show="curIndex===index" class="table-item-style">
-                        <div>外网IP：{{item.os.serverIp}}</div>
-                        <div>内网IP：{{parseServerLocalIp(item.os.serverLocalIp)}}</div>
-                        <div>主机名：{{item.os.hostName}}</div>
-                        <div>操作系统：{{item.os.osType}}</div>
-                        <div>系统内核：{{item.os.systemKernel}}</div>
-                        <div>Mac地址：{{item.os.macCode}}</div>
-                        <div>备注信息：{{item.os.remarks}}</div>
-                    </div>
-                </td>
+<!--                <td style="position: relative;" @mouseenter="enters(index)" @mouseleave="leaver(index)">-->
+<!--                    {{item.serverIp}}-->
+<!--                    <div v-show="curIndex===index" class="table-item-style">-->
+<!--                        <div>外网IP：{{item.os.serverIp}}</div>-->
+<!--                        <div>内网IP：{{parseServerLocalIp(item.os.serverLocalIp)}}</div>-->
+<!--                        <div>主机名：{{item.os.hostName}}</div>-->
+<!--                        <div>操作系统：{{item.os.osType}}</div>-->
+<!--                        <div>系统内核：{{item.os.systemKernel}}</div>-->
+<!--                        <div>Mac地址：{{item.os.macCode}}</div>-->
+<!--                        <div>备注信息：{{item.os.remarks}}</div>-->
+<!--                    </div>-->
+<!--                </td>-->
+                <td>{{item.serverIp}}|{{parseServerLocalIp(item.serverLocalIp)}}</td>
                 <td>{{getCount(item)}}</td>
                 <td>
                     <div class="edit_btn" @click="onOpenDetail(item)">查看</div>

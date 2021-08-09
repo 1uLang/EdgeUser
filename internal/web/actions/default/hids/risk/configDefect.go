@@ -35,11 +35,7 @@ func (this *ConfigDefectAction) RunGet(params struct {
 	req.PageSize = params.PageSize
 	req.PageNo = params.PageNo
 
-	req.UserName, err = this.UserName()
-	if err != nil {
-		this.Data["errorMessage"] = fmt.Sprintf("获取用户信息失败：%v", err)
-		return
-	}
+	req.UserId = uint64(this.UserId())
 	list, err := risk_server.ConfigDefectList(req)
 	if err != nil {
 		this.Data["errorMessage"] = fmt.Sprintf("获取缺陷配置详细列表信息失败：%v", err)
@@ -54,13 +50,12 @@ func (this *ConfigDefectAction) RunGet(params struct {
 	list.List = append(list.List, list2.List...)
 	for k, v := range list.List {
 
-		if v["userName"] != req.UserName {
-			continue
-		}
-		os, err := server.Info(v["serverIp"].(string), req.UserName)
+		os, err := server.Info(v["serverIp"].(string))
 		if err != nil {
 			this.Data["errorMessage"] = fmt.Sprintf("获取主机信息失败：%v", err)
 			return
+		} else if os == nil{	//无主机信息
+			continue
 		}
 		list.List[k]["os"] = os
 	}
@@ -136,11 +131,6 @@ func (this *ConfigDefectListAction) RunGet(params struct {
 	req.MacCode = params.MacCode
 	req.Req.PageSize = params.PageSize
 	req.Req.PageNo = params.PageNo
-	req.Req.UserName,err = this.UserName()
-	if err != nil {
-		this.Data["errorMessage"] = fmt.Sprintf("获取用户信息失败：%v", err)
-		return
-	}
 
 	//待处理
 	req.Req.ProcessState = 1

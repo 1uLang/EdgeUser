@@ -78,8 +78,8 @@ Tea.context(function () {
     }
     this.checkScans = function () {
         for (item of this.datas) {
-            if (item.serverExamineResultInfo.state === 1 ||
-                item.serverExamineResultInfo.state === 4) {
+            if (item.state === 1 ||
+                item.state === 4) {
                 return true
             }
         }
@@ -222,7 +222,7 @@ Tea.context(function () {
 
     this.onOpenCheck = function (item) {
         this.MacCode = item.macCode
-        this.serverIp = item.serverExamineResultInfo.serverIp
+        this.serverIp = item.serverIp
         this.sSelectCheckValue = ["01","02","03","04","13","14","15"]
         this.pCheckDetailData = [
             {

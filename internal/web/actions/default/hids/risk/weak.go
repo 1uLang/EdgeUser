@@ -39,11 +39,7 @@ func (this *WeakAction) RunGet(params struct {
 	req.PageSize = params.PageSize
 	req.PageNo = params.PageNo
 
-	req.UserName, err = this.UserName()
-	if err != nil {
-		this.Data["errorMessage"] = fmt.Errorf("获取用户信息失败：%v", err)
-		return
-	}
+	req.UserId = uint64(this.UserId())
 	list, err := risk_server.WeakList(req)
 	if err != nil {
 		this.Data["errorMessage"] = fmt.Errorf("获取弱口令信息失败：%v", err)
@@ -57,13 +53,12 @@ func (this *WeakAction) RunGet(params struct {
 	}
 	list.List = append(list.List, list2.List...)
 	for k, v := range list.List {
-		if v["userName"] != req.UserName {
-			continue
-		}
-		os, err := server.Info(v["serverIp"].(string), req.UserName)
+		os, err := server.Info(v["serverIp"].(string))
 		if err != nil {
 			this.Data["errorMessage"] = fmt.Sprintf("获取主机信息失败：%v",err)
 			return
+		}else if os == nil {
+			continue
 		}
 		list.List[k]["os"] = os
 	}
@@ -136,7 +131,6 @@ func (this *WeakListAction) RunGet(params struct {
 	req.MacCode = params.MacCode
 	req.Req.PageSize = params.PageSize
 	req.Req.PageNo = params.PageNo
-	req.Req.UserName = "luobing"
 
 	//待处理
 	req.Req.ProcessState = 1

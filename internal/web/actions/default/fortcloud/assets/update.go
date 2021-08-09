@@ -12,6 +12,7 @@ import (
 type UpdateAction struct {
 	actionutils.ParentAction
 }
+
 func (this *UpdateAction) checkAndNewServerRequest() (*next_terminal_server.Request, error) {
 	if fortcloud.ServerUrl == "" {
 		err := fortcloud.InitAPIServer()
@@ -23,7 +24,7 @@ func (this *UpdateAction) checkAndNewServerRequest() (*next_terminal_server.Requ
 }
 
 func (this *UpdateAction) RunPost(params struct {
-	Id   string
+	Id          string
 	HostName    string
 	Ip          string
 	Type        string
@@ -33,12 +34,14 @@ func (this *UpdateAction) RunPost(params struct {
 	Protocol    string
 	Username    string
 	CertId      string
-	Must *actions.Must
+	Must        *actions.Must
 }) {
 
 	params.Must.
 		Field("hostName", params.HostName).
 		Require("请输入主机名").
+		Field("id", params.Id).
+		Require("请选择资产").
 		Field("protocol", params.Protocol).
 		Require("请选择接入协议").
 		Field("port", params.Port).

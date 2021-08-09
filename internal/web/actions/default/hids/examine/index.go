@@ -45,11 +45,7 @@ func (this *IndexAction) RunGet(params struct {
 		return
 	}
 	req := &examine.SearchReq{}
-	req.UserName, err = this.UserName()
-	if err != nil {
-		this.Data["errorMessage"] = fmt.Sprintf("获取当前用户信息失败：%v", err)
-		return
-	}
+	req.UserId = uint64(this.UserId())
 	req.PageNo = params.PageNo
 	req.PageSize = params.PageSize
 
@@ -68,15 +64,15 @@ func (this *IndexAction) RunGet(params struct {
 		this.Data["errorMessage"] = fmt.Sprintf("获取主机体检信息列表失败：%v", err)
 		return
 	}
+	username,_ := this.UserName()
 	datas := make([]map[string]interface{}, 0)
 	for k, v := range list.ServerExamineResultInfoList {
-		if v["userName"] != req.UserName {
-			continue
-		}
-		os, err := server.Info(v["serverExamineResultInfo"].(map[string]interface{})["serverIp"].(string), req.UserName)
+		os, err := server.Info(v["serverIp"].(string))
 		if err != nil {
 			this.Data["errorMessage"] = fmt.Sprintf("获取主机信息失败：%v", err)
 			return
+		}else if os == nil {
+			continue
 		}
 		list.ServerExamineResultInfoList[k]["os"] = os
 
@@ -85,12 +81,12 @@ func (this *IndexAction) RunGet(params struct {
 		}
 
 		//看当前主机是否保存了主机体检状态
-		_, isExist := gl_examine_scan_maps.Load(v["macCode"].(string) + v["userName"].(string))
+		_, isExist := gl_examine_scan_maps.Load(v["macCode"].(string) + username)
 		if isExist {
-			if v["serverExamineResultInfo"].(map[string]interface{})["state"].(float64) == 0 { //未检测  - 延迟 设置成体检中
-				list.ServerExamineResultInfoList[k]["serverExamineResultInfo"].(map[string]interface{})["state"] = 1
+			if v["state"].(float64) == 0 { //未检测  - 延迟 设置成体检中
+				list.ServerExamineResultInfoList[k]["state"] = 1
 			} else { //已生效 删除该记录
-				gl_examine_scan_maps.Delete(v["macCode"].(string) + v["userName"].(string))
+				gl_examine_scan_maps.Delete(v["macCode"].(string) + username)
 			}
 		}
 		datas = append(datas, list.ServerExamineResultInfoList[k])
@@ -125,11 +121,7 @@ func (this *IndexAction) RunPost(params struct {
 		return
 	}
 	req := &examine.SearchReq{}
-	req.UserName, err = this.UserName()
-	if err != nil {
-		this.ErrorPage(fmt.Errorf("获取当前用户信息失败：%v", err))
-		return
-	}
+	req.UserId = uint64(this.UserId())
 	req.PageNo = params.PageNo
 	req.PageSize = params.PageSize
 
@@ -148,15 +140,16 @@ func (this *IndexAction) RunPost(params struct {
 		this.ErrorPage(fmt.Errorf("获取主机体检信息列表失败：%v", err))
 		return
 	}
+	username,_ := this.UserName()
 	datas := make([]map[string]interface{}, 0)
 	for k, v := range list.ServerExamineResultInfoList {
-		if v["userName"] != req.UserName {
-			continue
-		}
-		os, err := server.Info(v["serverExamineResultInfo"].(map[string]interface{})["serverIp"].(string), req.UserName)
+
+		os, err := server.Info(v["serverIp"].(string))
 		if err != nil {
 			this.ErrorPage(fmt.Errorf("获取主机信息失败：%v", err))
 			return
+		}else if os == nil {
+			continue
 		}
 		list.ServerExamineResultInfoList[k]["os"] = os
 
@@ -164,12 +157,12 @@ func (this *IndexAction) RunPost(params struct {
 			list.ServerExamineResultInfoList[k]["state"] = req.State
 		}
 		//看当前主机是否保存了主机体检状态
-		_, isExist := gl_examine_scan_maps.Load(v["macCode"].(string) + v["userName"].(string))
+		_, isExist := gl_examine_scan_maps.Load(v["macCode"].(string) + username)
 		if isExist {
 			if list.ServerExamineResultInfoList[k]["state"].(float64) == 0 { //未检测  - 延迟 设置成体检中
 				list.ServerExamineResultInfoList[k]["state"] = 1
 			} else { //已生效 删除该记录
-				gl_examine_scan_maps.Delete(v["macCode"].(string) + req.UserName)
+				gl_examine_scan_maps.Delete(v["macCode"].(string) + username)
 			}
 		}
 
