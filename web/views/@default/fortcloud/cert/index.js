@@ -109,12 +109,19 @@ Tea.context(function () {
         })
     }
 
-    this.onAddSelectNoAuth = function (id, name) {
-        if (id && name) {
-            var tempData = {id: id, name: name, my: false}
-            this.selectNoAuthPeopleListData.push(tempData)
+
+    //添加操作
+    this.onCheckSelectAllNoAuth = function () {
+        var tempElement = document.getElementById("noAuth-allSelect")
+        for (var index = 0; index < this.allUsers.length; index++) {
+            if (!this.allUsers[index].my &&!this.onCheckHadValue(this.allUsers[index].id, this.selectNoAuthPeopleListData)) {
+                tempElement.checked = false
+                return
+            }
         }
+        tempElement.checked = true
     }
+
     this.selectAllNoAuth = function () {
         var tempElement = document.getElementById("noAuth-allSelect")
         let noAuthList = document.getElementsByName("noAuthSelect")
@@ -122,7 +129,7 @@ Tea.context(function () {
             for (var index = 0; index < noAuthList.length; index++) {
                 if (!noAuthList[index].checked && !noAuthList[index].disabled) {
                     noAuthList[index].checked = true
-                    this.onAddSelectNoAuth(noAuthList[index].value, noAuthList[index].data)
+                    this.onAddSelectNoAuth(noAuthList[index].value, noAuthList[index].getAttribute("data"))
                 }
             }
         } else {
@@ -134,11 +141,12 @@ Tea.context(function () {
                 }
             }
         }
+        
+        
 
     }
-
     this.onListenClickNoAuthChange = function (item) {
-        if (item.my) {
+        if(item.my){
             return
         }
         let noAuthList = document.getElementsByName("noAuthSelect")
@@ -156,6 +164,54 @@ Tea.context(function () {
         }
         this.onCheckSelectAllNoAuth()
     }
+    this.onListenSelectNoAuthChange = function (item) {
+        var hadSelect = this.onCheckHadValue(item.id, this.selectNoAuthPeopleListData)
+        if (hadSelect) {
+            this.onRemoveSelectNoAuth(item.id)
+        } else {
+            this.onAddSelectNoAuth(item.id, item.name)
+        }
+        this.onCheckSelectAllNoAuth()
+    }
+    this.onAddSelectNoAuth = function (id, name) {
+        if (id && name) {
+            var tempData = {id: id, name: name,my:false}
+            this.selectNoAuthPeopleListData.push(tempData)
+        }
+    }
+    this.onRemoveSelectNoAuth = function (id) {
+        this.selectNoAuthPeopleListData.splice(this.selectNoAuthPeopleListData.findIndex(i => i.id === id), 1);
+    }
+
+    this.onAddAuthPeople = function () {
+        if (this.selectNoAuthPeopleListData.length > 0) {
+            this.selectNoAuthPeopleListData.forEach(element => {
+                this.authUsers.push(element)
+                this.allUsers.splice(this.allUsers.findIndex(i => i.id === element.id), 1);
+            });
+            this.selectNoAuthPeopleListData = []
+        }
+        var tempElement = document.getElementById("noAuth-allSelect")
+        tempElement.checked = false
+        let noAuthList = document.getElementsByName("noAuthSelect")
+        for (var index = 0; index < noAuthList.length; index++) {
+            if(!noAuthList[index].disabled){
+                noAuthList[index].checked = false
+            }
+
+        }
+    }
+
+    this.onGetAuthPeopleItemInfo = function (id, table) {
+        if (table && id && table.length > 0 && id > 0) {
+            for (var index = 0; index < table.length; index++) {
+                if (table[index].id == id) {
+                    return table[index]
+                }
+            }
+        }
+        return null
+    }
     this.onCheckHadValue = function (id, table) {
         if (table && id && table.length > 0 && id > 0) {
             for (var index = 0; index < table.length; index++) {
@@ -166,19 +222,42 @@ Tea.context(function () {
         }
         return false
     }
-    this.onAddSelectAuth = function (id, name) {
-        if (id && name) {
-            var tempData = {id: id, name: name, my: false}
-            this.selectAuthPeopleListData.push(tempData)
+
+
+    //移除操作
+    this.onCheckSelectAllAuth = function () {
+        var tempElement = document.getElementById("auth-allSelect")
+        for (var index = 0; index < this.authUsers.length; index++) {
+            if (!this.onCheckHadValue(this.authUsers[index].id, this.selectAuthPeopleListData)) {
+                tempElement.checked = false
+                return
+            }
         }
+        tempElement.checked = true
     }
-    this.onRemoveSelectAuth = function (id) {
-        this.selectAuthPeopleListData.splice(this.selectAuthPeopleListData.findIndex(i => i.id === id), 1);
+    this.selectAllAuth = function () {
+        var tempElement = document.getElementById("auth-allSelect")
+        let authList = document.getElementsByName("authSelect")
+        if (tempElement.checked) {
+            for (var index = 0; index < authList.length; index++) {
+                if (!authList[index].checked) {
+                    authList[index].checked = true
+                    this.onAddSelectAuth(authList[index].value, authList[index].getAttribute("data"))
+                }
+            }
+        } else {
+            for (var index = 0; index < authList.length; index++) {
+                if (authList[index].checked) {
+                    authList[index].checked = false
+                    this.onRemoveSelectAuth(authList[index].value)
+                }
+            }
+        }
     }
     this.onListenClickAuthChange = function (item) {
         let authList = document.getElementsByName("authSelect")
         for (var index = 0; index < authList.length; index++) {
-            if (authList[index].value == id) {
+            if (authList[index].value == item.id) {
                 if (authList[index].checked) {
                     authList[index].checked = false
                     this.onRemoveSelectAuth(item.id)
@@ -201,36 +280,16 @@ Tea.context(function () {
         this.onCheckSelectAllAuth()
     }
 
-    //移除操作
-    this.onCheckSelectAllAuth = function () {
-        var tempElement = document.getElementById("auth-allSelect")
-        for (var index = 0; index < this.authUsers.length; index++) {
-            if (!this.onCheckHadValue(this.authUsers[index].id, this.selectAuthPeopleListData)) {
-                tempElement.checked = false
-                return
-            }
-        }
-        tempElement.checked = true
-    }
-    this.selectAllAuth = function () {
-        var tempElement = document.getElementById("auth-allSelect")
-        let authList = document.getElementsByName("authSelect")
-        if (tempElement.checked) {
-            for (var index = 0; index < authList.length; index++) {
-                if (!authList[index].checked) {
-                    authList[index].checked = true
-                    this.onAddSelectAuth(authList[index].value, authList[index].data)
-                }
-            }
-        } else {
-            for (var index = 0; index < authList.length; index++) {
-                if (authList[index].checked) {
-                    authList[index].checked = false
-                    this.onRemoveSelectAuth(noAuthList[index].value)
-                }
-            }
+    this.onAddSelectAuth = function (id, name) {
+        if (id && name) {
+            var tempData = {id: id, name: name,my:false}
+            this.selectAuthPeopleListData.push(tempData)
         }
     }
+    this.onRemoveSelectAuth = function (id) {
+        this.selectAuthPeopleListData.splice(this.selectAuthPeopleListData.findIndex(i => i.id === id), 1);
+    }
+
     this.onRemoveAuthPeople = function () {
         if (this.selectAuthPeopleListData.length > 0) {
             this.selectAuthPeopleListData.forEach(element => {
@@ -240,50 +299,15 @@ Tea.context(function () {
 
             this.selectAuthPeopleListData = []
         }
+        var tempElement = document.getElementById("auth-allSelect")
+        tempElement.checked = false
         let authList = document.getElementsByName("authSelect")
         for (var index = 0; index < authList.length; index++) {
             authList[index].checked = false
         }
     }
-    this.onAddAuthPeople = function () {
-        if (this.selectNoAuthPeopleListData.length > 0) {
-            this.selectNoAuthPeopleListData.forEach(element => {
-                this.authUsers.push(element)
-                this.allUsers.splice(this.allUsers.findIndex(i => i.id === element.id), 1);
-            });
-            this.selectNoAuthPeopleListData = []
-        }
-        let noAuthList = document.getElementsByName("noAuthSelect")
-        for (var index = 0; index < noAuthList.length; index++) {
-            if (!noAuthList[index].disabled) {
-                noAuthList[index].checked = false
-            }
 
-        }
-    }
-    this.onListenSelectNoAuthChange = function (item) {
-        var hadSelect = this.onCheckHadValue(item.id, this.selectNoAuthPeopleListData)
-        if (hadSelect) {
-            this.onRemoveSelectNoAuth(item.id)
-        } else {
-            this.onAddSelectNoAuth(item.id, item.name)
-        }
-        this.onCheckSelectAllNoAuth()
-    }
-    //添加操作
-    this.onCheckSelectAllNoAuth = function () {
-        var tempElement = document.getElementById("noAuth-allSelect")
-        for (var index = 0; index < this.allUsers.length; index++) {
-            if (!this.allUsers[index].my && !this.onCheckHadValue(this.allUsers[index].id, this.selectNoAuthPeopleListData)) {
-                tempElement.checked = false
-                return
-            }
-        }
-        tempElement.checked = true
-    }
-    this.onRemoveSelectNoAuth = function (id) {
-        this.allUsers.splice(this.selectNoAuthPeopleListData.findIndex(i => i.id === id), 1);
-    }
+
     this.onCloseAuth = function () {
         this.bShowhAuth = false
         this.id = ""
@@ -306,23 +330,6 @@ Tea.context(function () {
         this.selectNoAuthPeopleListData = []
         this.selectAuthPeopleListData = []
 
-    }
-
-    this.onOpenAuth = function (item) {
-        //req
-        this.cert_name = item.name
-        this.id = item.id
-
-        this.$get(".authorize")
-            .params({
-                Id: this.id,
-            }).success(resp => {
-            if (resp.code === 200) {
-                this.allUsers = resp.data.allUsers
-                this.authUsers = resp.data.authUsers
-                this.bShowhAuth = true
-            }
-        })
     }
     this.onOpenAuth = function (item) {
         //req
