@@ -15,6 +15,7 @@ func init() {
 			GetPost("", new(IndexAction)).
 			GetPost("/createPopup", new(CreatePopupAction)).
 			GetPost("/auth", new(AuthAction)).
+			GetPost("/authorize", new(AuthorizeAction)).
 			GetPost("/delete", new(DeleteAction)).
 			EndAll()
 	})
