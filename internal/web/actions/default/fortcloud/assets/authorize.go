@@ -64,21 +64,20 @@ func (this *AuthorizeAction) RunGet(params struct {
 	for _, v := range users {
 		if _, isExist := contain[fmt.Sprintf("%v", v.Id)]; isExist {
 			authUsers = append(authUsers, map[string]interface{}{
-				"name": fmt.Sprintf("%v(%v)",v.Name,v.Username),
+				"name": v.Username,
 				"id":   v.Id,
 			})
 		} else {
 			allUsers = append(allUsers, map[string]interface{}{
-				"name": fmt.Sprintf("%v(%v)",v.Name,v.Username),
+				"name": v.Username,
 				"id":   v.Id,
 				"my":   false,
 			})
 		}
 	}
 	username, _ := this.UserName()
-	fullname, _ := this.FullName()
 	allUsers = append(allUsers, map[string]interface{}{
-		"name": fmt.Sprintf("%v(%v)",username,fullname),
+		"name": username,
 		"id":   this.UserId(),
 		"my":   true,
 	})

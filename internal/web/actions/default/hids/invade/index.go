@@ -18,7 +18,7 @@ func (this *IndexAction) RunGet(params struct{}) {
 		{"name": "病毒木马", "url": "virus", "value": 0},
 		{"name": "网页后门", "url": "webShell", "value": 0},
 		{"name": "反弹shell", "url": "reboundShell", "value": 0},
-		{"name": "异常账号", "url": "abnormalAcvalue", "value": 0},
+		{"name": "异常账号", "url": "abnormalAccount", "value": 0},
 		{"name": "日志异常删除", "url": "logDelete", "value": 0},
 		{"name": "异常登录", "url": "abnormalLogin", "value": 0},
 		{"name": "异常进程", "url": "abnormalProcess", "value": 0},

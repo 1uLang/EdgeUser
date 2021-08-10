@@ -38,9 +38,11 @@
                 <div style="display: inline-flex;justify-content: center;">
                     <div v-if="item.agentState ==2 " class="edit_btn_blue" @click="onStopConfig(item)">停用</div>
                     <div v-if="item.agentState ==4 " class="edit_btn_blue" @click="onStartConfig(item)">启用</div>
-                    <div v-if="item.agentState ==2 || item.agentState ==4" class="edit_btn_red" @click="onDelete(item)">
-                        卸载
+                    <div class="edit_btn_blue" @click="onDelete(item)">删除</div>
+                    <div v-if="item.agentState ==2 || item.agentState ==4" class="edit_btn_red"
+                         @click="onUninstall(item)">卸载
                     </div>
+
                 </div>
             </td>
         </tr>

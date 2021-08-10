@@ -104,18 +104,18 @@ Tea.context(function () {
         //req
         this.asset_name = item.name
         this.bShowhAuth = true
-        // this.id = item.id
+        this.id = item.id
 
-        // this.$get(".authorize")
-        //     .params({
-        //         Id: this.id,
-        //     }).success(resp => {
-        //     if (resp.code === 200) {
-        //         this.allUsers = resp.data.allUsers
-        //         this.authUsers = resp.data.authUsers
-        //         this.bShowhAuth = true
-        //     }
-        // })
+        this.$get(".authorize")
+            .params({
+                Id: this.id,
+            }).success(resp => {
+            if (resp.code === 200) {
+                this.allUsers = resp.data.allUsers
+                this.authUsers = resp.data.authUsers
+                this.bShowhAuth = true
+            }
+        })
     }
 
     this.onRefreshAuth = function () {
@@ -554,21 +554,21 @@ Tea.context(function () {
         {type: "custom", name: "密码"}, {type: "credential", name: "授权"},
     ]
     // 测试数据 先别删
-    this.allUsers = [
-        {id:2,name:"别人1",my:false},
-        {id:3,name:"别人2",my:false},
-        {id:4,name:"别人3",my:false},
-        {id:5,name:"别人4",my:false},
-        {id:6,name:"别人5",my:false},
-        {id:1,name:"自己",my:true},
-    ]
-    this.authUsers =[
-        {id:51,name:"别人51",my:false},
-        {id:52,name:"别人52",my:false},
-        {id:53,name:"别人53",my:false},
-        {id:54,name:"别人54",my:false},
-        {id:55,name:"别人55",my:false},
-        {id:56,name:"别人56",my:false},
-    ]
+    // this.allUsers = [
+    //     {id:2,name:"别人1",my:false},
+    //     {id:3,name:"别人2",my:false},
+    //     {id:4,name:"别人3",my:false},
+    //     {id:5,name:"别人4",my:false},
+    //     {id:6,name:"别人5",my:false},
+    //     {id:1,name:"自己",my:true},
+    // ]
+    // this.authUsers =[
+    //     {id:51,name:"别人51",my:false},
+    //     {id:52,name:"别人52",my:false},
+    //     {id:53,name:"别人53",my:false},
+    //     {id:54,name:"别人54",my:false},
+    //     {id:55,name:"别人55",my:false},
+    //     {id:56,name:"别人56",my:false},
+    // ]
 
 })
