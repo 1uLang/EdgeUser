@@ -218,7 +218,7 @@ Tea.context(function () {
         if (this.selectNoAuthPeopleListData.length > 0) {
             this.selectNoAuthPeopleListData.forEach(element => {
                 this.authUsers.push(element)
-                this.onRemoveTableItem(id,this.allUsers)
+                this.onRemoveTableItem(element.id,this.allUsers)
             });
             this.selectNoAuthPeopleListData = []
         }
@@ -304,7 +304,7 @@ Tea.context(function () {
         if (this.selectAuthPeopleListData.length > 0) {
             this.selectAuthPeopleListData.forEach(element => {
                 this.allUsers.push(element)
-                this.onRemoveTableItem(id,this.authUsers)
+                this.onRemoveTableItem(element.id,this.authUsers)
             });
 
             this.selectAuthPeopleListData = []
