@@ -86,6 +86,17 @@ Tea.context(function () {
     }
 
     this.onDelete = function (item) {
+        teaweb.confirm("确定要删除吗？", function () {
+            this.$post(".delete")
+                .params({
+                    id: item.id,
+                }).success(function () {
+                window.location.reload()
+            })
+        })
+
+    }
+    this.onUninstall = function (item) {
         teaweb.confirm("确定要卸载吗？", function () {
             this.$post(".disport")
                 .params({

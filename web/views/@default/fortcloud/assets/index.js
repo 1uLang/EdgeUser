@@ -103,6 +103,7 @@ Tea.context(function () {
     this.onOpenAuth = function (item) {
         //req
         this.asset_name = item.name
+        this.bShowhAuth = true
         this.id = item.id
 
         this.$get(".authorize")
@@ -365,6 +366,18 @@ Tea.context(function () {
         }
         return false
     }
+
+    this.onRemoveTableItem=function (id,table) { 
+        if(id && table && table.length>0 ){
+            for(var index=0;index<table.length;index++){
+                if(table[index].id==id){
+                    table.splice(index,1)
+                }
+            }
+        }
+        return table
+    }
+
     //添加操作
     this.onCheckSelectAllNoAuth = function () {
         var tempElement = document.getElementById("noAuth-allSelect")
@@ -396,10 +409,8 @@ Tea.context(function () {
                 }
             }
         }
-        
-        
-
     }
+
     this.onListenClickNoAuthChange = function (item) {
         if(item.my){
             return
@@ -435,14 +446,14 @@ Tea.context(function () {
         }
     }
     this.onRemoveSelectNoAuth = function (id) {
-        this.selectNoAuthPeopleListData.splice(this.selectNoAuthPeopleListData.findIndex(i => i.id === id), 1);
+        this.onRemoveTableItem(id,this.selectNoAuthPeopleListData)
     }
 
     this.onAddAuthPeople = function () {
         if (this.selectNoAuthPeopleListData.length > 0) {
             this.selectNoAuthPeopleListData.forEach(element => {
                 this.authUsers.push(element)
-                this.allUsers.splice(this.allUsers.findIndex(i => i.id === element.id), 1);
+                this.onRemoveTableItem(element.id,this.allUsers)
             });
             this.selectNoAuthPeopleListData = []
         }
@@ -453,7 +464,6 @@ Tea.context(function () {
             if(!noAuthList[index].disabled){
                 noAuthList[index].checked = false
             }
-
         }
     }
 
@@ -509,7 +519,7 @@ Tea.context(function () {
         if (hadSelect) {
             this.onRemoveSelectAuth(item.id)
         } else {
-            this.onAddSelectAuth(item.id, name)
+            this.onAddSelectAuth(item.id, item.name)
         }
         this.onCheckSelectAllAuth()
     }
@@ -521,14 +531,14 @@ Tea.context(function () {
         }
     }
     this.onRemoveSelectAuth = function (id) {
-        this.selectAuthPeopleListData.splice(this.selectAuthPeopleListData.findIndex(i => i.id === id), 1);
+        this.onRemoveTableItem(id,this.selectAuthPeopleListData)
     }
 
     this.onRemoveAuthPeople = function () {
         if (this.selectAuthPeopleListData.length > 0) {
             this.selectAuthPeopleListData.forEach(element => {
                 this.allUsers.push(element)
-                this.authUsers.splice(this.authUsers.findIndex(i => i.id === element.id), 1);
+                this.onRemoveTableItem(element.id,this.authUsers)
             });
 
             this.selectAuthPeopleListData = []
@@ -543,5 +553,22 @@ Tea.context(function () {
     this.accountTypeData = [
         {type: "custom", name: "密码"}, {type: "credential", name: "授权"},
     ]
+    // 测试数据 先别删
+    // this.allUsers = [
+    //     {id:2,name:"别人1",my:false},
+    //     {id:3,name:"别人2",my:false},
+    //     {id:4,name:"别人3",my:false},
+    //     {id:5,name:"别人4",my:false},
+    //     {id:6,name:"别人5",my:false},
+    //     {id:1,name:"自己",my:true},
+    // ]
+    // this.authUsers =[
+    //     {id:51,name:"别人51",my:false},
+    //     {id:52,name:"别人52",my:false},
+    //     {id:53,name:"别人53",my:false},
+    //     {id:54,name:"别人54",my:false},
+    //     {id:55,name:"别人55",my:false},
+    //     {id:56,name:"别人56",my:false},
+    // ]
 
 })

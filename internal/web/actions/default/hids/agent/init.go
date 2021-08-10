@@ -19,6 +19,7 @@ func init() {
 			Get("/download", new(DownloadAction)).
 			Get("/install", new(InstallAction)).
 			Post("/disport", new(DisportAction)).
+			Post("/delete", new(DeleteAction)).
 			EndAll()
 	})
 }
