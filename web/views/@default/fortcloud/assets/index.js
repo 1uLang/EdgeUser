@@ -509,7 +509,7 @@ Tea.context(function () {
         if (hadSelect) {
             this.onRemoveSelectAuth(item.id)
         } else {
-            this.onAddSelectAuth(item.id, name)
+            this.onAddSelectAuth(item.id, item.name)
         }
         this.onCheckSelectAllAuth()
     }
@@ -543,5 +543,22 @@ Tea.context(function () {
     this.accountTypeData = [
         {type: "custom", name: "密码"}, {type: "credential", name: "授权"},
     ]
+    // 测试数据 先别删
+    // this.allUsers = [
+    //     {id:1,name:"自己",my:true},
+    //     {id:2,name:"别人1",my:false},
+    //     {id:3,name:"别人2",my:false},
+    //     {id:4,name:"别人3",my:false},
+    //     {id:5,name:"别人4",my:false},
+    //     {id:6,name:"别人5",my:false},
+    // ]
+    // this.authUsers =[
+    //     {id:51,name:"别人51",my:false},
+    //     {id:52,name:"别人52",my:false},
+    //     {id:53,name:"别人53",my:false},
+    //     {id:54,name:"别人54",my:false},
+    //     {id:55,name:"别人55",my:false},
+    //     {id:56,name:"别人56",my:false},
+    // ]
 
 })

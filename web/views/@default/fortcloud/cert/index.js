@@ -275,7 +275,7 @@ Tea.context(function () {
         if (hadSelect) {
             this.onRemoveSelectAuth(item.id)
         } else {
-            this.onAddSelectAuth(item.id, name)
+            this.onAddSelectAuth(item.id, item.name)
         }
         this.onCheckSelectAllAuth()
     }
