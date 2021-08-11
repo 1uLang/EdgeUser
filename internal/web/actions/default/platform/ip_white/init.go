@@ -1,4 +1,4 @@
-package strategy
+package ip_white
 
 import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/settingsutils"
@@ -10,9 +10,8 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth("")).
-			Helper(settingutils.NewHelper("strategy")).
-			Data("teaMenu", "strategy").
-			Prefix("/platform/strategy").
+			Helper(settingutils.NewHelper("ip_white")).
+			Prefix("/platform/ip_white").
 			GetPost("", new(IndexAction)).
 			EndAll()
 	})
