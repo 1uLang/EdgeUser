@@ -156,14 +156,23 @@
       <tr>
         <td class="title">权限列表</td>
         <td>
-          <div v-for="item in features" style="margin-bottom: 10px;">
-            <div style="display: inline-flex;align-items: center;">
-              <input name="authCheckBox" type="checkbox" :value="item.code" :checked="item.isChecked">
-              <span>{{item.name}}</span>
+          <div style="display: flex;flex-direction: column;margin-bottom: 5px;cursor: pointer;" v-for="item in features" >
+            <div style="display: flex;flex-direction: row;align-items: center;" :style="{'background':item.code==moveIndex? '#f0f0f0':'none'}"
+                 @mouseenter="onMouseEnter(item.code)" @mouseleave="onMouseLeave(item.code)" @click="onShowChildItem(item.code)">
+              <span v-show="item.children && item.children.length>0 && !item.bShowChild">&#9658;</span>
+              <span v-show="item.children && item.children.length>0 && item.bShowChild">&#9660;</span>
+              <img :src="getShowImageName(item.code)" width="14px" height="14px" style="margin: 0 5px;" @click.stop="onSelectValue(item.code)">
+              <div style="width: 100%;font-size: 14px;" >{{item.name}}</div>
             </div>
-            <p style="color: rgba(0, 0, 0, 0.4);font-size: 1em;">{{item.description}}</p>
+            <div style="margin-left: 36px;cursor: default;"><span style="font-size: 14px;color: rgba(0, 0, 0, 0.5);padding-top: 5px;">{{item.description}}</span></div>
+            <div v-if="item.children && item.children.length>0 && item.bShowChild" style="margin-left: 36px;margin-top: 5px;cursor: default;" v-for="childItem in item.children">
+              <div style="display: flex;flex-direction: row;align-items: center;">
+                <img :src="getItemShowImageName(childItem.code)" width="14px" height="14px" style="margin-right: 5px;cursor: pointer;" @click="onSelectChildValue(childItem.code,item.code)">
+                <div style="width: 100%;font-size: 14px;">{{childItem.name}}</div>
+              </div>
+              <div style="margin-left: 19px;"><span style="font-size: 14px;color: rgba(0, 0, 0, 0.5);padding-top: 5px;">{{childItem.description}}</span></div>
+            </div>
           </div>
-
         </td>
       </tr>
     </table>

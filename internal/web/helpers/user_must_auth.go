@@ -136,7 +136,6 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			}
 		}
 	}
-
 	allMaps := []maps.Map{
 		{
 			"code": "dashboard",
@@ -373,6 +372,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 
 	result := []maps.Map{}
 	configloaders.LoadUIConfig()
+
 	for _, m := range allMaps {
 
 		//默认展示该组件
@@ -380,26 +380,26 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 		//	result = append(result, m)
 		//	continue
 		//}
-
-		//if m.GetString("code") == "finance" {
-		//
-		//	if config != nil && !config.ShowFinance {
-		//		continue
-		//	}
-		//	if !lists.ContainsString(featureCodes, "finance") {
-		//		continue
-		//	}
-		//}
-		if m.GetString("code") == "lb" && !lists.ContainsString(featureCodes, "server.tcp") {
-			continue
+		code := m.GetString("code")
+		if lists.ContainsString(featureCodes, code) {
+			result = append(result, m)
+		} else { //判断子菜单是否已授权
+			sub := m.GetSlice("subItems")
+			newSub := []maps.Map{}
+			if sub != nil {
+				for _, item := range sub {
+					sub := item.(maps.Map)
+					subCode := sub.GetString("code")
+					if lists.ContainsString(featureCodes, code+"."+subCode) { //表示子菜单包含
+						newSub = append(newSub, sub)
+					}
+				}
+			}
+			if len(newSub) > 0 {
+				m["subItems"] = newSub
+				result = append(result, m)
+			}
 		}
-		if m.GetString("code") == "waf" && !lists.ContainsString(featureCodes, "server.waf") {
-			continue
-		}
-		if code := m.GetString("code"); (code == "hids" || code == "webscan") && !lists.ContainsString(featureCodes, code) {
-			continue
-		}
-		result = append(result, m)
 	}
 
 	return result
