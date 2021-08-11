@@ -14,6 +14,7 @@ func init() {
 			Prefix("/audit/db").
 			GetPost("", new(IndexAction)).
 			GetPost("/createPopup", new(CreatePopupAction)).
+			GetPost("/authorize", new(AuthorizeAction)).
 			GetPost("/auth", new(AuthAction)).
 			GetPost("/delete", new(DeleteAction)).
 			EndAll()

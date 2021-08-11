@@ -112,6 +112,7 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 		if res == 0 {
 			//30分钟没有操作  自动退出
 			session.Delete()
+			cache.DelKey(fmt.Sprintf("login_success_userid_%v", userId))
 			this.login(action)
 			return false
 		}
