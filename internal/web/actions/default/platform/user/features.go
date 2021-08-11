@@ -8,6 +8,7 @@ import (
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/maps"
+	"strings"
 )
 
 type FeaturesAction struct {
@@ -19,28 +20,69 @@ func (this *FeaturesAction) RunGet(params struct {
 }) {
 	allFeatures := userutils.FindAllUserFeatures()
 
-	features, err := server.FindUserFeatures(&model.FindUserFeaturesReq{UserId: params.UserId})
+	parentFeatureCodes, err := server.FindUserFeatures(&model.FindUserFeaturesReq{UserId: this.UserId()})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	userFeatureCodes := []string{}
-	for _, userFeature := range features {
-		userFeatureCodes = append(userFeatureCodes, userFeature)
+	userFeatureCodes, err := server.FindUserFeatures(&model.FindUserFeaturesReq{UserId: params.UserId})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	codeMaps := map[string]bool{}
+	for _, v := range parentFeatureCodes {
+		v := strings.Split(v, ".")[0]
+		codeMaps[v] = true
+	}
+	nl := []string{}
+	for k := range codeMaps {
+		nl = append(nl, k)
 	}
 
 	featureMaps := []maps.Map{}
+	idx := 0
+	var checkStr []string
+	var parent bool
 	for _, feature := range allFeatures {
-		featureMaps = append(featureMaps, maps.Map{
+
+		//当前用户无权限跳过
+		if strings.Contains(feature.Code, ".") {
+			checkStr = parentFeatureCodes
+			parent = false
+		} else {
+			parent = true
+			checkStr = nl
+		}
+		if !lists.ContainsString(checkStr, feature.Code) {
+			continue
+		}
+		if parent {
+			feature.Code = strings.Split(feature.Code, ".")[0]
+		}
+
+		item := maps.Map{
 			"name":        feature.Name,
 			"code":        feature.Code,
+			"bShowChild":  false,
 			"description": feature.Description,
-			"isChecked":   lists.ContainsString(userFeatureCodes, feature.Code),
-		})
+			"children":    []maps.Map{},
+		}
+		//子菜单
+		if codes := strings.Split(feature.Code, "."); len(codes) == 2 {
+
+			subItems := featureMaps[idx-1]["children"].([]maps.Map)
+			subItems = append(subItems, item)
+			featureMaps[idx-1]["children"] = subItems
+		} else {
+			featureMaps = append(featureMaps, item)
+			idx++
+		}
 	}
 
 	this.Data["features"] = featureMaps
-
+	this.Data["selectList"] = userFeatureCodes
+	this.Data["userId"] = params.UserId
 	this.Success()
 }
 
