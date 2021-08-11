@@ -78,9 +78,9 @@ Tea.context(function () {
     this.onStopScan = function (item) {
 
         let curValue = []
-        if(item.owner){
+        if (item.owner) {
             curValue = [item.target_id]
-        }else{
+        } else {
             curValue = [item.scan_id]
         }
 
@@ -303,7 +303,10 @@ Tea.context(function () {
                 // this.statistics.request_count = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].web_scan_status.request_count
                 // this.statistics.avg_response_time = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].web_scan_status.avg_response_time
                 // this.statistics.locations = resp.data.statistics.scanning_app.wvs.hosts[item.target_id].web_scan_status.locations
-                this.statistics.vulns = resp.data.statistics.scanning_app.wvs.main.vulns
+                if (resp.data.vulList)
+                    this.statistics.vulns = resp.data.vulList
+                else
+                    this.statistics.vulns = resp.data.statistics.scanning_app.wvs.main.vulns
                 this.scans_vulns = this.statistics.vulns
                 this.vulnerabilities = this.scans_vulns
                 // this.statistics.duration = resp.data.statistics.scanning_app.wvs.main.duration

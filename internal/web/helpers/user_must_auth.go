@@ -372,7 +372,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 
 	result := []maps.Map{}
 	configloaders.LoadUIConfig()
-	fmt.Println(featureCodes)
+
 	for _, m := range allMaps {
 
 		//默认展示该组件

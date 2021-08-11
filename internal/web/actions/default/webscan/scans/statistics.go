@@ -1,6 +1,7 @@
 package scans
 
 import (
+	scans_model "github.com/1uLang/zhiannet-api/awvs/model/scans"
 	scans_server "github.com/1uLang/zhiannet-api/awvs/server/scans"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan"
@@ -64,6 +65,13 @@ func (this *StatisticsAction) RunGet(params struct {
 			}
 		}
 	}
+	vulList, err := scans_server.VulnerabilitiesList(&scans_model.VulnerabilitiesListReq{ScanId: params.ScanId, ScanSessionId: params.ScanSessionId})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+
 	this.Data["severity"] = severity
+	this.Data["vulList"] = vulList
 	this.Success()
 }
