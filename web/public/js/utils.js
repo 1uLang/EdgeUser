@@ -114,6 +114,31 @@ window.teaweb = {
 			};
 		}
 
+
+        Swal.fire({
+            html: '<iframe src="' + url + '#popup-' + width + '" style="border:0; width: 100%; height:' + height + '"></iframe>',
+            width: width,
+            padding: "0.5em",
+            showConfirmButton: false,
+            showCloseButton: true,
+            focusConfirm: false,
+            onClose: function (popup) {
+                if (typeof (options["onClose"]) == "function") {
+                    options["onClose"].apply(Tea.Vue, arguments)
+                }
+            }
+        });
+    },
+    closePopup: function () {
+		if (this.isPopup()) {
+			window.parent.Swal.close();
+		}
+	},
+    success: function (message, callback) {
+        var width = "20em";
+        if (message.length > 30) {
+            width = "30em";
+        }
 		Swal.fire({
 			html: '<iframe src="' + url + '#popup-' + width + '" style="border:0; width: 100%; height:' + height + '"></iframe>',
 			width: width,
@@ -155,7 +180,6 @@ window.teaweb = {
 		if (message.length > 30) {
 			width = "30em";
 		}
-
 		let config = {
 			confirmButtonText: "确定",
 			buttonsStyling: false,

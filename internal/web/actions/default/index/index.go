@@ -1,7 +1,12 @@
 package index
 
 import (
+	"encoding/json"
 	"fmt"
+	"github.com/1uLang/zhiannet-api/common/cache"
+	"github.com/1uLang/zhiannet-api/common/server/edge_admins_server"
+	"github.com/1uLang/zhiannet-api/common/server/edge_logins_server"
+	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/configloaders"
@@ -12,8 +17,11 @@ import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/helpers"
 	"github.com/iwind/TeaGo/actions"
+	"github.com/iwind/TeaGo/maps"
 	"github.com/iwind/TeaGo/types"
 	stringutil "github.com/iwind/TeaGo/utils/string"
+
+	"github.com/xlzd/gotp"
 	"time"
 )
 
@@ -26,9 +34,9 @@ type IndexAction struct {
 var TokenSalt = stringutil.Rand(32)
 
 func (this *IndexAction) RunGet(params struct {
-	From string
-
-	Auth *helpers.UserShouldAuth
+	From  string
+	Token string
+	Auth  *helpers.UserShouldAuth
 }) {
 	// 已登录跳转到dashboard
 	if params.Auth.IsUser() {
@@ -56,7 +64,9 @@ func (this *IndexAction) RunGet(params struct {
 		this.Data["version"] = teaconst.Version
 	}
 	this.Data["faviconFileId"] = config.FaviconFileId
-
+	if params.Token != "" {
+		this.Success()
+	}
 	this.Show()
 }
 
@@ -66,16 +76,23 @@ func (this *IndexAction) RunPost(params struct {
 	Username string
 	Password string
 	Remember bool
-	Must     *actions.Must
-	Auth     *helpers.UserShouldAuth
-	CSRF     *actionutils.CSRF
-}) {
-	params.Must.
-		Field("username", params.Username).
-		Require("请输入用户名").
-		Field("password", params.Password).
-		Require("请输入密码")
+	OtpCode  string
 
+	Must *actions.Must
+	Auth *helpers.UserShouldAuth
+	CSRF *actionutils.CSRF
+}) {
+
+	this.Data["from"] = ""
+	//params.Must.
+	//	Field("username", params.Username).
+	//	Require("请输入用户名").
+	//	Field("password", params.Password).
+	//	Require("请输入密码")
+
+	if params.Username == "" {
+		this.FailField("username", "请输入用户名")
+	}
 	if params.Password == stringutil.Md5("") {
 		this.FailField("password", "请输入密码")
 	}
@@ -97,17 +114,19 @@ func (this *IndexAction) RunPost(params struct {
 	if err != nil {
 		this.Fail("服务器出了点小问题：" + err.Error())
 	}
+	//登录限制检查
+	if res, _ := edge_admins_server.LoginCheck(fmt.Sprintf("user_%v", params.Username)); res {
+		this.FailField("refresh", "账号已被锁定（请 30分钟后重试）")
+	}
 	resp, err := rpcClient.UserRPC().LoginUser(rpcClient.Context(0), &pb.LoginUserRequest{
 		Username: params.Username,
 		Password: params.Password,
 	})
-
 	if err != nil {
 		err = dao.SharedLogDAO.CreateUserLog(rpcClient.Context(0), oplogs.LevelError, this.Request.URL.Path, "登录时发生系统错误："+err.Error(), this.RequestRemoteIP())
 		if err != nil {
 			utils.PrintError(err)
 		}
-
 		actionutils.Fail(this, err)
 	}
 
@@ -116,8 +135,66 @@ func (this *IndexAction) RunPost(params struct {
 		if err != nil {
 			utils.PrintError(err)
 		}
+		info, err := edge_users_server.GetUserInfoByName(params.Username)
+		if err != nil {
+			this.ErrorPage(err)
+		}
+		if info != nil && (info.State == 0 || info.Ison == 0) {
+			this.Fail("当前账号被禁用")
+		} else {
+			//登录次数+1
+			edge_admins_server.LoginErrIncr(fmt.Sprintf("user_%v", params.Username))
+			num, _ := cache.GetInt(fmt.Sprintf("user_%v", params.Username))
+			this.Fail(fmt.Sprintf("请输入正确的用户名密码，您还可以尝试%v次，（账号将被临时锁定30分钟）", 5-num))
+		}
 
-		this.Fail("请输入正确的用户名密码")
+	}
+	// 检查OTP-*/
+	otpInfo, err := edge_logins_server.GetInfoByUid(uint64(resp.UserId))
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	if otpInfo != nil && otpInfo.IsOn == 1 {
+		loginParams := maps.Map{}
+		err = json.Unmarshal([]byte(otpInfo.Params), &loginParams)
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+		secret := loginParams.GetString("secret")
+		if gotp.NewDefaultTOTP(secret).Now() != params.OtpCode {
+			this.Fail("请输入正确的OTP动态密码")
+		}
+	}
+	//密码过期检查
+	this.Data["from"] = ""
+	if res, _ := edge_users_server.CheckPwdInvalid(uint64(resp.UserId)); res {
+		params.Auth.SetUpdatePwdToken(resp.UserId)
+		this.Data["from"] = "/updatePwd"
+		this.Fail("密码已过期，请立即修改")
+	}
+	//ip登陆限制检查
+	{
+		securityConfig, _ := configloaders.LoadSecurityConfig(resp.UserId)
+		if !helpers.CheckIP(securityConfig, this.RequestRemoteIP()) {
+			//this.ResponseWriter.WriteHeader(http.StatusForbidden)
+			this.Fail("当前IP登录被限制")
+		}
+		fmt.Println("检查 当前IP登录被限制1")
+		//获取父级用户
+		userInfo, _ := edge_users_server.GetUserInfo(uint64(resp.UserId))
+		if userInfo != nil {
+			securityConfig, _ := configloaders.LoadSecurityConfig(int64(userInfo.ParentId))
+			if !helpers.CheckIP(securityConfig, this.RequestRemoteIP()) {
+				this.Fail("当前IP登录被限制")
+			}
+			fmt.Println("检查 当前IP登录被限制2")
+		}
 	}
 
 	userId := resp.UserId
@@ -128,6 +205,8 @@ func (this *IndexAction) RunPost(params struct {
 	if err != nil {
 		utils.PrintError(err)
 	}
-
+	//记录登录成功30分钟
+	cache.SetNx(fmt.Sprintf("login_success_userid_%v", userId), time.Minute*30)
+	cache.DelKey(fmt.Sprintf("user_%v", params.Username))
 	this.Success()
 }

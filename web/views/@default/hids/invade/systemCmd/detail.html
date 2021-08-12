@@ -1,0 +1,40 @@
+{$layout "layout_popup"}
+{$var "header"}
+<script type="text/javascript" src="/_/@default/hids/invade/systemCmd/detailList.js"></script>
+{$end}
+
+<div style="display: flex;flex-direction: column;">
+    <div style="flex: 6;">
+        <div class="detail-box-style" style="margin-top: 50px;">
+            <div class="title-box-f">主机IP：</div>
+            <div class="title-box-h">{{details.serverIp}}({{parseServerLocalIp(details.serverLocalIp)}})</div>
+        </div>
+        <div class="detail-box-style">
+            <div class="title-box-f">类型：</div>
+            <div class="title-box-h">{{details.invadeType}}</div>
+        </div>
+        <div class="detail-box-style">
+            <div class="title-box-f">hash值：</div>
+            <div class="title-box-h">{{details.hashValue}}</div>
+        </div>
+            <div class="title-box-f">发现时间：</div>
+            <div class="title-box-h">{{details.discoveryTime}}</div>
+        </div>
+        <div class="detail-box-style">
+            <div class="title-box-f">来源：</div>
+            <div class="title-box-h">{{details.src}}</div>
+        </div>
+        <div class="detail-box-style">
+            <div class="title-box-f">威胁特征：</div>
+            <div class="title-box-h">{{details.harmFeature}}</div>
+        </div>
+        <div class="detail-box-style">
+            <div class="title-box-f">威胁说明：</div>
+            <div class="title-box-h">{{details.harm}}</div>
+        </div>
+        <div class="detail-box-style">
+            <div class="title-box-f">处理建议：</div>
+            <div class="title-box-h">{{details.suggestion}}</div>
+        </div>
+    </div>
+</div>

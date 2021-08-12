@@ -192,7 +192,7 @@ p.margin {
   font-size: 0.9em;
 }
 .main-menu .ui.menu .sub-items .item {
-  padding-left: 2.82em !important;
+  padding-left: 2.2em !important;
 }
 .main-menu .ui.menu .sub-items .item.active {
   background-color: #2185d0 !important;
@@ -714,3 +714,24 @@ td {
   word-break: break-all;
 }
 /*# sourceMappingURL=@layout.css.map */
+
+.dialog-style{
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0);
+  z-index: 1;display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialog-bg-style{
+  width:100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

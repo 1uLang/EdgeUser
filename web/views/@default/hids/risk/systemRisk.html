@@ -1,0 +1,71 @@
+{$layout}
+<!-- 漏洞风险-系统漏洞 -->
+<div>
+    <div class="card-div"
+         style="display: flex;flex-direction: row;justify-content: space-between;padding: 15px 10px;margin-top: 20px;">
+        <div style="font-size: 16px;">系统漏洞</div>
+        <div class="edit_btn" @click="onGoBack">返回</div>
+    </div>
+
+    <div class="card-div" style="display: flex;flex-direction: row;margin-top: 15px;">
+        <form method="get" action="/hids/risk/systemRisk" class="ui form" autocomplete="off" style="padding-top: 5px;">
+            <div class="ui fields inline">
+                <div class="ui field">风险等级:</div>
+                <div class="ui field">
+                    <select class="ui dropdown auto-width" name="level" v-model="level">
+                        <option value="0">请选择</option>
+                        <option value="1">低危</option>
+                        <option value="2">中危</option>
+                        <option value="3">高危</option>
+                        <option value="4">危急</option>
+                    </select>
+                </div>
+                <div class="ui field">主机IP：</div>
+                <div class="ui field">
+                    <input type="text" name="serverIp" style="width:10em" v-model="serverIp"/>
+                </div>
+                <div class="ui field">
+                    <button type="submit" class="ui button" @click="">查询</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;margin-top: 20px;">
+        <table height="40px" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+            <tr align="center">
+                <th class='table-head-bg' style="width: 377px;">主机IP</th>
+                <th class='table-head-bg' style="width: 641px;">漏洞数量分布</th>
+                <th class='table-head-bg' style="width: 110px;">漏洞详情</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr align="center"  v-for="item in risks">
+                <td>{{item.serverIp}}|{{parseServerLocalIp(item.serverLocalIp)}}</td>
+                <td>
+                    <div class="model-background" style="display: flex;flex-direction: row;">
+                        <div v-show="item.criticalCount>0" class="model-child-background serious-bg-color"
+                             :style="{flex:item.criticalCount}">{{item.criticalCount}}
+                        </div>
+                        <div v-show="item.highRiskCount>0" class="model-child-background height-bg-color"
+                             :style="{flex:item.highRiskCount}">{{item.highRiskCount}}
+                        </div>
+                        <div v-show="item.middleRiskCount>0" class="model-child-background middle-bg-color"
+                             :style="{flex:item.middleRiskCount}">{{item.middleRiskCount}}
+                        </div>
+                        <div v-show="item.lowRiskCount>0" class="model-child-background low-bg-color"
+                             :style="{flex:item.lowRiskCount}">{{item.lowRiskCount}}
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="edit_btn" @click="onOpenDetail(item)">查看</div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+

@@ -1,4 +1,4 @@
 rpc:
   endpoints: [ "http://127.0.0.1:8003" ]
-nodeId: ""
-secret: ""
+nodeId: "3f52bf98a1065a02eea0f3b1df88a05e"
+secret: "uXU1ZLYufma9eFKrn5b37FRByIf5VR1q"

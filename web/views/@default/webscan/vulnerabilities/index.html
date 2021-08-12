@@ -1,0 +1,76 @@
+<!-- 漏洞详情 -->
+
+{$layout}
+<p class="comment" v-if="nodeErr != ''">请先添加web漏洞扫描节点</p>
+
+<div style="width: 100%;display: inline-flex;height: 100vh;" v-if="nodeErr == ''">
+    <div style="flex: 1;width: 100%;">
+        <form method="get" class="ui form" action="vulnerabilities">
+            <div class="ui margin"></div>
+            <div class="ui menu basic text">
+                <div class="item">
+                    <div class="ui fields inline">
+                        <div class="ui field">
+                            <span class="ui field">目标：</span>
+                            <input type="text" name="address" placeholder="请输入目标地址" v-model="address"/>
+                        </div>
+                        <span>严重性：</span>
+                        <div class="ui field">
+                            <div class="ui field">
+                                <select class="ui dropdown auto-width" name="severity" v-model="severity">
+                                    <option value="">全部</option>
+                                    <option value="3">高危</option>
+                                    <option value="2">中危</option>
+                                    <option value="1">低危</option>
+                                    <option value="0">信息性</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="ui field">
+                            <button type="submit" class="ui button">搜索</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;">
+            <p class="comment" v-if="vulnerabilities.length == 0 && nodeErr == ''">暂时还没有目标。</p>
+            <table class="ui table selectable celled" border="1" style="border-collapse: collapse;" v-if="vulnerabilities.length > 0">
+                <thead>
+                <tr align="center">
+                    <th class='table-head-bg' style="width: 183px;">严重性</th>
+                    <th class='table-head-bg' style="width: 462px;">漏洞</th>
+                    <th class='table-head-bg' style="width: 238px;">目标</th>
+                    <th class='table-head-bg' style="width: 297px;">发现时间</th>
+                </tr>
+                </thead>
+                <tbody id='tableBody'>
+                <tr align="center" style="height: 50px;cursor: pointer;" v-for="item in vulnerabilities" @click="getDetailInfo(item)" >
+                    <td :class="{'red-color':item.severity===3, 'yellow-color':item.severity===2,'blue-color':item.severity===1,'green-color':item.severity===0}">{{onChangeSeverityFormat(item.severity)}}</td>
+                    <td>{{item.vt_name}}</td>
+                    <td>{{item.affects_url}}</td>
+                    <td>{{onChangeTimeFormat(item.last_seen)}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div v-if="bShowDetail && detailInfo" style="display: flex; flex: 1;width: 100%;position: relative;">
+        <div style="height: 100%;width: 5px;background-color: #f0f0f0;margin: 1px 10px;"></div>
+        <div style="margin-top: 34px;">
+            <h2>{{detailInfo.vt_name}}</h2>
+            <div>{{detailInfo.affects_url}}</div>
+            <h2>攻击详细信息</h2>
+            <div>{{detailInfo.details}}</div>
+            <h2>漏洞描述</h2>
+            {{detailInfo.description}}
+            <div>发现者：<span style="font-weight: bold">{{detailInfo.vt_name}}</span></div>
+            <h2>此漏洞的影响</h2>
+            <div>{{detailInfo.impact}}</div>
+            <h2>如何修复此漏洞</h2>
+            <div>{{detailInfo.recommendation}}</div>
+        </div>
+        <div style="position: absolute;right: 10px;top: 8px;font-size: 24px;cursor: pointer;" @click="onCloseDetail()">X</div>
+    </div>
+</div>

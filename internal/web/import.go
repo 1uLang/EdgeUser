@@ -7,6 +7,29 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/dashboard"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/finance"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/finance/bills"
+
+	//堡垒机
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/assets"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/audit"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/cert"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud/sessions"
+
+	//主机安全防护
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/agent"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/baseline"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/examine"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/invade"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/invade/abnormalAccount"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/invade/abnormalLogin"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/invade/abnormalProcess"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/invade/logDelete"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/invade/reboundShell"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/invade/systemCmd"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/invade/virus"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/invade/webShell"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/risk"
+
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/index"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/lb"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/lb/server/settings/basic"
@@ -43,4 +66,28 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/ui"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/waf"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/waf/logs"
+
+	//web漏洞扫描
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan/reports"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan/scans"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan/targets"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan/vulnerabilities"
+
+	//安全审计
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/agent"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/app"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/db"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/host"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/logs"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/report"
+
+	//数据备份
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/databackup"
+
+	//平台管理
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/ip_white"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/logs"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/strategy"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/user"
 )

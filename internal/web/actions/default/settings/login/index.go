@@ -1,8 +1,10 @@
 package login
 
 import (
+	"github.com/1uLang/zhiannet-api/common/server/edge_users_server"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
+	"github.com/dlclark/regexp2"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
 )
@@ -59,11 +61,20 @@ func (this *IndexAction) RunPost(params struct {
 	if existsResp.Exists {
 		this.FailField("username", "此用户名已经被别的用户使用，请换一个")
 	}
-
+	var editPwd bool
 	if len(params.Password) > 0 {
 		if params.Password != params.Password2 {
 			this.FailField("password2", "两次输入的密码不一致")
 		}
+		reg, err := regexp2.Compile(
+			`^(?![A-z0-9]+$)(?=.[^%&',;=?$\x22])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,30}$`, 0)
+		if err != nil {
+			this.FailField("pass1", "密码格式不正确")
+		}
+		if match, err := reg.FindStringMatch(params.Password2); err != nil || match == nil {
+			this.FailField("pass1", "密码格式不正确")
+		}
+		editPwd = true
 	}
 
 	_, err = this.RPC().UserRPC().UpdateUserLogin(this.UserContext(), &pb.UpdateUserLoginRequest{
@@ -75,6 +86,8 @@ func (this *IndexAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-
+	if editPwd {
+		edge_users_server.UpdatePwdAt(uint64(this.UserId()))
+	}
 	this.Success()
 }

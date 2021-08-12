@@ -1,0 +1,232 @@
+<!-- 审计-数据库 -->
+{$layout}
+{$template "/datepicker"}
+{$var "header"}
+{$end}
+<div @click="onCloseDropMenu">
+    <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+        <div :class="{'menu-select-color':pageState===1,'menu-define-color':pageState!=1}" @click="onChangeState(1)">数据库审计</div>
+        <div :class="{'menu-select-color':pageState===2,'menu-define-color':pageState!=2}" @click="onChangeState(2)">主机审计</div>
+        <div :class="{'menu-select-color':pageState===3,'menu-define-color':pageState!=3}" @click="onChangeState(3)">应用审计</div>
+    </div>
+
+    <div style="width: 100%;display: flex;flex-direction: column;margin-top: 10px;">
+        <div style="display: inline-flex;margin-top: 15px;">
+            <div style="width: 70px;margin-right: 10px;text-align: right;">时间范围：</div>
+            <div :class="{'box-select-style':timeSelectIndex==='5min','box-define-style':timeSelectIndex!='5min'}" @click="onChangeCheckTime('5min')">最近5分钟</div>
+            <div :class="{'box-select-style':timeSelectIndex==='30min','box-define-style':timeSelectIndex!='30min'}" @click="onChangeCheckTime('30min')">最近30分钟</div>
+            <div :class="{'box-select-style':timeSelectIndex==='1h','box-define-style':timeSelectIndex!='1h'}" @click="onChangeCheckTime('1h')">最近1小时</div>
+            <div :class="{'box-select-style':timeSelectIndex==='6h','box-define-style':timeSelectIndex!='6h'}" @click="onChangeCheckTime('6h')">最近6小时</div>
+            <div :class="{'box-select-style':timeSelectIndex==='day','box-define-style':timeSelectIndex!='day'}" @click="onChangeCheckTime('day')">本日</div>
+            <div :class="{'box-select-style':timeSelectIndex==='today','box-define-style':timeSelectIndex!='today'}" @click="onChangeCheckTime('today')">昨日</div>
+            <div :class="{'box-select-style':timeSelectIndex==='week','box-define-style':timeSelectIndex!='week'}" @click="onChangeCheckTime('week')">本周</div>
+            <div :class="{'box-select-style':timeSelectIndex==='month','box-define-style':timeSelectIndex!='month'}" @click="onChangeCheckTime('month')">本月</div>
+            <div class="ui field" style="margin-right: 10px">
+                <input type="text" name="dayFrom" placeholder="开始日期" v-model="dayFrom" value="" style="width:142px;height: 24px;font-size: 13px;border: 1px solid #d7d7d7;" id="day-from-picker" @change="onTimeChange"/>
+            </div>
+            <div class="ui field" style="margin-right: 10px">
+                <input type="text" name="dayTo" placeholder="结束日期" v-model="dayTo" value="" style="width:142px;height: 24px;font-size: 13px;border: 1px solid #d7d7d7;" id="day-to-picker" @change="onTimeChange"/>
+            </div>
+        </div>
+
+        <div style="width: 100%;display: inline-flex;margin-top: 10px;align-items: center;">
+            <div style="display: inline-flex;">
+                <div style="width: 70px;margin-right: 10px;text-align: right;height: 26px;line-height: 26px;">{{objName}}：</div>
+                <!--数据库-->
+                <div  v-if="pageState===1" style="width: 200px;position: relative;">
+                    <div @click.stop="onShowSqlName" style="height: 26px;width: 200px;border: 1px solid #d7d7d7;display: inline-flex;align-items: center;">
+                        <div v-for="itemId in sSelectSqlName" style="background-color: #0090cc;color: #fff;border-radius: 10px;height: 18px;font-size: 10px;line-height: 18px;padding: 0px 2px;">
+                            {{getItemInfo(itemId, dbList)}}</div>
+                    </div>
+                    <div v-if="bShowSqlName" style="width:100%;position: absolute;left: 0;top: 28px;background-color: #fff;border: 1px solid #d7d7d7;">
+                        <div v-for="item in dbList" style="margin-left: 5px;padding-bottom: 3px;" @click.stop="onAddSqlNameValue(item.audit_id)">
+                            <img :src="getShowSelectValueImage(item.audit_id,sSelectSqlName)" width="12px" height="12px">
+                            <span style="margin-left: 5px;">{{item.name}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!--主机-->
+                <div  v-if="pageState===2" style="width: 200px;position: relative;">
+                    <div @click.stop="onShowSqlName" style="height: 26px;width: 200px;border: 1px solid #d7d7d7;display: inline-flex;align-items: center;">
+                        <div v-for="itemId in sSelectSqlName" style="background-color: #0090cc;color: #fff;border-radius: 10px;height: 18px;font-size: 10px;line-height: 18px;padding: 0px 2px;">
+                            {{getItemInfo(itemId,hostList)}}</div>
+                    </div>
+                    <div v-if="bShowSqlName" style="width:100%;position: absolute;left: 0;top: 28px;background-color: #fff;border: 1px solid #d7d7d7;">
+                        <div v-for="item in hostList" style="margin-left: 5px;padding-bottom: 3px;" @click.stop="onAddSqlNameValue(item.audit_id)">
+                            <img :src="getShowSelectValueImage(item.audit_id,sSelectSqlName)" width="12px" height="12px">
+                            <span style="margin-left: 5px;">{{item.name}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!--应用-->
+                <div  v-if="pageState===3" style="width: 200px;position: relative;">
+                    <div @click.stop="onShowSqlName" style="height: 26px;width: 200px;border: 1px solid #d7d7d7;display: inline-flex;align-items: center;">
+                        <div v-for="itemId in sSelectSqlName" style="background-color: #0090cc;color: #fff;border-radius: 10px;height: 18px;font-size: 10px;line-height: 18px;padding: 0px 2px;">
+                            {{getItemInfo(itemId,appList)}}</div>
+                    </div>
+                    <div v-if="bShowSqlName" style="width:100%;position: absolute;left: 0;top: 28px;background-color: #fff;border: 1px solid #d7d7d7;">
+                        <div v-for="item in appList" style="margin-left: 5px;padding-bottom: 3px;" @click.stop="onAddSqlNameValue(item.audit_id)">
+                            <img :src="getShowSelectValueImage(item.audit_id,sSelectSqlName)" width="12px" height="12px">
+                            <span style="margin-left: 5px;">{{item.name}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: inline-flex;margin-left: 30px;" v-if="pageState===1">
+                <div style="width: 70px;margin-right: 10px;text-align: right;height: 26px;line-height: 26px;">客户端IP：</div>
+                <input type="text" v-model="clientIp" style="height: 26px;width: 150px;line-height: 26px;border: 1px solid #d7d7d7;" placeholder="请输入客户端IP"></input>
+            </div>
+
+            <div style="display: inline-flex;margin-left: 30px;" v-if="pageState===1">
+                <div style="width: 100px;margin-right: 10px;text-align: right;height: 26px;line-height: 26px;">数据库账号：</div>
+                <input type="text" v-model="sqlName" style="height: 26px;width: 150px;line-height: 26px;border: 1px solid #d7d7d7;" placeholder="请输入数据库账号"></input>
+            </div>
+
+            <div style="display: inline-flex;margin-left: 30px;" v-if="pageState===1">
+                <div style="width: 100px;margin-right: 10px;text-align: right;height: 26px;line-height: 26px;">风险等级：</div>
+                <div style="width: 155px;position: relative;">
+                    <div @click.stop="onShowDangerLevel" style="height: 26px;width: 155px;border: 1px solid #d7d7d7;display: inline-flex;align-items: center;">
+                        <div v-for="itemId in sSelectDangerLevel" style="background-color: #0090cc;color: #fff;border-radius: 10px;height: 18px;font-size: 10px;line-height: 18px;padding: 0px 2px;">
+                        {{getItemInfo(itemId,dangerLevelData)}}</div>
+                    </div>
+                    <div v-if="bShowDangerLevel" style="width:100%;position: absolute;left: 0;top: 28px;background-color: #fff;border: 1px solid #d7d7d7;">
+                        <div v-for="item in dangerLevelData" style="margin-left: 5px;padding-bottom: 3px;" @click.stop="onAddDangerLevelValue(item.id)">
+                            <img :src="getShowSelectValueImage(item.id,sSelectDangerLevel)" width="12px" height="12px">
+                            <span style="margin-left: 5px;">{{item.name}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="display: inline-flex;margin-top: 10px;">
+            <div style="width: 70px;margin-right: 10px;text-align: right;height: 26px;line-height: 26px;">关键词：</div>
+            <input type="text" v-model="searchKey" style="height: 26px;width: 1045px;line-height: 26px;border: 1px solid #d7d7d7;" placeholder="请输入关键词"></input>
+        </div>
+        
+        <div style="display:inline-flex;margin-top: 10px;margin-left: 50px;">
+            <div class="sure-btn" style="margin-left: 30px;" @click="onSearch('false')">搜索</div>
+            <div class="sure-btn" style="margin-left: 30px;" @click="onReset">重置</div>
+            <div class="sure-btn" style="margin-left: 30px;" @click="onSearch('true')">导出</div>
+        </div>
+    </div>
+
+    <div style="width: 100%;height: 600px;margin-top: 10px;overflow-x: auto; overflow-y: auto;">
+        <table v-if="pageState===1" id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+                <tr align="center">
+                    <th class='table-head-bg' style="min-width: 120px;max-width: 120px;">数据库名称</th>
+                    <th class='table-head-bg' style="min-width: 120px;max-width: 120px;">服务端IP</th>
+                    <th class='table-head-bg' style="min-width: 120px;max-width: 120px;">客户端IP</th>
+                    <th class='table-head-bg' style="min-width: 100px;max-width: 100px;">数据库账号</th>
+                    <th class='table-head-bg' style="min-width: 100px;max-width: 100px;">数据库类型</th>
+                    <th class='table-head-bg' style="min-width: 280px;max-width: 280px;">SQL语句</th>
+                    <th class='table-head-bg' style="min-width: 80px;max-width: 80px;">风险等级</th>
+                    <th class='table-head-bg' style="min-width: 110px;max-width: 110px;">风险类型</th>
+                    <th class='table-head-bg' style="min-width: 140px;max-width: 140px;">记录时间</th>
+                </tr>
+            </thead>
+            <tbody id='tableBody' v-for="item in dbLogList">
+                <tr align="center" style="height: 40px;" @click="onOpenItemDetail(item.id,dbLogList)">
+                    <td>
+                        <div style="display: inline-flex;">
+                            <span v-show="!item.bOpen">&#9658;</span>
+                            <span v-show="item.bOpen">&#9660;</span>
+                            <span style="margin-left: 5px;">{{item.db_name}}</span>
+                        </div>
+                    </td>
+                    <td>{{item.db_ip}}</td>
+                    <td>{{item.cip}}</td>
+                    <td>{{item.user}}</td>
+                    <td>{{item.type}}</td>
+                    <td class="txt-overflow" style="min-width: 280px;max-width: 280px;">{{item.sql}}</td>
+                    <td>{{getDangerLevel(item.risk)}}</td>
+                    <td>{{getDangerType(item.risk)}}</td>
+                    <td>{{onChangeTimeFormat(item.timestamp)}}</td>
+                </tr>
+                <tr v-show="item.bOpen" style="min-height: 40px;">
+                    <td colspan="9">{{item.sql}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table v-if="pageState===2" id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+                <tr align="center">
+                    <th class='table-head-bg' style="min-width: 140px;max-width: 140px;">主机IP</th>
+                    <th class='table-head-bg' style="min-width: 120px;max-width: 120px;">主机类型</th>
+                    <th class='table-head-bg' style="min-width: 650px;max-width: 650px;">报文</th>
+                    <th class='table-head-bg' style="min-width: 100px;max-width: 100px;">日志类型</th>
+                    <th class='table-head-bg' style="min-width: 140px;max-width: 140px;">记录时间</th>
+                </tr>
+            </thead>
+            <tbody id='tableBody' v-for="item in hostLogList">
+                <tr align="center" style="height: 40px;" @click="onOpenItemDetail(item.id,hostLogList)">
+                    <td>
+                        <div style="display: inline-flex;">
+                            <span v-show="!item.bOpen">&#9658;</span>
+                            <span v-show="item.bOpen">&#9660;</span>
+                            <span style="margin-left: 5px;">{{item.server}}</span>
+                        </div>
+                    </td>
+                    <td>{{item.event_src}}</td>
+                    <td class="txt-overflow" style="min-width: 280px;max-width: 280px;">{{getHostMessage(item)}}</td>
+                    <td>{{getLogType(item.event_src,item.event_name)}}</td>
+                    <td>{{onChangeTimeFormat(item.timestamp)}}</td>
+                </tr>
+                <tr v-show="item.bOpen" style="min-height: 40px;">
+                    <td colspan="9">{{getHostMessage(item)}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table v-if="pageState===3" id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+                <tr align="center">
+                    <th class='table-head-bg' style="min-width: 120px;max-width: 120px;">应用IP</th>
+                    <th class='table-head-bg' style="min-width: 110px;max-width: 110px;">应用类型</th>
+                    <th class='table-head-bg' style="min-width: 530px;max-width: 530px;">报文</th>
+                    <th class='table-head-bg' style="min-width: 100px;max-width: 100px;">请求方式</th>
+                    <th class='table-head-bg' style="min-width: 100px;max-width: 100px;">请求状态</th>
+                    <th class='table-head-bg' style="min-width: 140px;max-width: 140px;">记录时间</th>
+                </tr>
+            </thead>
+            <tbody id='tableBody' v-for="item in appLogList">
+                <tr align="center" style="height: 40px;" @click="onOpenItemDetail(item.id,appLogList)">
+                    <td>
+                        <div style="display: inline-flex;">
+                            <span v-show="!item.bOpen">&#9658;</span>
+                            <span v-show="item.bOpen">&#9660;</span>
+                            <span style="margin-left: 5px;">{{item.server}}</span>
+                        </div>
+                    </td>
+                    <td>{{item.event_src}}</td>
+                    <td class="txt-overflow" style="min-width: 280px;max-width: 280px;">{{item.message}}</td>
+                    <td>{{item.method}}</td>
+                    <td>{{item.status}}</td>
+                    <td>{{onChangeTimeFormat(item.timestamp)}}</td>
+                </tr>
+                <tr v-show="item.bOpen" style="min-height: 40px;">
+                    <td colspan="9">{{item.message}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div v-if="maxPage>0" style="width: 100%;height: 30px;display: inline-flex;align-items: center;">
+        <div style="margin-right: 5px;">
+            <span>共 {{maxCount}} 条</span>
+        </div>
+        <div style="padding: 2px 10px;border: 1px solid #d7d7d7;margin-right: 5px;">
+            <span>{{pageCount}} 条/页</span>
+        </div>
+        <div class="page-box" :style="{'color':curPage==1 ? '#666':'#333'}" @click="onLessPage"><</div>
+
+        <div class="page-box" :class="{'page-box-define':item==curPage,'page-box-select':item==curPage}" :style="{'cursor': item=='...'?'default':'pointer'}" v-for="item in getPageTable(curPage,maxPage)" @click="onSelectPage(item)">{{item}}</div>
+        <div class="page-box" :style="{'color':curPage==maxPage ? '#666':'#333'}" @click="onAddPage">></div>
+        <div style="display: inline-flex;align-items: center;">
+            <span>前往</span>
+            <input type="number" v-model="inputPage" :max="String(maxPage)" min="1" style="height: 26px;width: 40px;line-height: 26px;border: 1px solid #d7d7d7;margin: 0 5px;" @change="onGoToPage"></input>
+            <span>页</span>
+        </div>
+    </div>
+</div>

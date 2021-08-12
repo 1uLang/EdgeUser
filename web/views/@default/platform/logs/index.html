@@ -1,0 +1,47 @@
+<!-- 平台管理-日志列表 -->
+{$layout}
+{$template "/datepicker"}
+{$var "header"}
+<!-- <script type="text/javascript" src="/js/jsencrypt/jsencrypt.min.js"></script> -->
+{$end}
+
+<form class="ui form" style="margin-top: 10px;">
+  <div class="ui fields inline">
+    <div class="ui field">
+      <input type="text" placeholder="开始日期" name="dayFrom" v-model="dayFrom" value="" style="width:8em" id="day-from-picker" autocomplete="off"/>
+    </div>
+    <div class="ui field">
+      <input type="text" placeholder="结束日期" name="dayTo" v-model="dayTo" value="" style="width:8em" id="day-to-picker" autocomplete="off"/>
+    </div>
+    <div class="ui field">
+      <input type="text" style="width:10em" name="keyword" v-model="keyword" placeholder="关键词" />
+    </div>
+    <div class="ui field">
+<!--      <div class="ui button" @click="onSearch">查询</div>-->
+      <button type="submit" class="ui button">查询</button>
+    </div>
+    <div class="ui field">
+      <a href="" @click.prevent="exportExcel">[导出到Excel]</a>
+    </div>
+  </div>
+</form>
+
+<div class="ui margin"></div>
+<div v-if="logs.length == 0">暂时还没有日志。</div>
+
+<table class="ui table selectable" v-for="log in logs">
+  <tr :class="{error: log.level == 'error', warning: log.level == 'warn'}">
+    <td class="log-row">{{log.createdTime}} <span class="grey">
+            <span v-if="log.userName.length > 0">|
+                <span v-if="log.userId>0">用户 &nbsp;|&nbsp;</span> {{log.userName}}</span> | <keyword :v-word="keyword">{{log.ip}}</keyword>
+                <span v-if="log.region.length > 0"> | {{log.region}}</span> &nbsp; <a href="" @click.prevent="showMore(log)" title="显示更多">...</a> &nbsp;
+                <span v-if="log.moreVisible">{{log.action}}</span>
+            </span>
+    </td>
+  </tr>
+  <tr :class="{error: log.level == 'error', warning: log.level == 'warn'}">
+    <td><keyword :v-word="keyword">{{log.description}}</keyword></td>
+  </tr>
+</table>
+
+<div class="page" v-html="page"></div>

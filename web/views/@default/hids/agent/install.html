@@ -1,0 +1,18 @@
+{$layout "layout_popup"}
+
+<div  style="display: flex;flex-direction: column;">
+    <div style="height: 300px;">
+        <div style="border-bottom: 1px solid #d7d7d7;height: 40px;color: #333;line-height: 40px;font-size: 18px;font-weight: 600;">
+            安装命令
+        </div>
+        <div style="margin-top: 10px;padding: 0 30px;">
+            <div class="system-text">linux安装命令</div>
+            <div>{{linux}}</div>
+            <div class="system-text">windows安装命令</div>
+            <div>{{windows}}</div>
+        </div>
+    </div>
+    <div style="display: flex;height: 50px;align-items: center;justify-content: center;border-top: 1px #d7d7d7 solid;">
+        <div class="sure-btn" @click="onCloseView()">关闭</div>
+    </div>
+</div>

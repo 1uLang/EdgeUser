@@ -1,0 +1,54 @@
+<!-- 体检详情 -->
+
+{$layout}
+{$var "header"}
+<script type="text/javascript" src="/js/echarts/echarts.min.js"></script>
+{$end}
+
+<div class="card-div" style="margin-top: 20px;">
+    <div style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;padding: 5px;">
+        <div>
+            <span>体检详情</span>
+            <span>{{otherDetails.serverIp}}({{parseServerLocalIp(otherDetails.serverLocalIp)}})</span>
+        </div>
+        <div class="edit_btn" @click="onGoBack">返回</div>
+    </div>
+    <div style="border-bottom:1px solid #f0f0f0;"></div>
+    <div style="display: flex;flex-direction: column;justify-content: start;">
+        <div style="margin-top: 10px;">
+            <span style="font-size: 30px;margin-right: 30px;">本次体检得分 {{otherDetails.score}}分</span>
+            <span :class="{'low-health-color':otherDetails.score<60,'middle-health-color':otherDetails.score<90,'hight-health-color':otherDetails.score>=90}"
+                    style="margin-right: 30px;font-size: 30px;">{{getHealthName(otherDetails.score)}}</span>
+        </div>
+        <div style="margin-top: 15px;">
+            <span style="font-weight: bold;margin-right: 20px;">体检时间：</span>
+            <span>{{otherDetails.startTime}}</span>
+        </div>
+        <div style="margin-top: 15px;display: inline-flex;">
+            <span style="font-weight: bold;margin-right: 20px;">体检项目：</span>
+            <div style="display: flex;flex-direction: column;">
+                <div style="display: inline-flex;margin-bottom: 20px;">
+                    <div v-for='item in sTopSelectItem' class="more-select-content">
+                        <img v-show="otherDetails.scanItems.indexOf(item.id) > -1" src="/images/check-select.png" width="15px" height="15px">
+                        <div v-show="otherDetails.scanItems.indexOf(item.id) <= -1"  style="width: 15px;height: 15px;"></div>
+                        <span style="margin-left: 5px;" class="select-txt-color define-txt-color">{{item.value}}</span>
+                    </div>
+                </div>
+                <div style="display: inline-flex;">
+                    <div v-for='item in sBottomSelectItem' class="more-select-content">
+                        <img v-show="otherDetails.scanItems.indexOf(item.id) > -1" src="/images/check-select.png" width="15px" height="15px">
+                        <div v-show="otherDetails.scanItems.indexOf(item.id) <= -1" style="width: 15px;height: 15px;"></div>
+                        <span style="margin-left: 5px;" class="select-txt-color define-txt-color">{{item.value}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card-div" style="margin-top: 20px;height: 500px;">
+    <div style="width: 100%;display: inline-flex;margin: 20px 0;">
+        <div style="flex: 1;height:35em;" id="bar-chart-box"></div>
+        <div style="flex: 1;height:35em;" id="circular-chart-box"></div>
+    </div>
+</div>

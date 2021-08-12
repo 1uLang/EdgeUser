@@ -1,0 +1,280 @@
+<!-- 扫描任务 -->
+{$layout}
+{$var "header"}
+<script type="text/javascript" src="/js/timeFactory.js"></script>
+{$end}
+<!-- 漏洞详情js-->
+<p class="comment" v-if="nodeErr != ''">请先添加web漏洞扫描节点</p>
+
+<div class="btn-contain" v-if="scans.length > 0 &&nShowState===1">
+    <!-- <div id="stop-btn" @click="onStopScan()">停止扫描</div>
+    <div id="create-btn" @click="onCreateReport()">生成报告</div> -->
+    <div id="del-btn" @click="onDelete()">删除</div>
+</div>
+
+<div v-if="nShowState!=1" style="display: inline-flex;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+    <div class="define-menu" @click.prevent="onChangeState(1)" style="cursor: pointer;font-size: 16px;">任务列表</div>
+<!--    <div :class="{'select-menu':nShowState===2, 'define-menu':nShowState!=2}" @click.prevent="onChangeState(2)" style="cursor: pointer;font-size: 16px;">扫描信息</div>-->
+    <div :class="{'select-menu':nShowState===3, 'define-menu':nShowState!=3}" @click.prevent="onChangeState(3)" style="cursor: pointer;font-size: 16px;">漏洞</div>
+</div>
+
+<div v-if="nShowState===1">
+    <p class="comment" v-if="scans.length === 0 && nodeErr == ''">暂时还没有目标。</p>
+
+    <div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;">
+        <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;" v-if="scans.length > 0">
+            <thead>
+            <tr align="center">
+                <th class='table-head-bg' style="width: 70px;">
+                    <input id="js-all-checkbox" type="checkbox" @click="checkAll">
+                </th>
+                <th class='table-head-bg' style="width: 155px;">目标</th>
+                <th class='table-head-bg' style="width: 130px;">目标描述</th>
+                <th class='table-head-bg' style="width: 142px;">类型</th>
+                <th class='table-head-bg' style="width: 240px;">漏洞</th>
+                <th class='table-head-bg' style="width: 110px;">状态</th>
+                <th class='table-head-bg' style="width: 175px;">扫描时间</th>
+                <th class='table-head-bg' style="width: 145px;">操作</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr align="center" style="height: 50px;" v-for="(item,index) in scans" >
+                <td>
+                    <input type="checkbox" name="select" :value="item.scan_id" :data="item.target_id" @click="clickCheckbox">
+                </td>
+                <td @mouseenter="mouseEnter(index)" @mouseleave="mouseLeave(index)">
+                    <u v-show="index===curIndex" @click="onHostShowDetail(item)" style="color: #169BD5;cursor: pointer;" v-if="item.owner">{{item.target.address}}</u>
+                    <u v-show="index===curIndex" @click="onShowDetail(item)" style="color: #169BD5;cursor: pointer;" v-else>{{item.target.address}}</u>
+                    <span v-show="index!=curIndex">{{item.target.address}}</span>
+                </td>
+                <td>{{item.target.description}}</td>
+                <td v-if="item.owner">主机漏洞扫描</td>
+                <td v-else>Web漏洞扫描</td>
+                <td>
+                    <div style="display: flex;justify-content: center;" v-if="item.current_session.severity_counts">
+                        <div class="vulnerable-num" style="background-color: #ec808d;">{{item.current_session.severity_counts.high}}</div>
+                        <div class="vulnerable-num" style="background-color: #fcc77d;">{{item.current_session.severity_counts.medium}}</div>
+                        <div class="vulnerable-num" style="background-color: #3abee8;">{{item.current_session.severity_counts.low}}</div>
+                        <div class="vulnerable-num" style="background-color: #00b144;">{{item.current_session.severity_counts.info}}</div>
+                    </div>
+                    <div style="display: flex;justify-content: center;" v-else>
+                        <div class="vulnerable-num" style="background-color: #ec808d;">0</div>
+                        <div class="vulnerable-num" style="background-color: #fcc77d;">0</div>
+                        <div class="vulnerable-num" style="background-color: #3abee8;">0</div>
+                        <div class="vulnerable-num" style="background-color: #00b144;">0</div>
+                    </div>
+                </td>
+                <td>{{onChangeStatusFormat(item.current_session.status)}}</td>
+                <td>{{onChangeTimeFormat(item.current_session.start_date)}}</td>
+                <td>
+                    <div v-show="item.current_session.status=='completed'||item.current_session.status=='canceled'||item.current_session.status=='aborted'" style="color: #169BD5;cursor: pointer;" @click="onCreateReport(item)">生成报告</div>
+                    <div v-show="item.current_session.status=='processing' || item.current_session.status=='running'" style="color: #ec808d;cursor: pointer;" @click="onStopScan(item)">停止扫描</div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div v-else-if="nShowState===2">
+    <div style="display: inline-flex;width: 100%;margin-top: 20px;">
+        <div class="card-box" style="flex: 1;margin-right: 15px;">
+            <div style="display: inline-flex;">
+                <h2>威胁等级</h2>
+                <div style="margin-left: 5px;">{{severity}}</div>
+            </div>
+            <div v-if="scanSeverity == 0">威胁级别尚不可用。</div>
+            <div v-if="scanSeverity == 1">扫描程序发现了一个或多个低危类型漏洞。</div>
+            <div v-if="scanSeverity == 2">扫描程序发现了一个或多个中危类型漏洞。您应调查每个漏洞以确保它们不会发展成为更严重的问题。</div>
+            <div v-if="scanSeverity == 3">扫描程序发现了一个或多个高危类型漏洞。恶意用户可以利用这些漏洞并破坏后端数据库和/或损坏您的网站。</div>
+        </div>
+        <div class="card-box" style="flex: 1;">
+            <div style="display: inline-flex;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 5px;justify-content: space-between;">
+                <div style="font-size: 20px;">活动</div>
+                <div style="font-size: 16px;">{{statistics.status}}</div>
+            </div>
+            <div style="display: inline-flex;width: 100%;padding: 10px 0;">
+                <div align="left" style="flex: 1;">总体进度</div>
+                <div align="right" style="flex: 1;">{{statistics.progress}}%</div>
+            </div>
+            <div class="progressBar" id="progressBar">
+                <div class="barContent" id="barContent" style="width: 0%;"></div>
+            </div>
+            <dl v-for="item in statistics.messages">
+                <dt>
+                    <div style="display: inline-flex;justify-items: center;width: 100%;">
+
+                        <div style="flex: 3;margin-right: 20px;" v-if="item.kind==='antivirus_not_found'">{{item.kind}}</div>
+                        <div style="flex: 3;margin-right: 20px;" v-else-if="item.kind==='scanning'">Scanning of {{item.target_info.host}} started</div>
+                        <div style="flex: 3;margin-right: 20px;" v-else>Scanning of {{item.target_info.host}} completed</div>
+
+                        <div align="right" style="flex: 2;">{{onChangeTimeFormat(item.time)}}</div>
+                    </div>
+                </dt>
+            </dl>
+        </div>
+    </div>
+
+    <div class="card-box ui four columns grid" style="height: 130px;width: 100%;">
+        <div class="ui column" style="height: 100%;display: flex;flex-direction: column;justify-content: space-around;align-items: center;">
+            <h4>持续扫描时间</h4>
+            <div class="value"><span class="show-num">{{onChangeTimeFormat2(statistics.duration)}}</span></div>
+        </div>
+        <div class="ui column" style="height: 100%;display: flex;flex-direction: column;justify-content: space-around;align-items: center;">
+            <h4>请求</h4>
+            <div class="value"><span class="show-num">{{statistics.request_count}}</span></div>
+        </div>
+        <div class="ui column" style="height: 100%;display: flex;flex-direction: column;justify-content: space-around;align-items: center;">
+            <h4>平均响应事件</h4>
+            <div class="value"><span class="show-num">{{statistics.avg_response_time}}ms</span></div>
+        </div>
+        <div class="ui column" style="height: 100%;display: flex;flex-direction: column;justify-content: space-around;align-items: center;">
+            <h4>路径已确认</h4>
+            <div class="value"><span class="show-num">{{statistics.locations}}</span></div>
+        </div>
+    </div>
+    <div style="width:100%; display: inline-flex;margin-top: 30px;">
+        <table class="ui table selectable" style="flex: 1;margin: 0 8px 0 0;">
+            <thead>
+                <tr style="height: 55px;max-height: 55px;">
+                    <th><h5>目标信息</h5></th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr style="height: 50px;">
+                <td>
+                    <div style="flex: 3;margin-right: 20px;" >地址</div>
+                    <div align="right" style="flex: 2;">{{statistics.host}}</div>
+                </td>
+            </tr>
+            <tr style="height: 50px;">
+                <td>
+                    <div style="flex: 3;margin-right: 20px;" >服务器</div>
+                    <div align="right" style="flex: 2;">{{statistics.server}}</div>
+                </td>
+            </tr>
+            <tr style="height: 50px;">
+                <td>
+                    <div style="flex: 3;margin-right: 20px;" >操作系统</div>
+                    <div align="right" style="flex: 2;">{{statistics.os}}</div>
+                </td>
+            </tr>
+            <tr style="height: 50px;">
+                <td>
+                    <div style="flex: 3;margin-right: 20px;" >响应式</div>
+                    <div align="right" style="flex: 2;">{{statistics.responsive}}</div>
+                </td>
+            </tr>
+            <tr style="height: 50px;">
+                <td>
+                    <div style="flex: 3;margin-right: 20px;" >已识别技术</div>
+                    <div align="right" style="flex: 2;">
+                        {{statistics.technologies}}
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="ui table selectable" style="flex: 1;margin: 0 0 0 8px;">
+            <thead>
+                <tr style="height: 55px;max-height: 55px;">
+                    <th>
+                        <div style="display: inline-flex;align-items: center;">
+                            <h5>最新警报</h5>
+                            <div style="display: inline-flex;">
+                                <div class="vulnerable-num" style="background-color: #ec808d;">{{statistics.severity_counts.high}}</div>
+                                <div class="vulnerable-num" style="background-color: #fcc77d;">{{statistics.severity_counts.medium}}</div>
+                                <div class="vulnerable-num" style="background-color: #3abee8;">{{statistics.severity_counts.low}}</div>
+                                <div class="vulnerable-num" style="background-color: #00b144;">{{statistics.severity_counts.info}}</div>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody >
+            <tr>
+                <td>
+                    <dl v-for="item in statistics.vulns">
+                        <dt>
+                            <div>
+                                <div style="flex: 3;" >{{item.name}}</div>
+                                <div align="right" style="flex: 2;">{{onChangeTimeFormat(item.time)}}</div>
+                            </div>
+                        </dt>
+                    </dl>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div v-else>
+    <div style="width: 100%;display: inline-flex;height: 100vh;">
+        <div style="flex: 1;width: 100%;">
+            <form method="get" class="ui form" action="/webscan/vulnerabilities">
+                <div class="ui margin"></div>
+                <div class="ui menu basic text">
+                    <div class="item">
+                        <div class="ui fields inline">
+                            <span>严重性：</span>
+                            <div class="ui field">
+                                <div class="ui field">
+                                    <select class="ui dropdown auto-width" name="severity" v-model="severity">
+                                        <option value="">全部</option>
+                                        <option value="3">高危</option>
+                                        <option value="2">中危</option>
+                                        <option value="1">低危</option>
+                                        <option value="0">信息性</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="ui field">
+                                <button type="button" class="ui button" @click="search()">搜索</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+    
+            <div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;">
+                <table class="ui table selectable celled" border="1" style="border-collapse: collapse;" v-if="vulnerabilities.length > 0">
+                    <thead>
+                    <tr align="center">
+                        <th class='table-head-bg' style="width: 183px;">严重性</th>
+                        <th class='table-head-bg' style="width: 462px;">漏洞</th>
+                        <th class='table-head-bg' style="width: 238px;">目标</th>
+                        <th class='table-head-bg' style="width: 297px;">发现时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr align="center" style="height: 50px;cursor: pointer;" v-for="item in vulnerabilities" @click="getDetailInfo(item)" >
+                        <td :class="{'red0-color':item.severity>3,'red-color':item.severity===3, 'yellow-color':item.severity===2,'blue-color':item.severity===1,'green-color':item.severity===0}">{{onChangeSeverityFormat(item.severity)}}</td>
+                        <td>{{item.vt_name}}</td>
+                        <td>{{item.affects_url}}</td>
+                        <td>{{item.vt_created}}</td>
+<!--                        <td>{{onChangeTimeFormat(item.last_seen)}}</td>-->
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div v-if="bShowDetail && detailInfo" style="display: flex; flex: 1;width: 100%;position: relative;">
+            <div style="height: 100%;width: 5px;background-color: #f0f0f0;margin: 1px 10px;"></div>
+            <div style="margin-top: 34px;">
+                <h2>{{detailInfo.vt_name}}</h2>
+                <div>{{detailInfo.affects_url}}</div>
+                <h2>攻击详细信息</h2>
+                <div>{{detailInfo.details}}</div>
+                <h2>漏洞描述</h2>
+                {{detailInfo.description}}
+                <div>发现者：<span style="font-weight: bold">{{detailInfo.vt_name}}</span></div>
+<!--                <h2>此漏洞的影响</h2>-->
+<!--                <div>{{detailInfo.impact}}</div>-->
+                <h2>如何修复此漏洞</h2>
+                <div>{{detailInfo.recommendation}}</div>
+            </div>
+            <div style="position: absolute;right: 10px;top: 8px;font-size: 24px;cursor: pointer;" @click="onCloseDetail()">X</div>
+        </div>
+    </div>
+</div>

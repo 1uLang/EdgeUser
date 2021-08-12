@@ -20,7 +20,7 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
-	if !this.ValidateFeature("server.waf") {
+	if !this.ValidateFeature("waf") {
 		return
 	}
 

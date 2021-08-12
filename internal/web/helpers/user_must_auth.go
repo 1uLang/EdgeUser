@@ -2,6 +2,13 @@ package helpers
 
 import (
 	"errors"
+	"fmt"
+	"github.com/1uLang/zhiannet-api/common/cache"
+	"github.com/TeaOSLab/EdgeUser/internal/utils"
+	"net/http"
+	"reflect"
+	"time"
+
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/configloaders"
 	teaconst "github.com/TeaOSLab/EdgeUser/internal/const"
@@ -10,8 +17,6 @@ import (
 	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/logs"
 	"github.com/iwind/TeaGo/maps"
-	"net/http"
-	"reflect"
 )
 
 // 认证拦截
@@ -101,6 +106,19 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 	if initMethod.IsValid() {
 		initMethod.Call([]reflect.Value{})
 	}
+	//fmt.Println("每次都执行的事件url=", action.Request.RequestURI, userId)
+	if !utils.UrlIn(action.Request.RequestURI) {
+		res, _ := cache.GetInt(fmt.Sprintf("login_success_userid_%v", userId))
+		if res == 0 {
+			//30分钟没有操作  自动退出
+			session.Delete()
+			cache.DelKey(fmt.Sprintf("login_success_userid_%v", userId))
+			this.login(action)
+			return false
+		}
+		//续期
+		cache.Incr(fmt.Sprintf("login_success_userid_%v", userId), time.Minute*30)
+	}
 
 	return true
 }
@@ -118,18 +136,42 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			}
 		}
 	}
-
 	allMaps := []maps.Map{
 		{
 			"code": "dashboard",
-			"name": "概览",
+			"name": "业务概览",
 			"icon": "dashboard",
+			"url":  "/dashboard",
+		},
+		{
+			"code": "waf",
+			"name": "态势感知",
+			"icon": "shield",
+			"url":  "/waf",
+			"subItems": []maps.Map{
+				{
+					"name": "安全概览",
+					"code": "waf",
+					"url":  "/waf",
+				},
+				{
+					"name": "拦截日志",
+					"code": "wafLogs",
+					"url":  "/waf/logs",
+				},
+			},
 		},
 		{
 			"code": "servers",
-			"name": "CDN加速",
-			"icon": "clone outline",
+			"name": "WAF服务",
+			"url":  "/servers",
+			"icon": "skyatlas",
 			"subItems": []maps.Map{
+				{
+					"name": "域名管理",
+					"code": "servers",
+					"url":  "/servers",
+				},
 				{
 					"name": "证书管理",
 					"code": "certs",
@@ -140,65 +182,224 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"code": "cache",
 					"url":  "/servers/cache",
 				},
-				/**{
-					"name": "用量统计",
-					"code": "stat",
-					"url":  "/servers/stat",
-				},**/
 			},
 		},
 		{
 			"code": "lb",
 			"name": "负载均衡",
 			"icon": "paper plane",
+			"url":  "/lb",
 		},
 		{
-			"code": "waf",
-			"name": "WAF安全",
-			"icon": "shield",
+			"code": "hids",
+			"url":  "/hids/examine",
+			"name": "主机防护",
+			"icon": "linux",
 			"subItems": []maps.Map{
 				{
-					"name": "拦截日志",
-					"code": "wafLogs",
-					"url":  "/waf/logs",
+					"name": "主机体检",
+					"url":  "/hids/examine",
+					"code": "examine",
+				},
+				{
+					"name": "漏洞风险",
+					"url":  "/hids/risk",
+					"code": "risk",
+				},
+				{
+					"name": "入侵威胁",
+					"url":  "/hids/invade",
+					"code": "invade",
+				},
+				{
+					"name": "合规基线",
+					"url":  "/hids/baseline",
+					"code": "baseline",
+				},
+				{
+					"name": "Agent管理",
+					"url":  "/hids/agent",
+					"code": "agent",
 				},
 			},
 		},
 		{
-			"code": "finance",
-			"name": "费用账单",
-			"icon": "yen sign",
+			"code": "webscan",
+			"url":  "/webscan/targets",
+			"name": "漏洞扫描",
+			"icon": "yelp",
+			"subItems": []maps.Map{
+				{
+					"name": "扫描目标",
+					"url":  "/webscan/targets",
+					"code": "targets",
+				},
+				{
+					"name": "扫描任务",
+					"url":  "/webscan/scans",
+					"code": "scans",
+				},
+				{
+					"name": "扫描报告",
+					"url":  "/webscan/reports",
+					"code": "reports",
+				},
+			},
 		},
 		{
-			"code": "acl",
-			"name": "访问控制",
-			"icon": "address book",
+			"code": "fortcloud",
+			"url":  "/fortcloud/assets",
+			"name": "堡垒机",
+			"icon": "ioxhost",
+			"subItems": []maps.Map{
+				{
+					"name": "资产管理",
+					"url":  "/fortcloud/assets",
+					"code": "assets",
+				},
+				{
+					"name": "授权凭证",
+					"url":  "/fortcloud/cert",
+					"code": "cert",
+				},
+				{
+					"name": "会话管理",
+					"url":  "/fortcloud/sessions",
+					"code": "sessions",
+				},
+				{
+					"name": "运维审计",
+					"url":  "/fortcloud/audit",
+					"code": "audit",
+				},
+			},
 		},
+		//{
+		//	"code": "finance",
+		//	"name": "费用账单",
+		//	"icon": "yen sign",
+		//},
+		//{
+		//	"code": "acl",
+		//	"name": "访问控制",
+		//	"icon": "address book",
+		//},
 		/**{
 			"code": "tickets",
 			"name": "工单",
 			"icon": "question circle outline",
 		},**/
+		{
+			"code": "audit",
+			"url":  "/audit/db",
+			"name": "安全审计",
+			"icon": "sellsy",
+			"subItems": []maps.Map{
+				{
+					"name": "数据库管理",
+					"url":  "/audit/db",
+					"code": "db",
+				},
+				{
+					"name": "主机管理",
+					"url":  "/audit/host",
+					"code": "host",
+				},
+				{
+					"name": "应用管理",
+					"url":  "/audit/app",
+					"code": "app",
+				},
+				{
+					"name": "审计日志",
+					"url":  "/audit/logs",
+					"code": "logs",
+				},
+				{
+					"name": "订阅报告",
+					"url":  "/audit/report",
+					"code": "report",
+				},
+				{
+					"name": "Agent管理",
+					"url":  "/audit/agent",
+					"code": "agent",
+				},
+			},
+		},
+		{
+			"code": "databackup",
+			"url":  "/databackup",
+			"name": "数据备份",
+			"icon": "copy",
+			//"subItems": []maps.Map{
+			//	{
+			//		"name": "文件管理",
+			//		"url":  "/databackup",
+			//		"code": "assets",
+			//	},
+			//	{
+			//		"name": "上传文件",
+			//		"url":  "/databackup/createPopUp",
+			//		"code": "admins",
+			//	},
+			//},
+		},
+		{
+			"code": "platform",
+			"url":  "/platform/user",
+			"name": "平台管理",
+			"icon": "sitemap",
+			"subItems": []maps.Map{
+				{
+					"name": "子账号管理",
+					"url":  "/platform/user",
+					"code": "user",
+				},
+				{
+					"name": "操作日志",
+					"url":  "/platform/logs",
+					"code": "logs",
+				},
+				{
+					"name": "安全策略",
+					"url":  "/platform/strategy",
+					"code": "strategy",
+				},
+			},
+		},
 	}
 
 	result := []maps.Map{}
-	config, _ := configloaders.LoadUIConfig()
+	configloaders.LoadUIConfig()
+
 	for _, m := range allMaps {
-		if m.GetString("code") == "finance" {
-			if config != nil && !config.ShowFinance {
-				continue
+
+		//默认展示该组件
+		//if m.GetString("code") == "hids" || m.GetString("code") == "webscan" || m.GetString("code") == "fortcloud" {
+		//	result = append(result, m)
+		//	continue
+		//}
+		code := m.GetString("code")
+		if lists.ContainsString(featureCodes, code)  || (code == "lb" && (lists.Contains(featureCodes,"lb-tcp") || lists.Contains(featureCodes,"lb-tcp-port")) ){
+			result = append(result, m)
+		} else { //判断子菜单是否已授权
+			sub := m.GetSlice("subItems")
+			newSub := []maps.Map{}
+			if sub != nil {
+				for _, item := range sub {
+					sub := item.(maps.Map)
+					subCode := sub.GetString("code")
+					if lists.ContainsString(featureCodes, code+"."+subCode) { //表示子菜单包含
+						newSub = append(newSub, sub)
+					}
+				}
 			}
-			if !lists.ContainsString(featureCodes, "finance") {
-				continue
+			if len(newSub) > 0 {
+				m["subItems"] = newSub
+				result = append(result, m)
 			}
 		}
-		if m.GetString("code") == "lb" && !lists.ContainsString(featureCodes, "server.tcp") {
-			continue
-		}
-		if m.GetString("code") == "waf" && !lists.ContainsString(featureCodes, "server.waf") {
-			continue
-		}
-		result = append(result, m)
 	}
 
 	return result

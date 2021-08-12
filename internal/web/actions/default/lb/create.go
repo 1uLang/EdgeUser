@@ -23,11 +23,11 @@ func (this *CreateAction) Init() {
 }
 
 func (this *CreateAction) RunGet(params struct{}) {
-	if !this.ValidateFeature("server.tcp") {
+	if !this.ValidateFeature("lb-tcp") {
 		return
 	}
 
-	this.Data["canSpecifyPort"] = this.ValidateFeature("server.tcp.port")
+	this.Data["canSpecifyPort"] = this.ValidateFeature("lb-tcp-port")
 
 	this.Show()
 }
@@ -54,7 +54,7 @@ func (this *CreateAction) RunPost(params struct {
 		this.Fail("当前用户没有指定集群，不能使用此服务")
 	}
 
-	if !this.ValidateFeature("server.tcp") {
+	if !this.ValidateFeature("lb-tcp") {
 		this.Fail("你没有权限使用此功能")
 	}
 
@@ -68,7 +68,7 @@ func (this *CreateAction) RunPost(params struct {
 	}
 
 	// 检查端口
-	canSpecifyPort := this.ValidateFeature("server.tcp.port")
+	canSpecifyPort := this.ValidateFeature("lb-tcp-port")
 	if canSpecifyPort {
 		if lists.Contains(params.Protocols, "tcp") {
 			if len(params.TcpPorts) == 0 {

@@ -1,0 +1,16 @@
+default:
+  db: "prod"
+  prefix: ""
+
+dbs:
+  prod:
+    driver: "mysql"
+    dsn: "root:test1234@tcp(127.0.0.1:3306)/edges?charset=utf8mb4&timeout=30s"
+    prefix: "edge"
+    models:
+      package: internal/web/models
+
+redis:
+  addr: "45.195.61.132:6379"
+  #addr: "127.0.0.1:6379"
+  password: "1232345342675"

@@ -9,8 +9,7 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth("")).
-			Data("teaMenu", "servers").
-			Data("teaSubMenu", "cache").
+			Data("teaMenu", "cache").
 			Prefix("/servers/cache").
 			GetPost("", new(IndexAction)).
 			GetPost("/preheat", new(PreheatAction)).

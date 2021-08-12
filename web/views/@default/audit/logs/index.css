@@ -1,0 +1,84 @@
+.menu-define-color{
+    color: #000;
+    cursor: pointer;
+    margin-right: 15px;
+    margin-top: 10px;
+}
+.menu-select-color{
+    color: #0090cb;
+    cursor: pointer;
+    margin-right: 15px;
+    margin-top: 10px;
+}
+
+.box-define-style{
+    width: 84px;
+    height: 24px;
+    padding: 2px;
+    font-size: 13px;
+    text-align: center;
+    color: #333;
+    border: 1px solid #d7d7d7;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.box-select-style{
+    width: 84px;
+    height: 24px;
+    padding: 2px;
+    font-size: 13px;
+    text-align: center;
+    color: #0090cb;
+    border: 1px solid #0090cb;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.table-head-bg{
+    height: 32px;
+    background: #f0f0f0;
+}
+
+
+.sure-btn{
+    width: 60px;
+    height: 30px;
+    background-color: #0090cb;
+    color: #fff;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+.grey-btn{
+    width: 60px;
+    height: 30px;
+    background-color: #9c9c9c;
+    color: #fff;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+.txt-overflow{
+    overflow:  hidden ;
+    text-overflow: ellipsis;
+    white-space:  nowrap ;
+}
+
+.page-box{
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    cursor:pointer;
+}
+.page-box-define{
+    color: #333;
+}
+.page-box-select{
+    color: #169bd5;
+}

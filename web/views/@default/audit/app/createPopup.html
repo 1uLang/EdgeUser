@@ -1,0 +1,50 @@
+{$layout "layout_popup"}
+
+
+<div style="margin-top: 35px;margin-left: 15px;">
+    <form class="ui form" method="post" data-tea-action="$" data-tea-success="success">
+        <table class="ui table definition selectable">
+            <tr>
+                <td class="title">名称*</td>
+                <td>
+                    <input type="text" v-model="name" style="height: 30px;width: 250px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">IP*</td>
+                <td>
+                    <input type="text" v-model="ip" :disabled="edit" style="height: 30px;width: 250px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">类型*</td>
+                <td>
+                    <app-type-selector :v-assembly-type.sync="typeSelect" :v-assembly-edit="edit"></app-type-selector>
+                </td>
+            </tr>
+            <tr>
+                <td class="title">状态</td>
+                <td>
+                    <div style="display: inline-flex;">
+                        <div style="width: 120px;cursor: null;" @click="onSelectOpenState">
+                            <input type="radio" name="openState" v-model="openState" :value="1" />
+                            <span style="margin-left: 10px;font-size: 14px;">启用</span>
+                        </div>
+                        <div style="width: 120px;cursor: null;" @click="onSelectOpenState">
+                            <input type="radio" name="openState"  v-model="openState" :value="0" />
+                            <span style="margin-left: 10px;font-size: 14px;">禁用</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div style="width: 100%;display: flex;align-items: center;justify-content: center;">
+            <!--<submit-btn></submit-btn>-->
+            <input type="hidden" name="id" v-model="id">
+            <button class="ui button small" @click="onSave" type="button">保存</button>
+        </div>
+        
+    </form>
+    <div style="width: 100%;height: 15px;"></div>
+</div>
+

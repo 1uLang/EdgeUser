@@ -18,7 +18,8 @@ import (
 
 type ParentAction struct {
 	actions.ActionObject
-
+	userName 	string
+	fullName 	string
 	rpcClient *rpc.RPCClient
 }
 
@@ -77,6 +78,38 @@ func (this *ParentAction) TinyMenu(menuItem string) {
 
 func (this *ParentAction) UserId() int64 {
 	return this.Context.GetInt64("userId")
+}
+func (this *ParentAction) FullName() (string, error) {
+
+	if this.fullName != "" {
+		return this.fullName, nil
+	}
+	userResp, err := this.RPC().UserRPC().FindEnabledUser(this.UserContext(), &pb.FindEnabledUserRequest{UserId: this.UserId()})
+	if err != nil {
+		return "", err
+	}
+	user := userResp.User
+	if user == nil {
+		return "", fmt.Errorf("无效的用户id")
+	}
+	this.fullName = user.Fullname
+	return user.Fullname, nil
+}
+func (this *ParentAction) UserName() (string, error) {
+
+	if this.userName != "" {
+		return this.userName, nil
+	}
+	userResp, err := this.RPC().UserRPC().FindEnabledUser(this.UserContext(), &pb.FindEnabledUserRequest{UserId: this.UserId()})
+	if err != nil {
+		return "", err
+	}
+	user := userResp.User
+	if user == nil {
+		return "", fmt.Errorf("无效的用户id")
+	}
+	this.userName = user.Username
+	return user.Username, nil
 }
 
 func (this *ParentAction) CreateLog(level string, description string, args ...interface{}) {
