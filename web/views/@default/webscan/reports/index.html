@@ -11,7 +11,8 @@
 </div>
 <!-- <p class="comment" v-if="reports.length == 0 && nodeErr == ''">暂时还没有目标。</p> -->
 <div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;">
-    <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;">
+    <p class="comment" v-if="reports.length === 0 && nodeErr == ''">暂时还没有报告。</p>
+    <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;"  v-if="reports.length > 0">
         <thead>
         <tr align="center">
             <th class='table-head-bg' style="width: 60px;">

@@ -7,7 +7,8 @@
         <div style="cursor: pointer;margin-top: 10px;" @click="onChangeState(2)">[添加凭证]</div>
     </div>
 
-    <div style="width: 100%;height: 650px;margin-top: 10px;overflow-x: auto; overflow-y: auto;">
+    <p class="comment" v-if="certs == null || certs.length === 0 && nodeErr == ''">暂时还没有授权凭证。</p>
+    <div style="width: 100%;height: 650px;margin-top: 10px;overflow-x: auto; overflow-y: auto;" v-else>
         <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
                 <tr align="center">
