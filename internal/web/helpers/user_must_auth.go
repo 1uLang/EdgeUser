@@ -185,7 +185,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			},
 		},
 		{
-			"code": "lb",
+			"code": "lb-tcp",
 			"name": "负载均衡",
 			"icon": "paper plane",
 			"url":  "/lb",

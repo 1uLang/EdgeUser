@@ -18,6 +18,7 @@
                 <input id="js-all-checkbox" type="checkbox" @click="checkAll">
             </th>
             <th class='table-head-bg' style="width: 243px;">目标</th>
+            <th class='table-head-bg' style="width: 243px;">类型</th>
             <th class='table-head-bg' style="width: 275px;">创建时间</th>
             <th class='table-head-bg' style="width: 262px;">状态</th>
             <th class='table-head-bg' style="width: 191px;">下载</th>
@@ -30,6 +31,8 @@
                 </td>
                 <td v-if="item.source">{{parseDesc(item.source.description)}}</td>
                 <td v-else >{{item.address}}</td>
+                <td v-if="item.owner">主机漏洞扫描</td>
+                <td v-else>Web漏洞扫描</td>
                 <td>{{onChangeTimeFormat(item.generation_date)}}</td>
                 <td>{{onChangeStatusFormat(item.status)}}</td>
                 <td>
