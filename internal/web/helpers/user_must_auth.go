@@ -185,7 +185,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			},
 		},
 		{
-			"code": "lb-tcp",
+			"code": "lb",
 			"name": "负载均衡",
 			"icon": "paper plane",
 			"url":  "/lb",
@@ -381,7 +381,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 		//	continue
 		//}
 		code := m.GetString("code")
-		if lists.ContainsString(featureCodes, code) {
+		if lists.ContainsString(featureCodes, code)  || (code == "lb" && (lists.Contains(featureCodes,"lb-tcp") || lists.Contains(featureCodes,"lb-tcp-port")) ){
 			result = append(result, m)
 		} else { //判断子菜单是否已授权
 			sub := m.GetSlice("subItems")

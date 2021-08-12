@@ -27,7 +27,7 @@ func (this *CreateAction) RunGet(params struct{}) {
 		return
 	}
 
-	this.Data["canSpecifyPort"] = this.ValidateFeature("lb-tcp.port")
+	this.Data["canSpecifyPort"] = this.ValidateFeature("lb-tcp-port")
 
 	this.Show()
 }
@@ -68,7 +68,7 @@ func (this *CreateAction) RunPost(params struct {
 	}
 
 	// 检查端口
-	canSpecifyPort := this.ValidateFeature("lb-tcp.port")
+	canSpecifyPort := this.ValidateFeature("lb-tcp-port")
 	if canSpecifyPort {
 		if lists.Contains(params.Protocols, "tcp") {
 			if len(params.TcpPorts) == 0 {
