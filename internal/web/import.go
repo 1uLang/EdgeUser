@@ -86,6 +86,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/databackup"
 
 	//平台管理
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/ip_white"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/logs"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/strategy"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/user"

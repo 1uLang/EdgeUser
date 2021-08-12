@@ -171,6 +171,25 @@ func (this *IndexAction) RunPost(params struct {
 		this.Data["from"] = "/updatePwd"
 		this.Fail("密码已过期，请立即修改")
 	}
+	//ip登陆限制检查
+	{
+		securityConfig, _ := configloaders.LoadSecurityConfig(resp.UserId)
+		if !helpers.CheckIP(securityConfig, this.RequestRemoteIP()) {
+			//this.ResponseWriter.WriteHeader(http.StatusForbidden)
+			this.Fail("当前IP登录被限制")
+		}
+		fmt.Println("检查 当前IP登录被限制1")
+		//获取父级用户
+		userInfo, _ := edge_users_server.GetUserInfo(uint64(resp.UserId))
+		if userInfo != nil {
+			securityConfig, _ := configloaders.LoadSecurityConfig(int64(userInfo.ParentId))
+			if !helpers.CheckIP(securityConfig, this.RequestRemoteIP()) {
+				this.Fail("当前IP登录被限制")
+			}
+			fmt.Println("检查 当前IP登录被限制2")
+		}
+	}
+
 	userId := resp.UserId
 	params.Auth.StoreUser(userId, params.Remember)
 
