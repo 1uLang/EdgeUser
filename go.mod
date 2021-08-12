@@ -14,8 +14,8 @@ require (
 	github.com/dlclark/regexp2 v1.4.0
 	github.com/go-ole/go-ole v1.2.5 // indirect
 	github.com/go-yaml/yaml v2.1.0+incompatible
-	github.com/gofrs/uuid v4.0.0+incompatible
-	github.com/iwind/TeaGo v0.0.0-20210809112119-a57ed0e84e34
+	github.com/iwind/TeaGo v0.0.0-20210720011303-fc255c995afa
+	github.com/iwind/gosock v0.0.0-20210722083328-12b2d66abec3
 	github.com/miekg/dns v1.1.35
 	github.com/shirou/gopsutil v3.21.5+incompatible
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
