@@ -122,13 +122,11 @@ func (this *IndexAction) RunPost(params struct {
 		Username: params.Username,
 		Password: params.Password,
 	})
-
 	if err != nil {
 		err = dao.SharedLogDAO.CreateUserLog(rpcClient.Context(0), oplogs.LevelError, this.Request.URL.Path, "登录时发生系统错误："+err.Error(), this.RequestRemoteIP())
 		if err != nil {
 			utils.PrintError(err)
 		}
-
 		actionutils.Fail(this, err)
 	}
 
@@ -137,10 +135,19 @@ func (this *IndexAction) RunPost(params struct {
 		if err != nil {
 			utils.PrintError(err)
 		}
-		//登录次数+1
-		edge_admins_server.LoginErrIncr(fmt.Sprintf("user_%v", params.Username))
-		num, _ := cache.GetInt(fmt.Sprintf("user_%v", params.Username))
-		this.Fail(fmt.Sprintf("请输入正确的用户名密码，您还可以尝试%v次，（账号将被临时锁定30分钟）", 5-num))
+		info, err := edge_users_server.GetUserInfoByName(params.Username)
+		if err != nil {
+			this.ErrorPage(err)
+		}
+		if info != nil && (info.State == 0 || info.Ison == 0) {
+			this.Fail("当前账号被禁用")
+		} else {
+			//登录次数+1
+			edge_admins_server.LoginErrIncr(fmt.Sprintf("user_%v", params.Username))
+			num, _ := cache.GetInt(fmt.Sprintf("user_%v", params.Username))
+			this.Fail(fmt.Sprintf("请输入正确的用户名密码，您还可以尝试%v次，（账号将被临时锁定30分钟）", 5-num))
+		}
+
 	}
 	// 检查OTP-*/
 	otpInfo, err := edge_logins_server.GetInfoByUid(uint64(resp.UserId))

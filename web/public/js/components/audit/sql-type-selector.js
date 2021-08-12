@@ -16,9 +16,11 @@ Vue.component("sql-type-selector", {
 		}
 		let isEdit = this.vAssemblyEdit
 		let assemblys = [
-			// {"name":"mariadb","id":"0"},
+			{"name":"mariadb","id":"0"},
 			{"name":"mysql","id":"1"},
 			{"name":"sqlServer","id":"2"},
+			{"name":"PostgreSql","id":"3"},
+			{"name":"MongoDb","id":"4"},
 		]
 		return {
 			assemblys: assemblys,
