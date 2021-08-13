@@ -22,7 +22,7 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
-	this.Data["featureIsOn"] = this.ValidateFeature("server.accessLog")
+	//this.Data["featureIsOn"] = this.ValidateFeature("server.accessLog")
 
 	// 获取配置
 	webConfig, err := dao.SharedHTTPWebDAO.FindWebConfigWithServerId(this.UserContext(), params.ServerId)
@@ -49,10 +49,10 @@ func (this *IndexAction) RunPost(params struct {
 
 	Must *actions.Must
 }) {
-	if !this.ValidateFeature("server.accessLog") {
-		this.Fail("Permission denied")
-		return
-	}
+	//if !this.ValidateFeature("server.accessLog") {
+	//	this.Fail("Permission denied")
+	//	return
+	//}
 
 	// 日志
 	defer this.CreateLog(oplogs.LevelInfo, "修改Web %d 的访问日志设置", params.WebId)

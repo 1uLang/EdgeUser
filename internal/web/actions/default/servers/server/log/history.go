@@ -27,11 +27,11 @@ func (this *HistoryAction) RunGet(params struct {
 }) {
 	this.Data["featureIsOn"] = true
 
-	if !this.ValidateFeature("server.viewAccessLog") {
-		this.Data["featureIsOn"] = false
-		this.Show()
-		return
-	}
+	//if !this.ValidateFeature("server.viewAccessLog") {
+	//	this.Data["featureIsOn"] = false
+	//	this.Show()
+	//	return
+	//}
 
 	if len(params.Day) == 0 {
 		params.Day = timeutil.Format("Y-m-d")

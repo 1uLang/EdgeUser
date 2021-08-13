@@ -50,6 +50,9 @@ func (this *TemplateAction) RunGet(params struct {
 	//todo:列出当前机器码对应主机系统的模板
 	win := check(params.Os, "win")
 	for _, v := range list.List {
+		if strings.Contains(v["name"].(string),"safedog") {	//去掉安全狗合规基线模板
+			continue
+		}
 		if win && v["type"].(float64) == 3 || !win && v["type"].(float64) == 4 {
 			ls = append(ls, v)
 		}
