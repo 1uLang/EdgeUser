@@ -23,11 +23,11 @@ func (this *TodayAction) RunGet(params struct {
 }) {
 	this.Data["featureIsOn"] = true
 
-	if !this.ValidateFeature("server.viewAccessLog") {
-		this.Data["featureIsOn"] = false
-		this.Show()
-		return
-	}
+	//if !this.ValidateFeature("server.viewAccessLog") {
+	//	this.Data["featureIsOn"] = false
+	//	this.Show()
+	//	return
+	//}
 
 	size := int64(10)
 

@@ -54,6 +54,10 @@ func (this *CreateSetPopupAction) RunGet(params struct {
 
 	actionMaps := []maps.Map{}
 	for _, action := range firewallconfigs.AllActions {
+		// TODO 用户端暂时屏蔽record_ip
+		if action.Code == firewallconfigs.HTTPFirewallActionRecordIP {
+			continue
+		}
 		actionMaps = append(actionMaps, maps.Map{
 			"name":        action.Name,
 			"description": action.Description,

@@ -15,9 +15,9 @@ func (this *DeleteIPAction) RunPost(params struct {
 	ItemId           int64
 }) {
 	// 校验权限
-	if !this.ValidateFeature("server.waf") {
-		return
-	}
+	//if !this.ValidateFeature("server.waf") {
+	//	return
+	//}
 
 	// 日志
 	defer this.CreateLog(oplogs.LevelInfo, "从WAF策略 %d 名单中删除IP %d", params.FirewallPolicyId, params.ItemId)

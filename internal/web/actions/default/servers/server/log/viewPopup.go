@@ -19,9 +19,9 @@ func (this *ViewPopupAction) Init() {
 func (this *ViewPopupAction) RunGet(params struct {
 	RequestId string
 }) {
-	if !this.ValidateFeature("server.viewAccessLog") {
-		return
-	}
+	//if !this.ValidateFeature("server.viewAccessLog") {
+	//	return
+	//}
 
 	accessLogResp, err := this.RPC().HTTPAccessLogRPC().FindHTTPAccessLog(this.UserContext(), &pb.FindHTTPAccessLogRequest{RequestId: params.RequestId})
 	if err != nil {

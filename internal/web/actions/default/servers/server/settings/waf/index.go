@@ -20,7 +20,8 @@ func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
 	// 校验权限
-	this.Data["featureIsOn"] = this.ValidateFeature("server.waf")
+	//this.Data["featureIsOn"] = this.ValidateFeature("server.waf")
+	this.Data["featureIsOn"] = true
 
 	webConfig, err := dao.SharedHTTPWebDAO.FindWebConfigWithServerId(this.UserContext(), params.ServerId)
 	if err != nil {
@@ -53,9 +54,9 @@ func (this *IndexAction) RunPost(params struct {
 	Must *actions.Must
 }) {
 	// 校验权限
-	if !this.ValidateFeature("server.waf") {
-		return
-	}
+	//if !this.ValidateFeature("server.waf") {
+	//	return
+	//}
 
 	defer this.CreateLogInfo("修改Web %d 的WAF设置", params.WebId)
 

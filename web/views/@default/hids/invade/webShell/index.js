@@ -4,7 +4,7 @@ Tea.context(function () {
         window.location = "/hids/invade"
     }
     this.onOpenDetail = function (item) {
-        window.location = "/hids/invade/abnormalProcess/detailList?macCode="+item.macCode+"&ip="+item.serverIp
+        window.location = "/hids/invade/webShell/detailList?macCode="+item.macCode+"&ip="+item.serverIp
     }
     this.enters = function (index) {
         // this.curIndex = index;
