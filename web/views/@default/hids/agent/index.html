@@ -7,8 +7,8 @@
 <p class="comment" v-if="!agents || agents.length == 0">暂时还没有主机安装agent。</p>
 <div style="width: 100%;height: 40px;display: flex;justify-content: flex-end;margin: 10px 0;">
     <div style="display: inline-flex;align-items: center;">
-        <button class="ui button" style="background-color:#0091cc;color: #fff;" @click="onOpenCreate">新增Agent</button>
-        <button class="ui button" style="background-color:#0091cc;color: #fff;" @click="onOpenCommand">获取安装命令</button>
+        <div class="save-btn" @click="onOpenCreate">新增Agent</div>
+        <div class="save-btn" @click="onOpenCommand">获取安装命令</div>
     </div>
 </div>
 

@@ -6,7 +6,7 @@
     justify-content: flex-end;
 }
 
-.btn-contain>div {
+/* .btn-contain>div {
     border-width: 0px;
     width: 91px;
     height: 32px;
@@ -24,7 +24,7 @@
     line-height: 32px;
     margin-left: 10px;
     color: #fff;
-}
+} */
 .table-contain{
     width: 100%;
 }
@@ -44,4 +44,32 @@
     margin-left: 10px;
     border-radius: 50%;
     border: 1px #000 solid;
+}
+
+.save-btn{
+    height: 32px;
+    margin-left: 15px;
+    padding: 0 20px !important;
+    color: #fff;
+    background-color: #276ac6;
+    font-size: 14px;
+    font-weight: normal;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 32px;
+    cursor: pointer;
+}
+
+.del-btn{
+    height: 32px;
+    margin-left: 15px;
+    padding: 0 20px !important;
+    color: #fff;
+    background-color: #D9001B;
+    font-size: 14px;
+    font-weight: normal;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 32px;
+    cursor: pointer;
 }

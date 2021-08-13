@@ -14,3 +14,17 @@
     cursor: pointer;
     color: #0090cb;
 }
+
+.save-btn{
+    height: 32px;
+    margin-left: 15px;
+    padding: 0 20px !important;
+    color: #fff;
+    background-color: #276ac6;
+    font-size: 14px;
+    font-weight: normal;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 32px;
+    cursor: pointer;
+}

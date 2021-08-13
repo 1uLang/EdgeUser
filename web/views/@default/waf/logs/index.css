@@ -1,16 +1,3 @@
-.table-head-bg{
-    height: 32px;
-    background: #f0f0f0;
-}
-
-.log-row {
-    position: relative;
-}
-.log-row .buttons {
-    position: absolute;
-    right: 1em;
-}
-
 .field > input{
     height: 32px;
   }

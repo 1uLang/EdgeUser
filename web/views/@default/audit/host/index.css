@@ -1,11 +1,14 @@
 .sure-btn{
-    width: 60px;
-    height: 26px;
-    background-color: #0090cb;
+    height: 32px;
+    margin-left: 15px;
+    padding: 0 20px !important;
     color: #fff;
+    background-color: #276ac6;
+    font-size: 14px;
+    font-weight: normal;
     border-radius: 5px;
     text-align: center;
-    line-height: 26px;
+    line-height: 32px;
     cursor: pointer;
 }
 
