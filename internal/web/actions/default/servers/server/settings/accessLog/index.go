@@ -23,7 +23,7 @@ func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
 	//this.Data["featureIsOn"] = this.ValidateFeature("server.accessLog")
-
+	this.Data["featureIsOn"] = true
 	// 获取配置
 	webConfig, err := dao.SharedHTTPWebDAO.FindWebConfigWithServerId(this.UserContext(), params.ServerId)
 	if err != nil {
