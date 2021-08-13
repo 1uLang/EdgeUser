@@ -172,12 +172,12 @@ func (this *IndexAction) RunPost(params struct {
 		}
 	}
 	//密码过期检查
-	//this.Data["from"] = ""
-	//if res, _ := edge_users_server.CheckPwdInvalid(uint64(resp.UserId)); res {
-	//	params.Auth.SetUpdatePwdToken(resp.UserId)
-	//	this.Data["from"] = "/updatePwd"
-	//	this.Fail("密码已过期，请立即修改")
-	//}
+	this.Data["from"] = ""
+	if res, _ := edge_users_server.CheckPwdInvalid(uint64(resp.UserId)); res {
+		params.Auth.SetUpdatePwdToken(resp.UserId)
+		this.Data["from"] = "/updatePwd"
+		this.Fail("密码已过期，请立即修改")
+	}
 	//ip登陆限制检查
 	{
 		securityConfig, _ := configloaders.LoadSecurityConfig(resp.UserId)
