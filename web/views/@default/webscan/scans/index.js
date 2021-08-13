@@ -453,9 +453,9 @@ Tea.context(function () {
     //         }
     //     }
     // ]
-    this.vulnerabilities = [
-        {scan_id:1,severity:1,vt_name:"vt-name",affects_url:"www.baidul.com",vt_created:"2021-12-12T12:12:12.100"},
-        {scan_id:2,severity:3,vt_name:"vt-name",affects_url:"www.baidul.com",vt_created:"2021-12-12T12:12:12.100"},
-    ]
+    // this.vulnerabilities = [
+    //     {scan_id:1,severity:1,vt_name:"vt-name",affects_url:"www.baidul.com",vt_created:"2021-12-12T12:12:12.100"},
+    //     {scan_id:2,severity:3,vt_name:"vt-name",affects_url:"www.baidul.com",vt_created:"2021-12-12T12:12:12.100"},
+    // ]
 })
 ;
