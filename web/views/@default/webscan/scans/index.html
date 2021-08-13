@@ -248,7 +248,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr align="center" style="height: 50px;cursor: pointer;" v-for="item in vulnerabilities" @click="getDetailInfo(item)" :style="{'background':showDetailScanId==item.scan_id ? '#f0f0f0':'none'}">
+                    <tr align="center" style="height: 50px;cursor: pointer;" v-for="item in vulnerabilities" @click="getDetailInfo(item)" :style="{'background':showDetailScanId==item.vt_id ? '#f0f0f0':'none'}">
                         <td :class="{'red0-color':item.severity>3,'red-color':item.severity===3, 'yellow-color':item.severity===2,'blue-color':item.severity===1,'green-color':item.severity===0}">{{onChangeSeverityFormat(item.severity)}}</td>
                         <td>{{item.vt_name}}</td>
                         <td>{{item.affects_url}}</td>
