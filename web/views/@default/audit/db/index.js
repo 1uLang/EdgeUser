@@ -24,13 +24,17 @@ Tea.context(function () {
     this.getTypeName = function (type) {
         switch (type) {
             case 0:
-                return "mariadb"
+                return "MariaDB"
             case 1:
-                return "mysql"
+                return "MySQL"
             case 2:
-                return "sqlServer"
+                return "Microsoft SQL Server"
+            case 3:
+                return "PostgreSQL"
+            case 4:
+                return "MongoDB"
             default:
-                return "未知"
+                return "其他"
         }
     }
 
