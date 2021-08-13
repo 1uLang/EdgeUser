@@ -10,8 +10,8 @@
 	<menu-item @click.prevent="hanleOpen">[添加目标]</menu-item>
 </first-menu>
 <div class="btn-contain" v-if="targets.length > 0 ">
-    <div class="save-btn" @click="onScan()">扫描</div>
-    <div class="del-btn" @click="onDelete()">删除</div>
+    <div class="save-btn" :style="{'background-color':scanValues.length>0?'#276ac6':'rgba(170, 170, 170, 1)'}" @click="onScan()">扫描</div>
+    <div class="del-btn" :style="{'background-color':checkValues.length>0?'#D9001B':'rgba(170, 170, 170, 1)'}" @click="onDelete()">删除</div>
 </div>
 <p class="comment" v-if="targets.length == 0 && nodeErr == ''">暂时还没有目标。</p>
 <div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;">

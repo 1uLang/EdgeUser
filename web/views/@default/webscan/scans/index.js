@@ -24,7 +24,10 @@ Tea.context(function () {
 
     this.showDetailItem = null
 
+    this.showDetailScanId = ""
+
     this.onCloseDetail = function () {
+        this.showDetailScanId = ""
         this.bShowDetail = false
     };
 
@@ -284,6 +287,7 @@ Tea.context(function () {
     this.onShowDetail = function (item) {
         this.showDetailItem = item
         this.scanId = item.scan_id
+        this.hostVulFlag = false
         this.scanSessionId = item.current_session.scan_session_id
         //获取漏洞详情报表
         this.$get(".statistics").params({
@@ -415,11 +419,12 @@ Tea.context(function () {
                 scanSessionId: this.scanSessionId,
             }).success(resp => {
                 if (resp.code === 200) {
+                    this.showDetailScanId = vul.scan_id
                     this.detailInfo = resp.data.data
                     this.detailInfo.affects_url = "URL:           " + this.detailInfo.affects_url
                     this.bShowDetail = true
                 } else {
-                    this.bShowDetail = false
+                    this.onCloseDetail()
                 }
             })
         } else {
@@ -429,14 +434,28 @@ Tea.context(function () {
                 scanSessionId: this.scanSessionId,
             }).success(resp => {
                 if (resp.code === 200) {
+                    this.showDetailScanId = vul.scan_id
                     this.detailInfo = resp.data.data
                     this.detailInfo.affects_url = "URL:           " + this.scanAddr
                     this.bShowDetail = true
                 } else {
-                    this.bShowDetail = false
+                    this.onCloseDetail()
                 }
             })
         }
     }
+
+    // this.scans = [
+    //     {scan_id:1,target_id:1,owner:true,
+    //         target:{address:"192.168.0.1",description:"this ist description"},
+    //         current_session:{status:"aborted",start_date:"2021-12-12T12:50:30.100",
+    //             severity_counts:{high:100,medium:120,low:130,info:140}
+    //         }
+    //     }
+    // ]
+    this.vulnerabilities = [
+        {scan_id:1,severity:1,vt_name:"vt-name",affects_url:"www.baidul.com",vt_created:"2021-12-12T12:12:12.100"},
+        {scan_id:2,severity:3,vt_name:"vt-name",affects_url:"www.baidul.com",vt_created:"2021-12-12T12:12:12.100"},
+    ]
 })
 ;
