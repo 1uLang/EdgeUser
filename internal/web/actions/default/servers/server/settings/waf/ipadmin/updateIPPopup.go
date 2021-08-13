@@ -21,9 +21,9 @@ func (this *UpdateIPPopupAction) RunGet(params struct {
 	ItemId int64
 }) {
 	// 校验权限
-	if !this.ValidateFeature("server.waf") {
-		return
-	}
+	//if !this.ValidateFeature("server.waf") {
+	//	return
+	//}
 
 	itemResp, err := this.RPC().IPItemRPC().FindEnabledIPItem(this.UserContext(), &pb.FindEnabledIPItemRequest{IpItemId: params.ItemId})
 	if err != nil {
@@ -59,9 +59,9 @@ func (this *UpdateIPPopupAction) RunPost(params struct {
 	CSRF *actionutils.CSRF
 }) {
 	// 校验权限
-	if !this.ValidateFeature("server.waf") {
-		return
-	}
+	//if !this.ValidateFeature("server.waf") {
+	//	return
+	//}
 
 	// 日志
 	defer this.CreateLog(oplogs.LevelInfo, "修改WAF策略名单中的IP %d", params.ItemId)

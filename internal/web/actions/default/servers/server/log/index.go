@@ -21,7 +21,8 @@ func (this *IndexAction) RunGet(params struct {
 	ServerId  int64
 	RequestId string
 }) {
-	this.Data["featureIsOn"] = this.ValidateFeature("server.viewAccessLog")
+	//this.Data["featureIsOn"] = this.ValidateFeature("server.viewAccessLog")
+	this.Data["featureIsOn"] = true
 
 	this.Data["serverId"] = params.ServerId
 	this.Data["requestId"] = params.RequestId
@@ -35,9 +36,9 @@ func (this *IndexAction) RunPost(params struct {
 
 	Must *actions.Must
 }) {
-	if !this.ValidateFeature("server.viewAccessLog") {
-		return
-	}
+	//if !this.ValidateFeature("server.viewAccessLog") {
+	//	return
+	//}
 
 	isReverse := len(params.RequestId) > 0
 	accessLogsResp, err := this.RPC().HTTPAccessLogRPC().ListHTTPAccessLogs(this.UserContext(), &pb.ListHTTPAccessLogsRequest{

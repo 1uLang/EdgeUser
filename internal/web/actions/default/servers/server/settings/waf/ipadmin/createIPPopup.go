@@ -21,9 +21,9 @@ func (this *CreateIPPopupAction) RunGet(params struct {
 	Type   string
 }) {
 	// 校验权限
-	if !this.ValidateFeature("server.waf") {
-		return
-	}
+	//if !this.ValidateFeature("server.waf") {
+	//	return
+	//}
 
 	this.Data["type"] = params.Type
 	this.Data["listId"] = params.ListId
@@ -42,9 +42,9 @@ func (this *CreateIPPopupAction) RunPost(params struct {
 	CSRF *actionutils.CSRF
 }) {
 	// 校验权限
-	if !this.ValidateFeature("server.waf") {
-		return
-	}
+	//if !this.ValidateFeature("server.waf") {
+	//	return
+	//}
 
 	// TODO 校验ListId所属用户
 

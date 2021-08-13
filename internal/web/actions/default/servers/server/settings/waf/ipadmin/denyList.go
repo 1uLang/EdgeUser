@@ -25,11 +25,11 @@ func (this *DenyListAction) RunGet(params struct {
 	this.Data["firewallPolicyId"] = params.FirewallPolicyId
 
 	// 校验权限
-	if !this.ValidateFeature("server.waf") {
-		this.Data["featureIsOn"] = false
-		this.Show()
-		return
-	}
+	//if !this.ValidateFeature("server.waf") {
+	//	this.Data["featureIsOn"] = false
+	//	this.Show()
+	//	return
+	//}
 
 	listId, err := dao.SharedIPListDAO.FindDenyIPListIdWithServerId(this.UserContext(), params.ServerId)
 	if err != nil {

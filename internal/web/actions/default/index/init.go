@@ -10,6 +10,7 @@ func init() {
 			GetPost("", new(IndexAction)).
 			GetPost("updatePwd", new(UpdatePwdAction)).
 			GetPost("checkOTP", new(CheckOTPAction)).
+			//Post("renewal", new(RenewalAction)).
 			EndAll()
 	})
 }
