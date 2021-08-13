@@ -139,7 +139,7 @@ func (this *IndexAction) RunPost(params struct {
 		if err != nil {
 			this.ErrorPage(err)
 		}
-		if info != nil && (info.State == 0 || info.Ison == 0) {
+		if (info != nil && info.ID > 0) && (info.State == 0 || info.Ison == 0) {
 			this.Fail("当前账号被禁用")
 		} else {
 			//登录次数+1
@@ -172,12 +172,12 @@ func (this *IndexAction) RunPost(params struct {
 		}
 	}
 	//密码过期检查
-	//this.Data["from"] = ""
-	//if res, _ := edge_users_server.CheckPwdInvalid(uint64(resp.UserId)); res {
-	//	params.Auth.SetUpdatePwdToken(resp.UserId)
-	//	this.Data["from"] = "/updatePwd"
-	//	this.Fail("密码已过期，请立即修改")
-	//}
+	this.Data["from"] = ""
+	if res, _ := edge_users_server.CheckPwdInvalid(uint64(resp.UserId)); res {
+		params.Auth.SetUpdatePwdToken(resp.UserId)
+		this.Data["from"] = "/updatePwd"
+		this.Fail("密码已过期，请立即修改")
+	}
 	//ip登陆限制检查
 	{
 		securityConfig, _ := configloaders.LoadSecurityConfig(resp.UserId)
@@ -185,7 +185,6 @@ func (this *IndexAction) RunPost(params struct {
 			//this.ResponseWriter.WriteHeader(http.StatusForbidden)
 			this.Fail("当前IP登录被限制")
 		}
-		fmt.Println("检查 当前IP登录被限制1")
 		//获取父级用户
 		userInfo, _ := edge_users_server.GetUserInfo(uint64(resp.UserId))
 		if userInfo != nil {
@@ -193,7 +192,6 @@ func (this *IndexAction) RunPost(params struct {
 			if !helpers.CheckIP(securityConfig, this.RequestRemoteIP()) {
 				this.Fail("当前IP登录被限制")
 			}
-			fmt.Println("检查 当前IP登录被限制2")
 		}
 	}
 
