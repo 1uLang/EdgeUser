@@ -306,9 +306,7 @@
                     teaweb.warn(res.message, function () {
                         var loginPart = document.getElementById("loginPart")
                         var resetPwdPart = document.getElementById("resetPart")
-						var renewalPart = document.getElementById("renewalPart")
                         loginPart.style.display = "none"
-						renewalPart.style.display = "none"
                         resetPwdPart.style.display = "block"
                         onGetRefreshToken()
                         onGetToken()
@@ -317,10 +315,8 @@
                     teaweb.warn(res.message, function () {
                         var loginPart = document.getElementById("loginPart")
                         var resetPwdPart = document.getElementById("resetPart")
-                        var renewalPart = document.getElementById("renewalPart")
                         loginPart.style.display = "none"
                         resetPwdPart.style.display = "none"
-                        renewalPart.style.display = "block"
                         console.log(res.data.systemCode)
                         document.getElementById("systemCode").value = res.data.systemCode
 
