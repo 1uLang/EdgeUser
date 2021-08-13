@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/1uLang/zhiannet-api/hids/model/risk"
 	risk_server "github.com/1uLang/zhiannet-api/hids/server/risk"
+	"github.com/1uLang/zhiannet-api/hids/server/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids"
 )
@@ -55,6 +56,17 @@ func (this *SystemRiskAction) RunGet(params struct {
 		return
 	}
 	risk.List = append(risk.List, list2.List...)
+	for k, v := range risk.List {
+
+		os, err := server.Info(v["serverIp"].(string))
+		if err != nil {
+			this.Data["errorMessage"] = fmt.Sprintf("获取主机信息失败：%v", err)
+			return
+		} else if os == nil { //无主机信息
+			continue
+		}
+		risk.List[k]["os"] = os
+	}
 	this.Data["risks"] = risk.List
 	this.Data["serverIp"] = params.ServerIp
 	this.Data["level"] = params.Level

@@ -134,7 +134,19 @@ func (this *ConfigDefectListAction) RunGet(params struct {
 
 	//待处理
 	req.Req.ProcessState = 1
+	req.Req.PageSize = 1
+	req.Req.PageNo = 1
 	list1, err := risk_server.ConfigDefectDetailList(req)
+	if err != nil {
+		this.ErrorPage(err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取缺陷配置详细列表失败：%v", err)
+		return
+	}
+	page := this.NewPage(int64(list1.TotalData))
+	this.Data["page1"] = page.AsHTML()
+	req.Req.PageSize = int(page.Size)
+	req.Req.PageNo = int(page.Offset / page.Size) + 1
+	list1, err = risk_server.ConfigDefectDetailList(req)
 	if err != nil {
 		this.ErrorPage(err)
 		this.Data["errorMessage"] = fmt.Sprintf("获取缺陷配置详细列表失败：%v", err)
@@ -142,7 +154,20 @@ func (this *ConfigDefectListAction) RunGet(params struct {
 	}
 	//已处理
 	req.Req.ProcessState = 2
+	//得到总数
+	req.Req.PageSize = 1
+	req.Req.PageNo = 1
 	list2, err := risk_server.ConfigDefectDetailList(req)
+	if err != nil {
+		this.Data["errorMessage"] = fmt.Sprintf("获取缺陷配置详细列表失败：%v", err)
+		return
+	}
+	page2 := this.NewPage(int64(list2.TotalData))
+	this.Data["page2"] = page2.AsHTML()
+
+	req.Req.PageSize = int(page2.Size)
+	req.Req.PageNo = int(page2.Offset / page2.Size) + 1
+	list2, err = risk_server.ConfigDefectDetailList(req)
 	if err != nil {
 		this.Data["errorMessage"] = fmt.Sprintf("获取缺陷配置详细列表失败：%v", err)
 		return

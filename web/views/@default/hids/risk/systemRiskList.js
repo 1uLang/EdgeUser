@@ -51,7 +51,7 @@ Tea.context(function () {
             case -20:
                 return "取消信任失败";
             default:
-                "未知";
+               return  "未知";
         }
     };
 
@@ -66,7 +66,7 @@ Tea.context(function () {
             case 4:
                 return "危急";
             default:
-                "未评级";
+                return "未评级";
         }
     };
 

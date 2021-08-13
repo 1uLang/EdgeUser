@@ -16,7 +16,7 @@ Tea.context(function () {
             case '0203':
                 return "应用软件弱口令";
             default:
-                "未知";
+                return "未知";
         }
     }
 
@@ -34,7 +34,7 @@ Tea.context(function () {
             case 5:
                 return "已忽略";
             default:
-                "未知";
+                return "未知";
         }
     };
 
@@ -57,7 +57,7 @@ Tea.context(function () {
             case 4:
                 return "危机";
             default:
-                "未评级";
+                return "未评级";
         }
     };
     this.onDetail = function (item) {

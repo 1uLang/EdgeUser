@@ -23,7 +23,8 @@ Tea.context(function () {
         return ips.slice(-1)[0]
     }
     this.onOpenDetail = function (item) {
-        window.location.href = "/hids/risk/systemRiskList?ip=" + item.serverIp +  '&macCode=' +item.macCode
+        window.location.href = "/hids/risk/systemRiskList?ip=" + item.serverIp +  '&macCode=' +item.macCode +
+            "&os=" + item.os.osType + "&lastUpdateTime=" + item.os.lastUpdateTime
     }
     this.dangerData = [
         {id: 1, value: "低危"},

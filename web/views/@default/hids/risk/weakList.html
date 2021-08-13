@@ -47,7 +47,7 @@
             <tbody >
                 <tr align="center" style="height: 40px;" v-for="item in weak1" >
                     <td>
-                        <div :class="{'low-bg-color':item.level===1,'middle-bg-color':item.level===2,'height-bg-color':item.level===3,'serious-bg-color':item.level===4}">
+                        <div :class="{'low-bg-color':item.level == null ||item.level===1,'middle-bg-color':item.level===2,'height-bg-color':item.level===3,'serious-bg-color':item.level===4}">
                             {{getDangerName(item.level)}}
                         </div>
                     </td>
@@ -64,6 +64,7 @@
                 </tr>
             </tbody>
         </table>
+        <div class="page" v-html="page1"></div>
     </div>
     <div v-else>
         <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
@@ -79,7 +80,7 @@
             <tbody>
                 <tr align="center" style="height: 40px;" v-for="item in weak2" >
                     <td>
-                        <div :class="{'low-bg-color':item.level===1,'middle-bg-color':item.level===2,'height-bg-color':item.level===3,'serious-bg-color':item.level===4}">
+                        <div :class="{'low-bg-color':item.level == null ||item.level===1,'middle-bg-color':item.level===2,'height-bg-color':item.level===3,'serious-bg-color':item.level===4}">
                             {{getDangerName(item.level)}}
                         </div>
                     </td>
@@ -94,6 +95,7 @@
                 </tr>
             </tbody>
         </table>
+        <div class="page" v-html="page2"></div>
     </div>
     
 </div>
