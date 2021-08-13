@@ -82,13 +82,13 @@ Tea.context(function () {
         });
     };
     this.handleOnCheck = function () {
-        const scanBtn = document.getElementById("scan-btn");
-        scanBtn.style.backgroundColor = "#14539A";
-        scanBtn.style.cursor = "pointer";
+        // const scanBtn = document.getElementById("scan-btn");
+        // scanBtn.style.backgroundColor = "#14539A";
+        // scanBtn.style.cursor = "pointer";
 
-        const delBtn = document.getElementById("del-btn");
-        delBtn.style.backgroundColor = "#D9001B";
-        delBtn.style.cursor = "pointer";
+        // const delBtn = document.getElementById("del-btn");
+        // delBtn.style.backgroundColor = "#D9001B";
+        // delBtn.style.cursor = "pointer";
     };
 
     this.clickCheckbox = function () {
@@ -165,25 +165,25 @@ Tea.context(function () {
 
     this.updateBtnStatus = function () {
         this.checkCanScan()
-        const scanBtn = document.getElementById("scan-btn");
-        const delBtn = document.getElementById("del-btn");
-        if (this.checkValues.length > 0) {
+        // const scanBtn = document.getElementById("scan-btn");
+        // const delBtn = document.getElementById("del-btn");
+        // if (this.checkValues.length > 0) {
 
-            delBtn.style.backgroundColor = "#D9001B";
-            delBtn.style.cursor = "pointer";
-        } else {
+        //     delBtn.style.backgroundColor = "#D9001B";
+        //     delBtn.style.cursor = "pointer";
+        // } else {
 
-            delBtn.style.backgroundColor = "#AAAAAA";
-            delBtn.style.cursor = null;
-        }
+        //     delBtn.style.backgroundColor = "#AAAAAA";
+        //     delBtn.style.cursor = null;
+        // }
 
-        if (this.scanValues.length > 0) {
-            scanBtn.style.backgroundColor = "#14539A";
-            scanBtn.style.cursor = "pointer";
-        } else {
-            scanBtn.style.backgroundColor = "#AAAAAA";
-            scanBtn.style.cursor = null;
-        }
+        // if (this.scanValues.length > 0) {
+        //     scanBtn.style.backgroundColor = "#14539A";
+        //     scanBtn.style.cursor = "pointer";
+        // } else {
+        //     scanBtn.style.backgroundColor = "#AAAAAA";
+        //     scanBtn.style.cursor = null;
+        // }
     };
 
     this.onChangeTimeFormat = function (time) {
