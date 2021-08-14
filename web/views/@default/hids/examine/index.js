@@ -483,11 +483,7 @@ Tea.context(function () {
                 break
             }
         }
-        if(that.progressListData.length>0){
-            that.progressListData = that.progressListData.filter((item) => {
-                return item.state == 1;
-            });
-        }
+       
         that.onSaveProgressData()
     }
     // 进度的缓存数据
@@ -520,6 +516,12 @@ Tea.context(function () {
         if (that.updateTimeId) {
             that.updateTimeId.stop()
             that.updateTimeId = null
+        }
+        if(that.progressListData.length>0){
+            that.progressListData = that.progressListData.filter((item) => {
+                return item.state == 1;
+            });
+            that.onSaveProgressData()
         }
     }
 

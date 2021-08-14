@@ -100,7 +100,6 @@ Tea.context(function () {
     }
 
     this.getProgressPerStr = function (curValue,maxValue,id,state) { 
-        console.log(curValue);
         if(!that.getProgressItemInfo){return "0%"}
 
         if(curValue == 0 ){
@@ -178,6 +177,9 @@ Tea.context(function () {
         //打开合规基线弹窗
          teaweb.popup(Tea.url(".template?macCode="+item.macCode+'&serverIp='+serverIp+"&os="+item.os.osType), {
              height: "500px",
+             callback:function(){
+                 console.log(window.location)
+             }
          })
       }
 
@@ -240,11 +242,6 @@ Tea.context(function () {
                 break
             }
         }
-        if(that.progressListData.length>0){
-            that.progressListData = that.progressListData.filter((item) => {
-                return item.state == 1;
-            });
-        }
         
         that.onSaveProgressData()
     }
@@ -279,6 +276,13 @@ Tea.context(function () {
         if (that.updateTimeId) {
             that.updateTimeId.stop()
             that.updateTimeId = null
+        }
+        //在页面释放的时候删除废弃数据
+        if(that.progressListData.length>0){
+            that.progressListData = that.progressListData.filter((item) => {
+                return item.state == 1;
+            });
+            that.onSaveProgressData()
         }
     }
 });
