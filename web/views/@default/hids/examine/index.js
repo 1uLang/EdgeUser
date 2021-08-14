@@ -390,7 +390,7 @@ Tea.context(function () {
         if(curValue && maxValue && maxValue>0 && maxValue >= curValue){
             var tempValue = ((curValue / maxValue) * 100).toFixed(1)
             if(tempValue>=100){
-                return "已完成"
+                return "100%"
             }else if(tempValue<1 && state && state==1){
                 return "1%"
             }
