@@ -159,27 +159,27 @@ func (this *DetailListAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	for _,v := range details.WebshellInfoLis {
+	for _,v := range details.WebshellInfoList {
 		if v["state"].(float64) == 1 || v["state"].(float64) == -1{
-			list2.WebshellInfoLis = append(list2.WebshellInfoLis, v)
+			list2.WebshellInfoList = append(list2.WebshellInfoList, v)
 		}else if v["state"].(float64) == 2 || v["state"].(float64) == -2{
-			list3.WebshellInfoLis = append(list3.WebshellInfoLis, v)
+			list3.WebshellInfoList = append(list3.WebshellInfoList, v)
 		}else if v["state"].(float64) == 3 || v["state"].(float64) == -3{
-			list4.WebshellInfoLis = append(list4.WebshellInfoLis, v)
+			list4.WebshellInfoList = append(list4.WebshellInfoList, v)
 		}else{
-			list1.WebshellInfoLis = append(list1.WebshellInfoLis, v)
+			list1.WebshellInfoList = append(list1.WebshellInfoList, v)
 		}
 	}
 	//漏洞列表
-	this.Data["datas1"] = list1.WebshellInfoLis
-	this.Data["datas2"] = list2.WebshellInfoLis
-	this.Data["datas3"] = list3.WebshellInfoLis
-	this.Data["datas4"] = list4.WebshellInfoLis
+	this.Data["datas1"] = list1.WebshellInfoList
+	this.Data["datas2"] = list2.WebshellInfoList
+	this.Data["datas3"] = list3.WebshellInfoList
+	this.Data["datas4"] = list4.WebshellInfoList
 
-	this.Data["total1"] = len(list1.WebshellInfoLis)
-	this.Data["total2"] = len(list2.WebshellInfoLis)
-	this.Data["total3"] = len(list3.WebshellInfoLis)
-	this.Data["total4"] = len(list4.WebshellInfoLis)
+	this.Data["total1"] = len(list1.WebshellInfoList)
+	this.Data["total2"] = len(list2.WebshellInfoList)
+	this.Data["total3"] = len(list3.WebshellInfoList)
+	this.Data["total4"] = len(list4.WebshellInfoList)
 
 	this.Data["ip"] = params.Ip
 	this.Data["macCode"] = params.MacCode

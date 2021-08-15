@@ -154,7 +154,7 @@ func (this *DetailListAction) RunGet(params struct {
 	req.Req.PageNo = params.PageNo
 	req.MacCode = params.MacCode
 
-	var list1,list2,list3,list4 risk.DetailResp
+	var list1,list2 risk.DetailResp
 
 	details, err := risk_server.ReboundShellDetailList(req)
 	if err != nil {
@@ -162,12 +162,8 @@ func (this *DetailListAction) RunGet(params struct {
 		return
 	}
 	for _,v := range details.ReboundshellInfoList {
-		if v["state"].(float64) == 1 || v["state"].(float64) == -1{
+		if v["state"].(float64) == 7 {
 			list2.ReboundshellInfoList = append(list2.ReboundshellInfoList, v)
-		}else if v["state"].(float64) == 2 || v["state"].(float64) == -2{
-			list3.ReboundshellInfoList = append(list3.ReboundshellInfoList, v)
-		}else if v["state"].(float64) == 3 || v["state"].(float64) == -3{
-			list4.ReboundshellInfoList = append(list4.ReboundshellInfoList, v)
 		}else{
 			list1.ReboundshellInfoList = append(list1.ReboundshellInfoList, v)
 		}
@@ -176,8 +172,8 @@ func (this *DetailListAction) RunGet(params struct {
 	this.Data["datas1"] = list1.ReboundshellInfoList
 	this.Data["datas2"] = list2.ReboundshellInfoList
 
-	this.Data["total1"] = list1.TotalData
-	this.Data["total2"] = list2.TotalData
+	this.Data["total1"] = len(list1.ReboundshellInfoList)
+	this.Data["total2"] = len(list2.ReboundshellInfoList)
 
 	this.Data["ip"] = params.Ip
 	this.Data["macCode"] = params.MacCode
