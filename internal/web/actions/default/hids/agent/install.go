@@ -38,10 +38,13 @@ func (this *InstallAction) RunGet(params struct {
 	if url == "" {
 		url = "https://hids.zhiannet.com"
 	}
+	path := strings.Split(url,"//")[1]
 	linux = strings.Replace(linux, "https://172.18.200.29", url, 1)
-	linux = strings.ReplaceAll(linux, "172.18.200.29", "119.8.57.159")
+	//linux = strings.ReplaceAll(linux, "172.18.200.29", "119.8.57.159")
+	linux = strings.ReplaceAll(linux, "172.18.200.29", path)
 
-	windows = strings.Replace(windows, "172.18.200.29", "119.8.57.159", 1)
+	windows = strings.Replace(windows, "172.18.200.29", path, 1)
+	//windows = strings.Replace(windows, "172.18.200.29", "119.8.57.159", 1)
 
 	this.Data["linux"] = linux
 	this.Data["windows"] = windows
