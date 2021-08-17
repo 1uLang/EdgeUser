@@ -12,17 +12,17 @@ var (
 		{
 			Name:        "态势感知",
 			Code:        "waf",
-			Description: "用户平台的安全概览以及拦截日志",
+			Description: "用户平台整体地洞悉安全风险展示",
 		},
 		{
 			Name:        "安全概览",
 			Code:        "waf.waf",
-			Description: "用户可以查看安全概览以及拦截日志",
+			Description: "用户可以查看安全概览统计数据",
 		},
 		{
 			Name:        "拦截日志",
 			Code:        "waf.wafLogs",
-			Description: "用户可以查看安全概览以及拦截日志",
+			Description: "用户可以查看用户平台拦截日志",
 		},
 		{
 			Name:        "WAF服务",
@@ -32,17 +32,17 @@ var (
 		{
 			Name:        "域名管理",
 			Code:        "servers.servers",
-			Description: "用户可以查看安全概览以及拦截日志",
+			Description: "用户可以新增、管理、删除域名",
 		},
 		{
 			Name:        "证书管理",
 			Code:        "servers.certs",
-			Description: "用户可以查看安全概览以及拦截日志",
+			Description: "用户可以上传各类的证书",
 		},
 		{
 			Name:        "刷新预热",
 			Code:        "servers.cache",
-			Description: "用户可以查看安全概览以及拦截日志",
+			Description: "用户可以配置URL刷新预热缓存",
 		},
 		{
 			Name:        "负载均衡",

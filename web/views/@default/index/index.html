@@ -321,7 +321,11 @@
                         document.getElementById("systemCode").value = res.data.systemCode
 
                     })
-                } else {
+                }else if (res.data.from == "/页面过期") { //刷新页面
+                    teaweb.warn(res.message, function () {
+                        window.location.reload()
+                    }) 
+                }else {
                     teaweb.warn(res.message, function () {
                         onGetRefreshToken()
                         onGetToken()

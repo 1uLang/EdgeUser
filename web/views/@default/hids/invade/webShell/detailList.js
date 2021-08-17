@@ -12,7 +12,7 @@ Tea.context(function () {
         return ips.slice(-1)[0]
     }
     this.onGoBack = function () {
-        window.location.href = "/hids/invade/webshell"
+        window.location.href = "/hids/invade/webShell"
     };
     this.onDetail = function (item) {
         teaweb.popup(Tea.url(".detail?macCode=" + this.macCode +
@@ -24,7 +24,7 @@ Tea.context(function () {
     };
     this.onTrust = function (item) {
         teaweb.confirm("确定信任该事件吗？", function () {
-            this.$post("/hids/invade/webshell").params({
+            this.$post("/hids/invade/webShell").params({
                 Opt: "add_trust",
                 MacCode: this.macCode,
                 ItemIds: [item.itemId],
@@ -34,7 +34,7 @@ Tea.context(function () {
     };
     this.onIsolate = function (item) {
         teaweb.confirm("确定隔离该事件吗？", function () {
-            this.$post("/hids/invade/webshell").params({
+            this.$post("/hids/invade/webShell").params({
                 Opt: "isolate",
                 MacCode: this.macCode,
                 ItemIds: [item.itemId],
@@ -44,7 +44,7 @@ Tea.context(function () {
     };
     this.onRevert = function (item) {
         teaweb.confirm("确定恢复该事件吗？", function () {
-            this.$post("/hids/invade/webshell").params({
+            this.$post("/hids/invade/webShell").params({
                 Opt: "revert",
                 MacCode: this.macCode,
                 ItemIds: [item.itemId],
@@ -54,7 +54,7 @@ Tea.context(function () {
     };
     this.onDelete = function (item) {
         teaweb.confirm("确定删除该事件吗？", function () {
-            this.$post("/hids/invade/webshell").params({
+            this.$post("/hids/invade/webShell").params({
                 Opt: "delete",
                 MacCode: this.macCode,
                 ItemIds: [item.itemId],
@@ -64,7 +64,7 @@ Tea.context(function () {
     };
     this.onCancelTrust = function (item) {
         teaweb.confirm("确定取消信任该事件吗？", function () {
-            this.$post("/hids/invade/webshell").params({
+            this.$post("/hids/invade/webShell").params({
                 Opt: "cancel_trust",
                 MacCode: this.macCode,
                 ItemIds: [item.itemId],

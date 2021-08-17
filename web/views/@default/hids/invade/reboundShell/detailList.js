@@ -12,7 +12,7 @@ Tea.context(function () {
         return ips.slice(-1)[0]
     }
     this.onGoBack = function () {
-        window.location = "/hids/invade/reboundshell"
+        window.location = "/hids/invade/reboundShell"
     };
     this.onDetail = function (item) {
         teaweb.popup(Tea.url(".detail?macCode=" + this.macCode +
@@ -24,7 +24,7 @@ Tea.context(function () {
     };
     this.onClose = function (item) {
         teaweb.confirm("确定关闭该事件吗？", function () {
-            this.$post("/hids/invade/reboundshell").params({
+            this.$post("/hids/invade/reboundShell").params({
                 Opt: "close",
                 MacCode: this.macCode,
                 ItemIds: [item.itemId],
@@ -34,7 +34,7 @@ Tea.context(function () {
     };
     this.onCancelClose = function (item) {
         teaweb.confirm("确定取消关闭该事件吗？", function () {
-            this.$post("/hids/invade/reboundshell").params({
+            this.$post("/hids/invade/reboundShell").params({
                 Opt: "cancel_close",
                 MacCode: this.macCode,
                 ItemIds: [item.itemId],
