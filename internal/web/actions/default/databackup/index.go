@@ -5,6 +5,8 @@ import (
 
 	"github.com/1uLang/zhiannet-api/nextcloud/model"
 	"github.com/1uLang/zhiannet-api/nextcloud/request"
+	em "github.com/1uLang/zhiannet-api/edgeUsers/model"
+	es "github.com/1uLang/zhiannet-api/edgeUsers/server"
 	"github.com/TeaOSLab/EdgeUser/internal/oplogs"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
@@ -19,8 +21,12 @@ func (this *IndexAction) Init() {
 }
 
 func (this *IndexAction) RunGet(params struct{}) {
+	uid, _ := es.GetParentId(&em.GetParentIdReq{UserId: uint64(this.UserId())})
+	if uid == 0 {
+		uid = uint64(this.UserId())
+	}
 	// 获取token
-	token, err := model.QueryTokenByUID(this.UserId())
+	token, err := model.QueryTokenByUID(int64(uid))
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -39,8 +45,12 @@ func (this *IndexAction) RunGet(params struct{}) {
 func (this *IndexAction) RunPost(params struct {
 	UploadFile *actions.File `json:"uploadFile"`
 }) {
+	uid, _ := es.GetParentId(&em.GetParentIdReq{UserId: uint64(this.UserId())})
+	if uid == 0 {
+		uid = uint64(this.UserId())
+	}
 	// 获取token
-	token, err := model.QueryTokenByUID(this.UserId())
+	token, err := model.QueryTokenByUID(int64(uid))
 	if err != nil {
 		this.ErrorPage(err)
 		return

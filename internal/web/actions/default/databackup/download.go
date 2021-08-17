@@ -6,6 +6,8 @@ import (
 
 	"github.com/1uLang/zhiannet-api/nextcloud/model"
 	"github.com/1uLang/zhiannet-api/nextcloud/request"
+	em "github.com/1uLang/zhiannet-api/edgeUsers/model"
+	es "github.com/1uLang/zhiannet-api/edgeUsers/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 )
 
@@ -20,8 +22,12 @@ func (this *DownLoadAction) Init() {
 func (this *DownLoadAction) RunGet(params struct {
 	Name string
 }) {
+	uid, _ := es.GetParentId(&em.GetParentIdReq{UserId: uint64(this.UserId())})
+	if uid == 0 {
+		uid = uint64(this.UserId())
+	}
 	// 获取token
-	token, err := model.QueryTokenByUID(this.UserId())
+	token, err := model.QueryTokenByUID(int64(uid))
 	if err != nil {
 		this.ErrorPage(err)
 		return
