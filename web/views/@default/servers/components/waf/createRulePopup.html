@@ -91,7 +91,7 @@
 					<select class="ui dropdown" name="operator" style="width:10em" v-model="rule.operator" @change="changeOperator()">
 						<option v-for="op in operators" :value="op.code">{{op.name}}</option>
 					</select>
-					<p class="comment" v-if="operator != null" v-html="operator.description"></p>
+<!--					<p class="comment" v-if="operator != null" v-html="operator.description"></p>-->
 				</td>
 			</tr>
 			<tr v-if="operator.case != 'none'">

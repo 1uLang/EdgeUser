@@ -3,7 +3,7 @@
 {$var "header"}
 {$end}
 <div style="width: 100%;height: 650px;margin-top: 10px;overflow-x: auto; overflow-y: auto;">
-    <p class="comment" v-if="online == null || online.length === 0 && nodeErr == ''">暂时还没有会话记录。</p>
+    <p class="comment" v-if="online == null || online.length === 0 ">暂时还没有会话记录。</p>
     <table class="ui table selectable celled" border="1" style="border-collapse: collapse;" v-else>
         <thead>
         <tr align="center">
