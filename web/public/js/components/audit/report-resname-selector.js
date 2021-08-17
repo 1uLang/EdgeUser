@@ -16,7 +16,7 @@ Vue.component("report-resname-selector", {
     data: function () {
         let assemblyId = this.vAssemblyId
         if (assemblyId == null) {
-            assemblyId = 0
+            assemblyId = -1
         }
         let assemblyType = this.vAssemblyType
         if (assemblyType == null) {
@@ -61,12 +61,12 @@ Vue.component("report-resname-selector", {
 		vAssemblyType(newVal, oldVale) {
            this.assemblyType = newVal
            this.onResetData()
-           this.assemblyId = 0
+           this.assemblyId = -1
         }
     },
     template: `<div>
 	<select name="assemblyId" v-model="assemblyId" style="width: 220px;height: 30px;padding: 0 0 0 5px;line-height: 30px;font-size: 13px;border: 1px solid #d7d7d7;">
-		<option value="0">全部资产</option>
+		<option value="-1">请选择资产</option>
 		<option v-for="assembly in assemblys" :value="assembly.id">{{assembly.name}}</option>
 	</select>
 </div>`

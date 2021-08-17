@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"github.com/1uLang/zhiannet-api/audit/request"
 	"github.com/1uLang/zhiannet-api/audit/server/audit_db"
+	"github.com/1uLang/zhiannet-api/common/model/audit_assets_relation"
+	"github.com/1uLang/zhiannet-api/common/server/audit_assets_relation_server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
+	"time"
 )
 
 type CreatePopupAction struct {
@@ -69,7 +72,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 
 	params.Must.
 		Field("type", params.Type).
-		In([]int{1, 2}, "请选择类型")
+		In([]int{0, 1, 2, 3, 4}, "请选择类型")
 
 	params.Must.
 		Field("version", params.Version).
@@ -106,7 +109,23 @@ func (this *CreatePopupAction) RunPost(params struct {
 			this.ErrorPage(err)
 			return
 		}
-
+		if res != nil && res.Code != 0 {
+			this.Fail(res.Msg)
+			return
+		}
+		//关联账号审计ID
+		if res != nil {
+			_, err = audit_assets_relation_server.Add(&audit_assets_relation.AuditAssetsRelation{
+				UserId:     uint64(this.UserId()),
+				AssetsId:   res.Data.Id,
+				AssetsType: 0,
+				CreateTime: int(time.Now().Unix()),
+			})
+			if err != nil {
+				this.ErrorPage(err)
+				return
+			}
+		}
 		defer this.CreateLogInfo("创建安全审计-数据库 %v", res.Msg)
 	} else {
 		res, err := audit_db.EditDb(&audit_db.DBEditReq{
@@ -121,7 +140,10 @@ func (this *CreatePopupAction) RunPost(params struct {
 			this.ErrorPage(err)
 			return
 		}
-
+		if res != nil && res.Code != 0 {
+			this.Fail(res.Msg)
+			return
+		}
 		defer this.CreateLogInfo("修改安全审计-数据库 %v", res.Msg)
 	}
 
