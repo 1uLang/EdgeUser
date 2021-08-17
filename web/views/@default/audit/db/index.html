@@ -20,18 +20,24 @@
         <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
                 <tr align="center">
-                    <th class='table-head-bg' style="width: 150px;" >数据库名称</th>
-                    <th class='table-head-bg' style="width: 150px;" >IP</th>
-                    <th class='table-head-bg' style="width: 150px;" >端口</th>
-                    <th class='table-head-bg' style="width: 150px;" >类型</th>
-                    <th class='table-head-bg' style="width: 150px;" >版本</th>
-                    <th class='table-head-bg' style="width: 150px;" >操作系统</th>
-                    <th class='table-head-bg' style="width: 150px;" >状态</th>
-                    <th class='table-head-bg' style="width: 130px;" >操作</th>
+                    <th class='table-head-bg' style="width: 25%;" >审计ID</th>
+                    <th class='table-head-bg' style="width: 15%;" >数据库名称</th>
+                    <th class='table-head-bg' style="width: 10%;" >IP</th>
+                    <th class='table-head-bg' style="width: 8%;" >端口</th>
+                    <th class='table-head-bg' style="width: 8%;" >类型</th>
+                    <th class='table-head-bg' style="width: 8%;" >版本</th>
+                    <th class='table-head-bg' style="width: 8%;" >操作系统</th>
+                    <th class='table-head-bg' style="width: 8%;" >状态</th>
+                    <th class='table-head-bg' style="width: 10%;" >操作</th>
                 </tr>
             </thead>
             <tbody id='tableBody'>
                 <tr align="center" style="height: 40px;" v-for="item in dbList" >
+                    <td>
+                        <div style="padding: 4px 0;">
+                            {{item.audit_id}}
+                        </div>
+                    </td>
                     <td>
                         <div style="padding: 4px 0;">
                             {{item.name}}
