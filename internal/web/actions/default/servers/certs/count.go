@@ -11,7 +11,7 @@ type CountAction struct {
 
 func (this *CountAction) RunPost(params struct{}) {
 	countResp, err := this.RPC().SSLCertRPC().CountSSLCerts(this.UserContext(), &pb.CountSSLCertRequest{
-		UserId: this.UserId(),
+		UserId: this.UserId(true),
 	})
 	if err != nil {
 		this.ErrorPage(err)

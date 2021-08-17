@@ -18,6 +18,10 @@ Tea.context(function () {
         //req
     }
 
+    this.showMore = function (log) {
+        log.moreVisible = !log.moreVisible
+    }
+
 
     this.exportExcel = function () {
         let that = this

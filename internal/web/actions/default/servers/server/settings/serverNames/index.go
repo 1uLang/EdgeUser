@@ -70,7 +70,7 @@ func (this *IndexAction) RunPost(params struct {
 	defer this.CreateLog(oplogs.LevelInfo, "修改代理服务 %d 域名", params.ServerId)
 
 	// 检查用户所在集群
-	clusterIdResp, err := this.RPC().UserRPC().FindUserNodeClusterId(this.UserContext(), &pb.FindUserNodeClusterIdRequest{UserId: this.UserId()})
+	clusterIdResp, err := this.RPC().UserRPC().FindUserNodeClusterId(this.UserContext(), &pb.FindUserNodeClusterIdRequest{UserId: this.UserId(true)})
 	if err != nil {
 		this.ErrorPage(err)
 		return

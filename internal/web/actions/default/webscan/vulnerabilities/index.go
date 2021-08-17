@@ -49,7 +49,7 @@ func (this *IndexAction) RunGet(params struct {
 		query += ";"
 	}
 
-	list, err := vulnerabilities_server.List(&vulnerabilities.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, Query: query, UserId: uint64(this.UserId())})
+	list, err := vulnerabilities_server.List(&vulnerabilities.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, Query: query, UserId: uint64(this.UserId(true))})
 	if err != nil && list != nil {
 		//this.ErrorPage(err)
 		this.Show()

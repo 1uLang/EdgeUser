@@ -39,7 +39,7 @@ func (this *IndexAction) RunGet(params struct {
 	req.ServerIp = params.ServerIp
 	req.PageSize = params.pageSize
 	req.PageNo = params.PageNo
-	req.UserId = uint64(this.UserId())
+	req.UserId = uint64(this.UserId(true))
 	list, err := risk_server.AbnormalAccountList(req)
 	if err != nil {
 		this.Data["errorMessage"] = fmt.Sprintf("获取异常账号入侵威胁列表失败：%v", err)

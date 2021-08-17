@@ -49,7 +49,7 @@ func (this *IndexAction) RunGet(params struct{}) {
 	}
 	args := &risk.RiskSearchReq{}
 
-	args.UserId = uint64(this.UserId())
+	args.UserId = uint64(this.UserId(true))
 	args.PageSize = 1
 
 	for idx, fn := range fns {

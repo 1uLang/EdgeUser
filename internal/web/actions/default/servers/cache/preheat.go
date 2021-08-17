@@ -33,7 +33,7 @@ func (this *PreheatAction) RunPost(params struct {
 	defer this.CreateLogInfo("批量预热缓存")
 
 	// 查找当前用户的所有域名
-	serverNamesResp, err := this.RPC().ServerRPC().FindAllEnabledServerNamesWithUserId(this.UserContext(), &pb.FindAllEnabledServerNamesWithUserIdRequest{UserId: this.UserId()})
+	serverNamesResp, err := this.RPC().ServerRPC().FindAllEnabledServerNamesWithUserId(this.UserContext(), &pb.FindAllEnabledServerNamesWithUserIdRequest{UserId: this.UserId(true)})
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -67,7 +67,7 @@ func (this *PreheatAction) RunPost(params struct {
 	}
 
 	// 当前用户所在集群
-	clusterIdResp, err := this.RPC().UserRPC().FindUserNodeClusterId(this.UserContext(), &pb.FindUserNodeClusterIdRequest{UserId: this.UserId()})
+	clusterIdResp, err := this.RPC().UserRPC().FindUserNodeClusterId(this.UserContext(), &pb.FindUserNodeClusterIdRequest{UserId: this.UserId(true)})
 	if err != nil {
 		this.ErrorPage(err)
 		return

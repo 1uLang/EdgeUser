@@ -23,7 +23,7 @@ func (this *IndexAction) RunGet(params struct{}) {
 	countResp, err := this.RPC().ServerRPC().CountAllEnabledServersMatch(this.UserContext(), &pb.CountAllEnabledServersMatchRequest{
 		ServerGroupId:  0,
 		Keyword:        "",
-		UserId:         this.UserId(),
+		UserId:         this.UserId(true),
 		ProtocolFamily: "tcp",
 	})
 	if err != nil {
@@ -40,7 +40,7 @@ func (this *IndexAction) RunGet(params struct{}) {
 		ServerGroupId:  0,
 		Keyword:        "",
 		ProtocolFamily: "tcp",
-		UserId:         this.UserId(),
+		UserId:         this.UserId(true),
 	})
 	if err != nil {
 		this.ErrorPage(err)

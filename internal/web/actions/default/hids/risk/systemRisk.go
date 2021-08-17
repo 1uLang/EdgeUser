@@ -41,7 +41,7 @@ func (this *SystemRiskAction) RunGet(params struct {
 	req.PageSize = params.PageSize
 	req.PageNo = params.PageNo
 
-	req.UserId = uint64(this.UserId())
+	req.UserId = uint64(this.UserId(true))
 
 	//系统漏洞数汇总
 	risk, err := risk_server.SystemDistributed(req)

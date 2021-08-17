@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	edge_user_model "github.com/1uLang/zhiannet-api/edgeUsers/model"
+	edge_user_server "github.com/1uLang/zhiannet-api/edgeUsers/server"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/dao"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/oplogs"
@@ -19,7 +21,7 @@ import (
 type ParentAction struct {
 	actions.ActionObject
 	userName 	string
-	fullName 	string
+	parentId 	uint64
 	rpcClient *rpc.RPCClient
 }
 
@@ -76,24 +78,30 @@ func (this *ParentAction) TinyMenu(menuItem string) {
 	this.Data["tinyMenuItem"] = menuItem
 }
 
-func (this *ParentAction) UserId() int64 {
-	return this.Context.GetInt64("userId")
-}
-func (this *ParentAction) FullName() (string, error) {
+func (this *ParentAction) UserId(parent ...bool) int64 {
+	userId := this.Context.GetInt64("userId")
+	if len(parent) > 0 && parent[0]{
+		parentId,err := this.ParentId()
+		if err != nil {
+			logs.Error(err)
+		}
+		if parentId != 0 {
+			return int64(parentId)
+		}
+	}
 
-	if this.fullName != "" {
-		return this.fullName, nil
+	return userId
+}
+func (this *ParentAction) ParentId() (uint64, error) {
+	if this.parentId != 0 {
+		return this.parentId,nil
 	}
-	userResp, err := this.RPC().UserRPC().FindEnabledUser(this.UserContext(), &pb.FindEnabledUserRequest{UserId: this.UserId()})
+	parentId,err := edge_user_server.GetParentId(&edge_user_model.GetParentIdReq{UserId: uint64(this.UserId())})
 	if err != nil {
-		return "", err
+		return 0, err
 	}
-	user := userResp.User
-	if user == nil {
-		return "", fmt.Errorf("无效的用户id")
-	}
-	this.fullName = user.Fullname
-	return user.Fullname, nil
+	this.parentId = parentId
+	return this.parentId,nil
 }
 func (this *ParentAction) UserName() (string, error) {
 
@@ -159,7 +167,7 @@ func (this *ParentAction) UserContext() context.Context {
 		}
 		this.rpcClient = rpcClient
 	}
-	return this.rpcClient.Context(this.UserId())
+	return this.rpcClient.Context(this.UserId(true))
 }
 
 // 校验Feature

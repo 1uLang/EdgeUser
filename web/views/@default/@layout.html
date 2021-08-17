@@ -48,7 +48,7 @@
         <div class="ui labeled menu vertical blue inverted tiny borderless">
             <div class="item"></div>
             <div v-for="module in teaModules">
-                <a v-if="module.subItems && module.subItems.length>0" class="item" :class="{active:curSelectCode===module.code}" :href="onChangeUrl(module.url)"
+                <a v-if="module.subItems && module.subItems.length>0" class="item" :class="{active:curSelectCode===module.code}" :href="onChangeUrl(module)"
                    @click="onSetLeftTouchCode(module.code)">
                     <span v-if="module.code.length > 0">
 						<i class="window restore outline icon" v-if="module.icon == null"></i>
@@ -57,12 +57,12 @@
 					</span>
                 </a>
                 <div v-if="module.subItems && module.subItems.length>0 && curSelectCode == module.code" class="sub-items">
-                    <a class="item" v-for="subItem in module.subItems" v-if="subItem.isOn !== false" :href="onChangeUrl(subItem.url)" style="padding: 0.9em 1em;" @click="onOpenDialog">
+                    <a class="item" v-for="subItem in module.subItems" v-if="subItem.isOn !== false" :href="onChangeUrl(subItem)" style="padding: 0.9em 1em;" @click="onOpenDialog">
                         <i class="icon angle right" style="margin: 0;float: left;" v-if="subItem.code == teaMenu"></i>
                         <span class="module-name">{{subItem.name}}</span>
                     </a>
                 </div>
-                <a v-if="!module.subItems ||module.subItems.length==0" class="item" :href="onChangeUrl(module.url)"
+                <a v-if="!module.subItems ||module.subItems.length==0" class="item" :href="onChangeUrl(module)"
                    :class="{active:curSelectCode===module.code}" @click="onSetLeftTouchCode(module.code)">
 
                     <span v-if="module.code.length > 0">

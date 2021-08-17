@@ -44,7 +44,7 @@ func (this *CreateAction) RunPost(params struct {
 		return
 	}
 	if params.Type == 1 {
-		req := &targets.AddReq{Address: params.Address, UserId: uint64(this.UserId())}
+		req := &targets.AddReq{Address: params.Address, UserId: uint64(this.UserId(true))}
 		req.Description = params.Desc
 
 		_, err = targets_server.Add(req)
@@ -57,7 +57,7 @@ func (this *CreateAction) RunPost(params struct {
 	} else if params.Type == 2{
 
 		req := &scans.AddReq{}
-		req.UserId = uint64(this.UserId())
+		req.UserId = uint64(this.UserId(true))
 		req.Settings.Name = params.Address
 		req.Settings.Text_targets = params.Address
 		req.Settings.Description = params.Desc

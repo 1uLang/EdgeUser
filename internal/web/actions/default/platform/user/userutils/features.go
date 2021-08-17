@@ -1,5 +1,10 @@
 package userutils
 
+import (
+	"github.com/1uLang/zhiannet-api/edgeUsers/model"
+	"github.com/1uLang/zhiannet-api/edgeUsers/server"
+	"github.com/iwind/TeaGo/lists"
+)
 
 var (
 	// 所有功能列表，注意千万不能在运行时进行修改
@@ -180,6 +185,11 @@ var (
 			Description: "用户可以新增、删除子账号以及配置其权限",
 		},
 		{
+			Name:        "创建子账号",
+			Code:        "platform.userCreate",
+			Description: "用户可以新增子账号",
+		},
+		{
 			Name:        "操作日志",
 			Code:        "platform.logs",
 			Description: "用户可以查看用户及其子账号的操作日志",
@@ -214,3 +224,11 @@ func FindUserFeature(code string) *UserFeature {
 	return nil
 }
 
+func CheckCreateIsOn(userId int64, checkCode string) (bool,error ){
+
+	userFeatureCodes, err := server.FindUserFeatures(&model.FindUserFeaturesReq{UserId: userId})
+	if err != nil {
+		return false, err
+	}
+	return lists.ContainsString(userFeatureCodes, checkCode),nil
+}

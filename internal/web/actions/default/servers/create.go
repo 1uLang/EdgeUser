@@ -24,7 +24,7 @@ func (this *CreateAction) Init() {
 }
 
 func (this *CreateAction) RunGet(params struct{}) {
-	clusterIdResp, err := this.RPC().UserRPC().FindUserNodeClusterId(this.UserContext(), &pb.FindUserNodeClusterIdRequest{UserId: this.UserId()})
+	clusterIdResp, err := this.RPC().UserRPC().FindUserNodeClusterId(this.UserContext(), &pb.FindUserNodeClusterIdRequest{UserId: this.UserId(true)})
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -47,7 +47,7 @@ func (this *CreateAction) RunPost(params struct {
 	CSRF *actionutils.CSRF
 }) {
 	// 检查用户所在集群
-	clusterIdResp, err := this.RPC().UserRPC().FindUserNodeClusterId(this.UserContext(), &pb.FindUserNodeClusterIdRequest{UserId: this.UserId()})
+	clusterIdResp, err := this.RPC().UserRPC().FindUserNodeClusterId(this.UserContext(), &pb.FindUserNodeClusterIdRequest{UserId: this.UserId(true)})
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -414,7 +414,7 @@ func (this *CreateAction) RunPost(params struct {
 	}
 
 	createResp, err := this.RPC().ServerRPC().CreateServer(this.UserContext(), &pb.CreateServerRequest{
-		UserId:           this.UserId(),
+		UserId:           this.UserId(true),
 		AdminId:          0,
 		Type:             serverconfigs.ServerTypeHTTPProxy,
 		Name:             serverNames[0].Name,

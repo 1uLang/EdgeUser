@@ -17,7 +17,7 @@ func (this *IndexAction) Init() {
 
 func (this *IndexAction) RunGet(params struct{}) {
 
-	config, err := configloaders.LoadSecurityConfig(this.UserId())
+	config, err := configloaders.LoadSecurityConfig(this.UserId(true))
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -35,7 +35,7 @@ func (this *IndexAction) RunPost(params struct {
 	Must *actions.Must
 }) {
 	//defer this.CreateLogInfo("修改登录设置")
-	config, err := configloaders.LoadSecurityConfig(this.UserId())
+	config, err := configloaders.LoadSecurityConfig(this.UserId(true))
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -56,7 +56,7 @@ func (this *IndexAction) RunPost(params struct {
 	// 允许本地
 	config.AllowLocal = true
 
-	err = configloaders.UpdateSecurityConfig(config, this.UserId())
+	err = configloaders.UpdateSecurityConfig(config, this.UserId(true))
 	if err != nil {
 		this.ErrorPage(err)
 		return

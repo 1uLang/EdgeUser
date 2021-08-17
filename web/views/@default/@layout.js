@@ -7,7 +7,6 @@ Tea.context(function () {
 	if (typeof this.leftMenuItemIsDisabled == "undefined") {
 		this.leftMenuItemIsDisabled = false
 	}
-
 	this.$delay(function () {
 		if (this.$refs.focus != null) {
 			this.$refs.focus.focus()
@@ -77,8 +76,13 @@ Tea.context(function () {
 		this.success = window.NotifyPopup
 	}
 
-	this.onChangeUrl = function (url,code) {
-        let tempUrl = url
+	this.onChangeUrl = function (module,code) {
+        let tempUrl = module.url
+
+		//跳转到一级子菜单
+		if(module.subItems && module.subItems.length>0){
+			tempUrl = module.subItems[0].url
+		}
         if(tempUrl){
             if(tempUrl.indexOf("nfw") != -1){
                 let curSelectNode = localStorage.getItem("nfwSelectNodeId");

@@ -17,10 +17,19 @@ func (this *IndexAction) Init() {
 }
 
 func (this *IndexAction) RunGet(params struct{}) {
+	parentId,err := this.ParentId()
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	searchId := this.UserId(true)
+	if searchId == 0 {
+		searchId = int64(parentId)
+	}
 	countResp, err := this.RPC().ServerRPC().CountAllEnabledServersMatch(this.UserContext(), &pb.CountAllEnabledServersMatchRequest{
 		ServerGroupId:        0,
 		Keyword:        "",
-		UserId:         this.UserId(),
+		UserId:         this.UserId(true),
 		ProtocolFamily: "http",
 	})
 	if err != nil {
@@ -37,7 +46,7 @@ func (this *IndexAction) RunGet(params struct{}) {
 		ServerGroupId:        0,
 		Keyword:        "",
 		ProtocolFamily: "http",
-		UserId:         this.UserId(),
+		UserId:         this.UserId(true),
 	})
 	if err != nil {
 		this.ErrorPage(err)

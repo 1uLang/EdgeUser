@@ -39,7 +39,7 @@ func (this *WeakAction) RunGet(params struct {
 	req.PageSize = params.PageSize
 	req.PageNo = params.PageNo
 
-	req.UserId = uint64(this.UserId())
+	req.UserId = uint64(this.UserId(true))
 	list, err := risk_server.WeakList(req)
 	if err != nil {
 		this.Data["errorMessage"] = fmt.Errorf("获取弱口令信息失败：%v", err)

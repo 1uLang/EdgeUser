@@ -23,15 +23,12 @@ var sharedSecurityConfig *systemconfigs.SecurityConfig = nil
 func LoadSecurityConfig(userId int64) (*systemconfigs.SecurityConfig, error) {
 	locker.Lock()
 	defer locker.Unlock()
-	fmt.Println("userid----", userId)
 	config, err := loadSecurityConfig(userId)
-	fmt.Println("config-----", *config)
 	if err != nil {
 		return nil, err
 	}
 
 	v := reflect.Indirect(reflect.ValueOf(config)).Interface().(systemconfigs.SecurityConfig)
-	fmt.Println("config2-----", v)
 	return &v, nil
 }
 

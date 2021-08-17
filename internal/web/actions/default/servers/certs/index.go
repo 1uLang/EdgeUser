@@ -37,7 +37,7 @@ func (this *IndexAction) RunGet(params struct {
 		// all
 		resp, err := this.RPC().SSLCertRPC().CountSSLCerts(this.UserContext(), &pb.CountSSLCertRequest{
 			Keyword: params.Keyword,
-			UserId:  this.UserId(),
+			UserId:  this.UserId(true),
 		})
 		if err != nil {
 			this.ErrorPage(err)
@@ -49,7 +49,7 @@ func (this *IndexAction) RunGet(params struct {
 		resp, err = this.RPC().SSLCertRPC().CountSSLCerts(this.UserContext(), &pb.CountSSLCertRequest{
 			IsCA:    true,
 			Keyword: params.Keyword,
-			UserId:  this.UserId(),
+			UserId:  this.UserId(true),
 		})
 		if err != nil {
 			this.ErrorPage(err)
@@ -61,7 +61,7 @@ func (this *IndexAction) RunGet(params struct {
 		resp, err = this.RPC().SSLCertRPC().CountSSLCerts(this.UserContext(), &pb.CountSSLCertRequest{
 			IsAvailable: true,
 			Keyword:     params.Keyword,
-			UserId:      this.UserId(),
+			UserId:      this.UserId(true),
 		})
 		if err != nil {
 			this.ErrorPage(err)
@@ -73,7 +73,7 @@ func (this *IndexAction) RunGet(params struct {
 		resp, err = this.RPC().SSLCertRPC().CountSSLCerts(this.UserContext(), &pb.CountSSLCertRequest{
 			IsExpired: true,
 			Keyword:   params.Keyword,
-			UserId:    this.UserId(),
+			UserId:    this.UserId(true),
 		})
 		if err != nil {
 			this.ErrorPage(err)
@@ -85,7 +85,7 @@ func (this *IndexAction) RunGet(params struct {
 		resp, err = this.RPC().SSLCertRPC().CountSSLCerts(this.UserContext(), &pb.CountSSLCertRequest{
 			ExpiringDays: 7,
 			Keyword:      params.Keyword,
-			UserId:       this.UserId(),
+			UserId:       this.UserId(true),
 		})
 		if err != nil {
 			this.ErrorPage(err)
@@ -97,7 +97,7 @@ func (this *IndexAction) RunGet(params struct {
 		resp, err = this.RPC().SSLCertRPC().CountSSLCerts(this.UserContext(), &pb.CountSSLCertRequest{
 			ExpiringDays: 30,
 			Keyword:      params.Keyword,
-			UserId:       this.UserId(),
+			UserId:       this.UserId(true),
 		})
 		if err != nil {
 			this.ErrorPage(err)
@@ -124,7 +124,7 @@ func (this *IndexAction) RunGet(params struct {
 			Offset:  page.Offset,
 			Size:    page.Size,
 			Keyword: params.Keyword,
-			UserId:  this.UserId(),
+			UserId:  this.UserId(true),
 		})
 	case "ca":
 		page = this.NewPage(countCA)

@@ -34,7 +34,7 @@ func (this *IndexAction) RunGet(params struct {
 
 	billsResp, err := this.RPC().UserBillRPC().ListUserBills(this.UserContext(), &pb.ListUserBillsRequest{
 		PaidFlag: params.PaidFlag,
-		UserId:   this.UserId(),
+		UserId:   this.UserId(true),
 		Month:    params.Month,
 		Offset:   page.Offset,
 		Size:     page.Size,

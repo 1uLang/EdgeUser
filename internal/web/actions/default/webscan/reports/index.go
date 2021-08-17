@@ -37,7 +37,7 @@ func (this *IndexAction) RunGet(params struct {
 	if params.PageSize < 0 {
 		params.PageSize = 20
 	}
-	list, err := reports_server.List(&reports.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, UserId: uint64(this.UserId())})
+	list, err := reports_server.List(&reports.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, UserId: uint64(this.UserId(true))})
 	//if err != nil && list == nil {
 	//	this.ErrorPage(err)
 	//	return
@@ -46,7 +46,7 @@ func (this *IndexAction) RunGet(params struct {
 	if lists, ok := list["reports"]; ok {
 		reports = lists.([]interface{})
 	}
-	nessus_list, err := nessus_scans_server.ListReport(&nessus_scans_model.ScansListReq{UserId: uint64(this.UserId())})
+	nessus_list, err := nessus_scans_server.ListReport(&nessus_scans_model.ScansListReq{UserId: uint64(this.UserId(true))})
 	//if err != nil {
 	//	this.ErrorPage(err)
 	//	return
@@ -76,7 +76,7 @@ func (this *IndexAction) RunPost(params struct {
 	if params.PageSize < 0 {
 		params.PageSize = 20
 	}
-	list, err := reports_server.List(&reports.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, UserId: uint64(this.UserId())})
+	list, err := reports_server.List(&reports.ListReq{Limit: params.PageSize, C: params.PageNo * params.PageSize, UserId: uint64(this.UserId(true))})
 	//if err != nil && list == nil {
 	//	this.ErrorPage(err)
 	//	return
@@ -85,7 +85,7 @@ func (this *IndexAction) RunPost(params struct {
 	if lists, ok := list["reports"]; ok {
 		reports = lists.([]interface{})
 	}
-	nessus_list, err := nessus_scans_server.ListReport(&nessus_scans_model.ScansListReq{UserId: uint64(this.UserId())})
+	nessus_list, err := nessus_scans_server.ListReport(&nessus_scans_model.ScansListReq{UserId: uint64(this.UserId(true))})
 	//if err != nil {
 	//	this.ErrorPage(err)
 	//	return

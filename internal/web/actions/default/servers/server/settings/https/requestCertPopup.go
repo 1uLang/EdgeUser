@@ -60,7 +60,7 @@ func (this *RequestCertPopupAction) RunGet(params struct {
 
 	// 用户
 	acmeUsersResp, err := this.RPC().ACMEUserRPC().FindAllACMEUsers(this.UserContext(), &pb.FindAllACMEUsersRequest{
-		UserId: this.UserId(),
+		UserId: this.UserId(true),
 	})
 	userMaps := []maps.Map{}
 	for _, user := range acmeUsersResp.AcmeUsers {

@@ -2,13 +2,6 @@ package helpers
 
 import (
 	"errors"
-	"fmt"
-	"github.com/1uLang/zhiannet-api/common/cache"
-	"github.com/TeaOSLab/EdgeUser/internal/utils"
-	"net/http"
-	"reflect"
-	"time"
-
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/configloaders"
 	teaconst "github.com/TeaOSLab/EdgeUser/internal/const"
@@ -17,6 +10,8 @@ import (
 	"github.com/iwind/TeaGo/lists"
 	"github.com/iwind/TeaGo/logs"
 	"github.com/iwind/TeaGo/maps"
+	"net/http"
+	"reflect"
 )
 
 // 认证拦截
@@ -107,18 +102,18 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 		initMethod.Call([]reflect.Value{})
 	}
 	//fmt.Println("每次都执行的事件url=", action.Request.RequestURI, userId)
-	if !utils.UrlIn(action.Request.RequestURI) {
-		res, _ := cache.GetInt(fmt.Sprintf("login_success_userid_%v", userId))
-		if res == 0 {
-			//30分钟没有操作  自动退出
-			session.Delete()
-			cache.DelKey(fmt.Sprintf("login_success_userid_%v", userId))
-			this.login(action)
-			return false
-		}
-		//续期
-		cache.Incr(fmt.Sprintf("login_success_userid_%v", userId), time.Minute*30)
-	}
+	//if !utils.UrlIn(action.Request.RequestURI) {
+	//	res, _ := cache.GetInt(fmt.Sprintf("login_success_userid_%v", userId))
+	//	if res == 0 {
+	//		//30分钟没有操作  自动退出
+	//		session.Delete()
+	//		cache.DelKey(fmt.Sprintf("login_success_userid_%v", userId))
+	//		this.login(action)
+	//		return false
+	//	}
+	//	//续期
+	//	cache.Incr(fmt.Sprintf("login_success_userid_%v", userId), time.Minute*30)
+	//}
 
 	return true
 }

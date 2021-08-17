@@ -38,7 +38,7 @@ func (this *IndexAction) RunGet(params struct {
 	}
 
 	req := &agent.SearchReq{}
-	req.UserId = uint64(this.UserId())
+	req.UserId = uint64(this.UserId(true))
 	req.PageNo = params.PageNo
 	req.PageSize = params.PageSize
 	req.ServerIp = params.ServerIp
@@ -68,7 +68,7 @@ func (this *IndexAction) RunPost(params struct {
 	}
 
 	req := &agent.SearchReq{}
-	req.UserId = uint64(this.UserId())
+	req.UserId = uint64(this.UserId(true))
 	req.PageNo = params.PageNo
 	req.PageSize = params.PageSize
 	req.ServerIp = params.ServerIp

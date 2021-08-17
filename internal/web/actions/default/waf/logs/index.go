@@ -45,7 +45,7 @@ func (this *IndexAction) RunGet(params struct {
 		ServerGroupId:  0,
 		Keyword:        "",
 		ProtocolFamily: "http",
-		UserId:         this.UserId(),
+		UserId:         this.UserId(true),
 	})
 	if err != nil {
 		this.ErrorPage(err)
@@ -98,7 +98,7 @@ func (this *IndexAction) RunGet(params struct {
 
 		resp, err := this.RPC().HTTPAccessLogRPC().ListHTTPAccessLogs(this.UserContext(), &pb.ListHTTPAccessLogsRequest{
 			RequestId:           params.RequestId,
-			UserId:              this.UserId(),
+			UserId:              this.UserId(true),
 			ServerId:            params.ServerId,
 			FirewallPolicyId:    params.FirewallPolicyId,
 			FirewallRuleGroupId: params.GroupId,
@@ -133,7 +133,7 @@ func (this *IndexAction) RunGet(params struct {
 		if len(params.RequestId) > 0 {
 			this.Data["hasPrev"] = true
 			prevResp, err := this.RPC().HTTPAccessLogRPC().ListHTTPAccessLogs(this.UserContext(), &pb.ListHTTPAccessLogsRequest{
-				UserId:              this.UserId(),
+				UserId:              this.UserId(true),
 				ServerId:            params.ServerId,
 				RequestId:           params.RequestId,
 				FirewallPolicyId:    params.FirewallPolicyId,

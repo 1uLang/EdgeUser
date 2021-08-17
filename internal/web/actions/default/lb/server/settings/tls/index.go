@@ -107,7 +107,7 @@ func (this *IndexAction) RunPost(params struct {
 	}
 
 	// 检查端口是否被使用
-	clusterIdResp, err := this.RPC().UserRPC().FindUserNodeClusterId(this.UserContext(), &pb.FindUserNodeClusterIdRequest{UserId: this.UserId()})
+	clusterIdResp, err := this.RPC().UserRPC().FindUserNodeClusterId(this.UserContext(), &pb.FindUserNodeClusterIdRequest{UserId: this.UserId(true)})
 	if err != nil {
 		this.ErrorPage(err)
 		return

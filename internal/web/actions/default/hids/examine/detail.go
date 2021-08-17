@@ -28,13 +28,13 @@ func (this *DetailAction) RunGet(params struct {
 	}
 	info, err := examine_server.Details(&examine.DetailsReq{
 		MacCode: params.MacCode,
-		UserId: uint64(this.UserId()),
+		UserId: uint64(this.UserId(true)),
 	})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	list, err := examine_server.List(&examine.SearchReq{UserId: uint64(this.UserId()),Type: -1, Score: -1, State: -1})
+	list, err := examine_server.List(&examine.SearchReq{UserId: uint64(this.UserId(true)),Type: -1, Score: -1, State: -1})
 	if err != nil {
 		this.ErrorPage(err)
 		return

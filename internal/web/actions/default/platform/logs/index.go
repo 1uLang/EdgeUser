@@ -1,6 +1,7 @@
 package logs
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/common/model/edge_logs"
 	edge_logs_server "github.com/1uLang/zhiannet-api/common/server/edge_logs_server"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
@@ -50,7 +51,7 @@ func (this *IndexAction) RunGet(params struct {
 
 	//先获取总数
 	total, err := edge_logs_server.GetLogNum(&edge_logs.UserLogReq{
-		UserId:    uint64(this.UserId()),
+		UserId:    uint64(this.UserId(true)),
 		StartTime: startTime,
 		EndTime:   endTime,
 		Keyword:   params.Keyword,
@@ -60,14 +61,14 @@ func (this *IndexAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-
+	fmt.Println(total)
 	page := this.NewPage(total)
 	this.Data["page"] = page.AsHTML()
 	//fmt.Println("page====", page.Offset, page.Size,int(page.Offset / page.Size)+1)
 	list := make([]*edge_logs.UserLogResp, 0)
 	if total > 0 {
 		list, _, err = edge_logs_server.GetLogList(&edge_logs.UserLogReq{
-			UserId:    uint64(this.UserId()),
+			UserId:    uint64(this.UserId(true)),
 			StartTime: startTime,
 			EndTime:   endTime,
 			Keyword:   params.Keyword,

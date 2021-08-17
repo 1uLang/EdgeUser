@@ -46,7 +46,7 @@ func (this *CreateAction) RunPost(params struct {
 			err = nessus_scans_server.CreateReport(&nessus_scans_model.CreateReportReq{
 				ID: strings.TrimSuffix(params.TarIds[k], "-host"),
 				HistoryId:        strings.TrimSuffix(v, "-host"),
-				UserId:    uint64(this.UserId()),
+				UserId:    uint64(this.UserId(true)),
 			})
 			if err != nil {
 				this.ErrorPage(err)
@@ -63,7 +63,7 @@ func (this *CreateAction) RunPost(params struct {
 			}{IDS: webscan_ids, Type: "scans"},
 			//TemplateId: "11111111-1111-1111-1111-111111111112", //快速
 			TemplateId: "11111111-1111-1111-1111-111111111126", //综合分析报表
-			UserId:     uint64(this.UserId()),
+			UserId:     uint64(this.UserId(true)),
 		}
 		_, err = reports_server.Create(req)
 		if err != nil {

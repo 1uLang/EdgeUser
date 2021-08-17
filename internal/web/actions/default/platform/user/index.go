@@ -4,6 +4,7 @@ import (
 	"github.com/1uLang/zhiannet-api/edgeUsers/model"
 	"github.com/1uLang/zhiannet-api/edgeUsers/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/user/userutils"
 	"github.com/iwind/TeaGo/maps"
 	timeutil "github.com/iwind/TeaGo/utils/time"
 	"github.com/tidwall/gjson"
@@ -55,5 +56,7 @@ func (this *IndexAction) RunGet() {
 		}
 		this.Data["users"] = userMaps
 	}
+	//判断用户权限
+	this.Data["createIsOn"],err = userutils.CheckCreateIsOn(this.UserId(),"platform.userCreate")
 	this.Show()
 }

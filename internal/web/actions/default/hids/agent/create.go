@@ -35,7 +35,7 @@ func (this *CreateAction) RunPost(params struct {
 		return
 	}
 
-	err = agent_server.Create(&agent_model.CreateReq{AgentIp: params.Address,UserId: uint64(this.UserId())})
+	err = agent_server.Create(&agent_model.CreateReq{AgentIp: params.Address,UserId: uint64(this.UserId(true))})
 	if err != nil {
 		this.ErrorPage(err)
 		return

@@ -34,7 +34,7 @@ func (this *IndexAction) RunGet(params struct {
 		ServerGroupId:  0,
 		Keyword:        "",
 		ProtocolFamily: "http",
-		UserId:         this.UserId(),
+		UserId:         this.UserId(true),
 	})
 	if err != nil {
 		this.ErrorPage(err)
@@ -81,7 +81,7 @@ func (this *IndexAction) RunGet(params struct {
 	// 统计数据
 	resp, err := this.RPC().ServerHTTPFirewallDailyStatRPC().ComposeServerHTTPFirewallDashboard(this.UserContext(), &pb.ComposeServerHTTPFirewallDashboardRequest{
 		Day:      timeutil.Format("Ymd"),
-		UserId:   this.UserId(),
+		UserId:   this.UserId(true),
 		ServerId: params.ServerId,
 	})
 	if err != nil {

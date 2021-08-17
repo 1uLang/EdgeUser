@@ -48,7 +48,7 @@ func (this *ScanAction) RunPost(params struct {
 	if params.ServerIp != "" {
 		req := &agent.SearchReq{}
 		req.ServerIp = params.ServerIp
-		req.UserId = uint64(this.UserId())
+		req.UserId = uint64(this.UserId(true))
 		list, err := agent_server.List(req)
 		if err != nil {
 			this.Error(fmt.Sprintf("获取主机信息失败：%v", err), 400)

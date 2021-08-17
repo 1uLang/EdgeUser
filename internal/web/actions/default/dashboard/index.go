@@ -17,7 +17,7 @@ func (this *IndexAction) Init() {
 }
 
 func (this *IndexAction) RunGet(params struct{}) {
-	dashboardResp, err := this.RPC().UserRPC().ComposeUserDashboard(this.UserContext(), &pb.ComposeUserDashboardRequest{UserId: this.UserId()})
+	dashboardResp, err := this.RPC().UserRPC().ComposeUserDashboard(this.UserContext(), &pb.ComposeUserDashboardRequest{UserId: this.UserId(true)})
 	if err != nil {
 		this.ErrorPage(err)
 		return

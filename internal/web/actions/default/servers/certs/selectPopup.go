@@ -41,7 +41,7 @@ func (this *SelectPopupAction) RunGet(params struct {
 	this.Data["viewSize"] = params.ViewSize
 
 	countResp, err := this.RPC().SSLCertRPC().CountSSLCerts(this.UserContext(), &pb.CountSSLCertRequest{
-		UserId: this.UserId(),
+		UserId: this.UserId(true),
 	})
 	if err != nil {
 		this.ErrorPage(err)
@@ -52,7 +52,7 @@ func (this *SelectPopupAction) RunGet(params struct {
 	this.Data["page"] = page.AsHTML()
 
 	listResp, err := this.RPC().SSLCertRPC().ListSSLCerts(this.UserContext(), &pb.ListSSLCertsRequest{
-		UserId: this.UserId(),
+		UserId: this.UserId(true),
 		Offset: page.Offset,
 		Size:   page.Size,
 	})

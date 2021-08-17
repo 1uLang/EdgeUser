@@ -40,7 +40,7 @@ func (this *IndexAction) RunGet(params struct {
 		return
 	}
 	req := &risk_model.SearchReq{}
-	req.UserId = uint64(this.UserId())
+	req.UserId = uint64(this.UserId(true))
 
 	//系统漏洞数汇总
 	risk, err = risk_server.SystemDistributed(req)
@@ -73,6 +73,7 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["weak"] = weak
 	this.Data["dangerAccount"] = dangerAccount
 	this.Data["configDefect"] = configDefect
+	fmt.Println(risk)
 	this.Data["datas"] = []map[string]interface{}{
 		{"name": "系统漏洞","value":risk.Total},
 		{"name": "弱口令","value":weak.Total},

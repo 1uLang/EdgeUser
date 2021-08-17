@@ -53,7 +53,7 @@ func (this *ExportExcelAction) RunGet(params struct {
 	}
 	logsResp := make([]*edge_logs.UserLogResp, 0)
 	logsResp, _, err = edge_logs_server.GetLogList(&edge_logs.UserLogReq{
-		UserId:    uint64(this.UserId()),
+		UserId:    uint64(this.UserId(true)),
 		StartTime: startTime,
 		EndTime:   endTime,
 		Keyword:   params.Keyword,
