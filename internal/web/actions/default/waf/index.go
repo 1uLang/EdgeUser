@@ -20,9 +20,9 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
-	if !this.ValidateFeature("waf") {
-		return
-	}
+	//if !this.ValidateFeature("waf") {
+	//	return
+	//}
 
 	this.Data["serverId"] = params.ServerId
 	this.Data["path"] = this.Request.URL.Path
