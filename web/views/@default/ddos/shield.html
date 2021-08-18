@@ -12,7 +12,7 @@
     </div>
 </div>
 <div>
-    <form method="get" class="ui form" action="link">
+    <form method="get" class="ui form" action="shield">
         <div class="ui margin"></div>
         <div class="ui menu basic text">
             <div class="item">
@@ -42,7 +42,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr align="center" style="height: 40px;" v-for="item in shieldList">
+            <tr align="center" style="height: 40px;" v-for="item in list">
                 <td>{{item.LocalAddress}}</td>
                 <td>{{item.RemoteAddress}}</td>
                 <td>{{item.ReleaseTime}}</td>
@@ -52,39 +52,4 @@
             </tbody>
         </table>
     </div>
-
-</div>
-<!--    <div v-show="tableState===2" style="border:1px solid #d7d7d7;height: 530px;padding: 15px 15px;margin-top: 15px;">-->
-<!--        <div class="ui fields inline" style="display:inline-flex;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">-->
-<!--            <form class="ui form" autocomplete="off">-->
-<!--                <div style="display:inline-flex;align-items: center;">-->
-<!--                    <div class="ui field" style="margin: 10px 0;">-->
-<!--                        <input type="text" name="src_ip" placeholder="请输入主机源IP" v-model="src_ip"/>-->
-<!--                    </div>-->
-<!--                    <button class="ui button" style="height: 38px;margin-left: 10px;" type="button"  @click="linkSearchList(2)">查询</button>-->
-<!--    &lt;!&ndash;                <button class="ui button" @click="onExport">导出</button>&ndash;&gt;-->
-<!--                </div>-->
-<!--            </form>-->
-<!--        </div>-->
-<!--        <div style="width: 100%;height: 430px;overflow-x: auto; overflow-y: auto;">-->
-<!--            <table  class="ui table selectable celled" border="1" style="border-collapse: collapse;">-->
-<!--                <thead>-->
-<!--                    <tr align="center">-->
-<!--                        <th class='table-head-bg' style="width: 214px;" >主机IP</th>-->
-<!--                        <th class='table-head-bg' style="width: 214px;" >访问源IP</th>-->
-<!--                        <th class='table-head-bg' style="width: 214px;" >活动连接</th>-->
-<!--                        <th class='table-head-bg' style="width: 326px;" >全部连接</th>-->
-<!--                    </tr>-->
-<!--                </thead>-->
-<!--                <tbody >-->
-<!--                    <tr align="center" style="height: 40px;" v-for="item in linkList">-->
-<!--                        <td>{{item.LocalAddress}}</td>-->
-<!--                        <td>{{item.RemoteAddress}}</td>-->
-<!--                        <td>{{item.PortLinks}}</td>-->
-<!--                        <td>{{item.TotalLinks}}</td>-->
-<!--                    </tr>-->
-<!--                </tbody>-->
-<!--            </table>-->
-<!--        </div>-->
-<!--    </div>-->
 </div>

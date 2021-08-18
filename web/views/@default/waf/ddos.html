@@ -1,0 +1,85 @@
+{$layout}
+{$template "/datepicker"}
+<div style="display: flex;justify-content: space-between;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-bottom: 30px;">
+    <div align="right" style="display: inline-flex;">
+        <div style="line-height: 40px;text-align: center;">DDoS防护节点：</div>
+        <div class="ui field">
+            <div class="ui field">
+                <select class="ui dropdown auto-width" @change="showHost" v-model="nodeId" name="nodeId">
+                    <option :value="item.id" v-for="item in ddos">{{item.name}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <form method="get" action="ddos" class="ui form" autocomplete="off">
+        <div class="ui fields inline">
+            <div class="ui field">
+                <input type="text" name="startTime" placeholder="开始日期" v-model="startTime" value="" style="width:8em"
+                       id="day-from-picker"/>
+            </div>
+            <div class="ui field">
+                <input type="text" name="endTime" placeholder="结束日期" v-model="endTime" value="" style="width:8em"
+                       id="day-to-picker"/>
+            </div>
+            <div class="ui field">攻击类型：</div>
+            <div class="ui field">
+                <select class="ui dropdown auto-width" name="attackType" v-model="attackType">
+                    <option value="0">全部</option>
+                    <option value="65535">[SYN]</option>
+                    <option value="131072">[ACK]</option>
+                    <option value="262144">[UDP]</option>
+                    <option value="524288">[ICMP]</option>
+                    <option value="1048576">[FRAG]</option>
+                    <option value="2097152">[NonIP]</option>
+                </select>
+            </div>
+            <div class="ui field">状态：</div>
+            <div class="ui field">
+                <select class="ui dropdown auto-width" name="status" v-model="status">
+                    <option value="0">全部</option>
+                    <option value="1">保护中</option>
+                    <option value="2">结束</option>
+                </select>
+            </div>
+            <div class="ui field">目的主机：</div>
+            <div class="ui field">
+                <input type="text" name="address" style="width:10em" v-model="address"/>
+            </div>
+            <div class="ui field">
+                <button type="button" class="ui button" @click="search">查询</button>
+            </div>
+        </div>
+    </form>
+    <div style="margin-top: 30px;width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;">
+        <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+            <tr align="center">
+                <th class='table-head-bg' style="width: 126px;">目的地址</th>
+                <th class='table-head-bg' style="width: 70px;">目的端口</th>
+                <th class='table-head-bg' style="width: 140px;">开始时间</th>
+                <th class='table-head-bg' style="width: 140px;">结束时间</th>
+                <th class='table-head-bg' style="width: 78px;">攻击类型</th>
+                <th class='table-head-bg' style="width: 113px;">高层协议</th>
+                <th class='table-head-bg' style="width: 77px;">状态</th>
+                <th class='table-head-bg' style="width: 116px;">最大流量</th>
+                <th class='table-head-bg' style="width: 182px;">攻击源地址</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr align="center" style="height: 40px;" v-for="item in attacks">
+                <td>{{item.DstAddress}}</td>
+                <td>{{item.DstPort}}</td>
+                <td>{{item.Begin}}</td>
+                <td>{{item.End}}</td>
+                <td>{{item.Flags}}</td>
+                <td>{{item.Highproto}}</td>
+                <td>{{toShowStatus(item.Status)}}</td>
+                <td>{{item.BpsIn}}</td>
+                <td>{{item.FromAddress}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

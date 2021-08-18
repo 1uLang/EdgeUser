@@ -12,7 +12,8 @@ func init() {
 			Data("teaMenu", "waf").
 			Prefix("/waf").
 			Get("", new(IndexAction)).
-
+			Data("teaMenu", "ddos").
+			Get("/ddos", new(DdosAction)).
 			EndAll()
 	})
 }

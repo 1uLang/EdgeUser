@@ -260,17 +260,17 @@
         var tempUserName = document.getElementById('username').value
         var tempFormData = new FormData();
         tempFormData.append("username", tempUserName)
-        // reqApi("post","/checkOTP",tempFormData,null,
-        // 		(res)=>{
-        // 			var optInputBox =  document.getElementById("optInputBox")
-        // 			tempShowOTP = res.data.requireOTP
-        // 			if(tempShowOTP){
-        // 				optInputBox.style.display = "block"
-        // 			}else{
-        // 				optInputBox.style.display = "none"
-        // 			}
-        // 		}
-        // 	)
+        reqApi("post","/checkOTP",tempFormData,null,
+        		(res)=>{
+        			var optInputBox =  document.getElementById("optInputBox")
+        			tempShowOTP = res.data.requireOTP
+        			if(tempShowOTP){
+        				optInputBox.style.display = "block"
+        			}else{
+        				optInputBox.style.display = "none"
+        			}
+        		}
+        	)
     }
 
     function onCheckDoLogin(frm, event) {

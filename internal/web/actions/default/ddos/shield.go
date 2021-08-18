@@ -1,9 +1,10 @@
-package host
+package ddos
 
 import (
-	"fmt"
+	"github.com/1uLang/zhiannet-api/ddos/model/ddos_host_ip"
+	"github.com/1uLang/zhiannet-api/ddos/request/host_status"
 	host_status_server "github.com/1uLang/zhiannet-api/ddos/server/host_status"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 )
 
 type ShieldAction struct {
@@ -15,56 +16,63 @@ func (this *ShieldAction) Init() {
 }
 
 func (this *ShieldAction) RunGet(params struct {
-	Addr   string
+	Address   string
 	NodeId uint64
 }) {
+	//ddos节点
+	ddos, _, err := host_status_server.GetDdosNodeList()
+	if err != nil {
+		this.Data["errorMessage"] = err.Error()
+		return
+	}
+	if len(ddos) == 0 {
+		this.Data["errorMessage"] = "未配置DDoS防火墙节点"
+		return
+	}
 	if params.NodeId == 0 {
-		this.ErrorPage(fmt.Errorf("请选择节点"))
-		return
+		params.NodeId = ddos[0].Id
 	}
-	if len(params.Addr) == 0 {
-		this.ErrorPage(fmt.Errorf("请选择释放屏蔽的主机"))
-		return
+	var all bool
+	if len(params.Address) == 0 {
+		all = true
 	}
-	list, err := host_status_server.GetHostShieldList(&host_status_server.ShieldReq{
-		Addr:   params.Addr,
-		NodeId: params.NodeId,
-	})
+	list := &host_status.StatusFblink{}
+	if all {
+		hosts, _, err := host_status_server.GetHostList(&ddos_host_ip.HostReq{
+			NodeId:   params.NodeId,
+			Addr:     params.Address,
+			PageSize: 999,
+			PageNum:  1,
+		})
+		if err != nil {
+			this.ErrorPage(err)
+			return
+		}
+		for _,host := range hosts {
+			hostShield, err := host_status_server.GetHostShieldList(&host_status_server.ShieldReq{
+				Addr:   host.Addr,
+				NodeId: params.NodeId,
+			})
+			if err != nil {
+				this.ErrorPage(err)
+				return
+			}
+			list.Fblink = append(list.Fblink, hostShield.Fblink...)
+		}
+	}else{
+		list, err = host_status_server.GetHostShieldList(&host_status_server.ShieldReq{
+			Addr:   params.Address,
+			NodeId: params.NodeId,
+		})
+	}
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	this.Data["shield"] = list.Fblink
-	// 创建日志
-	//defer this.CreateLog(oplogs.LevelInfo, "释放屏蔽主机 %v", params.Addr)
+	this.Data["list"] = list.Fblink
+	this.Data["ddos"] = ddos
+	this.Data["nodeId"] = params.NodeId
+	this.Data["address"] = params.Address
 
-	this.Success()
-}
-
-func (this *ShieldAction) RunPost(params struct {
-	Addr   []string
-	NodeId uint64
-}) {
-	if params.NodeId == 0 {
-		this.ErrorPage(fmt.Errorf("请选择节点"))
-		return
-	}
-	if len(params.Addr) == 0 {
-		this.ErrorPage(fmt.Errorf("请选择释放屏蔽的主机"))
-		return
-	}
-	//GetHostShieldList
-	err := host_status_server.ReleaseShield(&host_status_server.ReleaseShieldReq{
-		Addr:   params.Addr,
-		NodeId: params.NodeId,
-	})
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-
-	// 创建日志
-	//defer this.CreateLog(oplogs.LevelInfo, "释放屏蔽主机 %v", params.Addr)
-
-	this.Success()
+	this.Show()
 }

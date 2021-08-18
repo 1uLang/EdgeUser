@@ -1,5 +1,17 @@
 {$layout}
 
+<div style="display: flex;justify-content: space-between;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+    <div align="right" style="display: inline-flex;">
+        <div style="line-height: 40px;text-align: center;">DDoS防护节点：</div>
+        <div class="ui field">
+            <div class="ui field">
+                <select class="ui dropdown auto-width" @change="showHost" v-model="nodeId">
+                    <option :value="item.id" v-for="item in ddos">{{item.name}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
 <div>
     <form method="get" class="ui form" action="host">
         <div class="ui margin"></div>
@@ -9,9 +21,9 @@
                     <div class="ui field">
                         <input type="text" name="address" placeholder="请输入主机IP" v-model="address"/>
                     </div>
-                    <!-- <div class="ui field">
+                    <div class="ui field">
                         <input type="text" name="nodeId"  :value="nodeId"  style="display: none"  />
-                    </div> -->
+                    </div>
                     <div class="ui field">
                         <button type="submit" class="ui button">搜索</button>
                     </div>
@@ -28,8 +40,6 @@
             <th class='table-head-bg' style="width: 122px;" colspan="2">带宽</th>
             <th class='table-head-bg' style="width: 465px;" colspan="8">频率</th>
             <th class='table-head-bg' style="width: 165px;" colspan="3">连接</th>
-            <th class='table-head-bg' style="width: 75px;" rowspan="2">防护策略</th>
-            <th class='table-head-bg' style="width: 120px;" rowspan="2">操作</th>
         </tr>
         <tr align="center">
             <th>IN</th>
@@ -64,13 +74,6 @@
             <td>{{item.tcp_conn_in}}</td>
             <td>{{item.tcp_conn_out}}</td>
             <td>{{item.udp_conn}}</td>
-            <td style="cursor: pointer;color: #0090cb;" @click="onOpenConfig(item.addr)">配置</td>
-            <td style="cursor: pointer;color: #0090cb;">
-                <div style="display: flex;flex-direction: row;justify-content: space-around;">
-                    <div class="edit_btn" @click="onUpdateConfig(item)">修改</div>
-                    <div class="del-btn" @click="onDeleteConfig(item.id)">删除</div>
-                </div>
-            </td>
         </tr>
         </tbody>
     </table>

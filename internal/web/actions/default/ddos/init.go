@@ -1,20 +1,22 @@
 package ddos
 
 import (
-	"github.com/TeaOSLab/EdgeAdmin/internal/configloaders"
-	"github.com/TeaOSLab/EdgeAdmin/internal/web/helpers"
+	"github.com/TeaOSLab/EdgeUser/internal/web/helpers"
 	"github.com/iwind/TeaGo"
 )
 
 func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
-			Helper(helpers.NewUserMustAuth(configloaders.AdminModuleCodeDdos)).
+			Helper(helpers.NewUserMustAuth("")).
 			Data("teaMenu", "ddos").
 			Prefix("/ddos").
-			Get("", new(IndexAction)).
-			//GetPost("/createPopup", new(CreatePopupAction)).
-			//GetPost("/ddos/host/shield_list", new(UpdatePopupAction)).
+			Data("teaMenu", "host").
+			Get("/host", new(HostAction)).//主机状态
+			Data("teaMenu", "shield").
+			Get("/shield", new(ShieldAction)). //连接监控
+			Data("teaMenu", "link").
+			Get("/link", new(LinkAction)). //屏蔽列表
 			EndAll()
 	})
 }

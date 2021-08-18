@@ -7,15 +7,15 @@ import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 )
 
-type IndexAction struct {
+type HostAction struct {
 	actionutils.ParentAction
 }
 
-func (this *IndexAction) Init() {
+func (this *HostAction) Init() {
 	this.Nav("", "", "")
 }
 
-func (this *IndexAction) RunGet(params struct {
+func (this *HostAction) RunGet(params struct {
 	Address  string
 	NodeId   uint64
 	PageNum  int
