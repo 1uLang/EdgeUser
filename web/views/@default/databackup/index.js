@@ -119,7 +119,7 @@ Tea.context(function () {
         this.bShowDialog = false
     }
 
-    this.tableData = [
-        {id:1,value1:"数据库agent.exe",value2:"CloudShield用户手册V1.0",value3:"100K",value4:"2021-06-30T21:52:20.123"}
-    ]
+    // this.tableData = [
+    //     {id:1,value1:"数据库agent.exe",value2:"CloudShield用户手册V1.0",value3:"100K",value4:"2021-06-30T21:52:20.123"}
+    // ]
 })
