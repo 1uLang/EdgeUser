@@ -59,7 +59,6 @@
           <div class="edit_btn" @click="onOpenDetail(item)">详情</div>
           <div class="del-btn" @click="onDelete(item.id)">删除</div>
         </div>
-
       </td>
     </tr>
     </tbody>
@@ -132,14 +131,14 @@
 <!--      <tr v-if="otpIsOn">-->
 <!--        <td colspan="2"><more-options-indicator>更多信息</more-options-indicator></td>-->
 <!--      </tr>-->
-      <tr v-if="otpIsOn">
+      <tr v-if="otpIsOn && otpIsOn1">
         <td>认证二维码</td>
         <td>
           <img :src="'/platform/user/otpQrcode?userId=' + userid"/>
           <p class="comment">可以通过二维码快速添加OTP认证信息到App中。</p>
         </td>
       </tr>
-      <tr v-if="otpIsOn">
+      <tr v-if="otpIsOn && otpIsOn1">
         <td>密钥</td>
         <td>{{otpParams}}</td>
       </tr>
