@@ -39,6 +39,9 @@ func (this *IndexAction) RunGet(params struct{}) {
 		return
 	}
 	this.Data["list"] = list.List
+	this.Data["quota"] = list.Quota
+	this.Data["used"] = list.Used
+
 	this.Show()
 }
 
