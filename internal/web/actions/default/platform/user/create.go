@@ -1,10 +1,6 @@
 package user
 
 import (
-	"fmt"
-	"github.com/1uLang/zhiannet-api/audit/model/audit_user_relation"
-	"github.com/1uLang/zhiannet-api/audit/request"
-	"github.com/1uLang/zhiannet-api/audit/server/user"
 	"github.com/1uLang/zhiannet-api/common/model/edge_logins"
 	"github.com/1uLang/zhiannet-api/common/server/edge_logins_server"
 	"github.com/1uLang/zhiannet-api/edgeUsers/model"
@@ -114,28 +110,28 @@ func (this *CreateAction) RunPost(params struct {
 	}
 
 	//创建审计系统的账号
-	auditResp, auditErr := user.AddUser(&user.AddUserReq{
-		User:        &request.UserReq{UserId: uint64(this.UserId())},
-		Email:       params.Email,
-		IsAdmin:     1,
-		NickName:    params.Username,
-		Opt:         1,
-		Password:    params.Pass1,
-		Phonenumber: params.Mobile,
-		RoleIds:     []uint64{},
-		RoleName:    "平台管理员",
-		Sex:         1,
-		Status:      1,
-		UserName:    params.Username,
-	})
-	if auditErr != nil || auditResp == nil {
-		this.ErrorPage(fmt.Errorf("创建账号失败"))
-		return
-	}
-	if auditResp.Code != 0 {
-		this.ErrorPage(fmt.Errorf(auditResp.Msg))
-		return
-	}
+	//auditResp, auditErr := user.AddUser(&user.AddUserReq{
+	//	User:        &request.UserReq{UserId: uint64(this.UserId())},
+	//	Email:       params.Email,
+	//	IsAdmin:     1,
+	//	NickName:    params.Username,
+	//	Opt:         1,
+	//	Password:    params.Pass1,
+	//	Phonenumber: params.Mobile,
+	//	RoleIds:     []uint64{},
+	//	RoleName:    "平台管理员",
+	//	Sex:         1,
+	//	Status:      1,
+	//	UserName:    params.Username,
+	//})
+	//if auditErr != nil || auditResp == nil {
+	//	this.ErrorPage(fmt.Errorf("创建账号失败"))
+	//	return
+	//}
+	//if auditResp.Code != 0 {
+	//	this.ErrorPage(fmt.Errorf(auditResp.Msg))
+	//	return
+	//}
 
 	userId, err := server.CreateUser(&model.CreateUserReq{
 		UserId:   uint64(this.UserId()),
@@ -155,14 +151,14 @@ func (this *CreateAction) RunPost(params struct {
 	defer this.CreateLogInfo("创建用户 %d", userId)
 
 	//关联账号
-	_, err = audit_user_relation.Add(&audit_user_relation.AuditReq{
-		UserId:      userId,
-		AuditUserId: uint64(auditResp.Data.Id),
-	})
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
+	//_, err = audit_user_relation.Add(&audit_user_relation.AuditReq{
+	//	UserId:      userId,
+	//	AuditUserId: uint64(auditResp.Data.Id),
+	//})
+	//if err != nil {
+	//	this.ErrorPage(err)
+	//	return
+	//}
 	// 用户账号和nextcloud账号进行关联
 	// 因为用户名是唯一的，所以加入用户名字段，减少脏数据的产生
 	err = nc_model.BindNCTokenAndUID(params.Username, int64(userId))
