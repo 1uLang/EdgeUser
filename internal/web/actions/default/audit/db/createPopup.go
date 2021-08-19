@@ -72,7 +72,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 
 	params.Must.
 		Field("type", params.Type).
-		In([]int{0, 1, 2, 3, 4}, "请选择类型")
+		In([]int{0, 1, 2, 3, 4, 5}, "请选择类型")
 
 	params.Must.
 		Field("version", params.Version).

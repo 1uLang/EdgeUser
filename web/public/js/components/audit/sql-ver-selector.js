@@ -57,7 +57,13 @@ Vue.component("sql-ver-selector", {
             {"name":"4.0"},
             {"name":"4.2"},
         ]
-
+        let assembly5 = [
+            {"name":"10G"},
+            {"name":"11G"},
+            {"name":"12C"},
+            {"name":"18C"},
+            {"name":"19C"},
+        ]
         switch(assemblyType){
             case 0:
                 assemblys = assembly0
@@ -73,6 +79,9 @@ Vue.component("sql-ver-selector", {
                 break;
             case 4:
                 assemblys = assembly4
+                break;
+            case 5:
+                assemblys = assembly5
                 break;
             default:
                 assemblys = assembly1
@@ -121,6 +130,13 @@ Vue.component("sql-ver-selector", {
               {"name":"4.0"},
               {"name":"4.2"},
           ]
+          let assembly5 = [
+              {"name":"10G"},
+              {"name":"11G"},
+              {"name":"12C"},
+              {"name":"18C"},
+              {"name":"19C"},
+          ]
           this.assemblys = assembly1
 
           switch(this.assemblyType){
@@ -138,6 +154,9 @@ Vue.component("sql-ver-selector", {
                   break;
               case "4":
                   this.assemblys = assembly4
+                  break;
+              case "5":
+                  this.assemblys = assembly5
                   break;
           }
           this.assemblyVer = ""
