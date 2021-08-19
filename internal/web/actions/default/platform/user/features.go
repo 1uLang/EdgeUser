@@ -92,6 +92,11 @@ func (this *FeaturesAction) RunPost(params struct {
 
 	Must *actions.Must
 }) {
+	if this.UserId() == params.UserId{
+		this.Fail("无权限")
+		return
+	}
+
 	defer this.CreateLogInfo("设置用户 %d 的功能列表", params.UserId)
 
 	err := server.UpdateUserFeatures(&model.UpdateUserFeaturesReq{

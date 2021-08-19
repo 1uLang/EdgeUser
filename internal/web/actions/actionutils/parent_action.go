@@ -57,7 +57,7 @@ func (this *ParentAction) NewPage(total int64, size ...int64) *Page {
 	if len(size) > 0 {
 		return NewActionPage(this, total, size[0])
 	}
-	return NewActionPage(this, total, 10)
+	return NewActionPage(this, total, 20)
 }
 
 func (this *ParentAction) Nav(mainMenu string, tab string, firstMenu string) {

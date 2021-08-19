@@ -1,0 +1,56 @@
+{$layout}
+
+<div style="width: 100%;height: 40px;display: flex;justify-content: flex-end;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-top: 10px;">
+    <div style="display: inline-flex;align-items: center;">
+        <div style="line-height: 40px;text-align: center;">DDoS防护节点：</div>
+        <div class="ui field">
+            <div class="ui field">
+                <select class="ui dropdown auto-width" @change="showHost" v-model="nodeId" name="nodeId">
+                    <option :value="item.id" v-for="item in ddos">{{item.name}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <form method="get" class="ui form" action="link">
+        <div class="ui margin"></div>
+        <div class="ui menu basic text">
+            <div class="item">
+                <div class="ui fields inline">
+                    <div class="ui field">
+                        <input type="text" name="address" placeholder="请输入主机IP" v-model="address"/>
+                    </div>
+                    <div class="ui field">
+                        <input type="text" name="nodeId" :value="nodeId" style="display: none"/>
+                    </div>
+                    <div class="ui field">
+                        <button type="submit" class="ui button">搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div style="width: 100%;height: 430px;overflow-x: auto; overflow-y: auto;">
+        <p class="comment" v-if="total == 0">暂时还没有连接监控数据。</p>
+        <table class="ui table selectable celled" border="1" style="border-collapse: collapse;" v-else>
+            <thead>
+            <tr align="center">
+                <th class='table-head-bg' style="width: 214px;">主机IP</th>
+                <th class='table-head-bg' style="width: 214px;">访问源IP</th>
+                <th class='table-head-bg' style="width: 214px;">活动连接</th>
+                <th class='table-head-bg' style="width: 326px;">全部连接</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr align="center" style="height: 40px;" v-for="item in list">
+                <td>{{item.LocalAddress}}</td>
+                <td>{{item.RemoteAddress}}</td>
+                <td>{{item.PortLinks}}</td>
+                <td>{{item.TotalLinks}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="page" v-html="page"></div>
+</div>

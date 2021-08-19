@@ -361,10 +361,12 @@ Tea.context(function () {
                 case "completed":
                     return "已完成";
                 case "processing":
-                    return "正在进行";
+                    return "扫描中";
                 case "running":
-                    return "正在进行";
+                    return "扫描中";
                 case "queued":
+                    return "队列中";
+                case "scheduled":
                     return "队列中";
                 case "stopping":
                     return "停止中";

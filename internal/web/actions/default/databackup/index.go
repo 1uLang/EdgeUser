@@ -3,10 +3,10 @@ package databackup
 import (
 	"bytes"
 
-	"github.com/1uLang/zhiannet-api/nextcloud/model"
-	"github.com/1uLang/zhiannet-api/nextcloud/request"
 	em "github.com/1uLang/zhiannet-api/edgeUsers/model"
 	es "github.com/1uLang/zhiannet-api/edgeUsers/server"
+	"github.com/1uLang/zhiannet-api/nextcloud/model"
+	"github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeUser/internal/oplogs"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
@@ -39,6 +39,10 @@ func (this *IndexAction) RunGet(params struct{}) {
 		return
 	}
 	this.Data["list"] = list.List
+	this.Data["quota"] = list.Quota
+	this.Data["used"] = list.Used
+	this.Data["percent"] = list.Percent
+
 	this.Show()
 }
 
@@ -72,7 +76,7 @@ func (this *IndexAction) RunPost(params struct {
 	}
 
 	// 创建日志
-	defer this.CreateLog(oplogs.LevelInfo, "上传nextcloud文件 %v", name)
+	defer this.CreateLog(oplogs.LevelInfo, "上传backup文件 %v", name)
 
 	this.Success()
 	// this.Show()

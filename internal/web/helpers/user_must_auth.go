@@ -141,7 +141,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 		{
 			"code": "waf",
 			"name": "态势感知",
-			"icon": "shield",
+			"icon": "eye",
 			"url":  "/waf",
 			"subItems": []maps.Map{
 				{
@@ -150,9 +150,65 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"url":  "/waf",
 				},
 				{
-					"name": "拦截日志",
+					"name": "WAF日志",
 					"code": "wafLogs",
 					"url":  "/waf/logs",
+				},
+				{
+					"name": "DDoS日志",
+					"code": "ddos",
+					"url":  "/waf/ddos",
+				},
+				{
+					"name": "IPS日志",
+					"code": "alarm",
+					"url":  "/waf/alarm",
+				},
+			},
+		},
+		{
+			"code": "ddos",
+			"name": "DDoS防护",
+			"icon": "shield",
+			"url":  "/ddos",
+			"subItems": []maps.Map{
+				{
+					"name": "主机状态",
+					"code": "host",
+					"url":  "/ddos/host",
+				},
+				{
+					"name": "连接监控",
+					"code": "link",
+					"url":  "/ddos/link",
+				},
+				{
+					"name": "屏蔽列表",
+					"code": "shield",
+					"url":  "/ddos/shield",
+				},
+			},
+		},
+		{
+			"code": "nfw",
+			"name": "云防火墙",
+			"icon": "bars",
+			"url":  "/nfw",
+			"subItems": []maps.Map{
+				{
+					"name": "ACL规则",
+					"code": "acl",
+					"url":  "/nfw/acl",
+				},
+				{
+					"name": "IPS规则",
+					"code": "ips",
+					"url":  "/nfw/ips",
+				},
+				{
+					"name": "会话列表",
+					"code": "conversation",
+					"url":  "/nfw/conversation",
 				},
 			},
 		},
@@ -168,16 +224,17 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"url":  "/servers",
 				},
 				{
-					"name": "证书管理",
-					"code": "certs",
-					"url":  "/servers/certs",
-				},
-				{
 					"name": "刷新预热",
 					"code": "cache",
 					"url":  "/servers/cache",
 				},
 			},
+		},
+		{
+			"code": "certs",
+			"name": "证书服务",
+			"icon": "leanpub",
+			"url":  "/servers/certs",
 		},
 		{
 			"code": "lb",
@@ -347,7 +404,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"icon": "sitemap",
 			"subItems": []maps.Map{
 				{
-					"name": "子账号管理",
+					"name": "账号管理",
 					"url":  "/platform/user",
 					"code": "user",
 				},

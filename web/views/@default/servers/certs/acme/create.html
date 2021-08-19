@@ -26,7 +26,7 @@
 		<div v-show="step == 'prepare'">
 			<div style="margin-bottom: 1em">
 				<radio name="authType" :v-value="'http'" v-model="authType">使用HTTP认证</radio> &nbsp;
-				<radio name="authType" :v-value="'dns'" v-model="authType">使用DNS认证</radio>
+<!--				<radio name="authType" :v-value="'dns'" v-model="authType">使用DNS认证</radio>-->
 			</div>
 			<div v-if="authType == 'http'">
 				使用HTTP的方式请求网址<code-label>/.well-known/acme-challenge/令牌</code-label>校验，该方式要求需要实现将域名解析到集群上，之后系统会自动生成网址信息。

@@ -264,6 +264,10 @@ func (this *RPCClient) IPLibraryRPC() pb.IPLibraryServiceClient {
 	return pb.NewIPLibraryServiceClient(this.pickConn())
 }
 
+func (this *RPCClient) DNSProviderRPC() pb.DNSProviderServiceClient {
+	return pb.NewDNSProviderServiceClient(this.pickConn())
+}
+
 // 构造用户上下文
 func (this *RPCClient) Context(userId int64) context.Context {
 	ctx := context.Background()

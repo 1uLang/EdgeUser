@@ -13,6 +13,7 @@ Tea.context(function () {
     this.editRemark = ""
     this.editEnabled = 0
     this.otpIsOn = false
+    this.otpIsOn1 = false
     this.otpParams = ""
     this.features = []
     this.selectList = []
@@ -52,6 +53,7 @@ Tea.context(function () {
     }
 
     this.onOpenDetail = function (item) {
+        this.otpIsOn1 = item.otpIsOn
         this.userid = item.id
         this.editUserName = item.username
         this.editPassword = ''
@@ -63,7 +65,6 @@ Tea.context(function () {
         this.otpIsOn = item.otpIsOn
         this.otpParams = item.otpParams
         this.editRemark = item.remark
-        console.log(item.remark)
         this.onChangeShowState(2)
     }
 

@@ -1,0 +1,32 @@
+.menu-define-color{
+    color: #000;
+    margin-right: 15px;
+    cursor: pointer;
+}
+.menu-select-color{
+    color: #0090cb;
+    margin-right: 15px;
+    cursor: pointer;
+}
+.table-head-bg{
+    height: 32px;
+    background: #f0f0f0;
+}
+.right-space{
+    margin-right: 10px;
+}
+
+.field > input{
+    height: 32px;
+}
+.field > button {
+    height: 32px;
+    background: #276ac6 !important;
+    color: #fff !important;
+    font-size: 14px;
+    font-weight: normal !important;
+    padding: 4px 20px !important;
+}
+.field > select {
+    padding: 4px !important;
+}

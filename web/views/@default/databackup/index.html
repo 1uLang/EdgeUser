@@ -2,9 +2,20 @@
 {$var "header"}
 {$end}
 
-<div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
-    <div :class="{'menu-select-color':pageState===1,'menu-define-color':pageState!=1}" @click="onChangeState(1)">文件列表</div>
-    <div :class="{'menu-select-color':pageState===2,'menu-define-color':pageState!=2}" @click="onChangeState(2)">上传文件</div>
+<div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;
+            padding-bottom: 10px;justify-content: space-between;align-items: center;">
+   
+    <div style="display: flex;flex-direction: row;">
+        <div :class="{'menu-select-color':pageState===1,'menu-define-color':pageState!=1}" @click="onChangeState(1)">文件列表</div>
+        <div :class="{'menu-select-color':pageState===2,'menu-define-color':pageState!=2}" @click="onChangeState(2)">上传文件</div>
+    </div>
+    <div style="display: flex;flex-direction: column;margin-top: 2px;">
+        <div>{{`${quota} (已使用 ${used})`}}</div>
+        <div class="Bar" style="display: inline-flex;">
+            <div class="progress-green-bg-style" style="width: percent"></div>
+        </div>
+    </div>
+    
 </div>
 
 <div v-if="pageState===1"  style="width: 100%;height: 600px;margin-top: 10px;overflow-x: auto; overflow-y: auto;">

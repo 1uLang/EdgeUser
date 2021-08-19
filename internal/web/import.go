@@ -42,7 +42,6 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/cache"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/certs"
-	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/components/waf"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/log"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/accessLog"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/cache"
@@ -84,6 +83,14 @@ import (
 
 	//数据备份
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/databackup"
+
+	//ddos攻击
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/ddos"
+
+	//ddos攻击
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/nfw/acl"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/nfw/conversation"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/nfw/ips"
 
 	//平台管理
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/ip_white"
