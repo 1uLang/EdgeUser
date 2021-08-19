@@ -21,6 +21,7 @@ Vue.component("sql-type-selector", {
 			{"name":"Microsoft SQL Server","id":"2"},
 			{"name":"PostgreSQL","id":"3"},
 			{"name":"MongoDB","id":"4"},
+			{"name":"Oracle","id":"5"},
 		]
 		return {
 			assemblys: assemblys,

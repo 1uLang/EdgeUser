@@ -33,6 +33,8 @@ Tea.context(function () {
                 return "PostgreSQL"
             case 4:
                 return "MongoDB"
+            case 5:
+                return "Oracle"
             default:
                 return "其他"
         }
