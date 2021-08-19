@@ -31,8 +31,8 @@
             </div>
         </div>
     </form>
-    <!-- <p class="comment" v-if="total == 0">暂时还没有主机高防IP。</p> -->
-    <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+     <p class="comment" v-if="total == 0">暂时还没有主机高防IP。</p>
+    <table class="ui table selectable celled" border="1" style="border-collapse: collapse;" v-else>
         <thead>
         <tr align="center">
             <th class='table-head-bg' style="width: 129px;" rowspan="2">高防IP</th>

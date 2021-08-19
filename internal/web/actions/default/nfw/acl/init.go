@@ -1,4 +1,4 @@
-package waf
+package acl
 
 import (
 	"github.com/TeaOSLab/EdgeUser/internal/web/helpers"
@@ -9,12 +9,9 @@ func init() {
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth("")).
-			Data("teaMenu", "waf").
-			Prefix("/waf").
+			Data("teaMenu", "acl").
+			Prefix("/nfw/acl").
 			Get("", new(IndexAction)).
-			Data("teaMenu", "ddos").
-			Get("/ddos", new(DdosAction)).
-			Get("/alarm", new(AlarmAction)).
 			EndAll()
 	})
 }

@@ -1,6 +1,8 @@
 package certs
 
 import (
+	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/certs/acme"
+	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/certs/acme/users"
 	"github.com/TeaOSLab/EdgeUser/internal/web/helpers"
 	"github.com/iwind/TeaGo"
 )
@@ -27,6 +29,20 @@ func init() {
 			Post("/delete", new(DeleteAction)).
 			GetPost("/updatePopup", new(UpdatePopupAction)).
 
+			// ACME
+			Prefix("/servers/certs/acme").
+			Data("leftMenuItem", "acme").
+			Get("", new(acme.IndexAction)).
+			GetPost("/create", new(acme.CreateAction)).
+			Post("/run", new(acme.RunAction)).
+			GetPost("/updateTaskPopup", new(acme.UpdateTaskPopupAction)).
+			Post("/deleteTask", new(acme.DeleteTaskAction)).
+			Prefix("/servers/certs/acme/users").
+			Get("", new(users.IndexAction)).
+			GetPost("/createPopup", new(users.CreatePopupAction)).
+			GetPost("/updatePopup", new(users.UpdatePopupAction)).
+			Post("/delete", new(users.DeleteAction)).
+			GetPost("/selectPopup", new(users.SelectPopupAction)).
 			EndAll()
 	})
 }

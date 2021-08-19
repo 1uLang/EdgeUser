@@ -25,10 +25,10 @@ func (this *Helper) BeforeAction(action *actions.ActionObject) {
 			"isActive": action.Data.GetString("leftMenuItem") == "cert",
 		},
 		// TODO 暂时不开放
-		/**{
+		{
 			"name":     "申请证书",
 			"url":      "/servers/certs/acme",
 			"isActive": action.Data.GetString("leftMenuItem") == "acme",
-		},**/
+		},
 	}
 }

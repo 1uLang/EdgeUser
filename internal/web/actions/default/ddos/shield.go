@@ -70,6 +70,7 @@ func (this *ShieldAction) RunGet(params struct {
 		return
 	}
 	this.Data["list"] = list.Fblink
+	this.Data["total"] = len(list.Fblink)
 	this.Data["ddos"] = ddos
 	this.Data["nodeId"] = params.NodeId
 	this.Data["address"] = params.Address

@@ -30,6 +30,60 @@ var (
 			Description: "用户可以查看用户平台拦截日志",
 		},
 		{
+			Name:        "DDoS攻击",
+			Code:        "waf.ddos",
+			Description: "用户可以查看平台检测到的DDoS攻击记录",
+		},
+		{
+			Name:        "安全监控",
+			Code:        "waf.alarm",
+			Description: "用户可以查看云防火墙的安全监控记录",
+		},
+		{
+			Name:        "DDoS防护",
+			Code:        "ddos",
+			Description: "用户开启DDoS防护功能",
+		},
+		{
+			Name:        "主机状态",
+			Code:        "ddos.host",
+			Description: "用户可以查看DDoS防护的主机状态",
+		},
+		{
+			Name:        "连接监控",
+			Code:        "ddos.link",
+			Description: "用户可以查看DDoS防护的连接监控",
+		},
+		{
+			Name:        "屏蔽列表",
+			Code:        "ddos.shield",
+			Description: "用户可以查看DDoS防护的屏蔽列表",
+		}, {
+			Name:        "云防火墙",
+			Code:        "nfw",
+			Description: "用户开启云防火墙功能",
+		},
+		{
+			Name:        "ACL规则",
+			Code:        "nfw.acl",
+			Description: "用户可以查阅云防火墙ACL规则",
+		},
+		{
+			Name:        "IPS规则",
+			Code:        "nfw.ips",
+			Description: "用户可以查阅云防火墙IPS规则",
+		},
+		{
+			Name:        "会话列表",
+			Code:        "nfw.conversation",
+			Description: "用户可以查阅云防火墙会话列表",
+		},
+		{
+			Name:        "证书服务",
+			Code:        "certs",
+			Description: "用户可以开启证书服务功能",
+		},
+		{
 			Name:        "WAF服务",
 			Code:        "servers",
 			Description: "对自定义域名以及证书进行管理和预热",
@@ -224,11 +278,11 @@ func FindUserFeature(code string) *UserFeature {
 	return nil
 }
 
-func CheckCreateIsOn(userId int64, checkCode string) (bool,error ){
+func CheckCreateIsOn(userId int64, checkCode string) (bool, error) {
 
 	userFeatureCodes, err := server.FindUserFeatures(&model.FindUserFeaturesReq{UserId: userId})
 	if err != nil {
 		return false, err
 	}
-	return lists.ContainsString(userFeatureCodes, checkCode),nil
+	return lists.ContainsString(userFeatureCodes, checkCode), nil
 }

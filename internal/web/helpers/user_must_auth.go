@@ -154,6 +154,62 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"code": "wafLogs",
 					"url":  "/waf/logs",
 				},
+				{
+					"name": "DDoS攻击",
+					"code": "ddos",
+					"url":  "/waf/ddos",
+				},
+				{
+					"name": "安全监控",
+					"code": "alarm",
+					"url":  "/waf/alarm",
+				},
+			},
+		},
+		{
+			"code": "ddos",
+			"name": "DDOS防护",
+			"icon": "shield",
+			"url":  "/ddos",
+			"subItems": []maps.Map{
+				{
+					"name": "主机状态",
+					"code": "host",
+					"url":  "/ddos/host",
+				},
+				{
+					"name": "连接监控",
+					"code": "link",
+					"url":  "/ddos/link",
+				},
+				{
+					"name": "屏蔽列表",
+					"code": "shield",
+					"url":  "/ddos/shield",
+				},
+			},
+		},
+		{
+			"code": "nfw",
+			"name": "云防火墙",
+			"icon": "bars",
+			"url":  "/nfw",
+			"subItems": []maps.Map{
+				{
+					"name": "ACL规则",
+					"code": "acl",
+					"url":  "/nfw/acl",
+				},
+				{
+					"name": "IPS规则",
+					"code": "ips",
+					"url":  "/nfw/ips",
+				},
+				{
+					"name": "会话列表",
+					"code": "conversation",
+					"url":  "/nfw/conversation",
+				},
 			},
 		},
 		{
@@ -168,16 +224,17 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"url":  "/servers",
 				},
 				{
-					"name": "证书管理",
-					"code": "certs",
-					"url":  "/servers/certs",
-				},
-				{
 					"name": "刷新预热",
 					"code": "cache",
 					"url":  "/servers/cache",
 				},
 			},
+		},
+		{
+			"code": "certs",
+			"name": "证书服务",
+			"icon": "certificate",
+			"url":  "/servers/certs",
 		},
 		{
 			"code": "lb",

@@ -1,0 +1,92 @@
+{$layout}
+{$layout}
+
+<p class="comment" v-if="nodes.length == 0">请先添加云防火墙节点。</p>
+<div style="height: 90vh;" v-if="nodes.length > 0">
+
+    <div style="display: flex;justify-content: space-between;height: 45px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-bottom: 30px;">
+        <div style="display: inline-flex;margin-top: 10px;">
+        </div>
+        <div align="right" style="display: inline-flex;">
+            <div style="line-height: 40px;text-align: center;">云防火墙节点：</div>
+            <div class="ui field">
+                <div class="ui field">
+                    <select class="ui dropdown auto-width" name="SelectNode" v-model="selectNode"
+                            @change="GetSelectNode">
+                        <option v-for="item in nodes" :value="item.id">{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div  style="margin-top: 20px;width: 100%;height: 650px;overflow-x: auto; overflow-y: auto;">
+        <table id="tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+            <tr align="center">
+                <th class='table-head-bg' style="min-width: 68px;" rowspan="2">接口</th>
+                <th class='table-head-bg' style="min-width: 60px;" rowspan="2">方向</th>
+                <th class='table-head-bg' style="min-width: 98px;" rowspan="2">协议</th>
+                <th class='table-head-bg' style="min-width: 200px;" colspan="2">源</th>
+                <th class='table-head-bg' style="min-width: 200px;" colspan="2">目标</th>
+                <th class='table-head-bg' style="min-width: 160px;" rowspan="2">描述</th>
+                <th class='table-head-bg' style="min-width: 67px;" rowspan="2">策略</th>
+            </tr>
+            <tr align="center">
+                <th>IP</th>
+                <th>端口</th>
+                <th>IP</th>
+                <th>端口</th>
+            </tr>
+            </thead>
+            <tbody id='tableBody'>
+            <tr align="center" style="height: 40px;" v-for="item in tableData">
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{getInterfaceName(item.interface)}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{getDirection(item.direction)}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.protocol}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.src}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.src_port}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.dst}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.dst_port}}
+                    </div>
+                </td>
+                <td>
+                    <div class="line-limit-length" style="padding: 4px 0;">
+                        {{item.descr}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.type}}
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

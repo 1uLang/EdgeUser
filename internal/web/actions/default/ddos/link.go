@@ -75,6 +75,7 @@ func (this *LinkAction) RunGet(params struct {
 		return
 	}
 	this.Data["list"] = list.Link
+	this.Data["total"] = len(list.Link)
 	this.Data["ddos"] = ddos
 	this.Data["nodeId"] = params.NodeId
 	this.Data["address"] = params.Address
