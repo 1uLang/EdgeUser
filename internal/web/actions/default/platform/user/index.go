@@ -28,6 +28,7 @@ func (this *IndexAction) RunGet() {
 	this.Data["page"] = page.AsHTML()
 
 	list, err := server.ListEnabledUsers(&model.ListReq{
+		All: true,
 		UserId: uint64(this.UserId()),
 		Offset: int(page.Offset),
 		Size:   int(page.Size),

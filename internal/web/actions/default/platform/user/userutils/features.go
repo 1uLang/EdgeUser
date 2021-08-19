@@ -79,11 +79,6 @@ var (
 			Description: "用户可以查阅云防火墙会话列表",
 		},
 		{
-			Name:        "证书服务",
-			Code:        "certs",
-			Description: "用户可以开启证书服务功能",
-		},
-		{
 			Name:        "WAF服务",
 			Code:        "servers",
 			Description: "对自定义域名以及证书进行管理和预热",
@@ -102,6 +97,11 @@ var (
 			Name:        "刷新预热",
 			Code:        "servers.cache",
 			Description: "用户可以配置URL刷新预热缓存",
+		},
+		{
+			Name:        "证书服务",
+			Code:        "certs",
+			Description: "用户可以开启证书服务功能",
 		},
 		{
 			Name:        "负载均衡",
@@ -234,7 +234,7 @@ var (
 			Description: "配置子账号以及平台的安全策略和查看用户以及子账号的操作日志",
 		},
 		{
-			Name:        "子账号管理",
+			Name:        "账号管理",
 			Code:        "platform.user",
 			Description: "用户可以新增、删除子账号以及配置其权限",
 		},
