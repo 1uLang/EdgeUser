@@ -16,10 +16,8 @@ func (this *LinkAction) Init() {
 }
 
 func (this *LinkAction) RunGet(params struct {
-	Address  string
-	NodeId   uint64
-	PageNum  int
-	PageSize int
+	Address string
+	NodeId  uint64
 }) {
 	this.Data["ddos"] = "[]"
 	this.Data["nodeId"] = ""
@@ -74,7 +72,18 @@ func (this *LinkAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	this.Data["list"] = list.Link
+
+	page := this.NewPage(int64(len(list.Link)))
+	this.Data["page"] = page.AsHTML()
+	offset := page.Offset
+	if offset > int64(len(list.Link)) {
+		offset = 0
+	}
+	end := offset + page.Size
+	if end > int64(len(list.Link)) {
+		end = int64(len(list.Link))
+	}
+	this.Data["list"] = list.Link[offset:end]
 	this.Data["total"] = len(list.Link)
 	this.Data["ddos"] = ddos
 	this.Data["nodeId"] = params.NodeId

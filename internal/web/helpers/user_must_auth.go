@@ -141,7 +141,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 		{
 			"code": "waf",
 			"name": "态势感知",
-			"icon": "shield",
+			"icon": "eye",
 			"url":  "/waf",
 			"subItems": []maps.Map{
 				{
@@ -150,17 +150,17 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"url":  "/waf",
 				},
 				{
-					"name": "拦截日志",
+					"name": "WAF日志",
 					"code": "wafLogs",
 					"url":  "/waf/logs",
 				},
 				{
-					"name": "DDoS攻击",
+					"name": "DDoS日志",
 					"code": "ddos",
 					"url":  "/waf/ddos",
 				},
 				{
-					"name": "安全监控",
+					"name": "IPS日志",
 					"code": "alarm",
 					"url":  "/waf/alarm",
 				},
@@ -168,7 +168,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 		},
 		{
 			"code": "ddos",
-			"name": "DDOS防护",
+			"name": "DDoS防护",
 			"icon": "shield",
 			"url":  "/ddos",
 			"subItems": []maps.Map{
@@ -233,7 +233,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 		{
 			"code": "certs",
 			"name": "证书服务",
-			"icon": "certificate",
+			"icon": "leanpub",
 			"url":  "/servers/certs",
 		},
 		{

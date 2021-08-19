@@ -20,7 +20,7 @@ func (this *Helper) BeforeAction(action *actions.ActionObject) {
 
 	action.Data["leftMenuItems"] = []maps.Map{
 		{
-			"name":     "证书",
+			"name":     "证书列表",
 			"url":      "/servers/certs",
 			"isActive": action.Data.GetString("leftMenuItem") == "cert",
 		},

@@ -15,9 +15,9 @@ Tea.context(function () {
         teaweb.datepicker("day-to-picker")
 
         let curSelectNode = localStorage.getItem("ddosSelectNodeId");
-		if(curSelectNode){
-			this.nodeId = curSelectNode
-		}
+        if (curSelectNode) {
+            this.nodeId = curSelectNode
+        }
 
         if (this.errorMessage !== "" && this.errorMessage !== undefined) {
             teaweb.warn(this.errorMessage, function () {
@@ -65,43 +65,9 @@ Tea.context(function () {
         }
     }
     this.search = function () {
-        if (this.nShowState == 1) {
-            window.location.href = "/ddos/logs?NodeId=" + this.nodeId + "&Level=" + this.level
-        } else if (this.nShowState == 3) {
-            this.$get(".link").params({NodeId: this.nodeId , Level: this.level}).success(resp => {
-                if (resp.code === 200) {
-                    if (resp.data.links)
-                        this.links = resp.data.links
-                    else
-                        this.links = []
-                    this.level = resp.data.level
-                }
-            })
-        } else if (this.nShowState == 2) {
-            let start = document.getElementById("day-from-picker").value
-            let end = document.getElementById("day-to-picker").value
-            this.$get(".attacks").params({
-                NodeId: this.nodeId,
-                startTime: start,
-                endTime: end,
-                attackType: this.attackType,
-                status: this.status,
-                address: this.address,
-            }).success(resp => {
-                if (resp.code === 200) {
-                    if (resp.data.attacks)
-                        this.attacks = resp.data.attacks
-                    else
-                        this.attacks = []
-                    this.nodeId = resp.data.nodeId
-                    this.startTime = resp.data.startTime
-                    this.endTime = resp.data.endTime
-                    this.address = resp.data.address
-                    this.attackType = resp.data.attackType
-                    this.status = resp.data.status
-                }
-            })
-        }
+        let start = document.getElementById("day-from-picker").value
+        let end = document.getElementById("day-to-picker").value
+        window.location.href = '/waf/ddos?nodeId=' +  this.nodeId +"&startTime="+start+"&endTime="+end+"&attackType="+this.attackType+"&status="+this.status+"&address="+this.address
     }
     this.toShowStatus = function (st) {
         if (st === "2") {

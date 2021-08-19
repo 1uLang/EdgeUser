@@ -1,6 +1,7 @@
 package ddos
 
 import (
+	"fmt"
 	"github.com/1uLang/zhiannet-api/ddos/model/ddos_host_ip"
 	"github.com/1uLang/zhiannet-api/ddos/request/host_status"
 	host_status_server "github.com/1uLang/zhiannet-api/ddos/server/host_status"
@@ -16,8 +17,8 @@ func (this *ShieldAction) Init() {
 }
 
 func (this *ShieldAction) RunGet(params struct {
-	Address   string
-	NodeId uint64
+	Address string
+	NodeId  uint64
 }) {
 	//ddos节点
 	ddos, _, err := host_status_server.GetDdosNodeList()
@@ -48,7 +49,7 @@ func (this *ShieldAction) RunGet(params struct {
 			this.ErrorPage(err)
 			return
 		}
-		for _,host := range hosts {
+		for _, host := range hosts {
 			hostShield, err := host_status_server.GetHostShieldList(&host_status_server.ShieldReq{
 				Addr:   host.Addr,
 				NodeId: params.NodeId,
@@ -59,7 +60,7 @@ func (this *ShieldAction) RunGet(params struct {
 			}
 			list.Fblink = append(list.Fblink, hostShield.Fblink...)
 		}
-	}else{
+	} else {
 		list, err = host_status_server.GetHostShieldList(&host_status_server.ShieldReq{
 			Addr:   params.Address,
 			NodeId: params.NodeId,
@@ -69,7 +70,18 @@ func (this *ShieldAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	this.Data["list"] = list.Fblink
+	page := this.NewPage(int64(len(list.Fblink)))
+	this.Data["page"] = page.AsHTML()
+	offset := page.Offset
+	if offset > int64(len(list.Fblink)) {
+		offset = 0
+	}
+	end := offset + page.Size
+	if end > int64(len(list.Fblink)) {
+		end = int64(len(list.Fblink))
+	}
+	fmt.Println(len(list.Fblink))
+	this.Data["list"] = list.Fblink[offset:end]
 	this.Data["total"] = len(list.Fblink)
 	this.Data["ddos"] = ddos
 	this.Data["nodeId"] = params.NodeId

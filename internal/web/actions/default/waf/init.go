@@ -14,6 +14,7 @@ func init() {
 			Get("", new(IndexAction)).
 			Data("teaMenu", "ddos").
 			Get("/ddos", new(DdosAction)).
+			Data("teaMenu", "alarm").
 			Get("/alarm", new(AlarmAction)).
 			EndAll()
 	})

@@ -25,17 +25,17 @@ var (
 			Description: "用户可以查看安全概览统计数据",
 		},
 		{
-			Name:        "拦截日志",
+			Name:        "WAF日志",
 			Code:        "waf.wafLogs",
 			Description: "用户可以查看用户平台拦截日志",
 		},
 		{
-			Name:        "DDoS攻击",
+			Name:        "DDoS日志",
 			Code:        "waf.ddos",
 			Description: "用户可以查看平台检测到的DDoS攻击记录",
 		},
 		{
-			Name:        "安全监控",
+			Name:        "IPS日志",
 			Code:        "waf.alarm",
 			Description: "用户可以查看云防火墙的安全监控记录",
 		},
