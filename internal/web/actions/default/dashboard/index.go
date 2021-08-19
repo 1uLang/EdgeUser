@@ -4,6 +4,7 @@ import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/utils/numberutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
+	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud"
 	"github.com/iwind/TeaGo/maps"
 	"math"
 )
@@ -22,9 +23,15 @@ func (this *IndexAction) RunGet(params struct{}) {
 		this.ErrorPage(err)
 		return
 	}
-
+	//堡垒机 资产数
+	assets,err := fortcloud.AssetCount(this.UserId())
+	if err != nil {
+		// 日志
+		this.CreateLogInfo("获取资产数失败：",err)
+	}
 	this.Data["dashboard"] = maps.Map{
 		"countServers":            dashboardResp.CountServers,
+		"countAssets":             assets,
 		"monthlyTrafficBytes":     numberutils.HumanBytes1000(dashboardResp.MonthlyTrafficBytes * 8),
 		"monthlyPeekTrafficBytes": numberutils.HumanBytes1000(dashboardResp.MonthlyPeekTrafficBytes * 8),
 		"dailyTrafficBytes":       numberutils.HumanBytes1000(dashboardResp.DailyTrafficBytes * 8),
