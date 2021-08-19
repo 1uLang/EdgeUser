@@ -88,7 +88,7 @@
     display: block; 
     position: relative;
     background:#0091cc;/* 进度条背景颜色 */ 
-    height: 20px; /* 高度 */ 
+    height: 5px; /* 高度 */ 
     line-height: 20px;/* 必须和高度一致，文本才能垂直居中 */ 
 }
 
@@ -96,6 +96,6 @@
     display: block; 
     position: relative;
     background:#00b144;/* 进度条背景颜色 */ 
-    height: 20px; /* 高度 */ 
+    height: 5px; /* 高度 */ 
     line-height: 20px;/* 必须和高度一致，文本才能垂直居中 */ 
 }
