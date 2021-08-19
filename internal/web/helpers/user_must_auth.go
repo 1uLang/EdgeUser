@@ -404,7 +404,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"icon": "sitemap",
 			"subItems": []maps.Map{
 				{
-					"name": "子账号管理",
+					"name": "账号管理",
 					"url":  "/platform/user",
 					"code": "user",
 				},
