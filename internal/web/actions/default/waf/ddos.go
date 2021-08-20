@@ -83,7 +83,7 @@ func (this *DdosAction) RunGet(params struct {
 	if end > int64(len(list.Report)) {
 		end = int64(len(list.Report))
 	}
-	this.Data["attacks"] = list.Report
+	this.Data["attacks"] = list.Report[offset:end]
 	this.Data["ddos"] = ddos
 	this.Data["nodeId"] = params.NodeId
 

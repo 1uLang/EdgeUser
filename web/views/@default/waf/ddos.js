@@ -1,8 +1,5 @@
 Tea.context(function () {
 
-    this.links = []
-    this.attacks = []
-
     this.address = ''
     this.nShowState = 1
     this.endTime = ""
