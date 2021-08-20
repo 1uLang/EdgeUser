@@ -90,7 +90,7 @@ Tea.context(function () {
         this.selectNode = event.target.value; //获取option对应的value值
         localStorage.setItem("nfwSelectNodeId", this.selectNode);
         let node = this.selectNode
-        window.location.href = '/nfw/ips?nodeId=' + node
+        window.location.href = '/waf/alarm?nodeId=' + node
 
     }
 })

@@ -7,7 +7,7 @@
 <p class="comment" v-if="nodeErr != ''">请先添加web漏洞扫描节点</p>
 
 <first-menu v-if="nodeErr  == ''">
-	<menu-item @click.prevent="hanleOpen">[添加目标]</menu-item>
+	<menu-item @click.prevent="hanleOpen" style="font-size: 14px;color: rgb(0,0,.87)">[添加目标]</menu-item>
 </first-menu>
 <div class="btn-contain" v-if="targets.length > 0 ">
     <div class="save-btn" :style="{'background-color':scanValues.length>0?'#276ac6':'rgba(170, 170, 170, 1)'}" @click="onScan()">扫描</div>

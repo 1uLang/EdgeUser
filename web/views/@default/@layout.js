@@ -94,7 +94,12 @@ Tea.context(function () {
                 if(curSelectNode){
                     tempUrl = tempUrl+"?nodeId="+curSelectNode
                 }
-            }
+            }else if (tempUrl === '/waf/alarm') {
+				let curSelectNode = localStorage.getItem("nfwSelectNodeId");
+				if(curSelectNode){
+					tempUrl = tempUrl+"?nodeId="+curSelectNode
+				}
+			}
         }
 
         return tempUrl

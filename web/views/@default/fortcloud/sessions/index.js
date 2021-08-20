@@ -29,7 +29,7 @@ Tea.context(function () {
                     return m.toFixed(1) + "分"
                 }
             } else {
-                return sec + ".0秒"
+                return sec + "秒"
             }
         }
     }
