@@ -29,7 +29,7 @@
         <td>
             <a href="" v-if="accessKey.isOn" @click.prevent="updateAccessKeyIsOn(accessKey.id, false)">禁用</a>
             <a href="" v-if="!accessKey.isOn" @click.prevent="updateAccessKeyIsOn(accessKey.id, true)">启用</a>
-            &nbsp; <a href="" @click.prevent="deleteAccessKey(accessKey.id)">删除</a>
+            &nbsp; <a href="" style="color: #db2828" @click.prevent="deleteAccessKey(accessKey.id)">删除</a>
         </td>
     </tr>
 </table>

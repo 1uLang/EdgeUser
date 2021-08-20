@@ -51,7 +51,7 @@
                         <div  v-show="item.active" class="edit_btn" @click="onConnect(item.id)">连接</div>
                         <div v-show="item.auth" class="edit_btn" @click="onOpenAuth(item)">授权</div>
                         <div v-show="item.auth" class="edit_btn" @click="onEdit(item.id)">编辑</div>
-                        <div v-show="item.auth" class="edit_btn" @click="onDelete(item.id)">删除</div>
+                        <div v-show="item.auth" class="edit_btn" style="color: #db2828" @click="onDelete(item.id)">删除</div>
                     </div>
                 </td>
             </tr>
@@ -217,7 +217,7 @@
                     <td>{{item.name}}</td>
                     <td>{{item.email}}</td>
                     <td>
-                        <div class="edit_btn" @click="onDeleteAuthAccount(item.id)">删除</div>
+                        <div class="edit_btn" style="color: #db2828" @click="onDeleteAuthAccount(item.id)">删除</div>
                     </td>
                 </tr>
                 </tbody>

@@ -37,7 +37,7 @@
 				<td>
 					<a :href="'/servers/server/settings/waf/group?serverId=' + serverId + '&firewallPolicyId=' + firewallPolicyId + '&type=' + type + '&groupId=' + group.id">详情</a> &nbsp;
 					<a href="" v-if="!group.isOn" @click.prevent="enableGroup(group.id)">启用</a><a href="" v-if="group.isOn" @click.prevent="disableGroup(group.id)">停用</a> &nbsp;
-					<a href="" @click.prevent="deleteGroup(group.id)" v-if="group.canDelete">删除</a>
+					<a href="" style="color: #db2828" @click.prevent="deleteGroup(group.id)" v-if="group.canDelete">删除</a>
 				</td>
 			</tr>
 		</tbody>

@@ -460,7 +460,7 @@ Vue.component("ssl-config-box", {
 					<span class="ui label tiny basic" v-for="(domain, arrayIndex) in hsts.domains" :class="{blue:hstsDomainEditingIndex == arrayIndex}">{{domain}}
 						<input type="hidden" name="hstsDomains" :value="domain"/> &nbsp;
 						<a href="" @click.prevent="editHstsDomain(arrayIndex)" title="修改"><i class="icon pencil"></i></a>
-						<a href="" @click.prevent="removeHstsDomain(arrayIndex)" title="删除"><i class="icon remove"></i></a>
+						<a href="" style="color: #db2828" @click.prevent="removeHstsDomain(arrayIndex)" title="删除"><i class="icon remove"></i></a>
 					</span>
 					</div>
 					<div class="ui fields inline" v-if="hstsDomainAdding" style="margin-top:0.8em">
@@ -493,7 +493,7 @@ Vue.component("ssl-config-box", {
 				<td>
 					<div v-if="policy.clientCACerts != null && policy.clientCACerts.length > 0">
 						<div class="ui label small" v-for="(cert, index) in policy.clientCACerts">
-							{{cert.name}} / {{cert.dnsNames}} / 有效至{{formatTime(cert.timeEndAt)}} &nbsp; <a href="" title="删除" @click.prevent="removeClientCACert()"><i class="icon remove"></i></a>
+							{{cert.name}} / {{cert.dnsNames}} / 有效至{{formatTime(cert.timeEndAt)}} &nbsp; <a href="" style="color: #db2828" title="删除" @click.prevent="removeClientCACert()"><i class="icon remove"></i></a>
 						</div>
 						<div class="ui divider"></div>
 					</div>

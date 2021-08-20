@@ -77,7 +77,7 @@
 			<td>
 				<a href="" @click.prevent="updateTask(task.id)" :class="{disabled: isRunning}">修改</a> &nbsp;
 				<a href="" @click.prevent="runTask(index, task)" :class="{disabled: isRunning}">执行</a> &nbsp;
-				<a href="" @click.prevent="deleteTask(task.id)" :class="{disabled: isRunning}">删除</a>
+				<a href="" style="color: #db2828" @click.prevent="deleteTask(task.id)" :class="{disabled: isRunning}">删除</a>
 			</td>
 		</tr>
 	</table>
