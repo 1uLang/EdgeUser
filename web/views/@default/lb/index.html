@@ -36,7 +36,7 @@
         <td>
             <a :href="'/lb/server?serverId=' + server.id">管理</a> &nbsp;
             <a href="" v-if="server.isOn" @click.prevent="updateServerOff(server.id)">停用</a><a href="" v-if="!server.isOn" @click.prevent="updateServerOn(server.id)">启用</a> &nbsp;
-            <a href=""  @click.prevent="deleteServer(server.id)">删除</a>
+            <a href=""  style="color: #db2828" @click.prevent="deleteServer(server.id)">删除</a>
         </td>
     </tr>
 </table>
