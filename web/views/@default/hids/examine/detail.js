@@ -54,8 +54,13 @@ Tea.context(function () {
         }
     }
     this.parseServerLocalIp = function (ip) {
+
         let ips = ip.split(";")
-        return ips.slice(-1)[0]
+        if (ips[0].indexOf('.')>0){
+            return ips[0]
+        }else{
+            return ips[1]
+        }
     }
 
     this.reloadBarTableChart = function () {
