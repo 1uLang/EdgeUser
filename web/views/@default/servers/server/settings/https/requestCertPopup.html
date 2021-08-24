@@ -13,7 +13,7 @@
 					<div v-for="(serverName, index) in serverNames" class="ui tiny basic label">
 						<input type="hidden" name="serverNames" :value="serverName"/>
                         {{serverName}}
-						<a href="" style="color: #db2828" title="删除" @click.prevent="remove(index)"><i class="icon remove"></i></a>
+						<a href="" title="删除" @click.prevent="remove(index)"><i class="icon remove"></i></a>
 					</div>
 				</div>
 			</td>

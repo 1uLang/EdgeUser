@@ -78,7 +78,7 @@ Tea.context(function () {
               a.click();
               document.body.removeChild(a);
               this.onHideLoading()
-              that.uploadFileSuccess()
+              // that.uploadFileSuccess()
             }
         }catch(e){
             this.onHideLoading()
