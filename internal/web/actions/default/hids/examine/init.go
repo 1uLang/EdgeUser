@@ -15,6 +15,7 @@ func init() {
 			GetPost("", new(IndexAction)).
 			Get("/detail", new(DetailAction)).
 			Post("/scans", new(ScanAction)).
+			Get("/examine", new(ExamineAction)).
 			EndAll()
 	})
 }

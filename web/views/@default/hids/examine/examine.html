@@ -1,0 +1,77 @@
+{$layout "layout_popup"}
+
+<div class="dialog-bg-style" style="display: flex;flex-direction: column;">
+    <div style="flex: 7;">
+        <div style="border-bottom: 1px solid #d7d7d7;height: 40px;color: #333;line-height: 40px;font-size: 18px;font-weight: 600;">
+            主机体检
+        </div>
+        <div style="display: flex;flex-direction: column;">
+            <div v-for="item in pCheckDetailData" style="display:inline-flex;padding: 15px 30px 8px 30px;">
+                <div style="width: 150px;min-width: 150px;">{{item.checkName}}</div>
+                <div style="display: flex;flex-wrap: wrap;">
+                    <div v-for="checkItem in item.checkValue" class="more-select-check-content"
+                         @click="onSelectCheckValue(checkItem.id)">
+                        <img :src="getShowSelectValueImage(checkItem.id)" width="10px" height="10px">
+                        <span style="margin-left: 10px;">{{checkItem.value}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display:inline-flex;padding: 15px 30px 8px 30px;">
+                <div style="width: 150px;min-width: 150px;"></div>
+                <div style="display: flex;width: 500px;">
+                    <div style="display: flex;flex-direction: column;width: 50%;margin-right: 30px;">
+                        <div class="more-select-check-content" @click="onSelectCheckValue(11)">
+                            <img :src="getShowSelectValueImage(11)" width="10px" height="10px">
+                            <span style="margin-left: 10px;">病毒木马</span>
+                            <div v-show="onCheckSelectItem(11)" style="display: inline-flex;align-items: center;">
+                                <div style="width: 15px;height: 15px;border-radius: 50%;border: 1px red solid;text-align: center;line-height: 14px;color: red;font-size: 14px;margin: 0 10px;">
+                                    !
+                                </div>
+                                <span style="color: red;">资源消耗高</span>
+                            </div>
+                        </div>
+                        <div v-show="onCheckSelectItem(11)"
+                             style="border: 1px #d7d7d7 solid;height: 130px;width: 220px;display: flex;flex-direction: column;padding: 5px;"
+                             @click="onCheckSelectValue">
+                            <label style="align-items: center;margin-bottom: 5px;">
+                                <input name="customScan" type="radio" value="1"
+                                       style="margin-right: 5px;"/>快速扫描</label>
+                            <label style="align-items: center;margin-bottom: 5px;">
+                                <input name="customScan" type="radio" value="2"
+                                       style="margin-right: 5px;"/>全盘扫描<span v-show="bTimeOutTip"
+                                                                             style="color: red;">(预计扫描需2小时)</span></label>
+                            <label style="align-items: center;margin-bottom: 5px;">
+                                <input name="customScan" type="radio" value="3"
+                                       style="margin-right: 5px;"/>自定义扫描</label>
+                            <div>
+                                    <textarea v-show="bShowScanPath" name="searchPath" v-model="searchPath"
+                                              style="resize: none;height: 45px;width: 210px;" placeholder="回车换行表示路径结束"
+                                              value="%web%"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex;flex-direction: column;width: 50%;">
+                        <div class="more-select-check-content" @click="onSelectCheckValue(12)">
+                            <img :src="getShowSelectValueImage(12)" width="10px" height="10px">
+                            <span style="margin-left: 10px;">网页后门</span>
+                            <div v-show="onCheckSelectItem(12)" style="display: inline-flex;align-items: center;">
+                                <div style="width: 15px;height: 15px;border-radius: 50%;border: 1px red solid;text-align: center;line-height: 14px;color: red;font-size: 14px;margin: 0 10px;">
+                                    !
+                                </div>
+                                <span style="color: red;">资源消耗高</span>
+                            </div>
+                        </div>
+                        <div v-show="onCheckSelectItem(12)">
+                                <textarea name="webSearchKey" v-model="webSearchKey"
+                                          style="resize: none;height: 130px;width: 220px;border: 1px #d7d7d7 solid;">%web%</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="flex: 1;display: flex;justify-content: center;align-items: center;border-top: 1px #f0f0f0 solid;">
+        <div class="sure-btn" @click="onStartCheck">确定</div>
+    </div>
+</div>
