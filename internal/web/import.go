@@ -42,6 +42,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/cache"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/certs"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/components/waf"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/log"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/accessLog"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/servers/server/settings/cache"

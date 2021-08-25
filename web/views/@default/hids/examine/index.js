@@ -221,29 +221,11 @@ Tea.context(function () {
     }
 
     this.onOpenCheck = function (item) {
-        this.MacCode = item.macCode
-        this.serverIp = item.serverIp
-        this.sSelectCheckValue = ["01","02","03","04","13","14","15"]
-        this.pCheckDetailData = [
-            {
-                checkName: "漏洞风险检查项：",
-                checkValue: [
-                    {id: "01", value: "系统漏洞"},
-                    {id: "02", value: "弱口令"},
-                    {id: "03", value: "风险账号"},
-                    {id: "04", value: "配置缺陷"},
-                ]
-            },
-            {
-                checkName: "入侵威胁检查项：",
-                checkValue: this.sBottomSelectItem
-            }
-        ]
-        if (this.pCheckDetailData) {
-            this.bShowCheckDetail = true
-        } else {
-            this.bShowCheckDetail = false
-        }
+        //打开主机体检弹窗
+        teaweb.popup(Tea.url(".examine?macCode="+item.macCode+'&serverIp='+item.serverIp), {
+            height: "410px",
+            width: "720px"
+        })
     }
 
     this.onSelectCheckValue = function (index) {

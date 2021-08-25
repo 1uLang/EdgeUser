@@ -34,7 +34,7 @@ func (this *DetailAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	list, err := examine_server.List(&examine.SearchReq{UserId: uint64(this.UserId(true)),Type: -1, Score: -1, State: -1})
+	list, err := examine_server.List(&examine.SearchReq{UserId: uint64(this.UserId(true)),Type: -1, Score: -1, State: -1,MacCode:params.MacCode})
 	if err != nil {
 		this.ErrorPage(err)
 		return
