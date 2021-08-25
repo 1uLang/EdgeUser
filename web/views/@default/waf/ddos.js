@@ -38,7 +38,7 @@ Tea.context(function () {
     this.showHost = function () { //重新加载该页面
         let node = this.nodeId
         localStorage.setItem("ddosSelectNodeId", node);
-        window.location.href = '/ddos/logs?nodeId=' + node
+        window.location.href = '/waf/ddos?nodeId=' + node
     }
 
     this.onChangeShowState = function (state) {

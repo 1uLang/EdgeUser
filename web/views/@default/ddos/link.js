@@ -57,7 +57,7 @@ Tea.context(function () {
             node = this.nodeId
         }
         localStorage.setItem("ddosSelectNodeId", node);
-        window.location.href = '/ddos/host?nodeId=' + node
+        window.location.href = '/ddos/link?nodeId=' + node
     }
     this.setHost = function (notice) {
         if (notice !== true && notice !== false)
