@@ -1,29 +1,29 @@
 {$layout "layout_popup"}
 
-<div class="dialog-bg-style" style="display: flex;flex-direction: column;">
+<div style="display: flex;flex-direction: column;width: 700px;height: 400px;">
     <div style="flex: 7;">
-        <div style="border-bottom: 1px solid #d7d7d7;height: 40px;color: #333;line-height: 40px;font-size: 18px;font-weight: 600;">
+        <div style="border-bottom: 1px solid #d7d7d7;height: 40px;color: #333;line-height: 40px;font-size: 18px;font-weight: 600;padding-left: 15px;">
             主机体检
         </div>
         <div style="display: flex;flex-direction: column;">
-            <div v-for="item in pCheckDetailData" style="display:inline-flex;padding: 15px 30px 8px 30px;">
+            <div v-for="item in pCheckDetailData" style="display:inline-flex;padding: 15px 15px 8px 15px;">
                 <div style="width: 150px;min-width: 150px;">{{item.checkName}}</div>
                 <div style="display: flex;flex-wrap: wrap;">
                     <div v-for="checkItem in item.checkValue" class="more-select-check-content"
                          @click="onSelectCheckValue(checkItem.id)">
                         <img :src="getShowSelectValueImage(checkItem.id)" width="10px" height="10px">
-                        <span style="margin-left: 10px;">{{checkItem.value}}</span>
+                        <span style="margin-left: 5px;">{{checkItem.value}}</span>
                     </div>
                 </div>
             </div>
 
-            <div style="display:inline-flex;padding: 15px 30px 8px 30px;">
+            <div style="display:inline-flex;padding: 15px 15px 8px 15px;">
                 <div style="width: 150px;min-width: 150px;"></div>
                 <div style="display: flex;width: 500px;">
                     <div style="display: flex;flex-direction: column;width: 50%;margin-right: 30px;">
                         <div class="more-select-check-content" @click="onSelectCheckValue(11)">
                             <img :src="getShowSelectValueImage(11)" width="10px" height="10px">
-                            <span style="margin-left: 10px;">病毒木马</span>
+                            <span style="margin-left: 5px;">病毒木马</span>
                             <div v-show="onCheckSelectItem(11)" style="display: inline-flex;align-items: center;">
                                 <div style="width: 15px;height: 15px;border-radius: 50%;border: 1px red solid;text-align: center;line-height: 14px;color: red;font-size: 14px;margin: 0 10px;">
                                     !

@@ -63,8 +63,8 @@ Tea.context(function () {
 
     this.getShowSelectValueImage = function (id) {
         let bValue = false;
-        if (this.checkSelectValue) {
-            bValue = this.checkSelectValue(id, this.sSelectCheckValue);
+        if (that.checkSelectValue) {
+            bValue = that.checkSelectValue(id, that.sSelectCheckValue);
         }
         if (bValue) {
             return "/images/select_select.png";
@@ -95,7 +95,7 @@ Tea.context(function () {
                 ScanItems: this.sSelectCheckValue.join(","),
             }).success(function () {
                 teaweb.closePopup()
-                window.location.reload()
+                parent.location.reload()
             }).error(function () {
                 teaweb.warn("失败：该主机agent已暂停服务，命令无法执行！")
             })
