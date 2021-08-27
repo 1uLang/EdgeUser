@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="/js/pikaday.css"/>
 <link rel="stylesheet" href="/js/pikaday.theme.css"/>
 <link rel="stylesheet" href="/js/pikaday.triangle.css"/>
+<script type="text/javascript" src="/js/echarts/echarts.min.js"></script>
 {$end}
 
 <div class="margin"></div>
@@ -49,3 +50,5 @@
 		<a :href="path + '?requestId=' + nextRequestId + '&day=' + day + '&groupId=' + groupId + '&serverId=' + serverId" v-if="hasMore">下一页</a>
 		<span v-else class="disabled">下一页</span>
 	</div>
+
+<div style="height:30em;width: 100%;" id="detail-chart-box"></div>
