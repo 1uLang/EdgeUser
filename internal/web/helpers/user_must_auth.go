@@ -150,11 +150,6 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"url":  "/waf",
 				},
 				{
-					"name": "WAF日志",
-					"code": "wafLogs",
-					"url":  "/waf/logs",
-				},
-				{
 					"name": "DDoS日志",
 					"code": "ddos",
 					"url":  "/waf/ddos",
@@ -163,6 +158,11 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"name": "IPS日志",
 					"code": "alarm",
 					"url":  "/waf/alarm",
+				},
+				{
+					"name": "WAF日志",
+					"code": "wafLogs",
+					"url":  "/waf/logs",
 				},
 			},
 		},
@@ -478,3 +478,4 @@ func (this *userMustAuth) findUserFullname(userId int64) (string, error) {
 
 	return resp.User.Fullname, nil
 }
+
