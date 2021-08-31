@@ -1,5 +1,9 @@
 {$layout}
 {$template "/datepicker"}
+{$var "header"}
+<script type="text/javascript" src="/js/echarts/echarts.min.js"></script>
+{$end}
+
 <div style="width: 100%;height: 40px;display: flex;justify-content: flex-end;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-top: 10px;">
     <div style="display: inline-flex;align-items: center;">
         <div style="line-height: 40px;text-align: center;">DDoS防护节点：</div>
@@ -50,8 +54,15 @@
             <div class="ui field">
                 <button type="button" class="ui button" @click="search">查询</button>
             </div>
+            <div class="ui field">
+                <button type="button" class="ui button" @click="report(0)">日报</button>
+            </div>
+            <div class="ui field">
+                <button type="button" class="ui button" @click="report(1)">周报</button>
+            </div>
         </div>
     </form>
+    <div style="height:10em;width: 100%;" id="detail-chart-box"></div>
     <div style="margin-top: 30px;width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;">
         <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
@@ -84,3 +95,4 @@
     </div>
     <div class="page" v-html="page"></div>
 </div>
+

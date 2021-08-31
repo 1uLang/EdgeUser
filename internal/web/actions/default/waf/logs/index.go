@@ -2,6 +2,7 @@ package logs
 
 import (
 	"encoding/json"
+	"github.com/1uLang/zhiannet-api/common/server/logs_statistics_server"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeCommon/pkg/serverconfigs"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
@@ -26,6 +27,7 @@ func (this *IndexAction) RunGet(params struct {
 	FirewallPolicyId int64
 	GroupId          int64
 	ServerId         int64
+	Report           int //0 日报 1周报
 }) {
 
 	if len(params.Day) == 0 {
@@ -37,7 +39,7 @@ func (this *IndexAction) RunGet(params struct {
 	this.Data["groupId"] = params.GroupId
 	this.Data["accessLogs"] = []interface{}{}
 	this.Data["serverId"] = params.ServerId
-
+	this.Data["report"] = params.Report
 	// 所有的服务列表
 	serversResp, err := this.RPC().ServerRPC().ListEnabledServersMatch(this.UserContext(), &pb.ListEnabledServersMatchRequest{
 		Offset:         0,
@@ -52,6 +54,7 @@ func (this *IndexAction) RunGet(params struct {
 		return
 	}
 	serverMaps := []maps.Map{}
+	serverIds := make([]int64, 0)
 	for _, server := range serversResp.Servers {
 		if !server.IsOn {
 			continue
@@ -86,6 +89,7 @@ func (this *IndexAction) RunGet(params struct {
 			"id":         server.Id,
 			"serverName": serverName,
 		})
+		serverIds = append(serverIds, server.Id)
 	}
 	this.Data["servers"] = serverMaps
 
@@ -168,6 +172,41 @@ func (this *IndexAction) RunGet(params struct {
 		}
 	}
 	this.Data["regions"] = regionMap
+	//res := make([]interface{}, 1)
+	//res[0] = maps.Map{
+	//	"header":          "11111",
+	//	"requestId":       "requestId1",
+	//	"status":          400,
+	//	"region":          "123region",
+	//	"remoteAddr":      "remoteAddr",
+	//	"timeLocal":       "timeLocal",
+	//	"requestMethod":   "requestMethod",
+	//	"scheme":          "scheme",
+	//	"host":            "host",
+	//	"requestURI":      "requestURI",
+	//	"proto":           "proto",
+	//	"firewallActions": "firewallActions",
+	//	"requestTime":     1,
+	//}
+	//this.Data["accessLogs"] = res
+
+	//周报 日报
+	reportList := maps.Map{
+		"lineValue": []interface{}{},
+		"lineData":  []interface{}{},
+	}
+	reportLists, _ := logs_statistics_server.GetWafStatistics(serverIds, params.Report, 3)
+	if len(reportLists) > 0 {
+		lineValue := []interface{}{}
+		lineData := []interface{}{}
+		for _, v := range reportLists {
+			lineValue = append(lineValue, v.Time)
+			lineData = append(lineData, v.Value)
+		}
+		reportList["lineValue"] = lineValue
+		reportList["lineData"] = lineData
+	}
+	this.Data["detailTableData"] = reportList
 
 	this.Show()
 }

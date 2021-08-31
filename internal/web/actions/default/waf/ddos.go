@@ -2,9 +2,11 @@ package waf
 
 import (
 	"fmt"
+	"github.com/1uLang/zhiannet-api/common/server/logs_statistics_server"
 	host_status_server "github.com/1uLang/zhiannet-api/ddos/server/host_status"
 	logs_server "github.com/1uLang/zhiannet-api/ddos/server/logs"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
+	"github.com/iwind/TeaGo/maps"
 	"time"
 )
 
@@ -19,6 +21,7 @@ func (this *DdosAction) RunGet(params struct {
 	EndTime    string
 	AttackType string
 	Status     int
+	Report     int
 }) {
 	defer this.Show()
 
@@ -53,12 +56,12 @@ func (this *DdosAction) RunGet(params struct {
 		Status:     params.Status,
 	}
 	if params.StartTime != "" && params.EndTime != "" {
-		sT, err := time.Parse("2006-01-02", params.StartTime)
+		sT, err := time.ParseInLocation("2006-01-02", params.StartTime, time.Local)
 		if err != nil {
 			this.ErrorPage(fmt.Errorf("起始时间参数错误"))
 			return
 		}
-		eT, err := time.Parse("2006-01-02", params.EndTime)
+		eT, err := time.ParseInLocation("2006-01-02", params.EndTime, time.Local)
 		if err != nil {
 			this.ErrorPage(fmt.Errorf("结束时间参数错误"))
 			return
@@ -94,4 +97,22 @@ func (this *DdosAction) RunGet(params struct {
 	this.Data["address"] = params.Address
 	this.Data["attackType"] = params.AttackType
 	this.Data["status"] = params.Status
+
+	//周报 日报
+	reportList := maps.Map{
+		"lineValue": []interface{}{},
+		"lineData":  []interface{}{},
+	}
+	reportLists, _ := logs_statistics_server.GetWafStatistics([]int64{int64(params.NodeId)}, params.Report, 1)
+	if len(reportLists) > 0 {
+		lineValue := []interface{}{}
+		lineData := []interface{}{}
+		for _, v := range reportLists {
+			lineValue = append(lineValue, v.Time)
+			lineData = append(lineData, v.Value)
+		}
+		reportList["lineValue"] = lineValue
+		reportList["lineData"] = lineData
+	}
+	this.Data["detailTableData"] = reportList
 }
