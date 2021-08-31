@@ -17,6 +17,7 @@ Tea.context(function () {
     })
 
     this.reloadDetailTableChart = function () {
+		console.log(this.detailTableData)
 		let chartBox = document.getElementById("detail-chart-box")
 		let chart = echarts.init(chartBox)
 		let option = {
@@ -40,7 +41,7 @@ Tea.context(function () {
 			},
 			series: [
 				{
-                    name:"漏洞总数",
+                    name:"日志数",
 					type: "line",
 					data: this.detailTableData.lineData,
 					itemStyle: {
@@ -57,8 +58,13 @@ Tea.context(function () {
 		chart.resize()
 	}
 
-    this.detailTableData={
-        lineValue:["05-08","05-10","05-12","05-14","05-16","05-18","05-20","05-22","05-24","05-26","05-28"],
-        lineData:[2,5,10,1,11,5,13,17,5,6,9]
-    }
+    // this.detailTableData={
+    //     lineValue:["05-08","05-10","05-12","05-14","05-16","05-18","05-20","05-22","05-24","05-26","05-28"],
+    //     lineData:[2,5,10,1,11,5,13,17,5,6,9]
+    // }
+
+	this.report = function (n){
+		window.location.href = '/waf/logs?report=' + n
+
+	}
 })

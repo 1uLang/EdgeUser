@@ -1,14 +1,15 @@
 package waf
 
 import (
+	"github.com/1uLang/zhiannet-api/common/server/logs_statistics_server"
 	req_ips "github.com/1uLang/zhiannet-api/opnsense/request/ips"
 	opnsense_server "github.com/1uLang/zhiannet-api/opnsense/server"
 	"github.com/1uLang/zhiannet-api/opnsense/server/ips"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
+	"github.com/iwind/TeaGo/maps"
 )
 
 type AlarmAction struct {
-
 	actionutils.ParentAction
 }
 
@@ -22,6 +23,7 @@ func (this *AlarmAction) RunGet(params struct {
 	FileId   string
 	PageSize int
 	Page     int
+	Report   int
 }) {
 	node, _, err := opnsense_server.GetOpnsenseNodeList()
 	if err != nil || node == nil {
@@ -66,5 +68,23 @@ func (this *AlarmAction) RunGet(params struct {
 	}
 	this.Data["nodes"] = node
 	this.Data["selectNode"] = params.NodeId
+	//周报 日报
+	reportList := maps.Map{
+		"lineValue": []interface{}{},
+		"lineData":  []interface{}{},
+	}
+	reportLists, _ := logs_statistics_server.GetWafStatistics([]int64{int64(params.NodeId)}, params.Report, 2)
+	if len(reportLists) > 0 {
+		lineValue := []interface{}{}
+		lineData := []interface{}{}
+		for _, v := range reportLists {
+			lineValue = append(lineValue, v.Time)
+			lineData = append(lineData, v.Value)
+		}
+		reportList["lineValue"] = lineValue
+		reportList["lineData"] = lineData
+	}
+	this.Data["detailTableData"] = reportList
+
 	this.Show()
 }

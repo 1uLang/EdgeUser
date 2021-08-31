@@ -23,6 +23,12 @@
 			<div v-if="servers.length == 0"></div>
 			<div style="display: flex;flex-direction: row;">
 				<div class="ui field">
+					<button class="ui button" @click="report(0)" type="button">日报</button>
+				</div>
+				<div class="ui field">
+					<button class="ui button"  @click="report(1)" type="button">周报</button>
+				</div>
+				<div class="ui field">
 					<input type="text" name="day" maxlength="10" placeholder="选择日期" style="width:7.8em" id="day-input" v-model="day"/>
 				</div>
 				<div class="ui field">
@@ -35,7 +41,7 @@
 
 
 	<p class="comment" v-if="accessLogs.length == 0">暂时还没有日志。</p>
-
+    <div style="height:10em;width: 100%;" id="detail-chart-box"></div>
 	<table class="ui table selectable" v-if="accessLogs.length > 0">
 		<!-- 这里之所以需要添加 :key，是因为要不然不会刷新显示 -->
 		<tr v-for="accessLog in accessLogs" :key="accessLog.requestId">
@@ -51,4 +57,3 @@
 		<span v-else class="disabled">下一页</span>
 	</div>
 
-<div style="height:30em;width: 100%;" id="detail-chart-box"></div>
