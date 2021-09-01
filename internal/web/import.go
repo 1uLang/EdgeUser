@@ -18,6 +18,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/agent"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/baseline"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/bwlist"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/examine"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/invade"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hids/invade/abnormalAccount"
