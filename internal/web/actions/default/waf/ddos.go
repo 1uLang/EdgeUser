@@ -7,6 +7,7 @@ import (
 	logs_server "github.com/1uLang/zhiannet-api/ddos/server/logs"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/maps"
+	"strconv"
 	"time"
 )
 
@@ -21,7 +22,7 @@ func (this *DdosAction) RunGet(params struct {
 	EndTime    string
 	AttackType string
 	Status     int
-	Report     int
+	Report     string
 }) {
 	defer this.Show()
 
@@ -34,6 +35,7 @@ func (this *DdosAction) RunGet(params struct {
 	this.Data["address"] = params.Address
 	this.Data["attackType"] = params.AttackType
 	this.Data["status"] = params.Status
+	this.Data["showReport"] = false
 
 	//ddos节点
 	ddos, _, err := host_status_server.GetDdosNodeList()
@@ -103,7 +105,12 @@ func (this *DdosAction) RunGet(params struct {
 		"lineValue": []interface{}{},
 		"lineData":  []interface{}{},
 	}
-	reportLists, _ := logs_statistics_server.GetWafStatistics([]int64{int64(params.NodeId)}, params.Report, 1)
+	report := 0
+	if params.Report != "" {
+		report, _ = strconv.Atoi(params.Report)
+		this.Data["showReport"] = true
+	}
+	reportLists, _ := logs_statistics_server.GetWafStatistics([]int64{int64(params.NodeId)}, report, 1)
 	if len(reportLists) > 0 {
 		lineValue := []interface{}{}
 		lineData := []interface{}{}

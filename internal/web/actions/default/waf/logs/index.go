@@ -10,6 +10,7 @@ import (
 	"github.com/iwind/TeaGo/maps"
 	timeutil "github.com/iwind/TeaGo/utils/time"
 	"regexp"
+	"strconv"
 	"strings"
 )
 
@@ -27,7 +28,7 @@ func (this *IndexAction) RunGet(params struct {
 	FirewallPolicyId int64
 	GroupId          int64
 	ServerId         int64
-	Report           int //0 日报 1周报
+	Report           string //0 日报 1周报
 }) {
 
 	if len(params.Day) == 0 {
@@ -172,6 +173,7 @@ func (this *IndexAction) RunGet(params struct {
 		}
 	}
 	this.Data["regions"] = regionMap
+	this.Data["showReport"] = false
 	//res := make([]interface{}, 1)
 	//res[0] = maps.Map{
 	//	"header":          "11111",
@@ -195,7 +197,12 @@ func (this *IndexAction) RunGet(params struct {
 		"lineValue": []interface{}{},
 		"lineData":  []interface{}{},
 	}
-	reportLists, _ := logs_statistics_server.GetWafStatistics(serverIds, params.Report, 3)
+	report := 0
+	if params.Report != "" {
+		report, _ = strconv.Atoi(params.Report)
+		this.Data["showReport"] = true
+	}
+	reportLists, _ := logs_statistics_server.GetWafStatistics(serverIds, report, 3)
 	if len(reportLists) > 0 {
 		lineValue := []interface{}{}
 		lineData := []interface{}{}
