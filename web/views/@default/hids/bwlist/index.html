@@ -1,0 +1,42 @@
+{$layout}
+<div style="display: flex;justify-content: space-between;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+    <div style="cursor: pointer;margin-top: 10px;" @click="onAddNameList">[添加黑白名单]</div>
+</div>
+{{list}}
+<form method="get" class="ui form" action="bwlist">
+    <div class="ui margin"></div>
+    <div class="ui menu basic text">
+        <div class="item">
+            <div class="ui fields inline">
+                <div class="ui field">
+                    <input type="text" name="Address" placeholder="请输入主机IP" v-model="Address"/>
+                </div>
+                <div class="ui field">
+                    <button type="submit" class="ui button">搜索</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div style="width: 100%;height: 650px;overflow-x: auto; overflow-y: auto;">
+    <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <thead>
+            <tr align="center">
+                <th class='table-head-bg' style="width: 364px;" >地址</th>
+                <th class='table-head-bg' style="width: 223px;" >类型</th>
+                <th class='table-head-bg' style="width: 82px;" >操作</th>
+            </tr>
+        </thead>
+        <tbody id='tableBody'>
+            <tr align="center" style="height: 40px;" v-for="item in list" >
+                <td>{{item.ip}}</td>
+                <td>{{toShowFlags(item.black)}}</td>
+                <td style="cursor: pointer;color: red;" @click="onDelete(item)">删除</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="page" v-html="page"></div>
+
+
+

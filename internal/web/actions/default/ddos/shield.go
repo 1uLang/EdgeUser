@@ -1,7 +1,6 @@
 package ddos
 
 import (
-	"fmt"
 	"github.com/1uLang/zhiannet-api/ddos/model/ddos_host_ip"
 	"github.com/1uLang/zhiannet-api/ddos/request/host_status"
 	host_status_server "github.com/1uLang/zhiannet-api/ddos/server/host_status"
@@ -80,7 +79,6 @@ func (this *ShieldAction) RunGet(params struct {
 	if end > int64(len(list.Fblink)) {
 		end = int64(len(list.Fblink))
 	}
-	fmt.Println(len(list.Fblink))
 	this.Data["list"] = list.Fblink[offset:end]
 	this.Data["total"] = len(list.Fblink)
 	this.Data["ddos"] = ddos

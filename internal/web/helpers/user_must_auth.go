@@ -272,6 +272,11 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"url":  "/hids/agent",
 					"code": "agent",
 				},
+				{
+					"name": "黑白名单",
+					"url":  "/hids/bwlist",
+					"code": "bwlist",
+				},
 			},
 		},
 		{
