@@ -5,6 +5,7 @@ import (
 	"github.com/1uLang/zhiannet-api/ddos/request/host_status"
 	host_status_server "github.com/1uLang/zhiannet-api/ddos/server/host_status"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
+	"strings"
 )
 
 type ShieldAction struct {
@@ -79,7 +80,15 @@ func (this *ShieldAction) RunGet(params struct {
 	if end > int64(len(list.Fblink)) {
 		end = int64(len(list.Fblink))
 	}
-	this.Data["list"] = list.Fblink[offset:end]
+	lists := list.Fblink[offset:end]
+	for k, v := range lists {
+		relaseTime := strings.Replace(v.ReleaseTime, "Forbidden", "禁止", -1)
+		relaseTime = strings.Replace(relaseTime, "seconds", "秒", -1)
+
+		lists[k].ReleaseTime = relaseTime
+	}
+
+	this.Data["list"] = lists
 	this.Data["total"] = len(list.Fblink)
 	this.Data["ddos"] = ddos
 	this.Data["nodeId"] = params.NodeId

@@ -1,0 +1,63 @@
+{$layout}
+{$template "/datepicker"}
+
+<p class="comment" v-if="nodes.length == 0">请先添加APT检测节点。</p>
+<div style="height: 90vh;" v-if="nodes.length > 0">
+    <div style="width: 100%;height: 40px;display: flex;justify-content: flex-end;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-top: 10px;">
+        <div style="display: inline-flex;align-items: center;">
+            <div style="text-align: center;">APT检测节点：</div>
+            <div class="ui field">
+                <div class="ui field">
+                    <select class="ui dropdown auto-width" name="selectNode" v-model="selectNode"
+                            @change="GetSelectNode">
+                        <option v-for="item in nodes" :value="item.id">{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="display: flex;flex-direction: row;margin-top: -40px">
+        <input type="text" name="dayFrom" placeholder="开始日期" v-model="dayFrom"
+               style="width:110px;height: 32px;border: 1px solid #d7d7d7;border-radius: 5px;"
+               id="day-from-picker" @change="onDate"/>
+        <div class="save-btn" @click="onSearch">搜索</div>
+    </div>
+    <div style="width: 100%;height: 600px;margin-top: 10px;overflow-x: auto; overflow-y: auto;">
+        <table id="tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+            <tr align="center">
+                <th class='table-head-bg' style="width: 130px;">时间</th>
+                <th class='table-head-bg' style="width: 100px;">事件数</th>
+                <th class='table-head-bg' style="width: 100px;">源IP</th>
+                <th class='table-head-bg' style="width: 100px;">源端口</th>
+                <th class='table-head-bg' style="width: 100px;">目标IP</th>
+                <th class='table-head-bg' style="width: 80px;">目标端口</th>
+                <th class='table-head-bg' style="width: 50px;">协议</th>
+                <th class='table-head-bg' style="width: 50px;">类型</th>
+                <!--<th class='table-head-bg' style="width: 100px;">追踪</th>-->
+                <th class='table-head-bg' style="width: 200px;">详情</th>
+                <th class='table-head-bg' style="width: 200px;">参考</th>
+            </tr>
+            </thead>
+            <tbody id='tableBody'>
+            <tr align="center" style="height: 40px;" v-for="item in list">
+                <td>{{item.time}}</td>
+                <td>{{item.events}}</td>
+                <td>{{item.src_ip}}</td>
+                <td>{{item.src_port}}</td>
+                <td>{{item.dst_ip}}</td>
+                <td>{{item.dst_port}}</td>
+                <td>{{item.proto}}</td>
+                <td>{{item.type}}</td>
+                <!-- <td>{{item.trail}}</td>-->
+                <td>{{item.info}}</td>
+                <td>{{item.reference}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="page" v-html="page"></div>
+
+</div>
+
+
