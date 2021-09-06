@@ -161,12 +161,12 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 				},
 				{
 					"name": "APT日志",
-					"code": "maltrail",
-					"url":  "/maltrail/index",
+					"code": "apt",
+					"url":  "/waf/apt",
 				},
 				{
 					"name": "WAF日志",
-					"code": "wafLogs",
+					"code": "logs",
 					"url":  "/waf/logs",
 				},
 			},
