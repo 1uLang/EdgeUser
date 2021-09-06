@@ -66,7 +66,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/settings/profile"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/ui"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/waf"
-	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/waf/logs"
+	//_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/waf/logs"
 
 	//web漏洞扫描
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/webscan"
@@ -99,7 +99,6 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/logs"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/strategy"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/user"
-
 	//APT
-	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/maltrail"
+	//_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/apt"
 )
