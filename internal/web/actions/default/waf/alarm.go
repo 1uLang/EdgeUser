@@ -7,6 +7,7 @@ import (
 	"github.com/1uLang/zhiannet-api/opnsense/server/ips"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/maps"
+	"strconv"
 )
 
 type AlarmAction struct {
@@ -23,7 +24,7 @@ func (this *AlarmAction) RunGet(params struct {
 	FileId   string
 	PageSize int
 	Page     int
-	Report   int
+	Report   string
 }) {
 	node, _, err := opnsense_server.GetOpnsenseNodeList()
 	if err != nil || node == nil {
@@ -68,12 +69,18 @@ func (this *AlarmAction) RunGet(params struct {
 	}
 	this.Data["nodes"] = node
 	this.Data["selectNode"] = params.NodeId
+	this.Data["showReport"] = false
 	//周报 日报
 	reportList := maps.Map{
 		"lineValue": []interface{}{},
 		"lineData":  []interface{}{},
 	}
-	reportLists, _ := logs_statistics_server.GetWafStatistics([]int64{int64(params.NodeId)}, params.Report, 2)
+	report := 0
+	if params.Report != "" {
+		report, _ = strconv.Atoi(params.Report)
+		this.Data["showReport"] = true
+	}
+	reportLists, _ := logs_statistics_server.GetWafStatistics([]int64{int64(params.NodeId)}, report, 2)
 	if len(reportLists) > 0 {
 		lineValue := []interface{}{}
 		lineData := []interface{}{}

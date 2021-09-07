@@ -16,6 +16,10 @@ func init() {
 			Get("/ddos", new(DdosAction)).
 			Data("teaMenu", "alarm").
 			Get("/alarm", new(AlarmAction)).
+			Data("teaMenu", "apt").
+			Get("/apt", new(AptAction)).
+			Data("teaMenu", "logs").
+			Get("/logs", new(LogsAction)).
 			EndAll()
 	})
 }
