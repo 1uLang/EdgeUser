@@ -102,6 +102,7 @@ Tea.context(function () {
         var fd = new FormData(fm);
 
         this.$post("/databackup").params(fd)
+        .timeout(120)
         .success(()=>{
             this.onHideLoading()
             that.uploadFileSuccess()
