@@ -15,7 +15,7 @@ type ExportAction struct {
 	actionutils.ParentAction
 }
 
-func (this *ExportAction) RunPost(params struct {
+func (this *ExportAction) RunGet(params struct {
 	Id        string
 	Format    string
 	HistoryId string
@@ -35,14 +35,17 @@ func (this *ExportAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	ret, err := nessus_scans_server.Export(&nessus_scans_model.ExportReq{ID: params.Id, Format: params.Format,HistoryId: params.HistoryId})
+	ret, err := nessus_scans_server.Export(&nessus_scans_model.ExportReq{ID: params.Id, Format: params.Format, HistoryId: params.HistoryId})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	this.Data["url"] = fmt.Sprintf("%s/tokens/%s/download", webscan.NessusServerUrl, ret.Token)
+	files, contents, err := nessus_scans_server.ExportFile(&nessus_scans_model.ExportFileReq{Url: fmt.Sprintf("%s/tokens/%s/download", webscan.NessusServerUrl, ret.Token)})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	this.AddHeader("Content-Disposition", contents)
 	// 日志
-	this.CreateLogInfo("漏洞扫描 - 生成目标扫描报表:%v成功", params.Id)
-
-	this.Success()
+	this.Write(files)
 }
