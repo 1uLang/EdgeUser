@@ -23,7 +23,6 @@ Tea.context(function () {
     this.bShowDetail = false
 
     this.showDetailItem = null
-
     this.showDetailScanId = ""
 
     this.onCloseDetail = function () {
@@ -81,9 +80,9 @@ Tea.context(function () {
     this.onStopScan = function (item) {
 
         let curValue = []
-        if (item.owner) {
+        if(item.owner){
             curValue = [item.target_id]
-        } else {
+        }else{
             curValue = [item.scan_id]
         }
 
@@ -376,6 +375,14 @@ Tea.context(function () {
         }
         return resultStatus;
     };
+    this.onChangeTimeFormat3 = function (time) {
+        let resultTime = ""
+        if (time) {
+            var tempTime = time.substring(0, time.indexOf("+"));
+            resultTime = tempTime.replace("T", " ");
+        }
+        return resultTime;
+    }
     this.onChangeTimeFormat2 = function (time) {
         if (time) {
             let m = parseInt(time / 60)
@@ -436,9 +443,9 @@ Tea.context(function () {
                 scanSessionId: this.scanSessionId,
             }).success(resp => {
                 if (resp.code === 200) {
-                    this.showDetailScanId = vul.vt_id
+                    this.showDetailScanId = vul.plugin_id
                     this.detailInfo = resp.data.data
-                    this.detailInfo.affects_url = "URL:           " + this.scanAddr
+                    this.detailInfo.affects_url = "URL:           " + vul.target_info.host
                     this.bShowDetail = true
                 } else {
                     this.onCloseDetail()
@@ -446,6 +453,5 @@ Tea.context(function () {
             })
         }
     }
-
 })
 ;

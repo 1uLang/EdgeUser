@@ -9,12 +9,12 @@
 <div class="btn-contain" v-if="scans.length > 0 &&nShowState===1">
     <!-- <div id="stop-btn" @click="onStopScan()">停止扫描</div>
     <div id="create-btn" @click="onCreateReport()">生成报告</div> -->
-    <div id="del-btn"   @click="onDelete()">删除</div>
+    <div id="del-btn"  @click="onDelete()">删除</div>
 </div>
 
 <div v-if="nShowState!=1" style="display: inline-flex;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
     <div class="define-menu" @click.prevent="onChangeState(1)" style="cursor: pointer;font-size: 16px;">任务列表</div>
-<!--    <div :class="{'select-menu':nShowState===2, 'define-menu':nShowState!=2}" @click.prevent="onChangeState(2)" style="cursor: pointer;font-size: 16px;">扫描信息</div>-->
+    <!--    <div :class="{'select-menu':nShowState===2, 'define-menu':nShowState!=2}" @click.prevent="onChangeState(2)" style="cursor: pointer;font-size: 16px;">扫描信息</div>-->
     <div :class="{'select-menu':nShowState===3, 'define-menu':nShowState!=3}" @click.prevent="onChangeState(3)" style="cursor: pointer;font-size: 16px;">漏洞</div>
 </div>
 
@@ -136,9 +136,9 @@
     <div style="width:100%; display: inline-flex;margin-top: 30px;">
         <table class="ui table selectable" style="flex: 1;margin: 0 8px 0 0;">
             <thead>
-                <tr style="height: 55px;max-height: 55px;">
-                    <th><h5>目标信息</h5></th>
-                </tr>
+            <tr style="height: 55px;max-height: 55px;">
+                <th><h5>目标信息</h5></th>
+            </tr>
             </thead>
             <tbody>
             <tr style="height: 50px;">
@@ -177,19 +177,19 @@
         </table>
         <table class="ui table selectable" style="flex: 1;margin: 0 0 0 8px;">
             <thead>
-                <tr style="height: 55px;max-height: 55px;">
-                    <th>
-                        <div style="display: inline-flex;align-items: center;">
-                            <h5>最新警报</h5>
-                            <div style="display: inline-flex;">
-                                <div class="vulnerable-num" style="background-color: #ec808d;">{{statistics.severity_counts.high}}</div>
-                                <div class="vulnerable-num" style="background-color: #fcc77d;">{{statistics.severity_counts.medium}}</div>
-                                <div class="vulnerable-num" style="background-color: #3abee8;">{{statistics.severity_counts.low}}</div>
-                                <div class="vulnerable-num" style="background-color: #00b144;">{{statistics.severity_counts.info}}</div>
-                            </div>
+            <tr style="height: 55px;max-height: 55px;">
+                <th>
+                    <div style="display: inline-flex;align-items: center;">
+                        <h5>最新警报</h5>
+                        <div style="display: inline-flex;">
+                            <div class="vulnerable-num" style="background-color: #ec808d;">{{statistics.severity_counts.high}}</div>
+                            <div class="vulnerable-num" style="background-color: #fcc77d;">{{statistics.severity_counts.medium}}</div>
+                            <div class="vulnerable-num" style="background-color: #3abee8;">{{statistics.severity_counts.low}}</div>
+                            <div class="vulnerable-num" style="background-color: #00b144;">{{statistics.severity_counts.info}}</div>
                         </div>
-                    </th>
-                </tr>
+                    </div>
+                </th>
+            </tr>
             </thead>
             <tbody >
             <tr>
@@ -236,9 +236,9 @@
                     </div>
                 </div>
             </form>
-    
+
             <div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;">
-                <table class="ui table celled selectable" border="1" style="border-collapse: collapse;" v-if="vulnerabilities.length > 0">
+                <table class="ui table selectable celled" border="1" style="border-collapse: collapse;" v-if="vulnerabilities.length > 0">
                     <thead>
                     <tr align="center">
                         <th class='table-head-bg' style="width: 183px;">严重性</th>
@@ -248,12 +248,19 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr align="center" style="height: 50px;cursor: pointer;" v-for="item in vulnerabilities" @click="getDetailInfo(item)" :style="{'background':showDetailScanId==item.vt_id ? '#f0f0f0':'none'}">
+                    <tr align="center" style="height: 50px;cursor: pointer;" v-for="item in vulnerabilities" @click="getDetailInfo(item)"
+                        :style="{'background':showDetailScanId==item.vt_id ? '#f0f0f0':'none'}">
                         <td :class="{'red0-color':item.severity>3,'red-color':item.severity===3, 'yellow-color':item.severity===2,'blue-color':item.severity===1,'green-color':item.severity===0}">{{onChangeSeverityFormat(item.severity)}}</td>
-                        <td>{{item.vt_name}}</td>
-                        <td>{{item.affects_url}}</td>
-                        <td>{{onChangeTimeFormat(item.vt_created)}}</td>
-<!--                        <td>{{onChangeTimeFormat(item.last_seen)}}</td>-->
+
+                        <td v-if="item.vt_name">{{item.vt_name}}</td>
+                        <td v-else>{{item.name}}</td>
+
+                        <td v-if="item.affects_url">{{item.affects_url}}</td>
+                        <td v-else>{{item.target_info.host}}</td>
+
+                        <td v-if="item.vt_created">{{onChangeTimeFormat3(item.vt_created)}}</td>
+                        <td v-else>{{onChangeTimeFormat3(item.time)}}</td>
+                        <!--                        <td>{{onChangeTimeFormat(item.last_seen)}}</td>-->
                     </tr>
                     </tbody>
                 </table>
@@ -269,8 +276,8 @@
                 <h2>漏洞描述</h2>
                 {{detailInfo.description}}
                 <div>发现者：<span style="font-weight: bold">{{detailInfo.vt_name}}</span></div>
-<!--                <h2>此漏洞的影响</h2>-->
-<!--                <div>{{detailInfo.impact}}</div>-->
+                <!--                <h2>此漏洞的影响</h2>-->
+                <!--                <div>{{detailInfo.impact}}</div>-->
                 <h2>如何修复此漏洞</h2>
                 <div>{{detailInfo.recommendation}}</div>
             </div>

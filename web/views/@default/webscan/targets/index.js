@@ -178,7 +178,7 @@ Tea.context(function () {
         // }
 
         // if (this.scanValues.length > 0) {
-        //     scanBtn.style.backgroundColor = "#14539A";
+        //     scanBtn.style.backgroundColor = "#276ac6";
         //     scanBtn.style.cursor = "pointer";
         // } else {
         //     scanBtn.style.backgroundColor = "#AAAAAA";
@@ -216,4 +216,16 @@ Tea.context(function () {
         }
 
     };
+    this.details = function (item) {
+        let host = false
+        if (item.owner)
+            host = true
+        teaweb.popup(Tea.url("/webscan/targets/update?id=" + item.id + "&addr=" + item.address + "&desc=" + item.description + "&host=" + host), {
+            callback: function () {
+                teaweb.success("保存成功", function () {
+                    teaweb.reload();
+                });
+            },
+        });
+    }
 });
