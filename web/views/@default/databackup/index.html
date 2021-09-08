@@ -29,7 +29,7 @@
                         <img src="/images/image_filebag.svg" width="20px" height="20px" style="margin-left: 10px;">
                         <span v-if="!bEditFileBagName" style="cursor: pointer;font-size: 14px;font-weight: normal;" @click="onEditFileBagName">&emsp;&emsp;新建文件夹</span>
                         <div v-if="bEditFileBagName" style="width: 150px;height: 40px;border: 1px solid #d7d7d7;border-radius: 5px;display: flex;flex-direction: row;align-items: center;margin-left: 10px;">
-                            <input id="fileBagName" style="width: 130px;height: 36px;font-size: 14px;font-weight: normal;border: none;outline:none;"/>
+                            <input id="fileBagName" style="width: 120px;height: 36px;font-size: 14px;font-weight: normal;border: none;outline:none;"/>
                             <img src="/images/image_arrow_right.png" width="20px" height="20px" style="margin-left: 5px;" @click="onCreateFileBag">
                         </div>
                         
@@ -47,7 +47,7 @@
     </div>
 
     <div v-if="pageState===1" style="width: 100%;height: 600px;margin-top: 10px;overflow-x: auto; overflow-y: auto;">
-        <table id="tab" class="ui table selectable celled" border rules=rows style="border-collapse: collapse;">
+        <table id="tab" class="ui table selectable celled" rules=rows style="border-collapse: collapse;">
             <thead>
                 <tr align="left">
                     <th class='table-head-bg' style="min-width: 400px;">名称</th>
@@ -57,10 +57,9 @@
                 </tr>
             </thead>
             <tbody id='tableBody'>
-                <tr align="left" style="height: 40px;" v-for="item in list">
+                <tr align="left" style="height: 40px;cursor: pointer;" v-for="item in list" @click="onOpenFile(item)">
                     <td>
-                        <div style="height: 30px;display: inline-flex;align-items: center;cursor: pointer;"
-                            @click="onOpenFile(item)">
+                        <div style="height: 30px;display: inline-flex;align-items: center;">
                             <img v-if="item.fileType == 1" src="/images/image_filebag.svg" width="18px" height="18px"
                                 style="margin-right: 3px;">
                             <img v-else src="/images/image_file.svg" width="18px" height="18px"
