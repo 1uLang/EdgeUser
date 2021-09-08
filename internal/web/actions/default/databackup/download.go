@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/1uLang/zhiannet-api/nextcloud/model"
-	"github.com/1uLang/zhiannet-api/nextcloud/request"
 	em "github.com/1uLang/zhiannet-api/edgeUsers/model"
 	es "github.com/1uLang/zhiannet-api/edgeUsers/server"
+	"github.com/1uLang/zhiannet-api/nextcloud/model"
+	"github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
+	"github.com/iwind/TeaGo/actions"
 )
 
 type DownLoadAction struct {
@@ -21,7 +22,16 @@ func (this *DownLoadAction) Init() {
 
 func (this *DownLoadAction) RunGet(params struct {
 	Name string
+	Fp   string
+
+	Must *actions.Must
 }) {
+	params.Must.
+		Field("id", params.Fp).
+		Require("请输入文件id")
+	if params.Fp == "" {
+		this.Fail("fp不能为空")
+	}
 	uid, _ := es.GetParentId(&em.GetParentIdReq{UserId: uint64(this.UserId())})
 	if uid == 0 {
 		uid = uint64(this.UserId())
@@ -45,7 +55,8 @@ func (this *DownLoadAction) RunGet(params struct {
 	// this.Data["url"] = dURL
 
 	// 获取下载字节流
-	rsp, err := request.DownLoadFile(token, params.Name)
+	// rsp, err := request.DownLoadFile(token, params.Name)
+	rsp, err := request.DownLoadFileWithPath(token, params.Fp)
 	if err != nil {
 		this.ErrorPage(fmt.Errorf("下载文件失败：%w", err))
 		return

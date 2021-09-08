@@ -1,8 +1,6 @@
 package agent
 
 import (
-	"log"
-
 	"github.com/1uLang/zhiannet-api/agent/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
@@ -27,7 +25,7 @@ func (this *DeleteAction) RunPost(params struct {
 	if params.Id <= 0 {
 		this.Fail("id必须大于0")
 	}
-	log.Println(params.Id)
+	// log.Println(params.Id)
 	err := server.DeleteFile(params.Id)
 	if err != nil {
 		this.ErrorPage(err)

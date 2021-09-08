@@ -6,19 +6,29 @@ import (
 	"github.com/1uLang/zhiannet-api/nextcloud/model"
 	"github.com/1uLang/zhiannet-api/nextcloud/request"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
+	"github.com/iwind/TeaGo/actions"
 )
 
-type DeleteAction struct {
+type DirAction struct {
 	actionutils.ParentAction
 }
 
-func (this *DeleteAction) Init() {
+func (this *DirAction) Init() {
 	this.Nav("", "", "")
 }
 
-func (this *DeleteAction) RunPost(params struct {
-	Fp string
+func (this *DirAction) RunPost(params struct {
+	Purl string
+	Name string
+
+	Must *actions.Must
 }) {
+	params.Must.
+		Field("id", params.Name).
+		Require("请输入文件名")
+	if params.Name == "" {
+		this.Fail("Purl不能为空")
+	}
 	uid, _ := es.GetParentId(&em.GetParentIdReq{UserId: uint64(this.UserId())})
 	if uid == 0 {
 		uid = uint64(this.UserId())
@@ -30,15 +40,11 @@ func (this *DeleteAction) RunPost(params struct {
 		return
 	}
 
-	// 删除文件
-	// err = request.DeleteFile(token, params.Name)
-	err = request.DeleteFileWithPath(token, params.Fp)
+	err = request.CreateFoler(token, params.Purl, params.Name)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-
-	defer this.CreateLogInfo("删除数据备份文件 %v", params.Fp)
 
 	this.Success()
 }

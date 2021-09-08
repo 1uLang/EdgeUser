@@ -17,6 +17,7 @@
 }
 
 .edit_btn{
+    margin-right: 30px;
     color: #276ac6;
     cursor: pointer;
 }
@@ -98,4 +99,33 @@
     background:#00b144;/* 进度条背景颜色 */ 
     height: 5px; /* 高度 */ 
     line-height: 20px;/* 必须和高度一致，文本才能垂直居中 */ 
+}
+
+.moremenu-btn{
+    width: 25px;
+    height: 25px;
+    margin-left: 10px;
+    text-align: center;
+    line-height: 23px;
+    border-radius: 50%;
+    border: none;
+    background-color: #999;
+    font-weight: bolder;
+    font-size: 25px;
+    color: #666;
+    cursor: pointer;
+}
+
+.upload-file-btn{
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 19px;
+    border-radius: 50%;
+    border: none;
+    background-color: #999;
+    font-weight: bolder;
+    font-size: 25px;
+    color: #666;
+    display: inline-block;
 }
