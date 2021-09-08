@@ -13,6 +13,7 @@ func init() {
 			Prefix("/webscan/targets").
 			GetPost("", new(IndexAction)).
 			GetPost("/create", new(CreateAction)).
+			GetPost("/update", new(UpdateAction)).
 			Post("/delete", new(DeleteAction)).
 			EndAll()
 	})

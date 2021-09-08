@@ -20,7 +20,9 @@ func (this *IndexAction) Init() {
 	this.Nav("", "", "")
 }
 
-func (this *IndexAction) RunGet(params struct{}) {
+func (this *IndexAction) RunGet(params struct{
+	Dirpath string // 为空时表示根目录
+}) {
 	uid, _ := es.GetParentId(&em.GetParentIdReq{UserId: uint64(this.UserId())})
 	if uid == 0 {
 		uid = uint64(this.UserId())
@@ -33,7 +35,8 @@ func (this *IndexAction) RunGet(params struct{}) {
 	}
 
 	// 文件列表（不包含目录）
-	list, err := request.ListFolders(token)
+	// list, err := request.ListFolders(token)
+	list, err := request.ListFoldersWithPath(token, params.Dirpath)
 	if err != nil {
 		this.ErrorPage(err)
 		return
@@ -42,12 +45,14 @@ func (this *IndexAction) RunGet(params struct{}) {
 	this.Data["quota"] = list.Quota
 	this.Data["used"] = list.Used
 	this.Data["percent"] = list.Percent
+	this.Data["title"] = list.DirList
 
 	this.Show()
 }
 
 func (this *IndexAction) RunPost(params struct {
 	UploadFile *actions.File `json:"uploadFile"`
+	Dirpath string
 }) {
 	uid, _ := es.GetParentId(&em.GetParentIdReq{UserId: uint64(this.UserId())})
 	if uid == 0 {
@@ -69,7 +74,8 @@ func (this *IndexAction) RunPost(params struct {
 		this.Fail("读取文件内容错误，请重新上传")
 	}
 	name := params.UploadFile.Filename
-	err = request.UploadFile(token, name, bytes.NewReader(upFile))
+	// err = request.UploadFile(token, name, bytes.NewReader(upFile))
+	err= request.UploadFileWithPath(token,name,bytes.NewReader(upFile),params.Dirpath)
 	if err != nil {
 		this.ErrorPage(err)
 		return

@@ -7,15 +7,20 @@
 <p class="comment" v-if="nodeErr != ''">请先添加web漏洞扫描节点</p>
 
 <first-menu v-if="nodeErr  == ''">
-	<menu-item @click.prevent="hanleOpen" style="font-size: 14px;color: rgb(0,0,.87)">[添加目标]</menu-item>
+    <menu-item @click.prevent="hanleOpen" style="font-size: 14px;color: rgb(0,0,.87)">[添加目标]</menu-item>
 </first-menu>
 <div class="btn-contain" v-if="targets.length > 0 ">
-    <div class="save-btn" :style="{'background-color':scanValues.length>0?'#276ac6':'rgba(170, 170, 170, 1)'}" @click="onScan()">扫描</div>
-    <div class="del-btn" :style="{'background-color':checkValues.length>0?'#D9001B':'rgba(170, 170, 170, 1)'}" @click="onDelete()">删除</div>
+    <div class="save-btn" :style="{'background-color':scanValues.length>0?'#276ac6':'rgba(170, 170, 170, 1)'}"
+         @click="onScan()">扫描
+    </div>
+    <div class="del-btn" :style="{'background-color':checkValues.length>0?'#D9001B':'rgba(170, 170, 170, 1)'}"
+         @click="onDelete()">删除
+    </div>
 </div>
 <p class="comment" v-if="targets.length == 0 && nodeErr == ''">暂时还没有目标。</p>
 <div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;">
-    <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;" v-if="targets.length > 0">
+    <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;"
+           v-if="targets.length > 0">
         <thead>
         <tr align="center">
             <th class='table-head-bg' style="width: 72px;">
@@ -34,7 +39,7 @@
             <td>
                 <input type="checkbox" name="select" :value="item.target_id" @click="clickCheckbox">
             </td>
-            <td>{{item.address}}</td>
+            <td><span @click="details(item)" style="cursor: pointer;">{{item.address}}</span></td>
             <td>{{item.description}}</td>
             <td v-if="item.owner">主机漏洞扫描</td>
             <td v-else>Web漏洞扫描</td>
