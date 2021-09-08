@@ -188,23 +188,11 @@ Tea.context(function () {
         window.location = "/databackup?Dirpath="
     }
     this.onOpenFile = function(item){
-        // window.location = item.url
-        window.location = "/databackup?Dirpath="+item.url
-        // if(item.childFile && item.childFile.length>0){
-        //     var childFileData = this.getItemInfo(item.id,tableData)
-        //     if(childFileData){
-        //         this.list = this.deepClone(childFileData)
-        //         this.titleData = [
-        //             {
-        //                 titleName:"数据库agent >",
-        //                 titleUrl:"",
-        //             },
-        //         ]
-        //         this.onCreateTitle()
-        //     }
-        // }else{
-        //     this.onDownFile(item.name,item.url,item.content_type)
-        // }
+        if(item.fileType==1){
+            window.location = "/databackup?Dirpath="+item.url
+        }else{
+            this.onDownFile(item.name,item.url,item.content_type)
+        }
         
     }
 
