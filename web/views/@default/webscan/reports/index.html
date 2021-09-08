@@ -43,8 +43,8 @@
                         <div class="html-style" @click="exportFile(item,'html')">HTML</div>
                     </div>
                     <div style="display: inline-flex;" v-else>
-                        <div class="pdf-style" @click="downloadFile(item.download[1])">PDF</div>
-                        <div class="html-style" @click="downloadFile(item.download[0])">HTML</div>
+                        <div class="pdf-style" @click="downloadFile(item.download[0],true)">PDF</div>
+                        <div class="html-style" @click="downloadFile(item.download[0],false)">HTML</div>
                     </div>
                 </td>
             </tr>
