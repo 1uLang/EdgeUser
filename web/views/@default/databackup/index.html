@@ -81,7 +81,7 @@
                         <div style="display: flex;padding: 4px 0;">
                             <div v-if="item.fileType != 1" class="edit_btn"
                                 @click="onDownFile(item.name,item.url,item.content_type)">下载</div>
-                            <div class="del-btn" style="color: #db2828" @click="onDelete(item.url)">删除</div>
+                            <div class="del-btn" style="color: #db2828" @click.stop="onDelete(item.url)">删除</div>
                         </div>
 
                     </td>
