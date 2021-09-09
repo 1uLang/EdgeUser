@@ -176,6 +176,12 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			},
 		},
 		{
+			"code": "hostlist",
+			"url":  "/hostlist",
+			"name": "云主机管理",
+			"icon": "tv",
+		},
+		{
 			"code": "ddos",
 			"name": "DDoS防护",
 			"icon": "shield",

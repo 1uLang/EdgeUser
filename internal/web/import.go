@@ -101,4 +101,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/user"
 	//APT
 	//_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/apt"
+
+	//主机列表
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hostlist"
 )
