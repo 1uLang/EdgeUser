@@ -1,0 +1,34 @@
+{$layout}
+{$var "header"}
+{$end}
+<!-- 合规基线 -->
+
+<p class="comment" v-if="baselines.length == 0">暂时没有合规基线记录。</p>
+<div style="width: 100%;height: 650px;margin-top: 10px;overflow-x: auto; overflow-y: auto;" v-else>
+    <table id="tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <thead>
+        <tr align="center">
+            <th class='table-head-bg' style="min-width: 170px;">主机IP</th>
+            <th class='table-head-bg' style="min-width: 230px;">主机名称</th>
+            <th class='table-head-bg' style="min-width: 300px;">基线规则</th>
+            <th class='table-head-bg' style="min-width: 150px;">分数</th>
+            <th class='table-head-bg' style="min-width: 150px;">异常项</th>
+            <th class='table-head-bg' style="min-width: 200px;">扫描时间</th>
+
+        </tr>
+        </thead>
+        <tbody id='tableBody'>
+        <tr align="center" style="height: 40px;" v-for="item in baselines">
+            <td>{{item.agent_ip}}</td>
+            <td>{{item.agent_name}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.score}}</td>
+            <td>
+                <u v-if="item.fail>0" style="color:#d9001b;cursor: pointer;" @click="onOpenProblemDetail(item)">{{item.fail}}</u>
+                <u v-else style="color: #21ba45;">{{item.fail}}</u>
+            </td>
+            <td>{{onChangeTimeFormat(item.start_scan)}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,47 @@
+{$layout "layout_popup"}
+
+<h3>添加主机</h3>
+
+
+<div>
+    <form class="ui form" method="post" data-tea-action="$" data-tea-success="success">
+        <table class="ui table definition selectable">
+            <tr>
+                <td class="title">操作系统 *</td>
+                <td>
+                    <div>
+                        <select class="ui dropdown auto-width" v-model="osSelectIndex" @change="createCommand(1)">
+                            <option v-for="item in OSList" :value="item.id">{{item.name}}</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr v-if="osSelectIndex==1">
+                <td class="title">系统版本 *</td>
+                <td>
+                    <div>
+                        <select class="ui dropdown auto-width" v-model="versionSelectIndex" @change="createCommand(2)">
+                            <option v-for="item in versionList" :value="item.id">{{item.name}}</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr v-if="osSelectIndex==1 || osSelectIndex==2">
+                <td class="title">系统架构 *</td>
+                <td>
+                    <div>
+                        <select class="ui dropdown auto-width" v-model="architectureSelectIndex" @change="createCommand">
+                            <option v-for="item in architectureList" :value="item.id" v-if="versionSelectIndex==1 && item.id<3 || versionSelectIndex!=1 ">{{item.name}}</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>安装命令*</td>
+                <td>
+                    <textarea  rows="6"  name="remark" value="command" v-model="command"></textarea>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>

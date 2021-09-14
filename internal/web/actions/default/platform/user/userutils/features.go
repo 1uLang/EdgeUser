@@ -164,7 +164,7 @@ var (
 			Description: "用户可以下载漏洞扫描报告文件",
 		},
 		{
-			Name:        "堡垒机",
+			Name:        "云堡垒机",
 			Code:        "fortcloud",
 			Description: "开启堡垒机组件功能",
 		},
