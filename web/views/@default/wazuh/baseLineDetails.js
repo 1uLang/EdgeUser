@@ -7,16 +7,8 @@ Tea.context(function () {
         return "/images/image-grey-close.png"
     }
 
-    this.$delay(function () {
 
-        for (let idx = 0; idx < this.details.length; idx++) {
-            this.details[idx].bOpen = false
-        }
-    })
-
-    this.onEnabledDetail = function (item, idx) {
-
-        // this.details[idx].bOpen = !this.details[idx].bOpen
+    this.onEnabledDetail = function (item) {
         item.bOpen = !item.bOpen
     }
 })

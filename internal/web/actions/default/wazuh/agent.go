@@ -25,7 +25,7 @@ func (this *AgentsAction) RunGet(params struct{}) {
 		return
 	}
 	list, err := server.AgentList(&agents.ListReq{
-		//UserId: this.UserId(true),
+		UserId: this.UserId(true),
 	})
 	if err != nil {
 		this.ErrorPage(err)
