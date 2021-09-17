@@ -7,6 +7,7 @@ import (
 	"github.com/1uLang/zhiannet-api/wazuh/model/agents"
 	"github.com/1uLang/zhiannet-api/wazuh/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
+	"time"
 )
 
 type VirusAction struct {
@@ -27,7 +28,7 @@ func (this *VirusAction) RunGet(params struct {
 		return
 	}
 	agent, err := server.AgentList(&agents.ListReq{
-		//AdminUserId: this.AdminId(),
+		UserId: this.UserId(true),
 	})
 	if err != nil {
 		this.ErrorPage(err)
@@ -37,17 +38,16 @@ func (this *VirusAction) RunGet(params struct {
 		this.FailField("agent", "请先添加资产")
 	}
 	if params.Agent == "" {
-		//params.Agent = agent.AffectedItems[0].ID
-		params.Agent = "007"
+		params.Agent = agent.AffectedItems[0].ID
+		//params.Agent = "007"
 	}
 	list, err := server.VirusList(agents.ESListReq{
 		Agent:  params.Agent,
 		Limit:  1,
 		Offset: 0,
-		//Start:    time.Now().AddDate(0, 0, -1).Unix(),
-		//End:      time.Now().Unix(),
-		Start: 1630982235, End: 1631068635,
-		//AdminUserId: this.AdminId()
+		Start:  time.Now().AddDate(0, 0, -1).Unix(),
+		End:    time.Now().Unix(),
+		//Start: 1630982235, End: 1631068635,
 	})
 	if err != nil {
 		this.ErrorPage(err)
@@ -61,9 +61,9 @@ func (this *VirusAction) RunGet(params struct {
 		Agent:  params.Agent,
 		Limit:  int(page.Size),
 		Offset: int(page.Offset),
-		//Start:    time.Now().AddDate(0, 0, -1).Unix(),
-		//End:      time.Now().Unix(),
-		Start: 1630982235, End: 1631068635,
+		Start:  time.Now().AddDate(0, 0, -1).Unix(),
+		End:    time.Now().Unix(),
+		//Start: 1630982235, End: 1631068635,
 	})
 	if err != nil {
 		this.ErrorPage(err)
