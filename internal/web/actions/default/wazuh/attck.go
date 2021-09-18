@@ -9,15 +9,15 @@ import (
 	"time"
 )
 
-type VirusAction struct {
+type AttckAction struct {
 	actionutils.ParentAction
 }
 
-func (this *VirusAction) Init() {
+func (this *AttckAction) Init() {
 	this.Nav("", "", "virus")
 }
 
-func (this *VirusAction) RunGet(params struct {
+func (this *AttckAction) RunGet(params struct {
 	Agent string
 }) {
 
@@ -45,7 +45,7 @@ func (this *VirusAction) RunGet(params struct {
 		params.Agent = agent.AffectedItems[0].ID
 		//params.Agent = "007"
 	}
-	list, err := server.VirusList(agents.ESListReq{
+	list, err := server.ATTCKESList(agents.ESListReq{
 		Agent:  params.Agent,
 		Limit:  1,
 		Offset: 0,
@@ -61,7 +61,7 @@ func (this *VirusAction) RunGet(params struct {
 	page := this.NewPage(int64(list.Total))
 	this.Data["page"] = page.AsHTML()
 
-	list, err = server.VirusList(agents.ESListReq{
+	list, err = server.ATTCKESList(agents.ESListReq{
 		Agent:  params.Agent,
 		Limit:  int(page.Size),
 		Offset: int(page.Offset),
@@ -73,7 +73,7 @@ func (this *VirusAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	this.Data["virus"] = list.Hits
+	this.Data["attcks"] = list.Hits
 
 	this.Data["agents"] = agent.AffectedItems
 

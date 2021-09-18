@@ -144,6 +144,41 @@ var (
 			Description: "用户可以安装、添加agent主机功能",
 		},
 		{
+			Name:        "主机防护",
+			Code:        "nhids",
+			Description: "开启主机防护(新)组件功能",
+		},
+		{
+			Name:        "资产管理",
+			Code:        "nhids.agents",
+			Description: "开启主机防护(新)主机资产管理",
+		},
+		{
+			Name:        "漏洞风险",
+			Code:        "nhids.vulnerability",
+			Description: "用户可以查看检测出来的漏洞风险记录",
+		},
+		{
+			Name:        "病毒检测",
+			Code:        "nhids.virus",
+			Description: "用户可以查看检测出来的病毒检测记录",
+		},
+		{
+			Name:        "合规基线",
+			Code:        "nhids.baseLine",
+			Description: "用户可以查看检测出来的合规基线记录",
+		},
+		{
+			Name:        "安全事件",
+			Code:        "nhids.attck",
+			Description: "用户可以查看检测出来的安全事件记录",
+		},
+		{
+			Name:        "文件监控",
+			Code:        "nhids.syscheck",
+			Description: "用户可以查看主机文件列表以及文件监控记录",
+		},
+		{
 			Name:        "漏洞扫描",
 			Code:        "webscan",
 			Description: "开启漏洞扫描组件功能",

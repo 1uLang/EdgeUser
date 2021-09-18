@@ -1,5 +1,4 @@
 // 主机防护使用wazuh组件
-// +build wazuh
 
 package wazuh
 
@@ -32,7 +31,11 @@ func (this *BaseLineAction) RunGet(params struct{}) {
 		return
 	}
 	if len(agent.AffectedItems) == 0 {
-		this.FailField("agent", "请先添加资产")
+		this.Data["errorMsg"] = "请先添加资产"
+		this.Data["baselines"] = []map[string]string{}
+		this.Data["agents"] = []map[string]string{}
+		this.Show()
+		return
 	}
 	baselines := agents.SCAListResp{}
 	for _, v := range agent.AffectedItems {

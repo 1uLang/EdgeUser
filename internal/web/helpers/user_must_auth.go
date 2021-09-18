@@ -257,228 +257,228 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 			"icon": "paper plane",
 			"url":  "/lb",
 		},
-	}
-	if configloaders.HIDSType == "safedog" {
-		allMaps = append(allMaps, []maps.Map{
-			{
-				"code": "hids",
-				"url":  "/hids/examine",
-				"name": "主机防护",
-				"icon": "linux",
-				"subItems": []maps.Map{
-					{
-						"name": "主机体检",
-						"url":  "/hids/examine",
-						"code": "examine",
-					},
-					{
-						"name": "漏洞风险",
-						"url":  "/hids/risk",
-						"code": "risk",
-					},
-					{
-						"name": "入侵威胁",
-						"url":  "/hids/invade",
-						"code": "invade",
-					},
-					{
-						"name": "合规基线",
-						"url":  "/hids/baseline",
-						"code": "baseline",
-					},
-					{
-						"name": "Agent管理",
-						"url":  "/hids/agent",
-						"code": "agent",
-					},
-					{
-						"name": "黑白名单",
-						"url":  "/hids/bwlist",
-						"code": "bwlist",
-					},
+		{
+			"code": "hids",
+			"url":  "/hids/examine",
+			"name": "主机防护",
+			"icon": "linux",
+			"subItems": []maps.Map{
+				{
+					"name": "主机体检",
+					"url":  "/hids/examine",
+					"code": "examine",
+				},
+				{
+					"name": "漏洞风险",
+					"url":  "/hids/risk",
+					"code": "risk",
+				},
+				{
+					"name": "入侵威胁",
+					"url":  "/hids/invade",
+					"code": "invade",
+				},
+				{
+					"name": "合规基线",
+					"url":  "/hids/baseline",
+					"code": "baseline",
+				},
+				{
+					"name": "Agent管理",
+					"url":  "/hids/agent",
+					"code": "agent",
+				},
+				{
+					"name": "黑白名单",
+					"url":  "/hids/bwlist",
+					"code": "bwlist",
 				},
 			},
-		}...)
-	} else { //wazuh
-		allMaps = append(allMaps, []maps.Map{
-			{
-				"code": "hids",
-				"url":  "/hids/agents",
-				"name": "主机防护",
-				"icon": "linux",
-				"subItems": []maps.Map{
-					{
-						"name": "资产管理",
-						"url":  "/hids/agents",
-						"code": "agents",
-					},
-					{
-						"name": "漏洞风险",
-						"url":  "/hids/vulnerability",
-						"code": "vulnerability",
-					},
-					{
-						"name": "病毒管理",
-						"url":  "/hids/virus",
-						"code": "virus",
-					},
-					{
-						"name": "合规基线",
-						"url":  "/hids/baseline",
-						"code": "baseline",
-					},
+		},
+		{
+			"code": "nhids",
+			"url":  "/hids/agents",
+			"name": "主机防护",
+			"icon": "linux",
+			"subItems": []maps.Map{
+				{
+					"name": "资产管理",
+					"url":  "/hids/agents",
+					"code": "agents",
+				},
+				{
+					"name": "漏洞风险",
+					"url":  "/hids/vulnerability",
+					"code": "vulnerability",
+				},
+				{
+					"name": "病毒管理",
+					"url":  "/hids/virus",
+					"code": "virus",
+				},
+				{
+					"name": "合规基线",
+					"url":  "/hids/baseLine",
+					"code": "baseLine",
+				},
+				{
+					"name": "安全事件",
+					"url":  "/hids/attck",
+					"code": "attck",
+				},
+				{
+					"name": "文件监控",
+					"url":  "/hids/syscheck",
+					"code": "syscheck",
 				},
 			},
-		}...)
-	}
-	allMaps = append(allMaps,
-		[]maps.Map{
-			{
-				"code": "webscan",
-				"url":  "/webscan/targets",
-				"name": "漏洞扫描",
-				"icon": "yelp",
-				"subItems": []maps.Map{
-					{
-						"name": "扫描目标",
-						"url":  "/webscan/targets",
-						"code": "targets",
-					},
-					{
-						"name": "扫描任务",
-						"url":  "/webscan/scans",
-						"code": "scans",
-					},
-					{
-						"name": "扫描报告",
-						"url":  "/webscan/reports",
-						"code": "reports",
-					},
+		},
+		{
+			"code": "webscan",
+			"url":  "/webscan/targets",
+			"name": "漏洞扫描",
+			"icon": "yelp",
+			"subItems": []maps.Map{
+				{
+					"name": "扫描目标",
+					"url":  "/webscan/targets",
+					"code": "targets",
+				},
+				{
+					"name": "扫描任务",
+					"url":  "/webscan/scans",
+					"code": "scans",
+				},
+				{
+					"name": "扫描报告",
+					"url":  "/webscan/reports",
+					"code": "reports",
 				},
 			},
-			{
-				"code": "fortcloud",
-				"url":  "/fortcloud/assets",
-				"name": "云堡垒机",
-				"icon": "ioxhost",
-				"subItems": []maps.Map{
-					{
-						"name": "资产管理",
-						"url":  "/fortcloud/assets",
-						"code": "assets",
-					},
-					{
-						"name": "授权凭证",
-						"url":  "/fortcloud/cert",
-						"code": "cert",
-					},
-					{
-						"name": "会话管理",
-						"url":  "/fortcloud/sessions",
-						"code": "sessions",
-					},
-					{
-						"name": "运维审计",
-						"url":  "/fortcloud/audit",
-						"code": "audit",
-					},
+		},
+		{
+			"code": "fortcloud",
+			"url":  "/fortcloud/assets",
+			"name": "云堡垒机",
+			"icon": "ioxhost",
+			"subItems": []maps.Map{
+				{
+					"name": "资产管理",
+					"url":  "/fortcloud/assets",
+					"code": "assets",
+				},
+				{
+					"name": "授权凭证",
+					"url":  "/fortcloud/cert",
+					"code": "cert",
+				},
+				{
+					"name": "会话管理",
+					"url":  "/fortcloud/sessions",
+					"code": "sessions",
+				},
+				{
+					"name": "运维审计",
+					"url":  "/fortcloud/audit",
+					"code": "audit",
 				},
 			},
-			//{
-			//	"code": "finance",
-			//	"name": "费用账单",
-			//	"icon": "yen sign",
+		},
+		//{
+		//	"code": "finance",
+		//	"name": "费用账单",
+		//	"icon": "yen sign",
+		//},
+		//{
+		//	"code": "acl",
+		//	"name": "访问控制",
+		//	"icon": "address book",
+		//},
+		/**{
+			"code": "tickets",
+			"name": "工单",
+			"icon": "question circle outline",
+		},**/
+		{
+			"code": "audit",
+			"url":  "/audit/db",
+			"name": "安全审计",
+			"icon": "sellsy",
+			"subItems": []maps.Map{
+				{
+					"name": "数据库管理",
+					"url":  "/audit/db",
+					"code": "db",
+				},
+				{
+					"name": "主机管理",
+					"url":  "/audit/host",
+					"code": "host",
+				},
+				{
+					"name": "应用管理",
+					"url":  "/audit/app",
+					"code": "app",
+				},
+				{
+					"name": "审计日志",
+					"url":  "/audit/logs",
+					"code": "logs",
+				},
+				{
+					"name": "订阅报告",
+					"url":  "/audit/report",
+					"code": "report",
+				},
+				{
+					"name": "Agent管理",
+					"url":  "/audit/agent",
+					"code": "agent",
+				},
+			},
+		},
+		{
+			"code": "databackup",
+			"url":  "/databackup",
+			"name": "数据备份",
+			"icon": "copy",
+			//"subItems": []maps.Map{
+			//	{
+			//		"name": "文件管理",
+			//		"url":  "/databackup",
+			//		"code": "assets",
+			//	},
+			//	{
+			//		"name": "上传文件",
+			//		"url":  "/databackup/createPopUp",
+			//		"code": "admins",
+			//	},
 			//},
-			//{
-			//	"code": "acl",
-			//	"name": "访问控制",
-			//	"icon": "address book",
-			//},
-			/**{
-				"code": "tickets",
-				"name": "工单",
-				"icon": "question circle outline",
-			},**/
-			{
-				"code": "audit",
-				"url":  "/audit/db",
-				"name": "安全审计",
-				"icon": "sellsy",
-				"subItems": []maps.Map{
-					{
-						"name": "数据库管理",
-						"url":  "/audit/db",
-						"code": "db",
-					},
-					{
-						"name": "主机管理",
-						"url":  "/audit/host",
-						"code": "host",
-					},
-					{
-						"name": "应用管理",
-						"url":  "/audit/app",
-						"code": "app",
-					},
-					{
-						"name": "审计日志",
-						"url":  "/audit/logs",
-						"code": "logs",
-					},
-					{
-						"name": "订阅报告",
-						"url":  "/audit/report",
-						"code": "report",
-					},
-					{
-						"name": "Agent管理",
-						"url":  "/audit/agent",
-						"code": "agent",
-					},
+		},
+		{
+			"code": "platform",
+			"url":  "/platform/user",
+			"name": "平台管理",
+			"icon": "sitemap",
+			"subItems": []maps.Map{
+				{
+					"name": "账号管理",
+					"url":  "/platform/user",
+					"code": "user",
+				},
+				{
+					"name": "操作日志",
+					"url":  "/platform/logs",
+					"code": "logs",
+				},
+				{
+					"name": "安全策略",
+					"url":  "/platform/strategy",
+					"code": "strategy",
 				},
 			},
-			{
-				"code": "databackup",
-				"url":  "/databackup",
-				"name": "数据备份",
-				"icon": "copy",
-				//"subItems": []maps.Map{
-				//	{
-				//		"name": "文件管理",
-				//		"url":  "/databackup",
-				//		"code": "assets",
-				//	},
-				//	{
-				//		"name": "上传文件",
-				//		"url":  "/databackup/createPopUp",
-				//		"code": "admins",
-				//	},
-				//},
-			},
-			{
-				"code": "platform",
-				"url":  "/platform/user",
-				"name": "平台管理",
-				"icon": "sitemap",
-				"subItems": []maps.Map{
-					{
-						"name": "账号管理",
-						"url":  "/platform/user",
-						"code": "user",
-					},
-					{
-						"name": "操作日志",
-						"url":  "/platform/logs",
-						"code": "logs",
-					},
-					{
-						"name": "安全策略",
-						"url":  "/platform/strategy",
-						"code": "strategy",
-					},
-				},
-			},
-		}...)
+		},
+	}
 
 	result := []maps.Map{}
 	configloaders.LoadUIConfig()

@@ -1,5 +1,4 @@
 // 主机防护使用wazuh组件
-// +build wazuh
 
 package wazuh
 

@@ -6,18 +6,17 @@ import (
 	"github.com/1uLang/zhiannet-api/wazuh/model/agents"
 	"github.com/1uLang/zhiannet-api/wazuh/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
-	"time"
 )
 
-type VirusAction struct {
+type InvadeAction struct {
 	actionutils.ParentAction
 }
 
-func (this *VirusAction) Init() {
+func (this *InvadeAction) Init() {
 	this.Nav("", "", "virus")
 }
 
-func (this *VirusAction) RunGet(params struct {
+func (this *InvadeAction) RunGet(params struct {
 	Agent string
 }) {
 
@@ -45,12 +44,12 @@ func (this *VirusAction) RunGet(params struct {
 		params.Agent = agent.AffectedItems[0].ID
 		//params.Agent = "007"
 	}
-	list, err := server.VirusList(agents.ESListReq{
+	list, err := server.InvadeThreatESList(agents.ESListReq{
 		Agent:  params.Agent,
 		Limit:  1,
 		Offset: 0,
-		Start:  time.Now().AddDate(0, 0, -1).Unix(),
-		End:    time.Now().Unix(),
+		//Start:  time.Now().AddDate(0, 0, -1).Unix(),
+		//End:    time.Now().Unix(),
 		//Start: 1630982235, End: 1631068635,
 	})
 	if err != nil {
@@ -61,19 +60,19 @@ func (this *VirusAction) RunGet(params struct {
 	page := this.NewPage(int64(list.Total))
 	this.Data["page"] = page.AsHTML()
 
-	list, err = server.VirusList(agents.ESListReq{
+	list, err = server.InvadeThreatESList(agents.ESListReq{
 		Agent:  params.Agent,
 		Limit:  int(page.Size),
 		Offset: int(page.Offset),
-		Start:  time.Now().AddDate(0, 0, -1).Unix(),
-		End:    time.Now().Unix(),
+		//Start:  time.Now().AddDate(0, 0, -1).Unix(),
+		//End:    time.Now().Unix(),
 		//Start: 1630982235, End: 1631068635,
 	})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	this.Data["virus"] = list.Hits
+	this.Data["invades"] = list.Hits
 
 	this.Data["agents"] = agent.AffectedItems
 

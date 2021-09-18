@@ -1,12 +1,10 @@
 // 主机防护使用wazuh组件
-// +build wazuh
 
 package wazuh
 
 import (
 	"fmt"
 	"github.com/1uLang/zhiannet-api/wazuh/server"
-	"github.com/TeaOSLab/EdgeUser/internal/configloaders"
 	"github.com/TeaOSLab/EdgeUser/internal/web/helpers"
 	"github.com/iwind/TeaGo"
 )
@@ -14,7 +12,6 @@ import (
 //主机防护
 
 func init() {
-	configloaders.HIDSType = "wazuh"
 	TeaGo.BeforeStart(func(server *TeaGo.Server) {
 		server.
 			Helper(helpers.NewUserMustAuth("")).
@@ -31,6 +28,12 @@ func init() {
 			Data("teaMenu", "baseLine").
 			Get("/baseLine", new(BaseLineAction)).
 			Get("/baseLineDetails", new(BaseLineDetailsAction)).
+			Data("teaMenu", "attck").
+			Get("/attck", new(AttckAction)).
+			Data("teaMenu", "invades").
+			Get("/invades", new(InvadeAction)).
+			Data("teaMenu", "syscheck").
+			Get("/syscheck", new(SysCheckAction)).
 			EndAll()
 	})
 }
