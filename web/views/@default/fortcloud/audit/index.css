@@ -33,6 +33,7 @@
     right: 0;
     top: 0;
     bottom: 0;
+    padding-left: 120px;
     background-color: rgba(0, 0, 0, 0.6);
     z-index: 1;display: flex;
     justify-content: center;
@@ -40,7 +41,7 @@
   }
   
   .dialog-bg-style{
-    width:1300px;
+    width: 90%;
     height: auto;
     display: flex;
     flex-direction: column;
