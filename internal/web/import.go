@@ -104,4 +104,7 @@ import (
 
 	//主机列表
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/hostlist"
+
+	//主机安全防护
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/wazuh"
 )

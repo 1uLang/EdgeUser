@@ -36,8 +36,9 @@ func (this *AttckAction) RunGet(params struct {
 
 	if len(agent.AffectedItems) == 0 {
 		this.Data["errorMsg"] = "请先添加资产"
-		this.Data["baselines"] = []map[string]string{}
+		this.Data["attcks"] = []map[string]string{}
 		this.Data["agents"] = []map[string]string{}
+		this.Data["agent"] = ""
 		this.Show()
 		return
 	}
