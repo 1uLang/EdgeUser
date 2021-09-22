@@ -1,107 +1,120 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta charset="UTF-8" />
-    <link rel="icon" href="/images/logo.png" type="image/x-icon" />
-    <link rel="shortcut icon" href="/images/logo.png" type="image/x-icon" />
-    <title>智安云综合防御平台</title>
-    <link rel="stylesheet" type="text/css" href="css/style2.0.css" />
-	{$TEA.VUE}
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta charset="UTF-8"/>
+    <!--    <link rel="icon" href="/images/logo.png" type="image/x-icon" />-->
+    <!--    <link rel="shortcut icon" href="/images/logo.png" type="image/x-icon" />-->
+    <!--    <title>智安云综合防御平台</title>-->
+    {$if eq .faviconFileId 0}
+    <link rel="shortcut icon" href="/images/favicon.png"/>
+    {$else}
+    <link rel="shortcut icon" href="/ui/image/{$ .faviconFileId}"/>
+    {$end}
+    <title>登录{$.systemName}</title>
+    <link rel="stylesheet" type="text/css" href="css/style2.0.css"/>
+    {$TEA.VUE}
     {$TEA.SEMANTIC}
     <script type="text/javascript" src="/js/utils.js"></script>
     <script type="text/javascript" src="/js/md5.min.js"></script>
     <script type="text/javascript" src="/js/sweetalert2/dist/sweetalert2.all.min.js"></script>
-	<script type="text/javascript" src="/ui/components.js?v=1.0.0"></script>
+    <script type="text/javascript" src="/ui/components.js?v=1.0.0"></script>
 
-	<script type="text/javascript" src="js/axios.min.js"></script>
+    <script type="text/javascript" src="js/axios.min.js"></script>
     <script type="text/javascript" src="js/requestApi.js"></script>
-  </head>
-  <style>
+</head>
+<style>
     html,
     body {
-      width: 100%;
-      height: 100%;
+        width: 100%;
+        height: 100%;
     }
-   
-  </style>
-  <body>
-    <div class="background-style">
-		<img src="/images/image_login_tag.png" style="left: 0;width: 60%;height: 100%;">
-		<div style="height: 100%;width: 40%;display: flex;align-items: center;">
-			<div v-if="showPageState==1" style="width: 70%;height: 60%;border-radius: 6px;background-color: #fff;display: flex;flex-direction: column;align-items: center;">
-				<div style="font-size: 2vw;color: #3C44E5;letter-spacing:0.2vw;margin-top: 10%;">
-					智安云综合防御平台
-				</div>
-				<div style="font-size: 1vw;color: #333;margin-top: 5%;margin-bottom: 5%;">
-					一站式等保合规建设服务平台
-				</div>
-				<div class="input-contain-style">
-					<img src="/images/image_login_user.png" style="margin-left: 5%;margin-right: 5%;width: 8%;">
-					<input style="border: none;outline: none;font-size: 1vw;width: 75%;" type="text" id="username" name="username" placeholder="请输入用户名" @change="onRefreshShowOpt"/>
-			   	</div>
 
-			   	<div class="input-contain-style">
-					<img src="/images/image_login_lock.png" style="margin-left: 5%;margin-right: 5%;width: 8%;">
-					<input style="border: none;outline: none;font-size: 1vw;width: 75%;" type="password" id="password" name="password" placeholder="请输入密码" @keydown="onCheckDoLogin"/>
-		   		</div>
+</style>
+<body>
+<div class="background-style">
+    <img src="/images/image_login_tag.png" style="left: 0;width: 60%;height: 100%;">
+    <div style="height: 100%;width: 40%;display: flex;align-items: center;">
+        <div v-if="showPageState==1"
+             style="width: 70%;height: 60%;border-radius: 6px;background-color: #fff;display: flex;flex-direction: column;align-items: center;">
+            <div style="font-size: 2vw;color: #3C44E5;letter-spacing:0.2vw;margin-top: 10%;">
+				{$.systemName}
+            </div>
+            <div style="font-size: 1vw;color: #333;margin-top: 5%;margin-bottom: 5%;">
+                一站式等保合规建设服务平台
+            </div>
+            <div class="input-contain-style">
+                <img src="/images/image_login_user.png" style="margin-left: 5%;margin-right: 5%;width: 8%;">
+                <input style="border: none;outline: none;font-size: 1vw;width: 75%;" type="text" id="username"
+                       name="username" placeholder="请输入用户名" @change="onRefreshShowOpt"/>
+            </div>
 
-				<div class="input-contain-style" v-if="tempShowOTP">
-					<img src="/images/image_opt_code.png" style="margin-left: 5%;margin-right: 5%;width: 8%;"> 
-					<input style="border: none;outline: none;font-size: 1vw;width: 75%;" type="text" id="otpCode" name="otpCode" placeholder="请输入OTP动态密码" maxlength="6"/>
-		   		</div>
+            <div class="input-contain-style">
+                <img src="/images/image_login_lock.png" style="margin-left: 5%;margin-right: 5%;width: 8%;">
+                <input style="border: none;outline: none;font-size: 1vw;width: 75%;" type="password" id="password"
+                       name="password" placeholder="请输入密码" @keydown="onCheckDoLogin"/>
+            </div>
 
-				<div class="login-btn-style" @click="login">登录</div>
-			</div>
+            <div class="input-contain-style" v-if="tempShowOTP">
+                <img src="/images/image_opt_code.png" style="margin-left: 5%;margin-right: 5%;width: 8%;">
+                <input style="border: none;outline: none;font-size: 1vw;width: 75%;" type="text" id="otpCode"
+                       name="otpCode" placeholder="请输入OTP动态密码" maxlength="6"/>
+            </div>
 
-			<div v-if="showPageState==2" style="width: 70%;height: 60%;border-radius: 6px;background-color: #fff;display: flex;flex-direction: column;align-items: center;">
-				<div style="font-size: 2vw;color: #3C44E5;letter-spacing:0.2vw;margin-top: 10%;">
-					智安云综合防御平台
-				</div>
-				<div style="font-size: 1vw;color: #333;margin-top: 5%;margin-bottom: 5%;">
-					一站式等保合规建设服务平台
-				</div>
-				<div class="input-contain-style">
-					<img src="/images/image_login_lock.png" style="margin-left: 5%;margin-right: 5%;width: 8%;">
-					<input style="border: none;outline: none;font-size: 1vw;width: 75%;" type="password" id="resetPassword" name="password" placeholder="请输入新密码"/>
-			   	</div>
+            <div class="login-btn-style" @click="login">登录</div>
+        </div>
 
-			   	<div class="input-contain-style">
-					<img src="/images/image_login_lock.png" style="margin-left: 5%;margin-right: 5%;width: 8%;">
-					<input style="border: none;outline: none;font-size: 1vw;width: 75%;" type="password" id="confirmPassword" name="confirmPassword" placeholder="请确认密码" @keydown="onCheckDoReset"/>
-		   		</div>
+        <div v-if="showPageState==2"
+             style="width: 70%;height: 60%;border-radius: 6px;background-color: #fff;display: flex;flex-direction: column;align-items: center;">
+            <div style="font-size: 2vw;color: #3C44E5;letter-spacing:0.2vw;margin-top: 10%;">
+				{$.systemName}
+            </div>
+            <div style="font-size: 1vw;color: #333;margin-top: 5%;margin-bottom: 5%;">
+                一站式等保合规建设服务平台
+            </div>
+            <div class="input-contain-style">
+                <img src="/images/image_login_lock.png" style="margin-left: 5%;margin-right: 5%;width: 8%;">
+                <input style="border: none;outline: none;font-size: 1vw;width: 75%;" type="password" id="resetPassword"
+                       name="password" placeholder="请输入新密码"/>
+            </div>
 
-				<div class="login-btn-style" @click="onResetPwd">确认修改</div>
-			</div>
+            <div class="input-contain-style">
+                <img src="/images/image_login_lock.png" style="margin-left: 5%;margin-right: 5%;width: 8%;">
+                <input style="border: none;outline: none;font-size: 1vw;width: 75%;" type="password"
+                       id="confirmPassword" name="confirmPassword" placeholder="请确认密码" @keydown="onCheckDoReset"/>
+            </div>
 
-			<!-- <div v-if="showPageState==3" style="width: 70%;height: 60%;border-radius: 6px;background-color: #fff;display: flex;flex-direction: column;align-items: center;">
-				<div style="font-size: 2vw;color: #3C44E5;letter-spacing:0.2vw;margin-top: 10%;">
-					智安云综合防御平台
-				</div>
-				<div style="font-size: 1vw;color: #333;margin-top: 5%;margin-bottom: 5%;">
-					一站式等保合规建设服务平台
-				</div>
-				<div class="input-contain-style">
-					<img src="/images/image_login_user.png" style="margin-left: 5%;margin-right: 5%;width: 8%;">
-					<input style="border: none;outline: none;font-size: 1vw;width: 75%;" type="text" id="systemCode" name="systemCode" disabled/>
-			   	</div>
+            <div class="login-btn-style" @click="onResetPwd">确认修改</div>
+        </div>
 
-			   	<div class="input-contain-style">
-					<img src="/images/image_login_lock.png" style="margin-left: 5%;margin-right: 5%;width: 8%;">
-					<input style="border: none;outline: none;font-size: 1vw;width: 75%;" type="text" id="secret" name="secret" placeholder="请输入密钥" @keydown="onCheckDoRenewal"/>
-		   		</div>
+        <!-- <div v-if="showPageState==3" style="width: 70%;height: 60%;border-radius: 6px;background-color: #fff;display: flex;flex-direction: column;align-items: center;">
+            <div style="font-size: 2vw;color: #3C44E5;letter-spacing:0.2vw;margin-top: 10%;">
+                智安云综合防御平台
+            </div>
+            <div style="font-size: 1vw;color: #333;margin-top: 5%;margin-bottom: 5%;">
+                一站式等保合规建设服务平台
+            </div>
+            <div class="input-contain-style">
+                <img src="/images/image_login_user.png" style="margin-left: 5%;margin-right: 5%;width: 8%;">
+                <input style="border: none;outline: none;font-size: 1vw;width: 75%;" type="text" id="systemCode" name="systemCode" disabled/>
+               </div>
 
-				<div class="login-btn-style" @click="onRenewal">续订</div>
-			</div> -->
-		</div>
+               <div class="input-contain-style">
+                <img src="/images/image_login_lock.png" style="margin-left: 5%;margin-right: 5%;width: 8%;">
+                <input style="border: none;outline: none;font-size: 1vw;width: 75%;" type="text" id="secret" name="secret" placeholder="请输入密钥" @keydown="onCheckDoRenewal"/>
+               </div>
 
-		<div v-if="bShowDialog" class="dialog-style" @click.stop>
-			<div class="dialog-bg-style">
-				<img :src="tipImage" style="width: 100px;height: 100px;margin-bottom: 20px;">
-				<div style="margin-top: 15px;margin-bottom: 15px;">{{errorMsg}}</div>
-				<div class="dialog-define-style" @click="onCloseDialog">确定</div>
-			</div>
-		</div>
-	</div>
-  </body>
+            <div class="login-btn-style" @click="onRenewal">续订</div>
+        </div> -->
+    </div>
+
+    <div v-if="bShowDialog" class="dialog-style" @click.stop>
+        <div class="dialog-bg-style">
+            <img :src="tipImage" style="width: 100px;height: 100px;margin-bottom: 20px;">
+            <div style="margin-top: 15px;margin-bottom: 15px;">{{errorMsg}}</div>
+            <div class="dialog-define-style" @click="onCloseDialog">确定</div>
+        </div>
+    </div>
+</div>
+</body>
 </html>

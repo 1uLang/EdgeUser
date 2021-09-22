@@ -1,0 +1,74 @@
+<!-- 添加目标 -->
+{$layout}
+{$template "/datepicker"}
+{$var "header"}
+<!--<script type="text/javascript" src="/js/timeFactory.js"></script>-->
+{$end}
+
+<div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+    <div :class="{'menu-select-color':pageState===1,'menu-define-color':pageState!=1}" @click="onChangeState(1)">文件列表
+    </div>
+    <div :class="{'menu-select-color':pageState===2,'menu-define-color':pageState!=2}" @click="onChangeState(2)">文件监控
+    </div>
+</div>
+<div style="height: 40px;margin-top: 10px;display: flex;flex-direction: row;align-items: center;">
+    <span style="font-size: 14px;margin-right: 5px;height: 32px;line-height: 32px;">主机：</span>
+    <select class="ui dropdown auto-width" v-model="agent" @change="search">
+        <option value="">请选择</option>
+        <option v-for="item in agents" :value="item.id">{{item.ip}}</option>
+    </select>
+</div>
+<p class="comment" v-if="syschecks.length == 0">暂时无文件监控记录。</p>
+<div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;margin-top: 30px" v-else>
+    <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;"
+           v-if="pageState === 1">
+        <thead>
+        <tr align="center">
+            <th class='table-head-bg' style="width: 185px;">主机IP</th>
+            <th class='table-head-bg' style="width: 185px;">主机名称</th>
+            <th class='table-head-bg' style="width: 250px;">文件路径</th>
+            <th class='table-head-bg' style="width: 282px;">文件大小</th>
+            <th class='table-head-bg' style="width: 129px;">操作用户</th>
+            <th class='table-head-bg' style="width: 134px;">最后更新时间</th>
+            <th class='table-head-bg' style="width: 134px;">操作</th>
+        </tr>
+        </thead>
+        <tbody id='tableBody'>
+        <tr align="center" style="height: 50px;" v-for="item in syschecks">
+            <td>{{agentItem.ip}}</td>
+            <td>{{agentItem.name}}</td>
+            <td>{{item.file}}</td>
+            <td>{{onChangeSize(item.size)}}</td>
+            <td>{{item.uname}}</td>
+            <td>{{onChangeTimeFormat2(item.mtime)}}</td>
+            <td>
+                <div style="display: inline-flex;justify-content: center;">
+                    <div class="edit_btn_blue" style="color: #db2828" @click="onDetails(item)">监控记录</div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;" v-else>
+        <thead>
+        <tr align="center">
+            <th class='table-head-bg' style="width: 185px;">主机IP</th>
+            <th class='table-head-bg' style="width: 250px;">主机名称</th>
+            <th class='table-head-bg' style="width: 282px;">文件路径</th>
+            <th class='table-head-bg' style="width: 129px;">事件类型</th>
+            <th class='table-head-bg' style="width: 134px;">发现时间</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr align="center" style="height: 50px;" v-for="item in syschecks">
+            <td>{{agentItem.ip}}</td>
+            <td>{{agentItem.name}}</td>
+            <td>{{item._source.syscheck.path}}</td>
+            <td>{{onChangeEvent(item._source.syscheck.event)}}</td>
+            <td>{{onChangeTimeFormat(item._source.timestamp)}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="page" v-html="page"></div>
+

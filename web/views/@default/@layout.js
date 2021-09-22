@@ -99,6 +99,11 @@ Tea.context(function () {
 				if(curSelectNode){
 					tempUrl = tempUrl+"?nodeId="+curSelectNode
 				}
+			}else if(tempUrl.indexOf("hids") != -1){
+				let agent = localStorage.getItem("hidsSelectAgentId");
+				if(agent){
+					tempUrl = tempUrl+"?agent="+agent
+				}
 			}
         }
 

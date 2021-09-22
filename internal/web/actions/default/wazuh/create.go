@@ -26,7 +26,7 @@ func (this *CreateAction) RunGet(params struct{}) {
 
 	this.Data["server"] = addr
 
-	this.Data["commands"] = maps.Map{
+	this.Data["installs"] = maps.Map{
 		"1": maps.Map{
 			"1": maps.Map{
 				"1": "zhianhids-agent.el5.i386.rpm",
@@ -47,6 +47,12 @@ func (this *CreateAction) RunGet(params struct{}) {
 		},
 		"3": "zhianhids-agent.msi",
 		"4": "zhianhids-agent.pkg",
+	}
+	this.Data["commands"] = maps.Map{
+		"1": "sudo systemctl daemon-reload\nsudo systemctl enable wazuh-agent\nsudo systemctl start wazuh-agent",
+		"2": "sudo systemctl daemon-reload\nsudo systemctl enable wazuh-agent\nsudo systemctl start wazuh-agent",
+		"3": "",
+		"4": "sudo /Library/Ossec/bin/wazuh-control start",
 	}
 	this.Show()
 }

@@ -1,0 +1,22 @@
+.table-head-bg{
+    height: 32px;
+    background: #f0f0f0;
+}
+
+.menu-define-color{
+    color: #000;
+    cursor: pointer;
+    margin-right: 15px;
+    margin-top: 10px;
+}
+.menu-select-color{
+    color: #0090cb;
+    cursor: pointer;
+    margin-right: 15px;
+    margin-top: 10px;
+}
+.edit_btn_blue{
+    margin-right: 20px;
+    cursor: pointer;
+    color: #0090cb;
+}

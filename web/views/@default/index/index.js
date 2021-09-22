@@ -13,6 +13,7 @@ Tea.context(function () {
 		sessionStorage.setItem("leftSelectCode","dashboard")
 		localStorage.removeItem("ddosSelectNodeId")
 		localStorage.removeItem("nfwSelectNodeId")
+		localStorage.removeItem("hidsSelectAgentId");
 		this.onGetRefreshToken()
 		this.onGetToken()
 	});

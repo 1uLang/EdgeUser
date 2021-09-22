@@ -1,0 +1,39 @@
+<!-- 添加目标 -->
+{$layout}
+{$template "/datepicker"}
+{$var "header"}
+<!--<script type="text/javascript" src="/js/timeFactory.js"></script>-->
+{$end}
+
+<div style="height: 40px;margin-top: 10px;display: flex;flex-direction: row;align-items: center;">
+    <span style="font-size: 14px;margin-right: 5px;height: 32px;line-height: 32px;">主机：</span>
+    <select class="ui dropdown auto-width" v-model="agent" @change="search">
+        <option value="">请选择</option>
+        <option v-for="item in agents" :value="item.id">{{item.ip}}</option>
+    </select>
+</div>
+<p class="comment" v-if="attcks.length == 0">暂时无安全事件记录。</p>
+<div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;margin-top: 30px" v-else>
+    <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;">
+        <thead>
+        <tr align="center">
+            <th class='table-head-bg' style="width: 185px;">主机IP</th>
+            <th class='table-head-bg' style="width: 250px;">主机名称</th>
+            <th class='table-head-bg' style="width: 282px;">事件类型</th>
+            <th class='table-head-bg' style="width: 129px;">规则策略</th>
+            <th class='table-head-bg' style="width: 134px;">发现时间</th>
+        </tr>
+        </thead>
+        <tbody id='tableBody'>
+        <tr align="center" style="height: 50px;" v-for="item in attcks">
+            <td>{{agentItem.ip}}</td>
+            <td>{{agentItem.name}}</td>
+            <td>{{item._source.rule.description}}</td>
+            <td>{{showTactic(item._source.rule.mitre.tactic)}}</td>
+            <td>{{onChangeTimeFormat(item._source.timestamp)}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="page" v-html="page"></div>
+

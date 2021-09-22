@@ -42,6 +42,12 @@
                     <textarea  rows="6"  name="remark" value="command" v-model="command"></textarea>
                 </td>
             </tr>
+            <tr v-if="install !== '' && command !== ''">
+                <td>执行命令*</td>
+                <td>
+                    <textarea  rows="3"  name="remark" value="command" v-model="command"></textarea>
+                </td>
+            </tr>
         </table>
     </form>
 </div>

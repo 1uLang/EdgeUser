@@ -3,6 +3,11 @@ Tea.context(function () {
     this.agentItem = {}
     this.$delay(function () {
 
+        let agent = localStorage.getItem("hidsSelectAgentId");
+        if (agent) {
+            this.agent = agent
+        }
+
         if (this.errorMsg && this.errorMsg != "") {
             teaweb.warn(this.errorMsg)
         }
@@ -15,9 +20,20 @@ Tea.context(function () {
         }
 
     })
+    this.showTactic = function (tactic) {
+        let showResult = ""
+        for (let idx = 0; idx < tactic.length; idx++) {
+            let item = tactic[idx]
+            showResult += item
+            if (idx !== tactic.length - 1)
+                showResult += ','
+        }
+        return showResult
+    }
     this.search = function () {
+
         localStorage.setItem("hidsSelectAgentId", this.agent);
-        window.location = "/hids/virus?agent=" + this.agent
+        window.location = "/hids/attck?agent=" + this.agent
     }
 
     this.onChangeTimeFormat = function (time) {

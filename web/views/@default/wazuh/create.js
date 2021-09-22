@@ -3,6 +3,7 @@ Tea.context(function () {
     this.os = ""
     this.version = ""
     this.architecture = ""
+    this.install = ""
     this.command = ""
 
     this.osSelectIndex = 0
@@ -14,7 +15,7 @@ Tea.context(function () {
         {id: 1, name: "Red Hat / CentOS"},
         {id: 2, name: "Debian / Ubuntu"},
         {id: 3, name: "Windows"},
-        {id: 4, name: "MacOS"},
+        // {id: 4, name: "MacOS"},
     ]
     this.versionList = [
         {id: 0, name: "请选择"},
@@ -30,7 +31,7 @@ Tea.context(function () {
         {id: 4, name: "aarch64"},
     ]
 
-    this.commandList = [
+    this.installList = [
         "sudo WAZUH_MANAGER='ADDR' WAZUH_AGENT_GROUP='GROUP' yum install URL/UFILE",//centos
         "curl -so FILE URL/UFILE && sudo WAZUH_MANAGER='ADDR' WAZUH_AGENT_GROUP='GROUP' dpkg -i ./FILE",//ubuntu
         "Invoke-WebRequest -Uri URL/UFILE -OutFile FILE; ./FILE /q WAZUH_MANAGER='ADDR' WAZUH_REGISTRATION_SERVER='ADDR' WAZUH_AGENT_GROUP='GROUP' ",//windows
@@ -46,35 +47,13 @@ Tea.context(function () {
         this.version = ''
         this.architecture = ''
         this.command = ''
-    }
-
-    //获取命令
-    this.onGetItemCommand = function (id, table) {
-        if (id && table && table.length > 0) {
-            for (var index = 0; index < table.length; index++) {
-                if (table[index].id == id) {
-                    return table[index].command
-                }
-            }
-        }
-        return ""
-    }
-
-    //获取名称
-    this.onGetItemName = function (id, table) {
-        if (id && table && table.length > 0) {
-            for (var index = 0; index < table.length; index++) {
-                if (table[index].id == id) {
-                    return table[index].name
-                }
-            }
-        }
-        return ""
+        this.install = ''
     }
 
     this.createCommand = function (update) {
 
         this.command = ""
+        this.install = ""
         let file = ""
         if (update === 1 || this.osSelectIndex == 0 || this.osSelectIndex == 3 || this.osSelectIndex == 4) {
             this.versionSelectIndex = 0
@@ -84,26 +63,28 @@ Tea.context(function () {
         }
 
         if (this.osSelectIndex == 3 || this.osSelectIndex == 4) {
-            this.command = this.commandList[this.osSelectIndex - 1]
-            file = this.commands[this.osSelectIndex]
+            this.install = this.installList[this.osSelectIndex - 1]
+            file = this.installs[this.osSelectIndex]
         } else {
             if (this.osSelectIndex == 1 && this.versionSelectIndex != 0 && this.architectureSelectIndex != 0) {
-                this.command = this.commandList[this.osSelectIndex - 1]
-                file = this.commands[this.osSelectIndex][this.versionSelectIndex][this.architectureSelectIndex]
+                this.install = this.installList[this.osSelectIndex - 1]
+                file = this.installs[this.osSelectIndex][this.versionSelectIndex][this.architectureSelectIndex]
             }
             if (this.osSelectIndex == 2 && this.architectureSelectIndex != 0) {
-                this.command = this.commandList[this.osSelectIndex - 1]
-                file = this.commands[this.osSelectIndex][this.architectureSelectIndex]
+                this.install = this.installList[this.osSelectIndex - 1]
+                file = this.installs[this.osSelectIndex][this.architectureSelectIndex]
             }
         }
-        //替换command
-        this.command = this.command.replaceAll("ADDR", this.server)
-        this.command = this.command.replaceAll("'GROUP'", "'" + this.group + "'")
+        //替换install
+        this.install = this.install.replaceAll("ADDR", this.server)
+        this.install = this.install.replaceAll("'GROUP'", "'" + this.group + "'")
         let url = window.location
-        this.command = this.command.replaceAll("URL", url.origin)
+        this.install = this.install.replaceAll("URL", url.origin)
 
-        this.command = this.command.replaceAll("UFILE", "file/" + file)
-        this.command = this.command.replaceAll("FILE", file)
+        this.install = this.install.replaceAll("UFILE", "file/" + file)
+        this.install = this.install.replaceAll("FILE", file)
 
+        //生成安装命令
+        this.command = this.commands[this.osSelectIndex]
     }
 })
