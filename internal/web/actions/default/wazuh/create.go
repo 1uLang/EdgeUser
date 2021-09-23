@@ -29,24 +29,24 @@ func (this *CreateAction) RunGet(params struct{}) {
 	this.Data["installs"] = maps.Map{
 		"1": maps.Map{
 			"1": maps.Map{
-				"1": "zhianhids-agent.el5.i386.rpm",
-				"2": "zhianhids-agent.el5.x86_64.rpm",
+				"1": "hids-agent.el5.i386.rpm",
+				"2": "hids-agent.el5.x86_64.rpm",
 			},
 			"2": maps.Map{
-				"1": "zhianhids-agent.i386.rpm",
-				"2": "zhianhids-agent.x86_64.rpm",
-				"3": "zhianhids-agent.armv7hl.rpm",
-				"4": "zhianhids-agent.aarch64.rpm",
+				"1": "hids-agent.i386.rpm",
+				"2": "hids-agent.x86_64.rpm",
+				"3": "hids-agent.armv7hl.rpm",
+				"4": "hids-agent.aarch64.rpm",
 			},
 		},
 		"2": maps.Map{
-			"1": "zhianhids-agent_i386.deb",
-			"2": "zhianhids-agent_amd64.deb",
-			"3": "zhianhids-agent_armhf.deb",
-			"4": "zhianhids-agent_arm64.deb",
+			"1": "hids-agent_i386.deb",
+			"2": "hids-agent_amd64.deb",
+			"3": "hids-agent_armhf.deb",
+			"4": "hids-agent_arm64.deb",
 		},
-		"3": "zhianhids-agent.msi",
-		"4": "zhianhids-agent.pkg",
+		"3": "hids-agent.msi",
+		"4": "hids-agent.pkg",
 	}
 	this.Data["commands"] = maps.Map{
 		"1": "sudo systemctl daemon-reload\nsudo systemctl enable wazuh-agent\nsudo systemctl start wazuh-agent",
