@@ -37,13 +37,15 @@
                 </td>
             </tr>
             <tr>
-                <td>安装命令*</td>
+                <td>安装Agent*</td>
                 <td>
                     <textarea  rows="6"  name="remark" value="install" v-model="install"></textarea>
+                    <p class="comment">您可以使用此命令在一台或多台主机上安装和注册主机防护Agent。</p>
+                    <p class="comment" v-if="osSelectIndex==3">请以管理员身份运行PowerShell执行该命令。</p>
                 </td>
             </tr>
             <tr v-if="install !== '' && command !== ''">
-                <td>执行命令*</td>
+                <td>启动Agent*</td>
                 <td>
                     <textarea  rows="3"  name="remark" value="command" v-model="command"></textarea>
                 </td>
