@@ -22,3 +22,7 @@ Vue.component("tiny-basic-label", {
 Vue.component("micro-basic-label", {
 	template: `<span class="ui label tiny basic" style="margin-bottom: 0.5em; font-size: 0.7em; padding: 4px"><slot></slot></span>`
 })
+Vue.component("label-on-active", {
+	props: ["v-is-active"],
+	template: '<div><span v-if="vIsActive" class="ui label tiny green basic">已连接</span><span v-if="!vIsActive" class="ui label tiny  basic" style="color: #bebebe">未连接</span></div>'
+})
