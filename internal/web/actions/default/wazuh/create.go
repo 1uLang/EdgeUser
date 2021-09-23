@@ -4,6 +4,7 @@ package wazuh
 
 import (
 	"fmt"
+	"github.com/1uLang/zhiannet-api/wazuh/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/maps"
 	"strings"
@@ -19,7 +20,10 @@ func (this *CreateAction) Init() {
 
 func (this *CreateAction) RunGet(params struct{}) {
 
-	this.Data["group"] = fmt.Sprintf("user_%v", this.UserId(true))
+	userIdGroup := fmt.Sprintf("user_%v", this.UserId(true))
+	_ = server.CreateGroup(userIdGroup)
+
+	this.Data["group"] = userIdGroup
 
 	addr := strings.Replace(serverAddr, "http://", "", 1)
 	addr = strings.Replace(addr, "https://", "", 1)
