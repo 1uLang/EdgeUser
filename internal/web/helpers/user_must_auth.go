@@ -317,7 +317,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"code": "vulnerability",
 				},
 				{
-					"name": "病毒管理",
+					"name": "病毒查杀",
 					"url":  "/hids/virus",
 					"code": "virus",
 				},

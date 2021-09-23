@@ -78,4 +78,7 @@ Tea.context(function () {
     this.onDetails = function (item) {
         window.location = "/hids/syscheck?agent=" + this.agent + "&path=" + item.file + '&event=1'
     }
+    this.onSearch = function () {
+        window.location = "/hids/syscheck?agent=" + this.agent + "&file=" + this.filePath
+    }
 })

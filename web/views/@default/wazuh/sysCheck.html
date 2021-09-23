@@ -11,12 +11,15 @@
     <div :class="{'menu-select-color':pageState===2,'menu-define-color':pageState!=2}" @click="onChangeState(2)">文件监控
     </div>
 </div>
-<div style="height: 40px;margin-top: 10px;display: flex;flex-direction: row;align-items: center;">
+<div style="display: inline-flex;margin-top: 10px;">
     <span style="font-size: 14px;margin-right: 5px;height: 32px;line-height: 32px;">主机：</span>
     <select class="ui dropdown auto-width" v-model="agent" @change="search">
         <option value="">请选择</option>
         <option v-for="item in agents" :value="item.id">{{item.ip}}</option>
     </select>
+    <span style="font-size: 14px;margin-right: 5px;margin-left: 30px;height: 32px;line-height: 32px;">文件路径：</span>
+    <input type="text" v-model="filePath" style="height: 32px;width: 170px;line-height: 32px;border: 1px solid #d7d7d7;" placeholder="请输入文件路径"></input>
+    <div class="sure-btn" style="margin-left: 30px;" @click="onSearch">查询</div>
 </div>
 <p class="comment" v-if="syschecks.length == 0">暂时无文件监控记录。</p>
 <div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;margin-top: 30px" v-else>

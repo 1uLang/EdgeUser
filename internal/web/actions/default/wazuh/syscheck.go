@@ -21,8 +21,10 @@ func (this *SysCheckAction) RunGet(params struct {
 	Agent string
 	Event string
 	Path  string
+	File  string //查询文件路径
 }) {
 	this.Data["event"] = params.Event
+	this.Data["filePath"] = params.File
 	err := InitAPIServer()
 	if err != nil {
 		this.ErrorPage(err)
@@ -53,6 +55,7 @@ func (this *SysCheckAction) RunGet(params struct {
 			Agent:  params.Agent,
 			Limit:  1,
 			Offset: 0,
+			File:   params.File,
 			//Start: 1630982235, End: 1631068635,
 		})
 		if err != nil {
@@ -67,6 +70,7 @@ func (this *SysCheckAction) RunGet(params struct {
 			Agent:  params.Agent,
 			Limit:  page.Size,
 			Offset: page.Offset,
+			File:   params.File,
 		})
 		if err != nil {
 			this.ErrorPage(err)
