@@ -10,17 +10,16 @@ import (
 )
 
 type ReplayAction struct {
-
 	actionutils.ParentAction
 }
 
 func (this *ReplayAction) checkAndNewServerRequest() (*next_terminal_server.Request, error) {
-	if fortcloud.ServerUrl == "" {
-		err := fortcloud.InitAPIServer()
-		if err != nil {
-			return nil, err
-		}
+
+	err := fortcloud.InitAPIServer()
+	if err != nil {
+		return nil, err
 	}
+
 	return fortcloud.NewServerRequest(fortcloud.Username, fortcloud.Password)
 }
 
@@ -40,11 +39,11 @@ func (this *ReplayAction) RunGet(params struct {
 	}
 	args := &session_model.ReplayReq{}
 	args.Id = params.Id
-	buf,err := req.Session.Replay(args)
+	buf, err := req.Session.Replay(args)
 	if err != nil {
 		this.ErrorPage(err)
 		return
-	}// 日志
+	} // 日志
 	this.CreateLogInfo("堡垒机 - 回放会话:[%v]成功", params.Id)
 	this.Write(buf)
 }

@@ -13,13 +13,13 @@ type IndexAction struct {
 }
 
 func (this *IndexAction) checkAndNewServerRequest() (*next_terminal_server.Request, error) {
-	if fortcloud.ServerUrl == "" {
-		err := fortcloud.InitAPIServer()
-		if err != nil {
-			return nil, err
-		}
+
+	err := fortcloud.InitAPIServer()
+	if err != nil {
+		return nil, err
 	}
-	return fortcloud.NewServerRequest(fortcloud.Username,fortcloud.Password)
+
+	return fortcloud.NewServerRequest(fortcloud.Username, fortcloud.Password)
 }
 func (this *IndexAction) RunGet(params struct {
 	PageSize int
@@ -32,10 +32,10 @@ func (this *IndexAction) RunGet(params struct {
 	}
 
 	offline, err := req.Session.List(&session_model.ListReq{
-		Status:"disconnected",
-		UserId: uint64(this.UserId()),
+		Status:    "disconnected",
+		UserId:    uint64(this.UserId()),
 		PageIndex: 1,
-		PageSize: 999,
+		PageSize:  999,
 	})
 	if err != nil {
 		this.ErrorPage(err)

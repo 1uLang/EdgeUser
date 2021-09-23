@@ -18,12 +18,12 @@ func (this *DetailsAction) Init() {
 }
 
 func (this *DetailsAction) checkAndNewServerRequest() (*next_terminal_server.Request, error) {
-	if fortcloud.ServerUrl == "" {
-		err := fortcloud.InitAPIServer()
-		if err != nil {
-			return nil, err
-		}
+
+	err := fortcloud.InitAPIServer()
+	if err != nil {
+		return nil, err
 	}
+
 	return fortcloud.NewServerRequest(fortcloud.Username, fortcloud.Password)
 }
 
@@ -36,7 +36,6 @@ func (this *DetailsAction) RunPost(params struct {
 		Field("id", params.Id).
 		Require("请选择资产")
 
-
 	req, err := this.checkAndNewServerRequest()
 	if err != nil {
 		this.ErrorPage(fmt.Errorf("堡垒机组件错误:" + err.Error()))
@@ -44,7 +43,7 @@ func (this *DetailsAction) RunPost(params struct {
 	}
 	args := &asset_model.DetailsReq{}
 	args.Id = params.Id
-	info,err := req.Assets.Details(args)
+	info, err := req.Assets.Details(args)
 	if err != nil {
 		this.ErrorPage(err)
 		return

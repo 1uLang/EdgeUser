@@ -14,12 +14,12 @@ type ConnectAction struct {
 }
 
 func (this *ConnectAction) checkAndNewServerRequest() (*next_terminal_server.Request, error) {
-	if fortcloud.ServerUrl == "" {
-		err := fortcloud.InitAPIServer()
-		if err != nil {
-			return nil, err
-		}
+
+	err := fortcloud.InitAPIServer()
+	if err != nil {
+		return nil, err
 	}
+
 	return fortcloud.NewServerRequest(fortcloud.Username, fortcloud.Password)
 }
 
@@ -39,12 +39,12 @@ func (this *ConnectAction) RunPost(params struct {
 	}
 	args := &asset_model.ConnectReq{}
 	args.Id = params.Id
-	url,err := req.Assets.Connect(args)
+	url, err := req.Assets.Connect(args)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	this.Data["url"] = fortcloud.ServerUrl+url
+	this.Data["url"] = fortcloud.ServerUrl + url
 	// 日志
 	this.CreateLogInfo("堡垒机 - 连接资产:[%v]成功", params.Id)
 	this.Success()

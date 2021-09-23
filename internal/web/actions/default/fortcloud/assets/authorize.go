@@ -16,12 +16,12 @@ type AuthorizeAction struct {
 }
 
 func (this *AuthorizeAction) checkAndNewServerRequest() (*next_terminal_server.Request, error) {
-	if fortcloud.ServerUrl == "" {
-		err := fortcloud.InitAPIServer()
-		if err != nil {
-			return nil, err
-		}
+
+	err := fortcloud.InitAPIServer()
+	if err != nil {
+		return nil, err
 	}
+
 	return fortcloud.NewServerRequest(fortcloud.Username, fortcloud.Password)
 }
 
