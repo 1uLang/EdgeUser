@@ -4,6 +4,7 @@ Tea.context(function () {
     this.version = ""
     this.architecture = ""
     this.install = ""
+    this.uninstall = ""
     this.command = ""
 
     this.osSelectIndex = 0
@@ -86,5 +87,7 @@ Tea.context(function () {
 
         //生成安装命令
         this.command = this.commands[this.osSelectIndex]
+        //生成卸载命令
+        this.uninstall = this.uninstalls[this.osSelectIndex]
     }
 })

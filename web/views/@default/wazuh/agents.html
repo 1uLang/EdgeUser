@@ -14,6 +14,7 @@
         <tr align="center">
             <th class='table-head-bg' style="width: 185px;">主机IP</th>
             <th class='table-head-bg' style="width: 250px;">主机名称</th>
+            <th class='table-head-bg' style="width: 250px;">备注</th>
             <th class='table-head-bg' style="width: 282px;">操作系统</th>
             <th class='table-head-bg' style="width: 129px;">创建时间</th>
             <th class='table-head-bg' style="width: 129px;">最后在线时间</th>
@@ -25,6 +26,7 @@
         <tr align="center" style="height: 50px;" v-for="item in agents">
             <td>{{item.ip}}</td>
             <td>{{item.name}}</td>
+            <td>{{item.remake}}</td>
             <td>{{item.os.name + " " + item.os.version}}</td>
             <td>{{onChangeTimeFormat(item.dateAdd)}}</td>
             <td>{{onChangeTimeFormat(item.lastKeepAlive)}}</td>

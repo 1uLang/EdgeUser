@@ -46,7 +46,7 @@ func (this *SystemRiskAction) RunGet(params struct {
 	//系统漏洞数汇总
 	risk, err := risk_server.SystemDistributed(req)
 	if err != nil {
-		this.Data["errorMessage"] = fmt.Errorf("获取系统漏洞信息失败：%v", err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取系统漏洞信息失败：%v", err)
 		return
 	}
 	for k, v := range risk.List {

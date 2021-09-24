@@ -58,5 +58,11 @@ func (this *CreateAction) RunGet(params struct{}) {
 		"3": "",
 		"4": "sudo /Library/Ossec/bin/wazuh-control start",
 	}
+	this.Data["uninstalls"] = maps.Map{
+		"1": "yum remove wazuh-agent",
+		"2": "dpkg -P wazuh-agent",
+		"3": "msiexec.exe /x hids-agent.msi /qn",
+		"4": "",
+	}
 	this.Show()
 }

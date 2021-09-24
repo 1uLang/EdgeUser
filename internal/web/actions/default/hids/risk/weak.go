@@ -42,16 +42,16 @@ func (this *WeakAction) RunGet(params struct {
 	req.UserId = uint64(this.UserId(true))
 	list, err := risk_server.WeakList(req)
 	if err != nil {
-		this.Data["errorMessage"] = fmt.Errorf("获取弱口令信息失败：%v", err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取弱口令信息失败：%v", err)
 		return
 	}
 
 	for k, v := range list.List {
 		os, err := server.Info(v["serverIp"].(string))
 		if err != nil {
-			this.Data["errorMessage"] = fmt.Sprintf("获取主机信息失败：%v",err)
+			this.Data["errorMessage"] = fmt.Sprintf("获取主机信息失败：%v", err)
 			return
-		}else if os == nil {
+		} else if os == nil {
 			continue
 		}
 		list.List[k]["os"] = os
@@ -69,7 +69,7 @@ func (this *WeakAction) RunPost(params struct {
 }) {
 	err := hids.InitAPIServer()
 	if err != nil {
-		this.Error(err.Error(),400)
+		this.Error(err.Error(), 400)
 		return
 	}
 	req := &risk.ProcessReq{Opt: params.Opt}
@@ -78,7 +78,7 @@ func (this *WeakAction) RunPost(params struct {
 	req.Req.ItemIds = params.ItemIds
 	err = risk_server.ProcessWeak(req)
 	if err != nil {
-		this.Error(err.Error(),400)
+		this.Error(err.Error(), 400)
 		return
 	}
 	this.Success()
@@ -132,16 +132,16 @@ func (this *WeakListAction) RunGet(params struct {
 	req.Req.PageNo = 1
 	list1, err := risk_server.WeakDetailList(req)
 	if err != nil {
-		this.Data["errorMessage"] = fmt.Sprintf("获取弱口令详细列表信息失败：%v",err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取弱口令详细列表信息失败：%v", err)
 		return
 	}
 	page := this.NewPage(int64(list1.TotalData))
 	this.Data["page1"] = page.AsHTML()
 	req.Req.PageSize = int(page.Size)
-	req.Req.PageNo = int(page.Offset / page.Size) + 1
+	req.Req.PageNo = int(page.Offset/page.Size) + 1
 	list1, err = risk_server.WeakDetailList(req)
 	if err != nil {
-		this.Data["errorMessage"] = fmt.Sprintf("获取弱口令详细列表信息失败：%v",err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取弱口令详细列表信息失败：%v", err)
 		return
 	}
 	//已处理
@@ -150,7 +150,7 @@ func (this *WeakListAction) RunGet(params struct {
 	req.Req.PageNo = 1
 	list2, err := risk_server.WeakDetailList(req)
 	if err != nil {
-		this.Data["errorMessage"] = fmt.Sprintf("获取弱口令详细列表信息失败：%v",err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取弱口令详细列表信息失败：%v", err)
 		return
 	}
 	//得到总数
@@ -158,10 +158,10 @@ func (this *WeakListAction) RunGet(params struct {
 	this.Data["page2"] = page2.AsHTML()
 
 	req.Req.PageSize = int(page2.Size)
-	req.Req.PageNo = int(page2.Offset / page2.Size) + 1
+	req.Req.PageNo = int(page2.Offset/page2.Size) + 1
 	list2, err = risk_server.WeakDetailList(req)
 	if err != nil {
-		this.Data["errorMessage"] = fmt.Sprintf("获取弱口令详细列表信息失败：%v",err)
+		this.Data["errorMessage"] = fmt.Sprintf("获取弱口令详细列表信息失败：%v", err)
 		return
 	}
 	//漏洞列表
