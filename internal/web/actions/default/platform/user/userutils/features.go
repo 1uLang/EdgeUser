@@ -74,6 +74,11 @@ var (
 			Description: "用户可以查阅云防火墙IPS规则",
 		},
 		{
+			Name:        "病毒库",
+			Code:        "nfw.virus",
+			Description: "用户可以查阅云防火墙的病毒库信息",
+		},
+		{
 			Name:        "会话列表",
 			Code:        "nfw.conversation",
 			Description: "用户可以查阅云防火墙会话列表",

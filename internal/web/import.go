@@ -93,6 +93,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/nfw/acl"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/nfw/conversation"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/nfw/ips"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/nfw/virus"
 
 	//平台管理
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/ip_white"
