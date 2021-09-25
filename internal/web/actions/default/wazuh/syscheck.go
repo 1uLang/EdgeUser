@@ -6,7 +6,6 @@ import (
 	"github.com/1uLang/zhiannet-api/wazuh/model/agents"
 	"github.com/1uLang/zhiannet-api/wazuh/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
-	"time"
 )
 
 type SysCheckAction struct {
@@ -91,8 +90,8 @@ func (this *SysCheckAction) RunGet(params struct {
 		Path:   params.Path,
 		Limit:  1,
 		Offset: 0,
-		Start:  time.Now().AddDate(0, 0, -1).Unix(),
-		End:    time.Now().Unix(),
+		//Start:  time.Now().AddDate(0, 0, -1).Unix(),
+		//End:    time.Now().Unix(),
 		//Start: 1630982235, End: 1631068635,
 	})
 	if err != nil {
@@ -108,8 +107,8 @@ func (this *SysCheckAction) RunGet(params struct {
 		Path:   params.Path,
 		Limit:  int(page.Size),
 		Offset: int(page.Offset),
-		Start:  time.Now().AddDate(0, 0, -1).Unix(),
-		End:    time.Now().Unix(),
+		//Start:  time.Now().AddDate(0, 0, -1).Unix(),
+		//End:    time.Now().Unix(),
 		//Start: 1630982235, End: 1631068635,
 	})
 	if err != nil {
