@@ -69,3 +69,7 @@ h4 span {
     font-size: 0.8em;
     color: grey;
 }
+
+.ui[class*="four column"].grid>.column:not(.row), .ui[class*="four column"].grid>.row>.column {
+    width: 33%;
+}
