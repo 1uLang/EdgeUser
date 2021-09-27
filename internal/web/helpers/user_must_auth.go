@@ -541,3 +541,13 @@ func (this *userMustAuth) findUserFullname(userId int64) (string, error) {
 
 	return resp.User.Fullname, nil
 }
+
+func (this *userMustAuth) FirstMenuUrl(userId int64) string {
+	menus := this.modules(userId)
+
+	if sub := menus[0].GetSlice("subItems"); sub != nil {
+		return sub[0].(maps.Map).GetString("url")
+	} else {
+		return menus[0].GetString("url")
+	}
+}

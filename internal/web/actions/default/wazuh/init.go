@@ -22,6 +22,7 @@ func init() {
 			Get("/agents/create", new(CreateAction)).
 			Post("/agents/delete", new(AgentsAction)).
 			Post("/agents/update", new(UpdateAction)).
+			Post("/agents/check", new(CheckAction)).
 			Data("teaMenu", "vulnerability").
 			Get("/vulnerability", new(VulnerabilityAction)).
 			Data("teaMenu", "virus").
