@@ -83,21 +83,17 @@ Tea.context(function () {
     }
 
     this.onChangePerm = function (perm) {
-
         if (perm.length === 9 && (perm[0] === 'r' || perm[0] === '-')) { //linux
             return perm
         } else {
             let perms = perm.split(",")
-            let permsStr = ""
-            perms.forEach(function (item) {
-                var tempPerm = item.substring(0, item.lastIndexOf(" (allowed):"));
-                let lastidx = tempPerm.lastIndexOf(" ")
-                if (lastidx >= 0) {
-                    tempPerm = tempPerm.substring(lastidx);
-                }
-                permsStr += tempPerm + ' '
-            })
-            return permsStr
+            let item = perms[0]
+            var tempPerm = item.substring(0, item.lastIndexOf(" (allowed):"));
+            let lastidx = tempPerm.lastIndexOf(" ")
+            if (lastidx >= 0) {
+                tempPerm = tempPerm.substring(lastidx);
+            }
+            return tempPerm
         }
     }
 })
