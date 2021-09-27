@@ -81,4 +81,23 @@ Tea.context(function () {
     this.onSearch = function () {
         window.location = "/hids/syscheck?agent=" + this.agent + "&file=" + this.filePath
     }
+
+    this.onChangePerm = function (perm) {
+
+        if (perm.length === 9 && (perm[0] === 'r' || perm[0] === '-')) { //linux
+            return perm
+        } else {
+            let perms = perm.split(",")
+            let permsStr = ""
+            perms.forEach(function (item) {
+                var tempPerm = item.substring(0, item.lastIndexOf(" (allowed):"));
+                let lastidx = tempPerm.lastIndexOf(" ")
+                if (lastidx >= 0) {
+                    tempPerm = tempPerm.substring(lastidx);
+                }
+                permsStr += tempPerm + ' '
+            })
+            return permsStr
+        }
+    }
 })

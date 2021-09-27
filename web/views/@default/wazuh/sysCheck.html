@@ -27,10 +27,10 @@
            v-if="pageState === 1">
         <thead>
         <tr align="center">
-            <th class='table-head-bg' style="width: 185px;">主机IP</th>
             <th class='table-head-bg' style="width: 185px;">主机名称</th>
-            <th class='table-head-bg' style="width: 250px;">文件路径</th>
-            <th class='table-head-bg' style="width: 282px;">文件大小</th>
+            <th class='table-head-bg' style="width: 282px;">文件路径</th>
+            <th class='table-head-bg' style="width: 200px;">文件大小</th>
+            <th class='table-head-bg' style="width: 200px;">文件权限</th>
             <th class='table-head-bg' style="width: 129px;">操作用户</th>
             <th class='table-head-bg' style="width: 134px;">最后更新时间</th>
             <th class='table-head-bg' style="width: 134px;">操作</th>
@@ -38,10 +38,10 @@
         </thead>
         <tbody id='tableBody'>
         <tr align="center" style="height: 50px;" v-for="item in syschecks">
-            <td>{{agentItem.ip}}</td>
             <td>{{agentItem.name}}</td>
             <td>{{item.file}}</td>
             <td>{{onChangeSize(item.size)}}</td>
+            <td>{{onChangePerm(item.perm)}}</td>
             <td>{{item.uname}}</td>
             <td>{{onChangeTimeFormat2(item.mtime)}}</td>
             <td>
