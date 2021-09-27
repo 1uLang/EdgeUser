@@ -8,7 +8,6 @@
     <table id="tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
         <thead>
         <tr align="center">
-            <th class='table-head-bg' style="min-width: 170px;">主机IP</th>
             <th class='table-head-bg' style="min-width: 230px;">主机名称</th>
             <th class='table-head-bg' style="min-width: 300px;">基线规则</th>
             <th class='table-head-bg' style="min-width: 150px;">分数</th>
@@ -19,7 +18,6 @@
         </thead>
         <tbody id='tableBody'>
         <tr align="center" style="height: 40px;" v-for="item in baselines">
-            <td>{{item.agent_ip}}</td>
             <td>{{item.agent_name}}</td>
             <td>{{item.name}}</td>
             <td>{{item.score}}</td>

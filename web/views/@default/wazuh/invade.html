@@ -17,7 +17,6 @@
     <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;">
         <thead>
         <tr align="center">
-            <th class='table-head-bg' style="width: 185px;">主机IP</th>
             <th class='table-head-bg' style="width: 250px;">主机名称</th>
             <th class='table-head-bg' style="width: 282px;">威胁详情</th>
             <th class='table-head-bg' style="width: 129px;">威胁类型</th>
@@ -26,7 +25,6 @@
         </thead>
         <tbody id='tableBody'>
         <tr align="center" style="height: 50px;" v-for="item in invades">
-            <td>{{agentItem.ip}}</td>
             <td>{{agentItem.name}}</td>
             <td>{{item._source.full_log}}</td>
             <td>{{item._source.rule.description}}</td>

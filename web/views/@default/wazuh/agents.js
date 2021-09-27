@@ -10,7 +10,9 @@ Tea.context(function () {
                 .params({
                     agent: agent,
                 }).success(function () {
-                window.location.reload()
+                teaweb.success("删除成功", function () {
+                    teaweb.reload();
+                });
             })
         })
 
@@ -49,7 +51,7 @@ Tea.context(function () {
 
     this.onSaveRemark = function () {
 
-        if(this.newremake !== "" && this.newremake !==  this.newremake2){
+        if (this.newremake !== "" && this.newremake !== this.newremake2) {
             this.$post("/hids/agents/update")
                 .params({
                     agent: this.dbClickId,
@@ -62,6 +64,16 @@ Tea.context(function () {
         this.dbClickId = -1
     }
 
+    this.onUpdate = function (agent) {
+        teaweb.popup(Tea.url("/hids/agents/update?agent=" + agent.id + "&remake=" + agent.remake), {
+            height: '10em',
+            callback: function () {
+                teaweb.success("修改成功", function () {
+                    teaweb.reload();
+                });
+            },
+        });
+    }
     this.onCheck = function (agent) {
 
         teaweb.confirm("确定要立即体检所选资产吗？", function () {
@@ -69,7 +81,9 @@ Tea.context(function () {
                 .params({
                     agent: agent,
                 }).success(function () {
-                window.location.reload()
+                teaweb.success("开启扫描成功", function () {
+                    teaweb.reload();
+                });
             })
         })
     }

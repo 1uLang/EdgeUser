@@ -7,12 +7,27 @@
 <first-menu>
     <menu-item @click.prevent="hanleOpen" style="font-size: 14px;color: rgb(0,0,.87)">[获取资产纳管命令]</menu-item>
 </first-menu>
+<div class="ui four columns grid">
+    <div class="ui column">
+        <h4>主机总数</h4>
+        <div class="value"><span>{{dashboard.total}}</span>个</div>
+    </div>
+
+    <div class="ui column">
+        <h4>已连接数</h4>
+        <div class="value"><span>{{dashboard.active}}</span>个</div>
+    </div>
+
+    <div class="ui column">
+        <h4>未连接数</h4>
+        <div class="value"><span>{{dashboard.offline}}</span>个</div>
+    </div>
+</div>
 <p class="comment" v-if="agents.length == 0">暂时还没有主机。</p>
 <div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;margin-top: 10px" v-else>
     <table class="ui table selectable celled multi-table" border="1" style="border-collapse: collapse;">
         <thead>
         <tr align="center">
-            <th class='table-head-bg' style="width: 185px;">主机IP</th>
             <th class='table-head-bg' style="width: 200px;">主机名称</th>
             <th class='table-head-bg' style="width: 282px;">操作系统</th>
             <th class='table-head-bg' style="width: 129px;">创建时间</th>
@@ -24,7 +39,6 @@
         </thead>
         <tbody id='tableBody'>
         <tr align="center" style="height: 50px;" v-for="item in agents">
-            <td>{{item.ip}}</td>
             <td>{{item.name}}</td>
             <td>{{item.os.name + " " + item.os.version}}</td>
             <td>{{onChangeTimeFormat(item.dateAdd)}}</td>
@@ -32,23 +46,24 @@
             <td>
                 <label-on-active :v-is-active="item.status==='active'"></label-on-active>
             </td>
-            <td @dblclick="onDoubleClick(item)">
-                <div v-if="dbClickId!=item.id" >
-                    {{item.remake}}
-                </div>
-                <div v-else>
-                    <input  type="text" v-model="newremake"
-                            style="width:230px;height: 32px;font-size: 13px;border: 1px solid #d7d7d7;border-radius: 5px;"
-                            @keydown="onCheckKeyDown"/>
-                </div>
-
-            </td>
+            <td>{{item.remake}}</td>
+            <!--            <td @dblclick="onDoubleClick(item)">-->
+            <!--                <div v-if="dbClickId!=item.id" >-->
+            <!--                    {{item.remake}}-->
+            <!--                </div>-->
+            <!--                <div v-else>-->
+            <!--                    <input  type="text" v-model="newremake"-->
+            <!--                            style="width:230px;height: 32px;font-size: 13px;border: 1px solid #d7d7d7;border-radius: 5px;"-->
+            <!--                            @keydown="onCheckKeyDown"/>-->
+            <!--                </div>-->
+            <!--            </td>-->
             <td>
                 <div style="display: inline-flex;justify-content: center;">
                     <div class="edit_btn_blue" style="color: #2185d0" @click="onCheck(item.id)"
-                         v-if="item.status==='active'">立即扫描
+                         v-if="item.status==='active'">扫描
                     </div>
-                    <div class="edit_btn_blue" style="color: #bebebe" v-else>立即扫描</div>
+                    <div class="edit_btn_blue" style="color: #bebebe" v-else>扫描</div>
+                    <div class="edit_btn_blue" style="color: #2185d0" @click="onUpdate(item)">修改</div>
                     <div class="edit_btn_blue" style="color: #db2828" @click="onDelete(item.id)">删除</div>
                 </div>
             </td>
