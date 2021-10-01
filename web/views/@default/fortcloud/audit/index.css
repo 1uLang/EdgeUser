@@ -41,8 +41,8 @@
   }
   
   .dialog-bg-style{
-    width: 90%;
-    height: 70%;
+    width: 70em;
+    height: auto;
     display: flex;
     flex-direction: column;
     justify-content: start;

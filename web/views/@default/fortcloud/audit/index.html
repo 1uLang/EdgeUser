@@ -59,7 +59,7 @@
         <div style="display: flex;flex-direction: row;margin-top: 5px;align-items: center;padding-left: 10px;margin-bottom: 10px;">
             <img v-show="!isPlaying" src="/images/replay_play.png" width="25px" height="25px" style="cursor: pointer;" @click="onPlayReplay">
             <img v-show="isPlaying" src="/images/replay_pause.png" width="25px" height="25px" style="cursor: pointer;" @click="onPauseReplay">
-            <input type="range" :disabled="bAudioDisabled" min="0" :max="maxDuration" v-model="percentDuration" @change="handleSliderChange" style="width: 1150px;margin: 0 10px;">
+            <input type="range" :disabled="bAudioDisabled" min="0" :max="maxDuration" v-model="percentDuration" @change="handleSliderChange" style="width: 70%;margin: 0 10px;">
             <span>
                 {{`${playPosition}/${playDuration}`}}
             </span>
