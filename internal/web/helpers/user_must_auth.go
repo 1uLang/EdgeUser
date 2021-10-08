@@ -1,9 +1,12 @@
 package helpers
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/1uLang/zhiannet-api/common/cache"
+	"github.com/1uLang/zhiannet-api/common/model/channels"
+	"github.com/1uLang/zhiannet-api/common/server/channels_server"
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/configloaders"
 	teaconst "github.com/TeaOSLab/EdgeUser/internal/const"
@@ -119,6 +122,24 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 		cache.Incr(fmt.Sprintf("login_success_userid_%v", userId), time.Minute*30)
 	}
 
+	//按照用户渠道信息 读取logo配置
+	key := fmt.Sprintf("get-channel-info-uid-%v", userId)
+	channelInfo, err := cache.CheckCache(key, func() (interface{}, error) {
+		info, err := channels_server.GetInfoByUid(uint64(userId))
+		return info, err
+	}, 10, true) //10s缓存
+	if err == nil {
+		b, err := json.Marshal(channelInfo)
+		if err == nil {
+			list := &channels.Channels{}
+			err = json.Unmarshal(b, &list)
+			if err == nil {
+				action.Data["teaLogoFileId"] = list.Logo
+				action.Data["teaTitle"] = list.ProductName
+			}
+
+		}
+	}
 	return true
 }
 
