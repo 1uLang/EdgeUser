@@ -18,6 +18,7 @@ import (
 	"github.com/iwind/TeaGo/maps"
 	"net/http"
 	"reflect"
+	"strconv"
 	"time"
 )
 
@@ -133,8 +134,9 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 		if err == nil {
 			list := &channels.Channels{}
 			err = json.Unmarshal(b, &list)
-			if err == nil {
+			if err == nil && list.ProductName != "" && list.Logo != "" {
 				action.Data["teaLogoFileId"] = list.Logo
+				action.Data["teaFaviconFileId"], _ = strconv.Atoi(list.Logo)
 				action.Data["teaTitle"] = list.ProductName
 			}
 
