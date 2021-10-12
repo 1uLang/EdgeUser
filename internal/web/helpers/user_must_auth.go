@@ -134,10 +134,14 @@ func (this *userMustAuth) BeforeAction(actionPtr actions.ActionWrapper, paramNam
 		if err == nil {
 			list := &channels.Channels{}
 			err = json.Unmarshal(b, &list)
-			if err == nil && list.ProductName != "" && list.Logo != "" {
-				action.Data["teaLogoFileId"] = list.Logo
-				action.Data["teaFaviconFileId"], _ = strconv.Atoi(list.Logo)
-				action.Data["teaTitle"] = list.ProductName
+			if err == nil {
+				if list.ProductName != "" {
+					action.Data["teaTitle"] = list.ProductName
+				}
+				if list.Logo != "" {
+					action.Data["teaLogoFileId"] = list.Logo
+					action.Data["teaFaviconFileId"], _ = strconv.Atoi(list.Logo)
+				}
 			}
 
 		}
