@@ -343,11 +343,11 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"url":  "/hids/attck",
 					"code": "attck",
 				},
-				{
-					"name": "漏洞风险",
-					"url":  "/hids/vulnerability",
-					"code": "vulnerability",
-				},
+				//{
+				//	"name": "漏洞风险",
+				//	"url":  "/hids/vulnerability",
+				//	"code": "vulnerability",
+				//},
 				{
 					"name": "病毒查杀",
 					"url":  "/hids/virus",
