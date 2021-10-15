@@ -163,11 +163,11 @@ var (
 			Code:        "nhids.attck",
 			Description: "用户可以查看检测出来的安全事件记录",
 		},
-		{
-			Name:        "漏洞风险",
-			Code:        "nhids.vulnerability",
-			Description: "用户可以查看检测出来的漏洞风险记录",
-		},
+		//{
+		//	Name:        "漏洞风险",
+		//	Code:        "nhids.vulnerability",
+		//	Description: "用户可以查看检测出来的漏洞风险记录",
+		//},
 		{
 			Name:        "病毒检测",
 			Code:        "nhids.virus",
