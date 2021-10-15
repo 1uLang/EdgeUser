@@ -96,6 +96,11 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/nfw/virus"
 
 	//平台管理
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/feature_library"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/feature_library/feature"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/feature_library/loopholes"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/feature_library/rule"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/feature_library/update"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/ip_white"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/logs"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/strategy"

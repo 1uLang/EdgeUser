@@ -19,17 +19,21 @@ func (this *LinkAction) RunGet(params struct {
 	Address string
 	NodeId  uint64
 }) {
-	this.Data["ddos"] = "[]"
+	defer this.Show()
+	this.Data["ddos"] = ""
 	this.Data["nodeId"] = ""
 	this.Data["address"] = ""
+	this.Data["list"] = ""
+	this.Data["total"] = 0
+	this.Data["page"] = ""
 	//ddos节点
 	ddos, _, err := host_status_server.GetDdosNodeList()
 	if err != nil {
-		this.Data["errorMessage"] = err.Error()
+		//this.Data["errorMessage"] = err.Error()
 		return
 	}
 	if len(ddos) == 0 {
-		this.Data["errorMessage"] = "未配置DDoS防火墙节点"
+		//this.Data["errorMessage"] = "未配置DDoS防火墙节点"
 		return
 	}
 	if params.NodeId == 0 {
@@ -48,7 +52,7 @@ func (this *LinkAction) RunGet(params struct {
 			PageNum:  1,
 		})
 		if err != nil {
-			this.ErrorPage(err)
+			//this.ErrorPage(err)
 			return
 		}
 		for _, host := range hosts {
@@ -57,7 +61,7 @@ func (this *LinkAction) RunGet(params struct {
 				Addr:   host.Addr,
 			})
 			if err != nil {
-				this.ErrorPage(err)
+				//this.ErrorPage(err)
 				return
 			}
 			list.Link = append(list.Link, hostLink.Link...)
@@ -69,7 +73,7 @@ func (this *LinkAction) RunGet(params struct {
 		})
 	}
 	if err != nil {
-		this.ErrorPage(err)
+		//this.ErrorPage(err)
 		return
 	}
 
@@ -88,5 +92,4 @@ func (this *LinkAction) RunGet(params struct {
 	this.Data["ddos"] = ddos
 	this.Data["nodeId"] = params.NodeId
 	this.Data["address"] = params.Address
-	this.Show()
 }

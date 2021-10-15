@@ -1,0 +1,30 @@
+{$layout}
+
+<div class="margin"></div>
+<form method="post" class="ui form" data-tea-action="$" data-tea-success="success">
+    <table class="ui table definition selectable">
+
+
+        <tr>
+            <td class="title">更新方式</td>
+            <td>
+                <!--<div style="display: inline-flex;">
+                    <div style="margin-right: 20px; cursor: default;"><img src="/images/select_select_grey.png" width="12px" height="12px"> <span style="margin-left: 5px;">手动更新</span></div>
+                    <div style="margin-right: 20px; cursor: default;"><img src="/images/select_select_grey.png" width="12px" height="12px"> <span style="margin-left: 5px;">每天自动更新</span></div>-->
+                <div class="ui checkbox">
+                    <a href="javascript:void(0);" @click='update' id="update">{{status}}</a>
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="ui checkbox">
+                    <input type="checkbox" :checked="authUpdate" name="otpOn" id="checkbox" value="1" @click="onUpdate">
+                    <label for="checkbox" @click="onUpdate" style="font-size: 0.85em !important;">自动更新</label>
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="ui checkbox" v-show="status=='立即更新'">
+                    <span style="font-size: 13px;">上次检查更新时间 {{update_time}}</span>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <!-- <submit-btn></submit-btn> -->
+</form>

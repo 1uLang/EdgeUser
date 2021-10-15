@@ -247,11 +247,11 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"code": "ips",
 					"url":  "/nfw/ips",
 				},
-				{
-					"name": "病毒库",
-					"code": "virus",
-					"url":  "/nfw/virus",
-				},
+				//{
+				//	"name": "病毒库",
+				//	"code": "virus",
+				//	"url":  "/nfw/virus",
+				//},
 				{
 					"name": "会话列表",
 					"code": "conversation",
@@ -507,6 +507,11 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"name": "安全策略",
 					"url":  "/platform/strategy",
 					"code": "strategy",
+				},
+				{
+					"name": "特征库管理",
+					"url":  "/platform/feature_library/virus",
+					"code": "virus",
 				},
 			},
 		},
