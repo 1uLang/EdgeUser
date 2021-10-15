@@ -235,7 +235,16 @@ Tea.context(function () {
     this.onEditFileBagName = function(){
         this.bEditFileBagName = true
     }
-
+    this.onName = function(name,url,t){
+        teaweb.popup(Tea.url("databackup/rename?name="+name+"&url="+url), {
+            height: "12em",
+            callback: function () {
+                teaweb.success("修改成功", function () {
+                    teaweb.reload()
+                })
+            }
+        })
+    }
     // this.list = []
 
     // this.dataList = [
