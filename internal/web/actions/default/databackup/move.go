@@ -9,25 +9,27 @@ import (
 	"github.com/iwind/TeaGo/actions"
 )
 
-type DirAction struct {
+type MoveAction struct {
 	actionutils.ParentAction
 }
 
-func (this *DirAction) Init() {
+func (this *MoveAction) Init() {
 	this.Nav("", "", "")
 }
 
-func (this *DirAction) RunPost(params struct {
-	Purl string
-	Name string
+func (this *MoveAction) RunPost(params struct {
+	SrcURL  string
+	NewName string
 
 	Must *actions.Must
 }) {
 	params.Must.
-		Field("name", params.Name).
-		Require("请输入文件名")
-	if params.Name == "" {
-		this.Fail("Purl不能为空")
+		Field("srcURL", params.SrcURL).
+		Require("请输入原文件或文件夹的url路径").
+		Field("newName", params.NewName).
+		Require("请输入新的的名字")
+	if params.SrcURL == "" || params.NewName == "" {
+		this.Fail("url路径，新名字不能为空")
 	}
 	uid, _ := es.GetParentId(&em.GetParentIdReq{UserId: uint64(this.UserId())})
 	if uid == 0 {
@@ -36,13 +38,13 @@ func (this *DirAction) RunPost(params struct {
 	// 获取token
 	token, err := model.QueryTokenByUID(int64(uid))
 	if err != nil {
-		this.FailField("error",err.Error())
+		this.FailField("error", err.Error())
 		return
 	}
 
-	err = request.CreateFoler(token, params.Purl, params.Name)
+	err = request.MoveFileOrFolder(params.SrcURL, params.NewName, token)
 	if err != nil {
-		this.FailField("error",err.Error())
+		this.FailField("error", err.Error())
 		return
 	}
 
