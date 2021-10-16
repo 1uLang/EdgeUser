@@ -2,11 +2,11 @@ package feature
 
 import (
 	"github.com/1uLang/zhiannet-api/common/model/subassemblynode"
+	"github.com/1uLang/zhiannet-api/common/util"
 	opnsense_server "github.com/1uLang/zhiannet-api/opnsense/server"
 	"github.com/1uLang/zhiannet-api/opnsense/server/ips"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/maps"
-	"time"
 )
 
 type IndexAction struct {
@@ -34,14 +34,13 @@ func (this *IndexAction) RunGet(params struct {
 		NodeId: params.NodeId,
 	})
 	if err != nil || version == nil {
-		//this.Show()
-		//this.ErrorPage(err)
-		//return
+		t, _ := util.GetFirstDateOfWeek()
+
 		this.Data["version"] = maps.Map{
-			"update_time":  time.Now().Format("2006-01-02 15:04"),
-			"version":      "版本",
-			"all_total":    "总特征数",
-			"update_total": "更新特征数",
+			"update_time":  t.Format("2006-01-02 15:04"),
+			"version":      "6.0.3_2",
+			"all_total":    "354",
+			"update_total": "21",
 			"name":         "ET open/emerging-scan",
 		}
 	} else {
