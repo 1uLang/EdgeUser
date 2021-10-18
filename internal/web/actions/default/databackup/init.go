@@ -16,6 +16,7 @@ func init() {
 			Post("/delete", new(DeleteAction)).
 			Post("/dir", new(DirAction)).
 			Get("/download", new(DownLoadAction)).
+			GetPost("/rename", new(RenameAction)).
 			EndAll()
 	})
 }

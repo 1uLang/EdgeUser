@@ -1,6 +1,7 @@
 {$layout}
+<p class="comment" v-if="ddos.length == 0">请先添加DDoS防火墙节点。</p>
 
-<div style="width: 100%;height: 40px;display: flex;justify-content: flex-end;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-top: 10px;">
+<div style="width: 100%;height: 40px;display: flex;justify-content: flex-end;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-top: 10px;" v-if="ddos.length > 0">
     <div style="display: inline-flex;align-items: center;">
         <div style="line-height: 40px;text-align: center;">DDoS防护节点：</div>
         <div class="ui field">
@@ -12,7 +13,7 @@
         </div>
     </div>
 </div>
-<div>
+<div v-if="ddos.length > 0">
     <form method="get" class="ui form" action="shield" style="margin-top:-60px;width:400px;">
         <div class="ui margin"></div>
         <div class="ui menu basic text">

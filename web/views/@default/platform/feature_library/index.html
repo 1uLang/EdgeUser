@@ -1,0 +1,44 @@
+{$layout}
+
+<div class="margin"></div>
+<form method="post" class="ui form" data-tea-action="$" data-tea-success="success">
+    <table class="ui table definition selectable">
+
+        <tr>
+            <td class="title">防病毒引擎版本</td>
+            <td>
+                <input disabled type="text" name="version" :value="version.version"/>
+                <p class="comment"></p>
+            </td>
+        </tr>
+        <!--<tr>
+            <td class="title">主要特征数</td>
+            <td>
+                <input disabled type="text" name="main_total" :value="version.main_total"/>
+                <p class="comment"></p>
+            </td>
+        </tr>-->
+        <tr>
+            <td class="title">总特征数</td>
+            <td>
+                <input disabled type="text" name="all_total" :value="version.all_total"/>
+                <p class="comment"></p>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">最新特征数</td>
+            <td>
+                <input disabled type="text" name="update_total" :value="version.update_total"/>
+                <p class="comment"></p>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">最后更新时间</td>
+            <td>
+                <input disabled type="text" name="update_time" :value="version.update_time"/>
+                <p class="comment"></p>
+            </td>
+        </tr>
+    </table>
+    <!-- <submit-btn></submit-btn> -->
+</form>

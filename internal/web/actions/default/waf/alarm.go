@@ -26,10 +26,17 @@ func (this *AlarmAction) RunGet(params struct {
 	Page     int
 	Report   string
 }) {
+	this.Data["page"] = ""
+	this.Data["tableData"] = make([]interface{}, 0)
+	this.Data["nodes"] = make([]interface{}, 0)
+	this.Data["selectNode"] = params.NodeId
+	this.Data["showReport"] = false
+	this.Data["detailTableData"] = maps.Map{}
+	defer this.Show()
 	node, _, err := opnsense_server.GetOpnsenseNodeList()
 	if err != nil || node == nil {
 		//node = make([]*subassemblynode.Subassemblynode, 0)
-		this.ErrorPage(err)
+		//this.ErrorPage(err)
 		return
 	}
 	// 规则列表
@@ -53,7 +60,7 @@ func (this *AlarmAction) RunGet(params struct {
 		FileId: params.FileId,
 	})
 	if err != nil {
-		this.ErrorPage(err)
+		//this.ErrorPage(err)
 		return
 	}
 	count := list.Total
@@ -93,5 +100,4 @@ func (this *AlarmAction) RunGet(params struct {
 	}
 	this.Data["detailTableData"] = reportList
 
-	this.Show()
 }

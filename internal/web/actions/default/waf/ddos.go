@@ -1,7 +1,6 @@
 package waf
 
 import (
-	"fmt"
 	"github.com/1uLang/zhiannet-api/common/server/logs_statistics_server"
 	host_status_server "github.com/1uLang/zhiannet-api/ddos/server/host_status"
 	logs_server "github.com/1uLang/zhiannet-api/ddos/server/logs"
@@ -26,8 +25,8 @@ func (this *DdosAction) RunGet(params struct {
 }) {
 	defer this.Show()
 
-	this.Data["attacks"] = nil
-	this.Data["ddos"] = nil
+	this.Data["attacks"] = ""
+	this.Data["ddos"] = ""
 	this.Data["nodeId"] = params.NodeId
 	//2006-01-02
 	this.Data["startTime"] = params.StartTime
@@ -36,15 +35,16 @@ func (this *DdosAction) RunGet(params struct {
 	this.Data["attackType"] = params.AttackType
 	this.Data["status"] = params.Status
 	this.Data["showReport"] = false
+	this.Data["page"] = ""
 
 	//ddos节点
 	ddos, _, err := host_status_server.GetDdosNodeList()
 	if err != nil {
-		this.ErrorPage(err)
+		//this.ErrorPage(err)
 		return
 	}
 	if len(ddos) == 0 {
-		this.ErrorPage(fmt.Errorf("未配置DDoS防火墙节点"))
+		//this.ErrorPage(fmt.Errorf("未配置DDoS防火墙节点"))
 		return
 	}
 	if params.NodeId == 0 {
@@ -60,12 +60,12 @@ func (this *DdosAction) RunGet(params struct {
 	if params.StartTime != "" && params.EndTime != "" {
 		sT, err := time.ParseInLocation("2006-01-02", params.StartTime, time.Local)
 		if err != nil {
-			this.ErrorPage(fmt.Errorf("起始时间参数错误"))
+			//this.ErrorPage(fmt.Errorf("起始时间参数错误"))
 			return
 		}
 		eT, err := time.ParseInLocation("2006-01-02", params.EndTime, time.Local)
 		if err != nil {
-			this.ErrorPage(fmt.Errorf("结束时间参数错误"))
+			//this.ErrorPage(fmt.Errorf("结束时间参数错误"))
 			return
 		}
 		req.StartTime = sT
@@ -74,7 +74,7 @@ func (this *DdosAction) RunGet(params struct {
 
 	list, err := logs_server.GetAttackLogList(req)
 	if err != nil {
-		this.ErrorPage(fmt.Errorf("获取统计日志列表失败：%v", err))
+		//this.ErrorPage(fmt.Errorf("获取统计日志列表失败：%v", err))
 		return
 	}
 

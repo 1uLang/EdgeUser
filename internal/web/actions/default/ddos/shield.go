@@ -20,14 +20,21 @@ func (this *ShieldAction) RunGet(params struct {
 	Address string
 	NodeId  uint64
 }) {
+	defer this.Show()
+	this.Data["list"] = ""
+	this.Data["total"] = 0
+	this.Data["ddos"] = ""
+	this.Data["nodeId"] = params.NodeId
+	this.Data["address"] = params.Address
+	this.Data["address"] = params.Address
 	//ddos节点
 	ddos, _, err := host_status_server.GetDdosNodeList()
 	if err != nil {
-		this.Data["errorMessage"] = err.Error()
+		//this.Data["errorMessage"] = err.Error()
 		return
 	}
 	if len(ddos) == 0 {
-		this.Data["errorMessage"] = "未配置DDoS防火墙节点"
+		//this.Data["errorMessage"] = "未配置DDoS防火墙节点"
 		return
 	}
 	if params.NodeId == 0 {
@@ -46,7 +53,7 @@ func (this *ShieldAction) RunGet(params struct {
 			PageNum:  1,
 		})
 		if err != nil {
-			this.ErrorPage(err)
+			//this.ErrorPage(err)
 			return
 		}
 		for _, host := range hosts {
@@ -55,7 +62,7 @@ func (this *ShieldAction) RunGet(params struct {
 				NodeId: params.NodeId,
 			})
 			if err != nil {
-				this.ErrorPage(err)
+				//this.ErrorPage(err)
 				return
 			}
 			list.Fblink = append(list.Fblink, hostShield.Fblink...)
@@ -67,7 +74,7 @@ func (this *ShieldAction) RunGet(params struct {
 		})
 	}
 	if err != nil {
-		this.ErrorPage(err)
+		//this.ErrorPage(err)
 		return
 	}
 	page := this.NewPage(int64(len(list.Fblink)))
@@ -94,5 +101,4 @@ func (this *ShieldAction) RunGet(params struct {
 	this.Data["nodeId"] = params.NodeId
 	this.Data["address"] = params.Address
 
-	this.Show()
 }

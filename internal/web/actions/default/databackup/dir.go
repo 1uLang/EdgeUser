@@ -24,7 +24,7 @@ func (this *DirAction) RunPost(params struct {
 	Must *actions.Must
 }) {
 	params.Must.
-		Field("id", params.Name).
+		Field("name", params.Name).
 		Require("请输入文件名")
 	if params.Name == "" {
 		this.Fail("Purl不能为空")
