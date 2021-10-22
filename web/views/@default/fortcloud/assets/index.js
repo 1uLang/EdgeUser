@@ -551,7 +551,7 @@ Tea.context(function () {
         }
     }
     this.accountTypeData = [
-        {type: "custom", name: "密码"}, {type: "credential", name: "授权"},
+        {type: "custom", name: "密码"}, {type: "credential", name: "授权"}, {type: "no_custom", name: "免密"},
     ]
     // 测试数据 先别删
     // this.allUsers = [

@@ -94,6 +94,8 @@ func (this *IndexAction) RunPost(params struct {
 			Require("请输入授权账号").
 			Field("protocol", params.Protocol).
 			Require("请输入密码")
+	} else if params.Type == "on_custom" { //免密登录
+		params.Type = "custom"
 	} else {
 		params.Must.
 			Field("certId", params.CertId).
