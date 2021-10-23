@@ -357,7 +357,7 @@ body.expanded .main {
 .main-menu {
   position: fixed;
   /**top: 1.05em;**/
-  top: 2em;
+  top: 1em;
   bottom: 0;
   overflow-y: auto;
   background: #14539A !important;

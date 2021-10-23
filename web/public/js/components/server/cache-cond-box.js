@@ -116,7 +116,7 @@ Vue.component("cache-cond-box", {
 				<time-duration-box placeholder="缓存时长" :v-unit="'day'" :v-count="1" @change="changeExtDuration"></time-duration-box>
 			</div>
 			<div class="ui field">
-				<a href="" class="ui button tiny" @click.prevent="confirmExt">确定</a> &nbsp; <a href="" title="取消" @click.prevent="cancel()"><i class="icon remove small"></i></a>
+				<a href="" class="ui button tiny" style="background-color: #1b6aff;color: #ffffff" @click.prevent="confirmExt">确定</a> &nbsp; <a href="" title="取消" @click.prevent="cancel()"><i class="icon remove small"></i></a>
 			</div>
 		</div>
 	</div>
@@ -131,14 +131,14 @@ Vue.component("cache-cond-box", {
 				<time-duration-box placeholder="缓存时长" :v-unit="'day'" :v-count="1" @change="changePathDuration"></time-duration-box>
 			</div>
 			<div class="ui field">
-				<a href="" class="ui button tiny" @click.prevent="confirmPath">确定</a> &nbsp; <a href="" title="取消" @click.prevent="cancel()"><i class="icon remove small"></i></a>
+				<a href="" style="background-color: #1b6aff;color: #ffffff" class="ui button tiny" @click.prevent="confirmPath">确定</a> &nbsp; <a href="" title="取消" @click.prevent="cancel()"><i class="icon remove small"></i></a>
 			</div>
 		</div>
 	</div>
 	
 	<div style="margin-top: 1em">
-		<button type="button" class="ui button tiny" @click.prevent="addExt">+缓存扩展名</button> &nbsp; 
-		<button type="button" class="ui button tiny" @click.prevent="addPath">+缓存路径</button>
+		<button style="background-color: #1b6aff;color: #ffffff" type="button" class="ui button tiny" @click.prevent="addExt">+缓存扩展名</button> &nbsp; 
+		<button style="background-color: #1b6aff;color: #ffffff" type="button" class="ui button tiny" @click.prevent="addPath">+缓存路径</button>
 	</div>
 </div>`
 })

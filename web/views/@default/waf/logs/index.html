@@ -23,16 +23,16 @@
 			<div v-if="servers.length == 0"></div>
 			<div style="display: flex;flex-direction: row;">
 				<div class="ui field">
-					<button class="ui button" @click="report(0)"   type="button">日报</button>
+					<button style="background-color: #1b6aff;" class="ui button" @click="report(0)"   type="button">日报</button>
 				</div>
 				<div class="ui field">
-					<button class="ui button"  @click="report(1)"  type="button">周报</button>
+					<button style="background-color: #1b6aff;" class="ui button"  @click="report(1)"  type="button">周报</button>
 				</div>
 				<div class="ui field">
 					<input type="text" name="day" maxlength="10" placeholder="选择日期" style="width:7.8em" id="day-input" v-model="day"/>
 				</div>
 				<div class="ui field">
-					<button class="ui button" type="submit">查找</button>
+					<button style="background-color: #1b6aff;" class="ui button" type="submit">查找</button>
 				</div>
 			</div>
 		</div>

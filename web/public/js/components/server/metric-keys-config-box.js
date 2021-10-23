@@ -132,14 +132,14 @@ Vue.component("metric-keys-config-box", {
 				<input type="text" v-model="subKey" placeholder="Cookie名" size="15">
 			</div>
 			<div class="ui field">
-				<button type="button" class="ui button tiny" @click.prevent="confirm">确定</button>
+				<button style="background-color: #1b6aff;" type="button" class="ui button tiny" @click.prevent="confirm">确定</button>
 				<a href="" @click.prevent="cancel"><i class="icon remove small"></i></a>
 			</div>
 		</div>
 		<p class="comment" v-if="keyDescription.length > 0">{{keyDescription}}</p>
 	</div>
 	<div style="margin-top: 1em" v-if="!isAdding">
-		<button type="button" class="ui button tiny" @click.prevent="add">+</button>
+		<button style="background-color: #1b6aff;" type="button" class="ui button tiny" @click.prevent="add">+</button>
 	</div>
 </div>`
 })

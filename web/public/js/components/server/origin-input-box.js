@@ -68,7 +68,7 @@ Vue.component("origin-input-box", {
 		</div>
 	</div>
 	<div style="margin-top: 1em">
-		<button class="ui button tiny" type="button" @click.prevent="add()">+</button>
+		<button style="background-color: #1b6aff;color: #ffffff;" class="ui button tiny" type="button" @click.prevent="add()">+</button>
 	</div>
 </div>`
 })

@@ -83,7 +83,7 @@ Vue.component("http-request-conds-box", {
 		</div>
 		
 		<div>
-			<button class="ui button tiny" type="button" @click.prevent="addGroup()">+</button>
+			<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="addGroup()">+</button>
 		</div>
 	</div>	
 </div>`

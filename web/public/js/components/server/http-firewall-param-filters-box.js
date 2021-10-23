@@ -67,13 +67,13 @@ Vue.component("http-firewall-param-filters-box", {
 					</select>
 				</div>
 				<div class="ui field">
-					<button class="ui button tiny" type="button" @click.prevent="confirm()">确定</button>
+					<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="confirm()">确定</button>
 					&nbsp; <a href="" @click.prevent="cancel()" title="取消"><i class="icon remove"></i></a>
 				</div>
 			</div>
 		</div>
 		<div v-if="!isAdding">
-			<button class="ui button tiny" type="button" @click.prevent="add">+</button>
+			<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="add">+</button>
 		</div>
 		<p class="comment">可以对参数值进行特定的编解码处理。</p>
 </div>`

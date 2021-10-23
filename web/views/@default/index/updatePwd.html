@@ -37,8 +37,8 @@
 						<input type="password"  v-model="confirmPassword" placeholder="请确认密码" maxlength="200" @input="changePassword1"/>
 					</div>
 				</div>
-				<button class="ui button primary fluid" type="submit" v-if="!isSubmitting">确认修改</button>
-				<button class="ui button primary fluid disabled" type="submit" v-if="isSubmitting">提交中...</button>
+				<button style="background-color: #1b6aff;" class="ui button primary fluid" type="submit" v-if="!isSubmitting">确认修改</button>
+				<button style="background-color: #1b6aff;" class="ui button primary fluid disabled" type="submit" v-if="isSubmitting">提交中...</button>
 			</div>
 		</form>
 	</div>

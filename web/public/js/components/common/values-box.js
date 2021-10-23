@@ -70,7 +70,7 @@ Vue.component("values-box", {
 					<input type="text" :size="size" :maxlength="maxlength" :placeholder="placeholder" v-model="value" ref="value" @keyup.enter="confirm()" @keypress.enter.prevent="1"/>
 				</div> 
 				<div class="ui field">
-					<button class="ui button small" type="button" @click.prevent="confirm()">确定</button> 
+					<button style="background-color: #1b6aff;color: #ffffff"  class="ui button small" type="button" @click.prevent="confirm()">确定</button> 
 				</div>
 				<div class="ui field">
 					<a href="" @click.prevent="cancel()" title="取消"><i class="icon remove small"></i></a> 
@@ -78,7 +78,7 @@ Vue.component("values-box", {
 			</div> 
 		</div> 
 		<div v-if="!isAdding && !isUpdating">
-			<button class="ui button small" type="button" @click.prevent="create()">+</button> 
+			<button style="background-color: #1b6aff;color:#ffffff;"  class="ui button small" type="button" @click.prevent="create()">+</button> 
 		</div>
 </div>`
 });

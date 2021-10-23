@@ -45,6 +45,6 @@ Vue.component("http-firewall-rules-box", {
 			</div>
 			<div class="ui divider"></div>
 		</div>
-		<button class="ui button tiny" type="button" @click.prevent="addRule()">+</button>
+		<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="addRule()">+</button>
 </div>`
 })

@@ -13,15 +13,16 @@
         <input type="text" v-model="searchSQLName" style="height: 32px;width: 170px;line-height: 32px;border: 1px solid #d7d7d7;" placeholder="请输入数据库名称"></input>
         <span style="font-size: 14px;margin-right: 5px;margin-left: 30px;height: 32px;line-height: 32px;">数据库IP：</span>
         <input type="text" v-model="searchSQLIp" style="height: 32px;width: 170px;line-height: 32px;border: 1px solid #d7d7d7;" placeholder="请输入数据库IP"></input>
-        <div class="sure-btn" style="margin-left: 30px;" @click="onSearch">查询</div>
+        <div class="sure-btn" style="margin-left: 30px;background-color: #1b6aff;" @click="onSearch">查询</div>
     </div>
 
     <div style="width: 100%;height: 600px;margin-top: 10px;overflow-x: auto; overflow-y: auto;">
         <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
             <thead>
                 <tr align="center">
-                    <th class='table-head-bg' style="width: 25%;" >审计ID</th>
-                    <th class='table-head-bg' style="width: 15%;" >数据库名称</th>
+                    <th class='table-head-bg' style="width: 20%;" >审计ID</th>
+                    <th class='table-head-bg' style="width: 15%;" >日志提交地址</th>
+                    <th class='table-head-bg' style="width: 10%;" >数据库名称</th>
                     <th class='table-head-bg' style="width: 10%;" >IP</th>
                     <th class='table-head-bg' style="width: 8%;" >端口</th>
                     <th class='table-head-bg' style="width: 8%;" >类型</th>
@@ -36,6 +37,15 @@
                     <td>
                         <div style="padding: 4px 0;">
                             {{item.audit_id}}
+                        </div>
+                    </td>
+
+                    <td>
+                        <div style="padding: 4px 0;">
+                            123.129.208.233:5045 <br>
+                            123.129.208.235:5045 <br>
+                            123.129.208.236:5045 <br>
+
                         </div>
                     </td>
                     <td>
@@ -75,7 +85,7 @@
                     </td>
                     <td>
                         <div style="display: flex;justify-content: space-around;padding: 4px 0;">
-                            <div class="edit_btn" @click="onOpenAuth(item)">授权</div>
+                            <div class="edit_btn"  @click="onOpenAuth(item)">授权</div>
                             <div class="edit_btn" @click="onEdit(item)">修改</div>
                             <div class="del-btn" style="color: #db2828" @click="onDelete(item.id)">删除</div>
                         </div>
@@ -112,8 +122,8 @@
 
             </div>
             <div style="height: 250px;display: flex;flex-direction: column;justify-content: center;align-items: center;margin: 0 10px;">
-                <div class="auth-middle-btn-stype" style="margin-bottom: 30px;" @click="onAddAuthPeople">授权 ></div>
-                <div class="auth-middle-btn-stype" @click="onRemoveAuthPeople">< 移除</div>
+                <div class="auth-middle-btn-stype" style="margin-bottom: 30px;background-color: #1b6aff;color: #ffffff;" @click="onAddAuthPeople">授权 ></div>
+                <div class="auth-middle-btn-stype" style="background-color: #1b6aff;color: #ffffff;" @click="onRemoveAuthPeople">< 移除</div>
             </div>
             <div class="auth-people-box-style">
                 <div class="auth-people-title-style">
@@ -131,7 +141,7 @@
 
         <div style="width: 100%;display: flex;justify-content: center;margin-top: 10px;border-top: 1px solid #d7d7d7;padding-top: 10px;">
             <div class="clean-btn" style="margin-right: 30px;" @click="onCloseAuth">取消</div>
-            <div class="sure-btn" @click="onSaveAuth">确认</div>
+            <div class="sure-btn"  style="background-color: #1b6aff;color: #ffffff;" @click="onSaveAuth">确认</div>
         </div>
     </div>
 </div>

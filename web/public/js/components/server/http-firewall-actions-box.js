@@ -554,7 +554,7 @@ Vue.component("http-firewall-actions-box", {
 				<td>选择IP名单 *</td>
 				<td>
 					<div v-if="recordIPListId > 0" class="ui label basic small">{{recordIPListName}} <a href="" @click.prevent="removeRecordIPList"><i class="icon remove small"></i></a></div>
-					<button type="button" class="ui button tiny" @click.prevent="selectRecordIPList">+</button>
+					<button style="background-color: #1b6aff;"  type="button" class="ui button tiny" @click.prevent="selectRecordIPList">+</button>
 					<p class="comment">如不选择，则自动添加到当前策略的IP名单中。</p>
 				</td>
 			</tr>
@@ -616,11 +616,11 @@ Vue.component("http-firewall-actions-box", {
 				</td>
 			</tr>
 		</table>
-		<button class="ui button tiny" type="button" @click.prevent="confirm">确定</button> &nbsp;
+		<button style="background-color: #1b6aff;"  class="ui button tiny" type="button" @click.prevent="confirm">确定</button> &nbsp;
 		<a href="" @click.prevent="cancel" title="取消"><i class="icon remove small"></i></a>
 	</div>
 	<div v-if="!isAdding">
-		<button class="ui button tiny" type="button" @click.prevent="add">+</button>
+		<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="add">+</button>
 	</div>
 	<p class="comment">系统总是会先执行记录日志、标签等不会修改请求的动作，再执行阻止、验证码等可能改变请求的动作。</p>
 </div>`

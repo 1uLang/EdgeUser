@@ -55,7 +55,7 @@ Vue.component("http-host-redirect-box", {
 		<div class="ui divider"></div>	
 	</div>
 	<div>
-		<button type="button" class="ui button tiny" @click.prevent="add">+</button>
+		<button style="background-color: #1b6aff;" type="button" class="ui button tiny" @click.prevent="add">+</button>
 	</div>
 </div>`
 })

@@ -12,7 +12,8 @@
 .edit_btn_blue{
     margin-right: 20px;
     cursor: pointer;
-    color: #0090cb;
+    color: #ffffff;
+    background-color: #1b6aff;
 }
 
 .save-btn{
@@ -20,7 +21,7 @@
     margin-left: 15px;
     padding: 0 20px !important;
     color: #fff;
-    background-color: #276ac6;
+    background-color: #1b6aff;
     font-size: 14px;
     font-weight: normal;
     border-radius: 5px;

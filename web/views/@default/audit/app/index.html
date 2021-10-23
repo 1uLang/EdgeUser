@@ -13,7 +13,7 @@
         <input type="text" v-model="searchSQLName" style="height: 32px;width: 170px;line-height: 32px;border: 1px solid #d7d7d7;" placeholder="请输入应用名称"></input>
         <span style="font-size: 14px;margin-right: 5px;margin-left: 30px;height: 32px;line-height: 32px;">应用IP：</span>
         <input type="text" v-model="searchSQLIp" style="height: 32px;width: 170px;line-height: 32px;border: 1px solid #d7d7d7;" placeholder="请输入应用IP"></input>
-        <div class="sure-btn" style="margin-left: 30px;" @click="onSearch">查询</div>
+        <div class="sure-btn" style="margin-left: 30px;background-color: #1b6aff;" @click="onSearch">查询</div>
     </div>
 
     <div style="width: 100%;height: 600px;margin-top: 10px;overflow-x: auto; overflow-y: auto;">
@@ -21,8 +21,9 @@
             <thead>
                 <tr align="center">
                 <tr align="center">
-                    <th class='table-head-bg' style="width: 30%;" >审计ID</th>
-                    <th class='table-head-bg' style="width: 20%;" >应用名称</th>
+                    <th class='table-head-bg' style="width: 20%;" >审计ID</th>
+                    <th class='table-head-bg' style="width: 15%;" >日志提交地址</th>
+                    <th class='table-head-bg' style="width: 15%;" >应用名称</th>
                     <th class='table-head-bg' style="width: 12%;" >IP</th>
                     <th class='table-head-bg' style="width: 12%;" >类型</th>
                     <th class='table-head-bg' style="width: 12%;" >状态</th>
@@ -35,6 +36,13 @@
                     <td>
                         <div style="padding: 4px 0;">
                             {{item.audit_id}}
+                        </div>
+                    </td>
+                    <td>
+                        <div style="padding: 4px 0;">
+                            123.129.208.233:5045 <br>
+                            123.129.208.235:5045 <br>
+                            123.129.208.236:5045 <br>
                         </div>
                     </td>
                     <td>
@@ -113,8 +121,8 @@
         </div>
 
         <div style="width: 100%;display: flex;justify-content: center;margin-top: 10px;border-top: 1px solid #d7d7d7;padding-top: 10px;">
-            <div class="clean-btn" style="margin-right: 30px;" @click="onCloseAuth">取消</div>
-            <div class="sure-btn" @click="onSaveAuth">确认</div>
+            <div class="clean-btn" style="margin-right: 30px;background-color: #1b6aff;color: #ffffff;" @click="onCloseAuth">取消</div>
+            <div class="sure-btn" style="background-color: #1b6aff;color: #ffffff;" @click="onSaveAuth">确认</div>
         </div>
     </div>
 </div>

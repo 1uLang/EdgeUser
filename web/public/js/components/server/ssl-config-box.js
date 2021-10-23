@@ -362,8 +362,8 @@ Vue.component("ssl-config-box", {
 						<span class="red">选择或上传证书后<span v-if="vProtocol == 'https'">HTTPS</span><span v-if="vProtocol == 'tls'">TLS</span>服务才能生效。</span>
 						<div class="ui divider"></div>
 					</div>
-					<button class="ui button tiny" type="button" @click.prevent="selectCert()">选择已有证书</button> &nbsp;
-					<button class="ui button tiny" type="button" @click.prevent="uploadCert()">上传新证书</button> &nbsp;
+					<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="selectCert()">选择已有证书</button> &nbsp;
+					<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="uploadCert()">上传新证书</button> &nbsp;
 					<!--<button class="ui button tiny" type="button" @click.prevent="requestCert()" v-if="vServerId != null && vServerId > 0">申请免费证书</button>-->
 				</td>
 			</tr>
@@ -468,12 +468,12 @@ Vue.component("ssl-config-box", {
 							<input type="text" name="addingHstsDomain" ref="addingHstsDomain" style="width:16em" maxlength="100" placeholder="域名，比如example.com" @keyup.enter="confirmAddHstsDomain()" @keypress.enter.prevent="1" v-model="addingHstsDomain" />
 						</div>
 						<div class="ui field">
-							<button class="ui button tiny" type="button" @click="confirmAddHstsDomain()">确定</button>
+							<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click="confirmAddHstsDomain()">确定</button>
 							&nbsp; <a href="" @click.prevent="cancelHstsDomainAdding()">取消</a>
 						</div>
 					</div>
 					<div class="ui field" style="margin-top: 1em">
-						<button class="ui button tiny" type="button" @click="addHstsDomain()">+</button>
+						<button style="background-color: #1b6aff;"  class="ui button tiny" type="button" @click="addHstsDomain()">+</button>
 					</div>
 					<p class="comment">如果没有设置域名的话，则默认支持所有的域名。</p>
 				</td>
@@ -497,8 +497,8 @@ Vue.component("ssl-config-box", {
 						</div>
 						<div class="ui divider"></div>
 					</div>
-					<button class="ui button tiny" type="button" @click.prevent="selectClientCACert()">选择已有证书</button> &nbsp;
-					<button class="ui button tiny" type="button" @click.prevent="uploadClientCACert()">上传新证书</button>
+					<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="selectClientCACert()">选择已有证书</button> &nbsp;
+					<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="uploadClientCACert()">上传新证书</button>
 					<p class="comment">用来校验客户端证书以增强安全性，通常不需要设置。</p>
 				</td>
 			</tr>

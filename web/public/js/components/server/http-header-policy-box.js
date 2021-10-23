@@ -163,7 +163,7 @@ Vue.component("http-header-policy-box", {
 					<div class="ui label small basic" v-for="headerName in requestDeletingHeaders">{{headerName}} <a href=""><i class="icon remove" title="删除" @click.prevent="deleteDeletingHeader(vRequestHeaderPolicy.id, headerName)"></i></a> </div>
 					<div class="ui divider" ></div>
 				</div>
-				<button class="ui button small" type="button" @click.prevent="addDeletingHeader(vRequestHeaderPolicy.id, 'request')">+</button>
+				<button style="background-color: #1b6aff;"  class="ui button small" type="button" @click.prevent="addDeletingHeader(vRequestHeaderPolicy.id, 'request')">+</button>
 			</td>
 		</table>
 	</div>
@@ -205,7 +205,7 @@ Vue.component("http-header-policy-box", {
 					<div class="ui label small basic" v-for="headerName in responseDeletingHeaders">{{headerName}} <a href=""><i class="icon remove" title="删除" @click.prevent="deleteDeletingHeader(vResponseHeaderPolicy.id, headerName)"></i></a> </div>
 					<div class="ui divider" ></div>
 				</div>
-				<button class="ui button small" type="button" @click.prevent="addDeletingHeader(vResponseHeaderPolicy.id, 'response')">+</button>
+				<button style="background-color: #1b6aff;" class="ui button small" type="button" @click.prevent="addDeletingHeader(vResponseHeaderPolicy.id, 'response')">+</button>
 			</td>
 		</table>
 	</div>

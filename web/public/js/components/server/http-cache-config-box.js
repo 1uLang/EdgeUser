@@ -119,7 +119,7 @@ Vue.component("http-cache-config-box", {
 			</thead>
 		</table>
 		
-		<button class="ui button tiny" @click.prevent="addRef">+添加缓存设置</button>
+		<button style="background-color: #1b6aff;" class="ui button tiny" @click.prevent="addRef">+添加缓存设置</button>
 	</div>
 	<div class="margin"></div>
 </div>`

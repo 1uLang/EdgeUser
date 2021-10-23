@@ -111,7 +111,7 @@ Vue.component("http-websocket-box", {
 						</div>
 						<div class="ui divider"></div>
 					</div>
-					<button class="ui button tiny" type="button" @click.prevent="createOrigin()">+</button>
+					<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="createOrigin()">+</button>
 					<p class="comment">只允许在列表中的来源域名访问Websocket服务。</p>
 				</td>
 			</tr>

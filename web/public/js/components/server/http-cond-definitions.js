@@ -70,11 +70,11 @@ Vue.component("http-cond-url-extension", {
 			<input type="text" size="6" maxlength="100" v-model="addingExt" ref="addingExt" placeholder=".xxx" @keyup.enter="confirmAdding" @keypress.enter.prevent="1" />
 		</div>
 		<div class="ui field">
-			<button class="ui button tiny" type="button" @click.prevent="confirmAdding">确认</button>
+			<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="confirmAdding">确认</button>
 			<a href="" title="取消" @click.prevent="cancelAdding"><i class="icon remove"></i></a>
 		</div> 
 	</div>
-	<button class="ui button tiny" type="button" @click.prevent="addExt()">+添加扩展名</button>
+	<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="addExt()">+添加扩展名</button>
 	<p class="comment">扩展名需要包含点（.）符号，例如<span class="ui label tiny">.jpg</span>、<span class="ui label tiny">.png</span>之类。</p>
 </div>`
 })
@@ -171,11 +171,11 @@ Vue.component("http-cond-mime-type", {
 			<input type="text" size="16" maxlength="100" v-model="addingMimeType" ref="addingMimeType" placeholder="类似于image/png" @keyup.enter="confirmAdding" @keypress.enter.prevent="1" />
 		</div>
 		<div class="ui field">
-			<button class="ui button tiny" type="button" @click.prevent="confirmAdding">确认</button>
+			<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="confirmAdding">确认</button>
 			<a href="" title="取消" @click.prevent="cancelAdding"><i class="icon remove"></i></a>
 		</div> 
 	</div>
-	<button class="ui button tiny" type="button" @click.prevent="addMimeType()">+添加MimeType</button>
+	<button style="background-color: #1b6aff;" class="ui button tiny" type="button" @click.prevent="addMimeType()">+添加MimeType</button>
 	<p class="comment">服务器返回的内容的MimeType，比如<span class="ui label tiny">text/html</span>、<span class="ui label tiny">image/*</span>等。</p>
 </div>`
 })
