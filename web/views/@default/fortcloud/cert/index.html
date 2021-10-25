@@ -44,7 +44,7 @@
     <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
         <div style="display: inline-flex;margin-top: 10px;">
             <span style="cursor: pointer;" @click="onChangeState(1)">账号列表</span>
-            <div style="margin-left: 20px;color: #0090cb;cursor: pointer;">[添加账号]</div>
+            <div style="margin-left: 20px;color: #1b6aff;cursor: pointer;">[添加账号]</div>
         </div>
     </div>
     <div style="padding: 10px 30px;">
@@ -77,9 +77,9 @@
     <div style="display: flex;flex-direction: column;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
         <div style="display: inline-flex;margin-top: 10px;">
             <span style="cursor: pointer;" @click="onChangeState(1)">账号列表</span>
-            <span v-show="pageState===3" style="margin-left: 20px;color:#0090cb">账号详情</span>
+            <span v-show="pageState===3" style="margin-left: 20px;color:#1b6aff">账号详情</span>
             <span v-show="pageState===4" style="margin-left: 20px;cursor: pointer;color:#000" @click="onChangeState(3)">账号详情</span>
-            <span v-show="pageState===4" style="margin-left: 20px;color:#0090cb">资产列表</span>
+            <span v-show="pageState===4" style="margin-left: 20px;color:#1b6aff">资产列表</span>
             <span v-show="pageState===3" style="margin-left: 20px;cursor: pointer;color:#000" @click="onChangeState(4)">资产列表</span>
         </div>
     </div>

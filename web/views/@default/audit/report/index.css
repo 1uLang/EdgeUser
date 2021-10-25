@@ -1,7 +1,7 @@
 .sure-btn{
     width: 60px;
     height: 26px;
-    background-color: #0090cb;
+    background-color: #1b6aff;
     color: #fff;
     border-radius: 5px;
     text-align: center;
@@ -32,7 +32,7 @@
 }
 
 .edit_btn{
-    color: #0090cb;
+    color: #1b6aff;
     cursor: pointer;
 }
 .del-btn{

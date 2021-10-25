@@ -20,7 +20,7 @@
 }
 
 .meun-select-color{
-    background-color: #0090cb;
+    background-color: #1b6aff;
     color: #fff;
     padding: 2px 5px;
     cursor: pointer;
@@ -46,7 +46,7 @@
 .edit_btn_blue{
     margin-right: 20px;
     cursor: pointer;
-    color: #0090cb;
+    color: #1b6aff;
 }
 
 .dialog-style{
@@ -75,7 +75,7 @@
 .sure-btn{
     width: 60px;
     height: 30px;
-    background-color: #0090cb;
+    background-color: #1b6aff;
     color: #fff;
     border-radius: 5px;
     text-align: center;

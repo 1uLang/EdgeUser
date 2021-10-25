@@ -5,7 +5,7 @@
     margin-top: 10px;
 }
 .menu-select-color{
-    color: #0090cb;
+    color: #1b6aff;
     cursor: pointer;
     margin-right: 15px;
     margin-top: 10px;
@@ -29,8 +29,8 @@
     padding: 2px;
     font-size: 13px;
     text-align: center;
-    color: #0090cb;
-    border: 1px solid #0090cb;
+    color: #1b6aff;
+    border: 1px solid #1b6aff;
     cursor: pointer;
     margin-right: 10px;
 }

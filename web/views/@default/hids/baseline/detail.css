@@ -1,6 +1,6 @@
 .edit_btn{
     cursor: pointer;
-    color: #0090cb;
+    color: #1b6aff;
 }
 
 .title-content-style{
@@ -37,7 +37,7 @@
     margin-right: 15px;
 }
 .menu-select-color{
-    color: #0090cb;
+    color: #1b6aff;
     cursor: pointer;
     margin-right: 15px;
 }
@@ -68,7 +68,7 @@
 .sure-btn{
     width: 60px;
     height: 30px;
-    background-color: #0090cb;
+    background-color: #1b6aff;
     color: #fff;
     border-radius: 5px;
     text-align: center;
@@ -84,5 +84,5 @@
 .edit_btn_blue{
     margin-right: 20px;
     cursor: pointer;
-    color: #0090cb;
+    color: #1b6aff;
 }

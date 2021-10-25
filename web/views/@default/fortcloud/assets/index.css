@@ -20,7 +20,7 @@
     border: 1px solid #db2828;
 }
 .edit_btn{
-    color: #0090cb;
+    color: #1b6aff;
     cursor: pointer;
 }
 
@@ -51,7 +51,7 @@
 .sure-btn{
     width: 60px;
     height: 30px;
-    background-color: #0090cb;
+    background-color: #1b6aff;
     color: #fff;
     border-radius: 5px;
     text-align: center;
@@ -72,7 +72,7 @@
 .sure-btn-min{
     width: 50px;
     height: 20px;
-    background-color: #0090cb;
+    background-color: #1b6aff;
     color: #fff;
     border-radius: 5px;
     text-align: center;
