@@ -1,0 +1,99 @@
+{$layout}
+{$var "header"}
+<script type="text/javascript" src="/js/echarts/echarts.min.js"></script>
+{$end}
+
+<p class="comment" v-if="nodes.length == 0">请先添加云防火墙节点。</p>
+<div style="height: 90vh;" v-if="nodes.length > 0">
+    <div style="width: 100%;height: 40px;display: flex;justify-content: flex-end;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-top: 10px;">
+<!--        <div class="ui field">-->
+<!--            <button type="button" class="ui button"  @click="report(0)">日报</button>-->
+<!--        </div>-->
+<!--        <div class="ui field">-->
+<!--            <button type="button" class="ui button"  @click="report(1)">周报</button>-->
+<!--        </div>-->
+
+        <div style="display: inline-flex;align-items: center;">
+            <div style="text-align: center;">云防火墙节点：</div>
+            <div class="ui field">
+                <div class="ui field">
+                    <select class="ui dropdown auto-width" name="selectNode" v-model="selectNode"
+                            @change="GetSelectNode">
+                        <option v-for="item in nodes" :value="item.id">{{item.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="width: 100%;height: 40px;display: flex;/* justify-content: flex-end; *//* border-bottom: 1px solid rgb(240, 240, 240); */padding-bottom: 10px;margin-top: -45px;">
+        <div style="display: inline-flex; align-items: center;">
+            <div style="line-height: 40px; text-align: center;">网络入侵防御日志</div>
+        </div>
+    </div>
+    <div style="height:10em;width: 100%;" v-show="showReport" id="detail-chart-box"></div>
+    <div style="margin-top: 20px;width: 100%;height: 650px;overflow-x: auto; overflow-y: auto;">
+        <table id="tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+            <tr align="center">
+                <th class='table-head-bg' style="min-width: 100px;width:150px;">时间</th>
+<!--                <th class='table-head-bg' style="min-width: 80px;width:100px;">操作</th>-->
+                <th class='table-head-bg' style="min-width: 80px;width:100px;">接口</th>
+                <th class='table-head-bg' style="min-width: 80px;width:100px;">源</th>
+                <th class='table-head-bg' style="width: 100px;min-width: 100px;max-width: 100px;">源端口</th>
+                <th class='table-head-bg' style="width: 120px;min-width: 120px;max-width: 120px;">目标</th>
+                <th class='table-head-bg' style="width: 120px;min-width: 120px;max-width: 120px;">目标端口</th>
+                <th class='table-head-bg' style="width: 120px;min-width: 120px;max-width: 120px;">警报</th>
+            </tr>
+            </thead>
+            <tbody id='tableBody'>
+            <tr align="center" style="height: 40px;" v-for="item in tableData">
+                <td>
+                    <div style="padding: 4px 0;">
+
+                        {{getTime(item.timestamp)}}
+                    </div>
+                </td>
+
+<!--                <td>-->
+<!--                    <div style="padding: 4px 0;">-->
+<!--                        {{item.alert_action}}-->
+<!--                    </div>-->
+<!--                </td>-->
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.in_iface}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.src_ip}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.src_port}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.dest_ip}}
+                    </div>
+                </td>
+                <td>
+                    <div style="padding: 4px 0;">
+                        {{item.dest_port}}
+                    </div>
+                </td>
+                <td>
+                    <div style="display: flex;justify-content: space-around;">
+                        {{item.alert}}
+                        <!--<div class="edit_btn"
+                             @click="onChangeCig(item.id,item.action)">{{getEditName(item.action)}}</div>-->
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="page" v-html="page"></div>
+</div>

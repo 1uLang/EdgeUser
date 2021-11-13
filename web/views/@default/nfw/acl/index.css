@@ -1,0 +1,46 @@
+.menu-define-color{
+    color: #000;
+    cursor: pointer;
+    margin-right: 15px;
+}
+.menu-select-color{
+    color: #1b6aff;
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+.status-open{
+    display: inline-block;
+    color: #21ba45;
+    font-weight: 700;
+    padding: 4px 6px;
+    border-radius: 5px;
+    border: 1px solid #21ba45;
+}
+.status-close{
+    display: inline-block;
+    color: #db2828;
+    font-weight: 700;
+    padding: 4px 6px;
+    border-radius: 5px;
+    border: 1px solid #db2828;
+}
+.edit_btn{
+    color: #1b6aff;
+    cursor: pointer;
+}
+.table-head-bg{
+    height: 32px;
+    background: #f0f0f0;
+}
+
+.hide {
+    display: none!important;
+}
+
+.line-limit-length {
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; 
+}

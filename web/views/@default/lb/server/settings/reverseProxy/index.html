@@ -1,0 +1,15 @@
+{$layout}
+{$template "/left_menu"}
+
+<div class="right-box">
+	{$template "menu"}
+
+	<div v-if="!reverseProxyRef.isOn">
+		<div class="margin"></div>
+		<p class="ui message warning">当前反向代理服务没有开启，可以通过点击 <a :href="'/lb/server/settings/reverseProxy/setting?serverId=' + serverId">[更多设置]</a> 开启 。</p>
+	</div>
+
+	<origin-list-box :v-primary-origins="primaryOrigins" :v-backup-origins="backupOrigins"
+					 :v-server-type="serverType"
+					 :v-params="'type=server&serverId=' + serverId + '&reverseProxyId=' + reverseProxyConfig.id"></origin-list-box>
+</div>

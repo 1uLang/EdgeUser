@@ -1,0 +1,62 @@
+{$layout}
+{$var "header"}
+{$end}
+<!-- 合规基线 -->
+
+<p class="comment" v-if="details.length == 0">暂时没有合规基线记录。</p>
+<div style="width: 100%;height: 650px;margin-top: 10px;overflow-x: auto; overflow-y: auto;" v-else>
+    <table id="tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <thead>
+        <tr align="left">
+            <th class='table-head-bg' style="min-width: 600px;max-width: 600px;">标题</th>
+            <th class='table-head-bg' style="min-width: 450px;max-width: 450px;">目标</th>
+        </tr>
+        </thead>
+        <tbody id='tableBody' v-for="(item,idx) in details">
+        <tr align="left" style="height: 40px;">
+            <td>
+                <div style="display: flex;align-items: center;">
+                    <img :src="getShowSelectValueImage(item.bOpen)" style="cursor: pointer;margin-right: 15px;"
+                         width="15px" height="15px" @click="onEnabledDetail(item)">
+                    <span>{{item.title}}</span>
+                </div>
+
+            </td>
+            <td>
+                <span v-if="item.command">
+                        <b>命令：</b>{{item.command}}
+                </span>
+                <span v-else-if="item.registry">
+                        <b>注册表：</b>{{item.registry}}
+                </span>
+                <span v-else>
+                        <b>文件：</b>{{item.file}}
+                </span>
+            </td>
+        </tr>
+        <tr align="left" style="height: 40px;" v-if="item.bOpen">
+            <td colspan="2">
+                <div style="margin-left: 50px;padding-right: 15px;display: flex;flex-direction: column;">
+                    <!--                    <div v-if="item.problemInfo.reason" style="margin: 10px 0;">-->
+                    <!--                        <h5 style="margin-bottom:5px">异常原因：</h5>-->
+                    <!--                        <span style="color: #888;">{{item.rationale}}</span>-->
+                    <!--                    </div>-->
+                    <div v-if="item.rationale" style="margin: 10px 0;">
+                        <h5 style="margin-bottom:5px">基本原理：</h5>
+                        <span style="color: #888;">{{item.rationale}}</span>
+                    </div>
+                    <div v-if="item.remediation" style="margin: 10px 0;">
+                        <h5 style="margin-bottom:5px">修复建议：</h5>
+                        <span style="color: #888;">{{item.remediation}}</span>
+                    </div>
+                    <div v-if="item.description" style="margin: 10px 0;">
+                        <h5 style="margin-bottom:5px">描述：</h5>
+                        <span style="color: #888;">{{item.description}}</span>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="page" v-html="page"></div>

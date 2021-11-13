@@ -1,0 +1,47 @@
+{$layout}
+
+{$var "header"}
+<!-- echart -->
+<script type="text/javascript" src="/js/echarts/echarts.min.js"></script>
+{$end}
+
+<div class="ui three columns grid">
+    <div class="ui column">
+        <h4>域名数量</h4>
+        <div class="value"><span>{{dashboard.countServers}}</span>个</div>
+    </div>
+
+    <div class="ui column">
+        <h4>本月总流量</h4>
+        <div class="value"><span>{{dashboard.monthlyTrafficBytes}}</span>{{dashboard.monthlyTrafficBytesUnit}}</div>
+    </div>
+
+    <div class="ui column no-border">
+        <h4>本月带宽峰值</h4>
+        <div class="value"><span>{{dashboard.monthlyPeekTrafficBytes}}</span>{{dashboard.monthlyPeekTrafficBytesUnit}}ps</div>
+    </div>
+
+    <div class="ui column">
+        <h4>资产数量</h4>
+        <div class="value"><span>{{dashboard.countAssets}}</span>个</div>
+    </div>
+    <div class="ui column">
+        <h4>今日流量</h4>
+        <div class="value"><span>{{dashboard.dailyTrafficBytes}}</span>{{dashboard.dailyTrafficBytesUnit}}</div>
+    </div>
+
+    <div class="ui column no-border">
+        <h4>今日带宽峰值</h4>
+        <div class="value"><span>{{dashboard.dailyPeekTrafficBytes}}</span>{{dashboard.dailyPeekTrafficBytesUnit}}ps</div>
+    </div>
+</div>
+
+<div class="ui divider"></div>
+
+<h4>近 15 日流量趋势（单位：MB）</h4>
+<div class="chart-box" id="daily-traffic-chart-box"></div>
+
+<div class="ui divider"></div>
+
+<h4>近 15 日峰值带宽趋势（单位：gbps）</h4>
+<div class="chart-box" id="daily-peek-traffic-chart-box"></div>

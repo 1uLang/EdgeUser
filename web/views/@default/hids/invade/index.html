@@ -1,0 +1,49 @@
+{$layout}
+{$template "/datepicker"}
+{$var "header"}
+<script type="text/javascript" src="/js/echarts/echarts.min.js"></script>
+{$end}
+
+<div class="card-div" style="display: inline-flex;margin-top: 25px;">
+    <div class="item-box-style" v-for="item in dashboard" @click="onOpenVirusPage(item.url)">
+        <span style="font-size: 16px;">{{item.name}}</span>
+        <div style="display: flex;flex-direction: row;">
+            <span style="font-size: 20px;">{{item.value}}</span>
+            <span>个</span>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="card-div" style="margin-top: 10px;height: 60px;border: 1px #D7D7D7 solid;">
+    <form method="get" action="/hids/invade" class="ui form" autocomplete="off" style="width: 100%;">
+        <div style="width: 100%;display: flex;flex-direction: row;justify-content: space-between;">
+            <div style="display: inline-flex;margin: 10px;">
+                <div class="ui field" style="margin-right: 10px;">
+                    <input type="text" name="dayFrom" placeholder="开始日期" v-model="dayFrom" value="" style="width:8em" id="day-from-picker"/>
+                </div>
+                <div class="ui field">
+                    <input type="text" name="dayTo" placeholder="结束日期" v-model="dayTo" value="" style="width:8em" id="day-to-picker"/>
+                </div>
+            </div>
+            <div align="right" style="margin: 10px;">
+                <div class="ui fields" >
+                    <div class="ui field">
+                        <input type="text" name="keyword" style="width:20em" v-model="keyword" placeholder="请输入主机IP(多个以 ; 分隔)"/>
+                    </div>
+                    <div class="ui field">
+                        <button type="submit" class="ui button">搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div> -->
+
+<div class="card-div" style="margin-top: 10px;border: 1px solid #d7d7d7;height: 580px;">
+    <div style="display: flex;flex-direction: column;width: 100%;">
+        <div style="height:25em;width: 100%;" id="line-chart-box"></div>
+        <div style="margin-top: 10px;"></div>
+        <div style="height:18em;width: 100%;" id="bar-chart-box"></div>
+    </div>
+
+</div>

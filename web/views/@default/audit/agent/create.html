@@ -1,0 +1,30 @@
+{$layout "layout_popup"}
+
+<div style="margin-top: 35px;margin-left: 15px;">
+    <form class="ui form" method="post" data-tea-action="$" data-tea-success="success">
+        <table class="ui table definition selectable">
+            <tr>
+                <td class="title">文件名称</td>
+                <td>
+                    <span>{{name}}</span>
+                </td>
+            </tr>
+            <tr v-show="false">
+                <td class="title">数据ID</td>
+                <td>
+                    <input type="text" name="id" v-model="id" style="height: 30px;width: 250px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                </tr>
+            <tr>
+                <td class="title">文件描述</td>
+                <td>
+                    <input type="text" name="describe" v-model="describe" style="height: 30px;width: 250px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                </td>
+            </tr>
+        </table>
+        <div style="width: 100%;display: flex;align-items: center;">
+            <submit-btn></submit-btn>
+        </div>
+        
+    </form>
+    <div style="width: 100%;height: 15px;"></div>
+</div>

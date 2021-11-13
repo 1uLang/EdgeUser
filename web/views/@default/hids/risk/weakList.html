@@ -1,0 +1,101 @@
+{$layout}
+
+<!-- 漏洞风险-弱口令-主机信息 列表 详情 -->
+
+<div class="card-div" style="margin-top: 20px;">
+    <div style="height: 50%;;display: flex;flex-direction: row;justify-content: space-between;align-items: center;">
+        <div>主机信息</div>
+        <div class="edit_btn" @click="onGoBack">返回</div>
+    </div>
+    <div style="border-bottom:1px solid #f0f0f0;"></div>  
+    <div style="height: 50%;display: flex;flex-direction: row;justify-content: space-between;align-items: center;">
+        <div style="width: 30%;margin-right: 5%;">
+            <span style="font-weight: bold;">操作系统：</span>
+            <span>{{os}}</span>
+        </div>
+        <div style="width: 30%;margin-right: 5%;">
+            <span style="font-weight: bold;">上次扫描时间：</span>
+            <span>{{lastUpdateTime}}</span>
+        </div>
+        <div style="width: 30%;">
+            <span style="font-weight: bold;">弱口令数：</span>
+            <span>{{total1}}</span>
+        </div>
+    </div>
+</div>
+
+<div class="card-div" style="margin-top: 20px;height: 40px;">
+    <div style="height: 100%;display: flex;flex-direction: row;align-items: center;">
+        <div :class="{'menu-select-color':nTableState===1,'menu-define-color':nTableState!=1}" @click="onChangeTableState(1)">待处理({{total1}})</div>
+        <div :class="{'menu-select-color':nTableState===2,'menu-define-color':nTableState!=2}" @click="onChangeTableState(2)">已处理({{total2}})</div>
+    </div>
+</div>
+
+<div style="width: 100%;height: 600px;overflow-x: auto; overflow-y: auto;margin-top: 20px;">
+    <div v-if="nTableState===1">
+        <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+                <tr align="center">
+                    <th class='table-head-bg' style="width: 102px;" >风险等级</th>
+                    <th class='table-head-bg' style="width: 442px;" >风险说明</th>
+                    <th class='table-head-bg' style="width: 219px;" >类型</th>
+                    <th class='table-head-bg' style="width: 176px;" >发现时间</th>
+                    <th class='table-head-bg' style="width: 106px;" >来源</th>
+                    <th class='table-head-bg' style="width: 113px;" >操作</th>
+                </tr>
+            </thead>
+            <tbody >
+                <tr align="center" style="height: 40px;" v-for="item in weak1" >
+                    <td>
+                        <div :class="{'low-bg-color':item.level == null ||item.level===1,'middle-bg-color':item.level===2,'height-bg-color':item.level===3,'serious-bg-color':item.level===4}">
+                            {{getDangerName(item.level)}}
+                        </div>
+                    </td>
+                    <td>{{item.itemDesc}}</td>
+                    <td>{{getWeakTypeName(item.weakType)}}</td>
+                    <td>{{item.discoveryTime}}</td>
+                    <td>{{item.src}}</td>
+                    <td>
+                        <div style="display: flex;justify-content: space-around;">
+                            <div class="edit_btn" @click="onDetail(item)">详情</div>
+                            <div class="edit_btn" @click="onIgnore(item)">忽略</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="page" v-html="page1"></div>
+    </div>
+    <div v-else>
+        <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+                <tr align="center">
+                    <th class='table-head-bg' style="width: 95px;" >风险等级</th>
+                    <th class='table-head-bg' style="width: 446px;" >风险说明</th>
+                    <th class='table-head-bg' style="width: 233px;" >类型</th>
+                    <th class='table-head-bg' style="width: 243px;" >发现时间</th>
+                    <th class='table-head-bg' style="width: 90px;" >操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr align="center" style="height: 40px;" v-for="item in weak2" >
+                    <td>
+                        <div :class="{'low-bg-color':item.level == null ||item.level===1,'middle-bg-color':item.level===2,'height-bg-color':item.level===3,'serious-bg-color':item.level===4}">
+                            {{getDangerName(item.level)}}
+                        </div>
+                    </td>
+                    <td>{{item.itemDesc}}</td>
+                    <td>{{getWeakTypeName(item.weakType)}}</td>
+                    <td>{{item.discoveryTime}}</td>
+                    <td>
+                        <div style="display: flex;justify-content: space-around;">
+                            <div class="edit_btn" @click="cancelOnIgnore(item)">取消忽略</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="page" v-html="page2"></div>
+    </div>
+    
+</div>

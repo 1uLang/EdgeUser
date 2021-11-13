@@ -1,0 +1,131 @@
+.menu-define-color{
+    color: #000;
+    cursor: pointer;
+    margin-right: 15px;
+    margin-top: 10px;
+}
+.menu-select-color{
+    color: #276ac6;
+    cursor: pointer;
+    margin-right: 15px;
+    margin-top: 10px;
+}
+
+.table-head-bg{
+    height: 32px;
+    background: #f0f0f0;
+}
+
+.edit_btn{
+    margin-right: 30px;
+    color: #276ac6;
+    cursor: pointer;
+}
+
+.del-btn{
+    color: #D51F16;
+    cursor: pointer;
+}
+
+.upload-btn{
+    width: 60px;
+    height: 30px;
+    background-color: #ececec;
+    color: #333;
+    border: 1px solid #333;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+.save-btn{
+    width: 80px;
+    height: 35px;
+    background-color: #276ac6;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 35px;
+    cursor: pointer;
+}
+
+.dialog-style{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1;display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.dialog-bg-style{
+    width: 400px;
+    height: 400px;
+}
+
+.Bar { 
+    width: 280px;/* 宽度 */ 
+    background:#f0f0f0;/* 进度框背景颜色 */ 
+    /* border: 1px solid #f0f0f0; */
+    padding: 1px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.Bar span{ 
+    position: absolute; 
+    width: 280px; /* 宽度 */ 
+    text-align: center; 
+    font-weight: bold; 
+    color: #000;
+}
+
+.progress-blue-bg-style{ 
+    display: block; 
+    position: relative;
+    background:#0091cc;/* 进度条背景颜色 */ 
+    height: 5px; /* 高度 */ 
+    line-height: 20px;/* 必须和高度一致，文本才能垂直居中 */ 
+}
+
+.progress-green-bg-style{ 
+    display: block; 
+    position: relative;
+    background:#00b144;/* 进度条背景颜色 */ 
+    height: 5px; /* 高度 */ 
+    line-height: 20px;/* 必须和高度一致，文本才能垂直居中 */ 
+}
+
+.moremenu-btn{
+    width: 25px;
+    height: 25px;
+    margin-left: 10px;
+    text-align: center;
+    line-height: 23px;
+    border-radius: 50%;
+    border: none;
+    background-color: #999;
+    font-weight: bolder;
+    font-size: 25px;
+    color: #666;
+    cursor: pointer;
+}
+
+.upload-file-btn{
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 19px;
+    border-radius: 50%;
+    border: none;
+    background-color: #999;
+    font-weight: bolder;
+    font-size: 25px;
+    color: #666;
+    display: inline-block;
+}

@@ -1,0 +1,93 @@
+{$layout}
+{$var "header"}
+<script type="text/javascript" src="/js/echarts/echarts.min.js"></script>
+{$end}
+
+<!-- 漏洞风险 -->
+<div style="margin-left: 30px;">
+    <div class="card-div" style="width: 100%;margin-top: 50px;" @click="onOpenDetail(1)">
+        <div style="height: 60%;display: flex;justify-content: space-between;margin-bottom: 10px;">
+            <div style="width: 30%;margin-left: 50px;margin-right: 5%;display: flex;flex-direction: row;">
+                <img src="/images/system_risk.svg" width="50px" height="50px">
+                <div style="margin-left: 15px;">
+                    <div style="margin-bottom: 10px;font-size: 16px;">系统漏洞总数</div>
+                    <div style="font-size: 30px;">{{risk.total}}</div>
+                </div>
+            </div>
+            <div style="width: 60%;margin-top: 10px;margin-right: 30px;">
+                <div class="model-stype" style="margin-bottom: 10px;">
+                    <span class="serious-color">·危急</span>
+                    <span class="height-color">·高危</span>
+                    <span class="middle-color">·中危</span>
+                    <span class="low-color">·低危</span>
+                </div>
+                <div class="model-stype">
+                    <div class="model-background" style="display: flex;flex-direction: row;">
+                        <div v-show="risk.critical>0" class="model-child-background serious-bg-color" :style="{flex:risk.critical}">{{risk.critical}}</div>
+                        <div v-show="risk.high>0" class="model-child-background height-bg-color" :style="{flex:risk.high}">{{risk.high}}</div>
+                        <div v-show="risk.middle>0" class="model-child-background middle-bg-color" :style="{flex:risk.middle}">{{risk.middle}}</div>
+                        <div v-show="risk.low>0" class="model-child-background low-bg-color" :style="{flex:risk.low}">{{risk.low}}</div>
+                        <div v-show="risk.critical===0 && risk.high===0 && risk.middle===0 && risk.low===0" class="model-child-background none-bg-color">0</div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div style="border-bottom:1px solid #d7d7d7;"></div>  
+        <div style="margin-top: 10px;margin-left: 50px;display: flex;flex-direction: row;">
+            <div style="width: 30%;margin-right: 5%;">
+                <span>影响主机数：</span>
+                <span style="color: #0090cb;">{{risk.host}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="width: 100%;margin-top: 50px;display: flex;flex-direction: row;">
+        <div class="card-div" style="margin-right: 5%;" @click="onOpenDetail(2)">
+            <div style="height: 60%;display: flex;justify-content: center;margin-bottom: 10px;">
+                <img src="/images/weak_cmd.svg" width="50px" height="50px">
+                <div style="margin-left: 10px;">
+                    <div style="margin-bottom: 10px;font-size: 16px;">弱口令</div>
+                    <div style="font-size: 30px;">{{weak.total}}</div>
+                </div>
+            </div>
+            <div style="border-bottom:1px solid #d7d7d7;"></div>  
+            <div style="margin-top: 10px;display: flex;justify-content: center;">
+                <span>影响主机数：</span>
+                <span style="color: #0090cb;">{{weak.host}}</span>
+            </div>
+        </div>
+        <div class="card-div" style="margin-right: 5%;" @click="onOpenDetail(3)">
+            <div style="height: 60%;display: flex;justify-content: center;margin-bottom: 10px;">
+                <img src="/images/danger_account.svg" width="50px" height="50px">
+                <div style="margin-left: 10px;">
+                    <div style="margin-bottom: 10px;font-size: 16px;">风险账号</div>
+                    <div style="font-size: 30px;">{{dangerAccount.total}}</div>
+                </div>
+            </div>
+            <div style="border-bottom:1px solid #d7d7d7;"></div>  
+            <div style="margin-top: 10px;display: flex;justify-content: center;">
+                <span>影响主机数：</span>
+                <span style="color: #0090cb;">{{dangerAccount.host}}</span>
+            </div>
+        </div>
+        <div class="card-div" @click="onOpenDetail(4)">
+            <div style="height: 60%;display: flex;justify-content: center;margin-bottom: 10px;">
+                <img src="/images/config_defect.svg" width="50px" height="50px">
+                <div style="margin-left: 10px;">
+                    <div style="margin-bottom: 10px;font-size: 16px;">缺陷配置</div>
+                    <div style="font-size: 30px;">{{configDefect.total}}</div>
+                </div>
+            </div>
+            <div style="border-bottom:1px solid #d7d7d7;"></div>  
+            <div style="margin-top: 10px;display: flex;justify-content: center;">
+                <span>影响主机数：</span>
+                <span style="color: #0090cb;">{{configDefect.host}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px;border: 1px solid #d7d7d7;border-radius: 10px;">
+        <div style="height:25em;width: 100%;" id="bar-chart-box"></div>
+    </div>
+</div>

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <title>智安云综合防御平台</title>
+    {$TEA.VUE}
+    {$TEA.SEMANTIC}
+	<script type="text/javascript" src="/js/md5.min.js"></script>
+	<script type="text/javascript" src="/js/utils.js"></script>
+	<script type="text/javascript" src="/js/sweetalert2/dist/sweetalert2.all.min.js"></script>
+	<script type="text/javascript" src="/ui/components.js?v=1.0.0"></script>
+</head>
+<body>
+<div>
+    {$template "/menu"}
+	<div class="form-box">
+		<form method="post" class="ui form" data-tea-action="$" data-tea-before="submitBefore" data-tea-done="submitDone" data-tea-success="submitSuccess" autocomplete="off">
+			<csrf-token></csrf-token>
+			<input type="hidden" name="password" v-model="passwordMd5"/>
+			<input type="hidden" name="confirmPassword" v-model="confirmPasswordMd5"/>
+			<input type="hidden" name="token" v-model="token"/>
+			<div class="ui segment stacked">
+				<div class="ui header">
+					智安云综合防御平台
+				</div>
+				<div class="ui field">
+					<div class="ui left icon input">
+						<i class="ui lock icon"></i>
+						<input type="password"  v-model="password" placeholder="请输入新密码" maxlength="200" @input="changePassword"/>
+<!--						<p>密码规则：8-30个字符,必须包含大小写字母、数字、特殊字符</p>-->
+					</div>
+				</div>
+				<div class="ui field">
+					<div class="ui left icon input">
+						<i class="ui lock icon"></i>
+						<input type="password"  v-model="confirmPassword" placeholder="请确认密码" maxlength="200" @input="changePassword1"/>
+					</div>
+				</div>
+				<button style="background-color: #1b6aff;" class="ui button primary fluid" type="submit" v-if="!isSubmitting">确认修改</button>
+				<button style="background-color: #1b6aff;" class="ui button primary fluid disabled" type="submit" v-if="isSubmitting">提交中...</button>
+			</div>
+		</form>
+	</div>
+
+</div>
+
+</body>
+</html>

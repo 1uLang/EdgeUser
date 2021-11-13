@@ -1,0 +1,22 @@
+{$layout}
+
+<div class="margin"></div>
+<form method="post" class="ui form" data-tea-action="$" data-tea-success="success">
+    <csrf-token></csrf-token>
+    <table class="ui table definition selectable">
+
+        <tr>
+            <td style="width: 160px">是否启用</td>
+            <td>
+                <input id="editCheckBox" type="checkbox" value="" :checked="enabled" name="enable" @change="onListenEditCheckBox"/>
+            </td>
+        </tr>
+        <tr v-if="enable">
+            <td style="width: 160px">告警邮箱</td>
+            <td>
+                <input type="text" v-model="email" name="email" maxlength="100"/>
+            </td>
+        </tr>
+    </table>
+    <submit-btn></submit-btn>
+</form>

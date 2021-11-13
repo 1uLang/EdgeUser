@@ -1,0 +1,102 @@
+
+<!-- 合规基线 -->
+<!-- <a href="/hids/baseline/template" class="item">基线检查 </a>
+<a href="/hids/baseline/detail" class="item">详情 </a> -->
+{$layout}
+{$var "header"}
+<script src="/js/timeFactory.js"></script>
+{$end}
+
+<div class="card-div" style="margin-top: 20px;height: 90px;">
+    <form class="ui form" autocomplete="off">
+        <div style="display: flex;flex-direction: row;margin: 0px 15px 15px 15px;height: 40px;align-items: center;">
+            <!-- <div style="display: inline-flex; width: 50%;">
+                <div class="title-style">检查状态</div>
+                <div :class="{'meun-select-color':State===0,'meun-define-color':State!=0}" @click="onChangeCheckState(0)">全部</div>
+                <div :class="{'meun-select-color':State===1,'meun-define-color':State!=1}" @click="onChangeCheckState(1)">未检查</div>
+                <div :class="{'meun-select-color':State===2,'meun-define-color':State!=2}" @click="onChangeCheckState(2)">检查中</div>
+                <div :class="{'meun-select-color':State===3,'meun-define-color':State!=3}" @click="onChangeCheckState(3)">已完成</div>
+            </div> -->
+            <div class="ui fields inline" style="width: 50%;">
+                <div class="title-style">检查时间</div>
+                <div class="ui field">
+                    <input type="datetime-local" step="01" style="height: 28px;font-size: 13px;" id="day-from-picker" @change="onTimeChange"/>
+                </div>
+                <div style="margin-right: 10px;"></div>
+                <div class="ui field">
+                    <input type="datetime-local" step="01" style="height: 28px;font-size: 13px;" id="day-to-picker" @change="onTimeChange"/>
+                 </div>
+            </div>
+            <div style="display: flex;flex-direction: row;width: 50%;">
+                <div style="display: inline-flex;align-items: center;">
+                    <div class="title-style">检查结论</div>
+                    <div :class="{'meun-select-color':ResultState===0,'meun-define-color':ResultState!=0}" @click="onChangeResultState(0)">全部</div>
+                    <div :class="{'meun-select-color':ResultState===1,'meun-define-color':ResultState!=1}" @click="onChangeResultState(1)">基线异常</div>
+                    <div :class="{'meun-select-color':ResultState===2,'meun-define-color':ResultState!=2}" @click="onChangeResultState(2)">基线正常</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div style="display: flex;flex-direction: row;margin: 15px;height: 40px;">
+            <div class="ui fields inline" style="width: 50%;">
+                <div class="title-style">检查时间</div>
+                <div class="ui field">
+                   <input type="text" name="dayFrom" placeholder="开始日期" v-model="dayFrom" value="" style="width:8em;height: 28px;font-size: 13px;" id="day-from-picker" @change="onTimeChange"/>
+               </div>
+               <div style="margin-right: 10px;"></div>
+               <div class="ui field">
+                   <input type="text" name="dayTo" placeholder="结束日期" v-model="dayTo" value="" style="width:8em;height: 28px;font-size: 13px;" id="day-to-picker" @change="onTimeChange"/>
+               </div>
+            </div>
+        </div> -->
+    </form>
+</div>
+
+<!-- <p class="comment" v-if="!baselines || baselines.length == 0">暂时还没有主机合规基线信息。</p> -->
+<div style="width: 100%;height: 550px;overflow-x: auto; overflow-y: auto;">
+    <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <thead>
+            <tr align="center">
+                <th class='table-head-bg' style="width: 345px;">主机</th>
+                <th class='table-head-bg' style="width: 286px;">检查进度</th>
+                <th class='table-head-bg' style="width: 85px;">状态</th>
+                <th class='table-head-bg' style="width: 140px;">异常项/总检查项</th>
+                <th class='table-head-bg' style="width: 160px;">完成时间</th>
+                <th class='table-head-bg' style="width: 160px;">操作</th>
+            </tr>
+        </thead>
+        <tbody >
+            <tr align="center" style="height: 40px;" v-for="(item,index) in baselines" >
+                <td style="position: relative;" @mouseenter="enters(index)" @mouseleave="leaver(index)">{{item.serverIp}}
+                    <div v-show="curIndex===index" class="table-item-style">
+                        <div>外网IP：{{item.os.serverIp}}</div>
+                        <div>内网IP：{{parseServerLocalIp(item.os.serverLocalIp)}}</div>
+                        <div>主机名：{{item.os.hostName}}</div>
+                        <div>操作系统：{{item.os.osType}}</div>
+                        <div>系统内核：{{item.os.systemKernel}}</div>
+                        <div>Mac地址：{{item.os.macCode}}</div>
+                        <div>备注信息：{{item.os.remarks}}</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="Bar" style="display: inline-flex;">
+                        <div :class="[checkShowColor(item.progress,100) ? 'progress-green-bg-style' : 'progress-blue-bg-style']"
+                            :style="{width: getProgressPer(item.progress,100,item.serverIp,item.state)}">
+                        </div>
+                        <span>{{getProgressPerStr(item.progress,100,item.serverIp,item.state)}}</span>
+                    </div>
+                </td>
+                <td>{{getStateName(item.state)}}</td>
+                <td>{{item.riskItemCount}}/{{item.totalItemCount}}</td>
+                <td>{{item.overTime}}</td>
+                <td>
+                    <div style="display: inline-flex;justify-content: center;">
+                        <div v-if="item.state!=1 && item.state!= 2 && item.state!= 3" class="edit_btn_blue" @click="onOpenCheck(item)">基线检查</div>
+                        <div v-if="item.state==3 || item.state ==2 || item.state ==6 " class="edit_btn_blue" @click="onOpenCheck(item)">重新检查</div>
+                        <div v-if="item.state==2" class="edit_btn_blue" @click="onOpenDetail(item)">详情</div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,174 @@
+<!-- 扫描报告 -->
+{$layout}
+{$var "header"}
+{$end}
+<div v-if="pageState==1">
+    <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+        <div style="cursor: pointer;margin-top: 10px;" @click="onChangeState(2)">[添加凭证]</div>
+    </div>
+
+    <p class="comment" v-if="certs == null || certs.length === 0 && nodeErr == ''">暂时还没有授权凭证。</p>
+    <div style="width: 100%;height: 650px;margin-top: 10px;overflow-x: auto; overflow-y: auto;" v-else>
+        <table id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+                <tr align="center">
+                    <th class='table-head-bg' style="width: 320px;" >名称</th>
+                    <th class='table-head-bg' style="width: 215px;" >用户名</th>
+                    <th class='table-head-bg' style="width: 100px;" >授权人数</th>
+                    <th class='table-head-bg' style="width: 200px;" >创建时间</th>
+                    <th class='table-head-bg' style="width: 200px;" >操作</th>
+                </tr>
+            </thead>
+            <tbody id='tableBody'>
+                <tr align="center" style="height: 40px;" v-for="(item,index) in certs" >
+                    <td>
+                       {{item.name}}</span>
+                    </td>
+                    <td>{{item.username}}</td>
+                    <td>{{item.count}}</td>
+                    <td>{{item.created}}</td>
+                    <td>
+                        <div style="display: flex;justify-content: space-around;padding: 4px 0;">
+                            <div v-show="!item.auth" class="edit_btn" @click="onOpenAuth(item)">授权</div>
+                            <div v-show="!item.auth" class="edit_btn" @click="onEdit(item)">修改</div>
+                            <div v-show="!item.auth" class="edit_btn" style="color: #db2828" @click="onDelete(item.id)">删除</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div v-else-if="pageState==2 || pageState==5">
+    <div style="display: flex;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+        <div style="display: inline-flex;margin-top: 10px;">
+            <span style="cursor: pointer;" @click="onChangeState(1)">账号列表</span>
+            <div style="margin-left: 20px;color: #1b6aff;cursor: pointer;">[添加账号]</div>
+        </div>
+    </div>
+    <div style="padding: 10px 30px;">
+        <div style="width: 100%;padding-bottom: 10px;">
+            <div style="display: flex;flex-direction: column;justify-content: flex-start;">
+                <div class="base_title_content">
+                    <span class="base_title_f">名称*</span>
+                    <input type="text" v-model="name" style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                </div>
+                <div class="base_title_content">
+                    <span class="base_title_f">用户名*</span>
+                    <input type="text" v-model="username" style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                </div>
+                <div class="base_title_content">
+                    <span class="base_title_f">密码*</span>
+                    <input type="password" v-model="password" style="height: 30px;width: 790px;line-height: 30px;border: 1px solid #d7d7d7;"></input>
+                </div>
+            </div>
+        </div>
+
+        <div style="width: 100%;display: flex;justify-content: center;margin-top: 10px;">
+            <div class="sure-btn" @click="onSave" v-if="pageState===2">保存</div>
+            <div class="sure-btn" @click="onUpdate" v-else>保存</div>
+        </div>
+
+    </div>
+</div>
+
+<div v-else>
+    <div style="display: flex;flex-direction: column;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">
+        <div style="display: inline-flex;margin-top: 10px;">
+            <span style="cursor: pointer;" @click="onChangeState(1)">账号列表</span>
+            <span v-show="pageState===3" style="margin-left: 20px;color:#1b6aff">账号详情</span>
+            <span v-show="pageState===4" style="margin-left: 20px;cursor: pointer;color:#000" @click="onChangeState(3)">账号详情</span>
+            <span v-show="pageState===4" style="margin-left: 20px;color:#1b6aff">资产列表</span>
+            <span v-show="pageState===3" style="margin-left: 20px;cursor: pointer;color:#000" @click="onChangeState(4)">资产列表</span>
+        </div>
+    </div>
+    <div v-if="pageState===3" style="width: 100%;margin-top: 10px;display: flex;justify-content: center;">
+        <div style="border: 1px solid #d7d7d7;width: 1150px;height: 650px;">
+            <div style="border-bottom: 1px solid #d7d7d7;height: 30px;display: flex;align-items: center;">
+                <img src="/images/icon_warring.png" width="15px" height="15px" style="margin-left:20px;">
+                <span style="font-size: 14px;margin-left: 5px;">基本信息</span>
+            </div>
+            <div v-for="item in accountData" style="margin-top:10px;margin-left:20px;display: inline-flex;">
+                <div style="width: 450px;">
+                    <span style="font-size: 14px;">{{item.key}}</span>
+                </div>
+                <div style="width: 670px;margin-left: 10px;">
+                    <span style="font-size: 14px;">{{item.value}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div v-else>
+        <div style="width: 100%;margin-top: 10px;height: 650px;overflow-x: auto; overflow-y: auto;">
+            <table  class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+                <thead>
+                    <tr align="center">
+                        <th class='table-head-bg' style="width: 235px;" >主机名</th>
+                        <th class='table-head-bg' style="width: 235px;" >IP</th>
+                        <th class='table-head-bg' style="width: 235px;" >管理用户</th>
+                        <th class='table-head-bg' style="width: 235px;" >连接状态</th>
+                        <th class='table-head-bg' style="width: 235px;" >更新时间</th>
+                    </tr>
+                </thead>
+                <tbody >
+                    <tr align="center" style="height: 40px;" v-for="item in assetsList" >
+                        <td>{{item.asset_name}}</td>
+                        <td>{{item.asset_ip}}</td>
+                        <td>{{item.systemuser_display}}</td>
+                        <td>{{getLinkStatus(item.connectivity)}}</td>
+                        <td>{{item.date_verified}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div v-if="bShowhAuth" class="dialog-style" @click.stop>
+    <div class="dialog-bg-style" style="display: flex;flex-direction: column;">
+        <div style="width: 100%;margin-top: 10px;display: flex;flex-direction: row;justify-content: space-between;border-bottom: 1px solid #d7d7d7;padding-bottom: 10px;">
+            <span style="font-size: 14px;color:#333;padding: 0 20px;">更新资源【
+                <span style="color: #0090cb;cursor: pointer;" @click="onRefreshAuth">{{cert_name}}</span>
+                】的授权人</span>
+            <span style="font-size: 16px;margin-right: 10px;cursor: pointer;color: #d7d7d7;" @click="onCloseAuth">X</span>
+        </div>
+        <div style="width: 100%;margin:23px 0;display: flex;flex-direction: row;justify-content: center;align-items: center;">
+            <div class="auth-people-box-style">
+                <div class="auth-people-title-style">
+                    <input id="noAuth-allSelect" type="checkbox" @click="selectAllNoAuth">
+                    <span>未授权</span>
+                </div>
+                <div style="width: 100%;height: 215px;overflow-x: auto; overflow-y: auto;">
+                    <div class="auth-people-content-style" v-for="item in allUsers" @click.stop="onListenClickNoAuthChange(item)">
+                        <input type="checkbox" name="noAuthSelect" :value="item.id"
+                               :data="item.name" @click.stop="onListenSelectNoAuthChange(item)" :checked="item.my" :disabled="item.my">
+                        <span style="margin-left: 5px;">{{item.name}}</span>
+                    </div>
+                </div>
+
+            </div>
+            <div style="height: 250px;display: flex;flex-direction: column;justify-content: center;align-items: center;margin: 0 10px;">
+                <div class="auth-middle-btn-stype" style="margin-bottom: 30px;" @click="onAddAuthPeople">授权 ></div>
+                <div class="auth-middle-btn-stype" @click="onRemoveAuthPeople">< 移除</div>
+            </div>
+            <div class="auth-people-box-style">
+                <div class="auth-people-title-style">
+                    <input id="auth-allSelect" type="checkbox" @click="selectAllAuth">
+                    <span>已授权</span>
+                </div>
+                <div style="width: 100%;height: 215px;overflow-x: auto; overflow-y: auto;">
+                    <div class="auth-people-content-style" v-for="item in authUsers" @click.stop="onListenClickAuthChange(item)">
+                        <input type="checkbox" name="authSelect" :value="item.id" :data="item.name" @click.stop="onListenSelectAuthChange(item)">
+                        <span style="margin-left: 5px;">{{item.name}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="width: 100%;display: flex;justify-content: center;margin-top: 10px;border-top: 1px solid #d7d7d7;padding-top: 10px;">
+            <div class="clean-btn" style="margin-right: 30px;" @click="onCloseAuth">取消</div>
+            <div class="sure-btn" @click="onSaveAuth">确认</div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,67 @@
+{$layout "layout_popup"}
+
+<h3>修改源站</h3>
+
+<form method="post" class="ui form" data-tea-action="$" data-tea-success="success">
+	<input type="hidden" name="reverseProxyId" :value="reverseProxyId"/>
+	<input type="hidden" name="originType" :value="originType"/>
+	<input type="hidden" name="originId" :value="originId"/>
+
+	<table class="ui table selectable definition">
+		<tr>
+			<td>源站协议</td>
+			<td>
+				<!-- HTTP -->
+				<select class="ui dropdown auto-width" name="protocol" v-model="origin.protocol" v-if="serverType == 'httpProxy' || serverType == 'httpWeb'">
+					<option value="http">HTTP</option>
+					<option value="https">HTTPS</option>
+				</select>
+
+				<!-- TCP -->
+				<select class="ui dropdown auto-width" name="protocol" v-model="origin.protocol" v-if="serverType == 'tcpProxy'">
+					<option value="tcp">TCP</option>
+					<option value="tls">TLS</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td class="title">源站地址</td>
+			<td>
+				<input type="text" name="addr" ref="focus" v-model="origin.addr"/>
+				<p class="comment">源站服务器地址，通常是一个IP（或域名）加端口<span v-if="serverType == 'httpProxy'">，不需要加 http:// 或 https://</span>。</p>
+			</td>
+		</tr>
+		<tr>
+			<td>权重</td>
+			<td>
+				<input type="text" name="weight" maxlength="4" v-model="origin.weight"  style="width:5em"/>
+				<p class="comment">数字越大，代表分配的请求比例越多。</p>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2"><more-options-indicator></more-options-indicator></td>
+		</tr>
+		<tbody v-show="moreOptionsVisible">
+			<tr>
+				<td>名称</td>
+				<td>
+					<input type="text" name="name" maxlength="100" v-model="origin.name"/>
+					<p class="comment">给当前源站起一个容易识别的名称。</p>
+				</td>
+			</tr>
+			<tr>
+				<td>备注</td>
+				<td>
+					<textarea name="description" rows="3" maxlength="100" v-model="origin.description"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>是否启用</td>
+				<td>
+					<checkbox name="isOn" :value="origin.isOn"></checkbox>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<submit-btn></submit-btn>
+</form>

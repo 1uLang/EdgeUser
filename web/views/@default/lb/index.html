@@ -1,0 +1,44 @@
+{$layout}
+{$template "menu"}
+
+<p class="comment" v-if="servers.length == 0">暂时还没有任何负载均衡服务。</p>
+
+<table class="ui table selectable" v-if="servers.length > 0">
+    <thead>
+        <tr>
+            <th>服务名称</th>
+            <th>CNAME</th>
+            <th>TCP</th>
+            <th>TLS</th>
+            <th>状态</th>
+            <th class="three op">操作</th>
+        </tr>
+    </thead>
+    <tr v-for="server in servers">
+        <td>{{server.name}}</td>
+        <td>{{server.cname}}</td>
+        <td>
+            <div v-if="server.tcpPorts.length > 0">
+                <span v-for="port in server.tcpPorts" class="ui label basic small">{{port}}</span>
+            </div>
+            <span v-else class="disabled">-</span>
+        </td>
+        <td>
+            <div v-if="server.tlsPorts.length > 0">
+                <span  v-for="port in server.tlsPorts" class="ui label basic small">{{port}}</span>
+            </div>
+            <span v-else class="disabled">-</span>
+        </td>
+        <td>
+            <span v-if="!server.isOn" class="grey">停用中</span>
+            <span v-else class="green">正常</span>
+        </td>
+        <td>
+            <a :href="'/lb/server?serverId=' + server.id">管理</a> &nbsp;
+            <a href="" v-if="server.isOn" @click.prevent="updateServerOff(server.id)">停用</a><a href="" v-if="!server.isOn" @click.prevent="updateServerOn(server.id)">启用</a> &nbsp;
+            <a href=""  style="color: #db2828" @click.prevent="deleteServer(server.id)">删除</a>
+        </td>
+    </tr>
+</table>
+
+<div class="page" v-html="page"></div>

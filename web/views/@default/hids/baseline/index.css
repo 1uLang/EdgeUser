@@ -1,0 +1,133 @@
+.card-div {
+    width: 100%;
+    height: 160px;
+    /* background-color: #f0f0f0;
+    box-shadow: 5px 5px 5px #8c939d; */
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.title-style{
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.meun-define-color{
+    color: #000;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.meun-select-color{
+    background-color: #1b6aff;
+    color: #fff;
+    padding: 2px 5px;
+    cursor: pointer;
+    margin-right: 10px;
+
+}
+.table-item-style{
+    position: absolute;
+    width: 340px;
+    height: 200px;
+    background-color:rgba(0, 0, 0, 0.9);
+    left: 0;
+    bottom: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: flex-start;
+    font-size: 16px;
+    color: #fff;
+}
+
+.edit_btn_blue{
+    margin-right: 20px;
+    cursor: pointer;
+    color: #1b6aff;
+}
+
+.dialog-style{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1;display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.dialog-bg-style{
+    width: 500px;
+    height: 500px;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 1);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(215, 215, 215, 1);
+    border-radius: 0px;
+    box-shadow: none;
+}
+.sure-btn{
+    width: 60px;
+    height: 30px;
+    background-color: #1b6aff;
+    color: #fff;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+}
+.close-btn{
+    width: 60px;
+    height: 30px;
+    background-color: #f0f0f0;
+    color: #000;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+}
+
+.Bar { 
+    width: 280px;/* 宽度 */ 
+    background:#f0f0f0;/* 进度框背景颜色 */ 
+    /* border: 1px solid #f0f0f0; */
+    padding: 1px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.Bar span{ 
+    position: absolute; 
+    width: 280px; /* 宽度 */ 
+    text-align: center; 
+    font-weight: bold; 
+    color: #000;
+}
+
+.progress-blue-bg-style{ 
+    display: block; 
+    position: relative;
+    background:#0091cc;/* 进度条背景颜色 */ 
+    height: 20px; /* 高度 */ 
+    line-height: 20px;/* 必须和高度一致，文本才能垂直居中 */ 
+}
+
+.progress-green-bg-style{ 
+    display: block; 
+    position: relative;
+    background:#00b144;/* 进度条背景颜色 */ 
+    height: 20px; /* 高度 */ 
+    line-height: 20px;/* 必须和高度一致，文本才能垂直居中 */ 
+}
+
+
+.table-head-bg{
+    height: 32px;
+    background: #f0f0f0;
+}

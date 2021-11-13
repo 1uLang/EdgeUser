@@ -1,0 +1,51 @@
+{$layout}
+
+{$var "header"}
+<script src="/js/timeFactory.js"></script>
+{$end}
+
+<p class="comment" v-if="!agents || agents.length == 0">暂时还没有主机安装agent。</p>
+<div style="width: 100%;height: 40px;display: flex;justify-content: flex-end;margin: 10px 0;">
+    <div style="display: inline-flex;align-items: center;">
+        <div class="save-btn" @click="onOpenCreate">新增Agent</div>
+        <div class="save-btn" @click="onOpenCommand">获取安装命令</div>
+    </div>
+</div>
+
+<div style="width:100%;height: 650px;overflow-x: auto; overflow-y: auto;" v-if="agents && agents.length > 0">
+    <table class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <thead>
+        <tr align="center">
+            <th class='table-head-bg' style="width: 259px;">主机IP</th>
+            <th class='table-head-bg' style="width: 129px;">Agent状态</th>
+            <th class='table-head-bg' style="width: 100px;">版本</th>
+            <th class='table-head-bg' style="width: 167px;">安装时间</th>
+            <th class='table-head-bg' style="width: 167px;">最近上线时间</th>
+            <th class='table-head-bg' style="width: 167px;">最后在线时间</th>
+            <th class='table-head-bg' style="width: 148px;">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr align="center" style="height: 40px;" v-for="item in agents">
+            <td>{{item.serverIp}}</td>
+            <td>{{getStateName(item.agentState)}}</td>
+            <td>{{item.version}}</td>
+            <td>{{item.installTime}}</td>
+            <td>{{item.lastOnlineTime}}</td>
+            <td>{{item.lastUpdateTime}}</td>
+            <td>
+
+                <div style="display: inline-flex;justify-content: center;">
+                    <div v-if="item.agentState ==2 " class="edit_btn_blue" @click="onStopConfig(item)">停用</div>
+                    <div v-if="item.agentState ==4 " class="edit_btn_blue" @click="onStartConfig(item)">启用</div>
+                    <div class="edit_btn_blue" style="color: #db2828" @click="onDelete(item)">删除</div>
+                    <div v-if="item.agentState ==2 || item.agentState ==4" class="edit_btn_red"
+                         @click="onUninstall(item)">卸载
+                    </div>
+
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

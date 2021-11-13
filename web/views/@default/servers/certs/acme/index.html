@@ -1,0 +1,86 @@
+{$layout}
+{$template "/left_menu_top"}
+
+<div class="right-box without-tabbar">
+	{$template "menu"}
+
+	<second-menu v-if="countAll > 0">
+		<menu-item :href="'/servers/certs/acme?keyword=' + keyword" :active="type == ''">所有任务({{countAll}})</menu-item>
+		<menu-item :href="'/servers/certs/acme?type=available&keyword=' + keyword" :active="type == 'available'">有效证书({{countAvailable}})</menu-item>
+		<menu-item :href="'/servers/certs/acme?type=expired&keyword=' + keyword" :active="type == 'expired'">过期证书<span :class="{red: countExpired > 0}">({{countExpired}})</span></menu-item>
+		<menu-item :href="'/servers/certs/acme?type=7days&keyword=' + keyword" :active="type == '7days'">7天内过期<span :class="{red: count7Days > 0}">({{count7Days}})</span></menu-item>
+		<menu-item :href="'/servers/certs/acme?type=30days&keyword=' + keyword" :active="type == '30days'">30天过期({{count30Days}})</menu-item>
+		<div class="item right">
+			<form class="ui form">
+				<div class="ui fields inline">
+					<div class="ui field">
+						<input type="text" name="keyword" placeholder="关键词" style="width:10em" v-model="keyword"/>
+					</div>
+					<div class="ui field">
+						<button style="background-color: #1b6aff;" type="submit" class="ui button">搜索</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</second-menu>
+	<p class="comment" v-if="tasks.length == 0">暂时还没有证书申请任务。</p>
+
+	<div class="ui message blue" v-if="isRunning">有任务在执行中，可能需要的时间较长，请耐心等待。</div>
+
+	<table class="ui table selectable" v-if="tasks.length > 0">
+		<thead>
+			<tr>
+				<th>ACME用户</th>
+				<th>证书域名</th>
+				<th>到期时间</th>
+				<th>更新时间</th>
+				<th class="center" style="width:6em">自动续期</th>
+				<th class="center" style="width:6em">关联证书</th>
+				<th class="three op">操作</th>
+			</tr>
+		</thead>
+		<tr v-for="(task, index) in tasks" :class="{warning: runningIndex == index}">
+			<td>{{task.acmeUser.email}}
+				<div style="margin-top: 1em">
+					<tiny-basic-label class="olive" v-if="task.authType == 'dns'">DNS</tiny-basic-label>
+					<tiny-basic-label class="olive" v-if="task.authType == 'http'">HTTP</tiny-basic-label>
+				</div>
+			</td>
+			<td nowrap="">
+				<div v-for="domain in task.domains">
+					<span class="ui label small basic">{{domain}}</span>
+				</div>
+			</td>
+			<td nowrap="">
+				<div v-if="task.cert != null">
+					{{task.cert.endTime}}
+				</div>
+				<span class="disabled" v-else>-</span>
+			</td>
+			<td nowrap="">
+				<div v-if="task.log != null">
+					<span class="green" v-if="task.log.isOk">{{task.log.createdTime}}</span>
+					<link-red v-if="!task.log.isOk" title="任务执行失败，点击查看详情" @click.prevent="showError(task.log.error)">{{task.log.createdTime}}</link-red>
+				</div>
+				<span v-else class="disabled">尚未执行</span>
+			</td>
+			<td class="center">
+				<span class="green" v-if="task.autoRenew">Y</span>
+				<span v-else class="disabled">N</span>
+			</td>
+			<td class="center">
+				<div v-if="task.cert != null">
+					<a href="" @click.prevent="viewCert(task.cert.id)"><link-icon title="查看关联证书"></link-icon></a>
+				</div>
+				<span class="disabled" v-else="">-</span>
+			</td>
+			<td>
+				<a href="" @click.prevent="updateTask(task.id)" :class="{disabled: isRunning}">修改</a> &nbsp;
+				<a href="" @click.prevent="runTask(index, task)" :class="{disabled: isRunning}">执行</a> &nbsp;
+				<a href="" style="color: #db2828" @click.prevent="deleteTask(task.id)" :class="{disabled: isRunning}">删除</a>
+			</td>
+		</tr>
+	</table>
+
+	<div class="page" v-html="page"></div>
+</div>

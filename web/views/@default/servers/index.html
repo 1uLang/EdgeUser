@@ -1,0 +1,49 @@
+{$layout}
+{$template "menu"}
+
+<p class="comment" v-if="servers.length == 0">暂时还没有任何域名。</p>
+
+<table class="ui table selectable" v-if="servers.length > 0">
+    <thead>
+        <tr>
+            <th>域名</th>
+            <th>CNAME</th>
+            <th>状态</th>
+            <th>HTTP</th>
+            <th>HTTPS</th>
+            <th class="three op">操作</th>
+        </tr>
+    </thead>
+    <tr v-for="server in servers">
+        <td>
+            	<span v-if="server.serverNames.length > 0">
+				<span v-if="server.serverNames[0].subNames == null || server.serverNames[0].subNames.length == 0">{{server.serverNames[0].name}}</span>
+				<span v-else>{{server.serverNames[0].subNames[0]}}</span>
+				<span v-if="server.countServerNames > 1">等{{server.countServerNames}}个域名 <popup-icon :href="'/servers/serverNamesPopup?serverId=' + server.id" height="20em"></popup-icon></span>
+			</span>
+            <span v-else class="disabled">-</span>
+        </td>
+        <td>{{server.cname}}</td>
+        <td>
+            <span v-if="!server.isOn" class="grey">停用中</span>
+            <span v-else-if="server.status.isOk" class="green">正常</span>
+            <span v-else-if="server.status.message.length == 0">检查中</span>
+            <span v-else class="red">{{server.status.message}}
+                <tip-icon :content="server.status.todo"></tip-icon>
+            </span>
+        </td>
+        <td>
+            <span v-if="server.httpIsOn" class="green">Y</span>
+        </td>
+        <td>
+            <span v-if="server.httpsIsOn" class="green">Y</span>
+        </td>
+        <td>
+            <a :href="'/servers/server?serverId=' + server.id">管理</a> &nbsp;
+            <a href="" v-if="server.isOn" @click.prevent="updateServerOff(server.id)">停用</a><a href="" v-if="!server.isOn" @click.prevent="updateServerOn(server.id)">启用</a> &nbsp;
+            <a href="" style="color: #db2828" @click.prevent="deleteServer(server.id)">删除</a>
+        </td>
+    </tr>
+</table>
+
+<div class="page" v-html="page"></div>

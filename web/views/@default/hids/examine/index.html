@@ -1,0 +1,112 @@
+<!-- <a href="/hids/examine/detail" class="item">详情</a> -->
+<!-- 主机体检 -->
+{$layout}
+{$template "/datepicker"}
+{$var "header"}
+<script src="/js/timeFactory.js"></script>
+{$end}
+
+<div class="card-div" style="margin-top: 20px;height: 90px;">
+    <form class="ui form" autocomplete="off">
+        <div style="display: flex;flex-direction: row;margin: 0px 15px 15px 15px;height: 40px;align-items: center;">
+            <!-- <div style="display: inline-flex;width: 50%;">
+                <div class="title-style">体检状态</div>
+                <div :class="{'meun-select-color':state===0,'meun-define-color':state!=0}"
+                     @click="onChangeCheckState(0)">全部
+                </div>
+                <div :class="{'meun-select-color':state===1,'meun-define-color':state!=1}"
+                     @click="onChangeCheckState(1)">未检查
+                </div>
+                <div :class="{'meun-select-color':state===2,'meun-define-color':state!=2}"
+                     @click="onChangeCheckState(2)">检查中
+                </div>
+                <div :class="{'meun-select-color':state===3,'meun-define-color':state!=3}"
+                     @click="onChangeCheckState(3)">已完成
+                </div>
+            </div> -->
+            <div class="ui fields inline" style="width: 50%;">
+                <div class="title-style">完成时间</div>
+                <div class="ui field">
+                    <input type="datetime-local" step="01" style="height: 28px;font-size: 13px;" id="day-from-picker"
+                           @change="onTimeChange"/>
+                </div>
+                <div style="margin-right: 10px;"></div>
+                <div class="ui field">
+                    <input type="datetime-local" step="01" style="height: 28px;font-size: 13px;" id="day-to-picker"
+                           @change="onTimeChange"/>
+                </div>
+            </div>
+
+            <div style="display: inline-flex;width: 50%;">
+                <div class="title-style">体检分数</div>
+                <div :class="{'meun-select-color':score===0,'meun-define-color':score!=0}"
+                     @click="onChangeHealthNumState(0)">全部
+                </div>
+                <div :class="{'meun-select-color':score===1,'low-health-color':score!=1}"
+                     @click="onChangeHealthNumState(1)">0-59（不健康）
+                </div>
+                <div :class="{'meun-select-color':score===2,'middle-health-color':score!=2}"
+                     @click="onChangeHealthNumState(2)">60-89（亚健康）
+                </div>
+                <div :class="{'meun-select-color':score===3,'hight-health-color':score!=3}"
+                     @click="onChangeHealthNumState(3)">90-100（健康）
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div style="width: 100%;height: 550px;overflow-x: auto; overflow-y: auto;">
+    <table id="tab" height="40px" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+        <thead>
+        <tr align="center">
+            <th class='table-head-bg' style="width: 240px;">主机</th>
+            <th class='table-head-bg' style="width: 260px;">体检进度</th>
+            <th class='table-head-bg' style="width: 70px;">状态</th>
+            <th class='table-head-bg' style="width: 90px;">体检分数</th>
+            <th class='table-head-bg' style="width: 165px;">开始时间</th>
+            <th class='table-head-bg' style="width: 165px;">完成时间</th>
+            <th class='table-head-bg' style="width: 165px;">操作</th>
+        </tr>
+        </thead>
+        <tbody id='tableBody'>
+        <tr align="center" v-for="(item, index) in datas">
+            <td style="position: relative;" @mouseenter="enters(index)" @mouseleave="leaver(index)">
+                {{item.serverIp}}
+                <div v-show="curIndex===index" class="table-item-style">
+                    <div>外网IP：{{item.os.serverIp}}</div>
+                    <div>内网IP：{{parseServerLocalIp(item.os.serverLocalIp)}}</div>
+                    <div>主机名：{{item.os.hostName}}</div>
+                    <div>操作系统：{{item.os.osType}}</div>
+                    <div>系统内核：{{item.os.systemKernel}}</div>
+                    <div>Mac地址：{{item.os.macCode}}</div>
+                    <div>备注信息：{{item.os.remarks}}</div>
+                </div>
+            </td>
+            <td>
+                <div class="Bar">
+                    <div :class="[checkShowColor(item.progress,100) ? 'progress-green-bg-style' : 'progress-blue-bg-style']"
+                         :style="{width:getProgressPer(item.progress,100,item.serverIp,item.state)}">
+                    </div>
+                    <span>{{getProgressPerStr(item.progress,100,item.serverIp,item.state)}}</span>
+                </div>
+            </td>
+            <td>{{getStatusName(item.state)}}</td>
+            <td v-if="item.state == 0">-</td>
+            <td v-else-if="item.state == 1 || item.state == 6">未得分</td>
+            <td v-else>{{item.score}}分</td>
+            <td v-if="item.state == 0">-</td>
+            <td v-else>{{item.startTime}}</td>
+            <td v-if="item.state == 2">{{item.reportTime}}</td>
+            <td v-else>-</td>
+            <td>
+                <div style="display: flex;justify-content: space-around;">
+                    <div v-show="item.state==0 || item.state==2" class="edit_btn" @click="onOpenCheck(item)">立即体检</div>
+                    <div v-show="item.state==6" class="edit_btn" @click="onOpenCheck(item)">重新体检</div>
+                    <div v-show="item.state==1" class="edit_btn" @click="onStopCheck(item)">取消体检</div>
+                    <div v-show="item.state==2" class="edit_btn" @click="onOpenDetail(item)">详情</div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

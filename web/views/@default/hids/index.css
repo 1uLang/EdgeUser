@@ -1,0 +1,34 @@
+.card-div {
+    width: 30%;
+    height: 160px;
+    background-color: #fff;
+    /* box-shadow: 5px 5px 5px #8c939d; */
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-define-color{
+    color: #000;
+    cursor: pointer;
+    margin-right: 15px;
+    font-weight: bold;
+}
+.menu-select-color{
+    color: #1b6aff;
+    cursor: pointer;
+    margin-right: 15px;
+    font-weight: bold;
+}
+
+.time-define-color{
+    color: #000;
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+.time-select-color{
+    color: #1b6aff;
+    cursor: pointer;
+    margin-right: 15px;
+}

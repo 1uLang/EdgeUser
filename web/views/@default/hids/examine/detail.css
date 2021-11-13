@@ -1,0 +1,41 @@
+.card-div{
+    width: 100%;
+    height: 210px;
+    /* background-color: #fff; */
+    border: 1px #f0f0f0 solid;
+    /* box-shadow: 5px 5px 5px #8c939d; */
+    padding: 0 10px;
+}
+
+.edit_btn{
+    cursor: pointer;
+    color: #1b6aff;
+}
+
+.low-health-color{
+    color: #ec808d;
+}
+.middle-health-color{
+    color: #f59a23;
+}
+.hight-health-color{
+    color: #169bd5;
+}
+
+.more-select-content{
+    min-width: 120px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    width: 120px ;
+    height: 20px;
+    cursor: default;
+}
+
+.select-txt-color{
+    color: #999999;
+}
+.define-txt-color{
+    color: #000;
+}

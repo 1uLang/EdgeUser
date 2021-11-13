@@ -1,0 +1,35 @@
+.table-head-bg{
+    height: 32px;
+    background: #f0f0f0;
+}
+.right-space{
+    margin-right: 10px;
+}
+.edit_btn_red{
+    cursor: pointer;
+    color: red;
+}
+.edit_btn_blue{
+    margin-right: 20px;
+    cursor: pointer;
+    color: #1b6aff;
+}
+
+.save-btn{
+    height: 32px;
+    margin-left: 15px;
+    padding: 0 20px !important;
+    color: #fff;
+    background-color: #276ac6;
+    font-size: 14px;
+    font-weight: normal;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 32px;
+    cursor: pointer;
+}
+.table-head-bg{
+     height: 32px;
+     background: #f0f0f0;
+ }
+

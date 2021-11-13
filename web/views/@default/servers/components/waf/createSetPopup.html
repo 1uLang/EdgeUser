@@ -1,0 +1,37 @@
+{$layout "layout_popup"}
+
+<h3>添加规则集</h3>
+
+<form method="post" class="ui form" data-tea-action="$" data-tea-success="success">
+	<input type="hidden" name="groupId" :value="groupId"/>
+	<table class="ui table definition selectable">
+		<tr>
+			<td class="title">规则集名称 *</td>
+			<td>
+				<input type="text" name="name" maxlength="100" ref="focus"/>
+			</td>
+		</tr>
+		<tr>
+			<td>规则 *</td>
+			<td>
+				<http-firewall-rules-box :v-rules="rules" :v-type="type"></http-firewall-rules-box>
+			</td>
+		</tr>
+		<tr>
+			<td>规则之间的关系</td>
+			<td>
+				<select class="ui dropdown" name="connector" style="width:10em" @change="changeConnector()" v-model="selectedConnector">
+					<option v-for="connector in connectors" :value="connector.value">{{connector.name}}</option>
+				</select>
+				<p class="comment">{{selectedConnectorDescription}}</p>
+			</td>
+		</tr>
+        <tr>
+            <td>执行动作 *</td>
+            <td>
+                <http-firewall-actions-box :v-actions="actions" :v-firewall-policy="firewallPolicy"></http-firewall-actions-box>
+            </td>
+        </tr>
+	</table>
+	<submit-btn></submit-btn>
+</form>

@@ -1,0 +1,41 @@
+.grid {
+  margin-top: 2em !important;
+  margin-left: 2em !important;
+}
+.grid .column {
+  margin-bottom: 2em;
+  border-right: 1px #eee solid;
+}
+.grid .column div.value {
+  margin-top: 1.5em;
+}
+.grid .column div.value span {
+  font-size: 2em;
+  margin-right: 0.2em;
+}
+.grid .column.no-border {
+  border-right: 0;
+}
+.chart-box {
+  height: 20em;
+}
+h4 .color-span {
+  font-size: 0.6em;
+  padding: 2px 4px;
+}
+
+.field > input{
+  height: 32px;
+}
+.field > button {
+  height: 32px;
+  background: #1b6aff !important;
+  color: #fff !important;
+  font-size: 14px;
+  font-weight: normal !important;
+  padding: 4px 20px !important;
+}
+.field > select {
+  padding: 4px !important;
+}
+/*# sourceMappingURL=index.css.map */

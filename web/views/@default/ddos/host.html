@@ -1,0 +1,178 @@
+{$layout}
+<p class="comment" v-if="ddos.length == 0">请先添加DDoS防火墙节点。</p>
+
+<div style="width: 100%;height: 40px;display: flex;justify-content: flex-end;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-top: 10px;" v-if="ddos.length > 0">
+    <div style="display: inline-flex;align-items: center;">
+        <div style="line-height: 40px;text-align: center;">DDoS防护节点：</div>
+        <div class="ui field">
+            <div class="ui field">
+                <select class="ui dropdown auto-width" @change="showHost" v-model="nodeId" name="nodeId">
+                    <option :value="item.id" v-for="item in ddos">{{item.name}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="width: 100%; height: 40px; display: flex; margin-top: -32px;" v-if="ddos.length > 0" >
+    <div style="display: inline-flex; align-items: center;">
+        <div style="line-height: 40px; text-align: center;margin-top: -20px">主机状态</div>
+    </div>
+</div>
+<div v-if="ddos.length > 0">
+    <!--<form method="get" class="ui form" action="host" style="margin-top: -60px;">
+        <div class="ui margin"></div>
+        <div class="ui menu basic text">
+            <div class="item">
+                <div class="ui fields inline">
+                    <div class="ui field">
+                        <span>主机状态</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>-->
+    <p class="comment" v-if="total == 0 && ddos.length>0">暂时还没有主机高防IP。</p>
+    <table class="ui table selectable celled" border="1" style="border-collapse: collapse;" v-else>
+        <thead>
+        <tr align="center">
+            <th class='table-head-bg' style="width: 129px;" rowspan="2">高防IP</th>
+            <th class='table-head-bg' style="width: 109px;" rowspan="2">备注</th>
+            <th class='table-head-bg' style="width: 122px;" colspan="2">带宽</th>
+            <th class='table-head-bg' style="width: 465px;" colspan="8">频率</th>
+            <th class='table-head-bg' style="width: 165px;" colspan="3">连接</th>
+        </tr>
+        <tr align="center">
+            <th>IN</th>
+            <th>OUT</th>
+            <th>SYN</th>
+            <th>ACK</th>
+            <th>UDP</th>
+            <th>ICMP</th>
+            <th>FRAG</th>
+            <th>NonIP</th>
+            <th>NewTCP</th>
+            <th>NewUDP</th>
+            <th>IN</th>
+            <th>OUT</th>
+            <th>UDP</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr align="center" style="height: 40px;" v-for="item in list">
+            <td>{{item.addr}}</td>
+            <td>{{item.remark}}</td>
+            <td>{{item.bandwidth_in}}</td>
+            <td>{{item.bandwidth_out}}</td>
+            <td>{{item.rate_syn}}</td>
+            <td>{{item.rate_ack}}</td>
+            <td>{{item.rate_udp}}</td>
+            <td>{{item.rate_icmp}}</td>
+            <td>{{item.rate_frag}}</td>
+            <td>{{item.rate_nonip}}</td>
+            <td>{{item.rate_new_tcp}}</td>
+            <td>{{item.rate_new_udp}}</td>
+            <td>{{item.tcp_conn_in}}</td>
+            <td>{{item.tcp_conn_out}}</td>
+            <td>{{item.udp_conn}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<!--<div v-if="nShowState===2" style="display: flex;flex-direction: column;">-->
+<!--    <div style="display:inline-flex;margin-top:20px;align-items: center;">-->
+<!--        <span style="width:150px;font-size: 14px;font-weight: bold;">IP直通：</span>-->
+<!--        <input class="btn-switch large" type="checkbox" :checked="ignore" id="btn-switch-ignore" @click.prevent="setHost(true)">-->
+<!--    </div>-->
+<!--    <div style="display: inline-flex;margin-top: 15px;">-->
+<!--        <div style="width:150px;line-height: 40px;text-align: left;font-size: 14px;font-weight: bold;">DDoS防护策略：</div>-->
+<!--        <div class="ui field">  -->
+<!--            <select class="ui dropdown auto-width" id="ddosLevel" @change="onChangeHandle" :value="level" style="margin-top: 5px;height: 30px;min-height: 30px;max-height: 30px;font-size: 13px;padding: 0;align-items: center;">-->
+<!--                <option value="0" style="font-size: 13px;">宽松防护策略</option>-->
+<!--                <option value="1" style="font-size: 13px;">适中防护策略</option>-->
+<!--                <option value="2" style="font-size: 13px;">严格防护策略</option>-->
+<!--                <option value="3" style="font-size: 13px;">超级严格防护策略</option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div>-->
+<!--        <div style="display: flex;justify-content: space-between;height: 40px;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">-->
+<!--            <div style="display: inline-flex;margin-top: 10px;">-->
+<!--                <div class="mouse-style" :class="{'config-menu-define-color':tableState===2,'config-menu-select-color':tableState===1}" style="margin-right: 20px;" @click="changeListState(1)">屏蔽列表</div>-->
+<!--                <div class="mouse-style" :class="{'config-menu-define-color':tableState===1,'config-menu-select-color':tableState===2}" @click="changeListState(2)">连接列表</div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div v-show="tableState===1" style="border:1px solid #d7d7d7;height: 530px;padding: 15px 15px;margin-top: 15px;">-->
+<!--        <div class="ui fields inline" style="display:inline-flex;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">-->
+<!--            <form class="ui form" autocomplete="off" style="width: 100%;">-->
+<!--                <div style="display:inline-flex;align-items: center;justify-content: space-between;width: 100%;">-->
+<!--                    <div style="display:inline-flex;align-items: center;">-->
+<!--                        <div class="ui field" style="margin: 10px 0;">-->
+<!--                            <input type="text" name="src_ip" placeholder="请输入主机源IP" v-model="src_ip"/>-->
+<!--                        </div>-->
+<!--                        <button class="ui button" style="height: 38px;margin-left: 10px;" type="button"  @click="shieldSearchList(1)">查询</button>-->
+<!--                    </div>-->
+<!--                    <button align="right" class="ui button" style="height: 38px;margin-left: 10px;background-color:red;color: #fff;" type="button"  @click="onRelease('all')">全部释放</button>-->
+<!--                </div>-->
+<!--            </form>-->
+<!--            -->
+<!--        </div>-->
+<!--        <div style="width: 100%;height: 430px;overflow-x: auto; overflow-y: auto;">-->
+<!--            <table  class="ui table selectable celled" border="1" style="border-collapse: collapse;">-->
+<!--                <thead>-->
+<!--                    <tr align="center">-->
+<!--                        <th class='table-head-bg' style="width: 214px;" >主机IP</th>-->
+<!--                        <th class='table-head-bg' style="width: 214px;" >访问源IP</th>-->
+<!--                        <th class='table-head-bg' style="width: 214px;" >当前状态</th>-->
+<!--                        <th class='table-head-bg' style="width: 326px;" >屏蔽原因</th>-->
+<!--                        <th class='table-head-bg' style="width: 105px;" >操作</th>-->
+<!--                    </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                    <tr align="center" style="height: 40px;" v-for="item in shieldList" >-->
+<!--                        <td>{{item.LocalAddress}}</td>-->
+<!--                        <td>{{item.RemoteAddress}}</td>-->
+<!--                        <td>{{item.ReleaseTime}}</td>-->
+<!--                        <td>{{item.ForbidReason}}</td>-->
+<!--                        <td style="cursor: pointer;color: red;" @click="onRelease(item)">释放</td>-->
+<!--                    </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+<!--        -->
+<!--    </div>-->
+<!--    <div v-show="tableState===2" style="border:1px solid #d7d7d7;height: 530px;padding: 15px 15px;margin-top: 15px;">-->
+<!--        <div class="ui fields inline" style="display:inline-flex;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;">-->
+<!--            <form class="ui form" autocomplete="off">-->
+<!--                <div style="display:inline-flex;align-items: center;">-->
+<!--                    <div class="ui field" style="margin: 10px 0;">-->
+<!--                        <input type="text" name="src_ip" placeholder="请输入主机源IP" v-model="src_ip"/>-->
+<!--                    </div>-->
+<!--                    <button class="ui button" style="height: 38px;margin-left: 10px;" type="button"  @click="linkSearchList(2)">查询</button>-->
+<!--    &lt;!&ndash;                <button class="ui button" @click="onExport">导出</button>&ndash;&gt;-->
+<!--                </div>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--        <div style="width: 100%;height: 430px;overflow-x: auto; overflow-y: auto;">-->
+<!--            <table  class="ui table selectable celled" border="1" style="border-collapse: collapse;">-->
+<!--                <thead>-->
+<!--                    <tr align="center">-->
+<!--                        <th class='table-head-bg' style="width: 214px;" >主机IP</th>-->
+<!--                        <th class='table-head-bg' style="width: 214px;" >访问源IP</th>-->
+<!--                        <th class='table-head-bg' style="width: 214px;" >活动连接</th>-->
+<!--                        <th class='table-head-bg' style="width: 326px;" >全部连接</th>-->
+<!--                    </tr>-->
+<!--                </thead>-->
+<!--                <tbody >-->
+<!--                    <tr align="center" style="height: 40px;" v-for="item in linkList">-->
+<!--                        <td>{{item.LocalAddress}}</td>-->
+<!--                        <td>{{item.RemoteAddress}}</td>-->
+<!--                        <td>{{item.PortLinks}}</td>-->
+<!--                        <td>{{item.TotalLinks}}</td>-->
+<!--                    </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->

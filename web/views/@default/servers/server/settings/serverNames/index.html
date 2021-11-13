@@ -1,0 +1,31 @@
+{$layout}
+{$template "/left_menu"}
+
+<div class="right-box">
+    <!-- 审核中 -->
+    <div v-show="isAuditing">
+        <p class="ui message warning">当前域名正在审核中，请耐心等待。</p>
+    </div>
+
+    <!-- 审核不通过 -->
+    <div class="ui message error" v-if="!isAuditing && !auditingResult.isOk">
+        审核不通过，原因：{{auditingResult.reason}} （{{auditingResult.createdTime}}），请修改后重新提交。
+    </div>
+
+    <!-- 不在审核中 -->
+    <div>
+        <form method="post" class="ui form" data-tea-action="$" data-tea-success="success">
+            <csrf-token></csrf-token>
+            <input type="hidden" name="serverId" :value="serverId"/>
+            <table class="ui table definition selectable">
+                <tr>
+                    <td class="title">已绑定的域名</td>
+                    <td>
+                        <server-name-box :v-server-names="serverNames"></server-name-box>
+                    </td>
+                </tr>
+            </table>
+            <submit-btn></submit-btn>
+        </form>
+    </div>
+</div>

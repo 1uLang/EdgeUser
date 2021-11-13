@@ -1,0 +1,68 @@
+{$layout "layout_popup"}
+
+<h3>添加目标</h3>
+
+<form class="ui form" method="post" data-tea-action="$" data-tea-success="success">
+    <csrf-token></csrf-token>
+    <input type="hidden" name="more" :value="moreSet"/>
+    <table class="ui table definition selectable">
+        <tr>
+            <td class="title">地址 *</td>
+            <td>
+                <input type="text" name="address" maxlength="100" ref="focus"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">类型 *</td>
+            <td>
+                <div style="display: inline-flex;justify-content: start;">
+                    <input name="type" type="radio" :value="1" @click="changeRadioEditing(1)" checked>Web漏洞扫描
+                    <input name="type" type="radio" :value="2" @click="changeRadioEditing(2)" style="margin-left:20px">主机漏洞扫描
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>登录设置</td>
+            <td>
+                <div>
+                    <a href="" @click.prevent="changeMoreSetEditing">登录设置<i class="icon angle"
+                                                                            :class="{down:!moreSet, up:moreSet}"></i></a>
+                </div>
+            </td>
+        </tr>
+        <tr v-show="moreSet && radioSet === 2">
+            <td>系统</td>
+            <td>
+                <div style="display: inline-flex;justify-content: start;">
+                    <input name="os" type="radio" :value="1" checked @click="changeOsEditing(1)">SSH
+                    <input name="os" type="radio" :value="2" style="margin-left:20px" @click="changeOsEditing(2)">Windows
+                </div>
+            </td>
+        </tr>
+        <tr v-show="moreSet">
+            <td>用户名</td>
+            <td>
+                <input type="text" name="username" maxlength="100"/>
+            </td>
+        </tr>
+        <tr v-show="moreSet">
+            <td>密码</td>
+            <td>
+                <input type="password" name="password" maxlength="100"/>
+            </td>
+        </tr>
+        <tr v-show="moreSet && osSet ===1">
+            <td>端口</td>
+            <td>
+                <input type="text" name="port" maxlength="100" value="22"/>
+            </td>
+        </tr>
+        <tr>
+            <td>描述</td>
+            <td>
+                <input type="text" name="desc" maxlength="100"/>
+            </td>
+        </tr>
+    </table>
+    <submit-btn></submit-btn>
+</form>

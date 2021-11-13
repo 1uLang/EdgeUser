@@ -1,0 +1,27 @@
+.table-head-bg{
+    height: 32px;
+    background: #f0f0f0;
+}
+
+.log-row {
+    position: relative;
+}
+.log-row .buttons {
+    position: absolute;
+    right: 1em;
+}
+
+.field > input{
+    height: 32px;
+  }
+  .field > button {
+    height: 32px;
+    background: #1b6aff !important;
+    color: #fff !important;
+    font-size: 14px;
+    font-weight: normal !important;
+    padding: 4px 20px !important;
+  }
+  .field > select {
+    padding: 4px !important;
+  }

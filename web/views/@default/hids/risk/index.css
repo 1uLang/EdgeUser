@@ -1,0 +1,76 @@
+.card-div {
+    width: 30%;
+    height: 160px;
+    border-radius: 10px;
+    background-color: #fff;
+    border: 1px #d7d7d7 solid;
+    /* box-shadow: 5px 5px 5px #8c939d; */
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.model-stype{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.model-background{
+    width: 500px;
+    height: 20px;
+    background-color: #fff;
+    /* border: 1px #000 solid; */
+    border-radius: 10px;
+    overflow: hidden;
+}
+.model-child-background{
+    height: 20px;
+}
+
+.serious-color{
+    color: #e41e36;
+    margin-right: 6px;
+}
+.serious-bg-color{
+    background-color: #e41e36;
+    color: #fff;
+    text-align: center;
+}
+
+.height-color{
+    color: #ff431d;
+    margin-right: 6px;
+}
+.height-bg-color{
+    background-color: #ff431d;
+    color: #fff;
+    text-align: center;
+}
+.middle-color{
+    color: #fc8f31;
+    margin-right: 6px;
+}
+.middle-bg-color{
+    background-color: #fc8f31;
+    color: #fff;
+    text-align: center;
+}
+
+.low-color{
+    color: #0091cc;
+    margin-right: 6px;
+}
+.low-bg-color{
+    background-color: #0091cc;
+    color: #fff;
+    text-align: center;
+}
+.none-bg-color{
+    background-color: #D7D7D7;
+    color: #fff;
+    text-align: center;
+    flex:1;
+}
+

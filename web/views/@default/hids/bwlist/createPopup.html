@@ -1,0 +1,21 @@
+{$layout "layout_popup"}
+
+
+<form method="post" class="ui form" data-tea-action="$" data-tea-success="success" style="margin-top: 50px;">
+    <table class="ui table definition selectable">
+        <tr>
+            <td class="title">地址*</td>
+            <td>
+                <input type="text" name="Addr" maxlength="50" ref="focus"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="title">类型*</td>
+            <td>
+                <label style="margin-right: 30px;"><input type="radio" name="White" checked="checked" value="黑名单">黑名单</label>
+                <label><input type="radio" name="White" value="白名单">白名单</label>
+            </td>
+        </tr>
+    </table>
+    <submit-btn></submit-btn>
+</form>
