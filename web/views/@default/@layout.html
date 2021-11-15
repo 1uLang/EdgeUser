@@ -27,7 +27,7 @@
 
 <div>
     <!-- 顶部导航 -->
-    <div class="ui menu top-nav blue inverted small borderless" style="background-color: #222530 !important;min-height: 3em" v-cloak="">
+    <div class="ui menu top-nav blue inverted small borderless" style="background-color: #222530 !important;min-height: 3.5em" v-cloak="">
         <a href="#" class="item">
             <i class="ui icon leaf" v-if="teaLogoFileId == 0"></i><img v-if="teaLogoFileId > 0" :src="'/ui/image/' + teaLogoFileId" style="width: auto;height: 1.6em"/> &nbsp; {{teaTitle}}&nbsp;<sup v-if="teaShowVersion">V{{teaVersion}}</sup> &nbsp;
         </a>
