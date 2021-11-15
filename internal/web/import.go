@@ -105,6 +105,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/logs"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/strategy"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/user"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/platform/warning"
 	//APT
 	//_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/apt"
 

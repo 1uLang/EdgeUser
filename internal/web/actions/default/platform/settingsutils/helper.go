@@ -27,6 +27,7 @@ func (this *Helper) BeforeAction(actionPtr actions.ActionWrapper) (goNext bool) 
 	tabbar := actionutils.NewTabbar()
 	tabbar.Add("安全策略", "", "/platform/strategy", "", this.tab == "strategy")
 	tabbar.Add("访问设置", "", "/platform/ip_white", "", this.tab == "ip_white")
+	tabbar.Add("告警设置", "", "/platform/warning", "", this.tab == "warning")
 	actionutils.SetTabbar(actionPtr, tabbar)
 
 	return
