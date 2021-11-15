@@ -8,7 +8,7 @@
         <tr>
             <td style="width: 160px">是否启用</td>
             <td>
-                <input id="editCheckBox" type="checkbox" value="" :checked="enabled" name="enable" @change="onListenEditCheckBox"/>
+                <input id="editCheckBox" type="checkbox" :checked="enable" name="enable" @change="onListenEditCheckBox"/>
             </td>
         </tr>
         <tr v-if="enable">
