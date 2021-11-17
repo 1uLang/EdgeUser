@@ -24,7 +24,7 @@ func (this *IndexAction) Init() {
 func (this *IndexAction) RunGet(params struct {
 	ServerId int64
 }) {
-	this.Data["canSpecifyPort"] = this.ValidateFeature("lb-tcp-port")
+	this.Data["canSpecifyPort"] = this.ValidateFeature("lb-tcp.lb-tcp-port")
 
 	server, err := dao.SharedServerDAO.FindEnabledServer(this.UserContext(), params.ServerId)
 	if err != nil {
@@ -60,7 +60,7 @@ func (this *IndexAction) RunPost(params struct {
 }) {
 	defer this.CreateLogInfo("修改代理服务 %d TCP设置", params.ServerId)
 
-	canSpecifyPort := this.ValidateFeature("lb-tcp-port")
+	canSpecifyPort := this.ValidateFeature("lb-tcp.lb-tcp-port")
 
 	server, err := dao.SharedServerDAO.FindEnabledServer(this.UserContext(), params.ServerId)
 	if err != nil {

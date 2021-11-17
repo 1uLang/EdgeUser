@@ -243,7 +243,7 @@ Tea.context(function () {
         } else {
             this.selectList.push(code)
             let tempItem = this.onGetTableItemInfo(code, this.features)
-            if (tempItem) {
+            if (tempItem && code !== 'lb-tcp') {
                 for (var index = 0; index < tempItem.children.length; index++) {
                     if (!this.onCheckHadValue(tempItem.children[index].code, this.selectList)) {
                         this.selectList.push(tempItem.children[index].code)
