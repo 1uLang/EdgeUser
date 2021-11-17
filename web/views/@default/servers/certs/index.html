@@ -1,7 +1,7 @@
 {$layout}
-{$template "/left_menu_top"}
+<!--{$template "/left_menu_top"}-->
 
-<div class="right-box without-tabbar">
+<div class="right-box without-tabbar" style="top:4em;left: inherit">
 	<second-menu>
 		<menu-item :href="'/servers/certs?keyword=' + keyword" :active="type == ''">所有证书({{countAll}})</menu-item>
 		<menu-item :href="'/servers/certs?type=ca&keyword=' + keyword" :active="type == 'ca'">CA证书({{countCA}})</menu-item>
