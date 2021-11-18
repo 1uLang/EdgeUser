@@ -275,14 +275,19 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"code": "cache",
 					"url":  "/servers/cache",
 				},
+				{
+					"name": "证书服务",
+					"code": "certs",
+					"url":  "/servers/certs",
+				},
 			},
 		},
-		{
-			"code": "certs",
-			"name": "证书服务",
-			"icon": "leanpub",
-			"url":  "/servers/certs",
-		},
+		//{
+		//	"code": "certs",
+		//	"name": "证书服务",
+		//	"icon": "leanpub",
+		//	"url":  "/servers/certs",
+		//},
 		{
 			"code": "lb",
 			"name": "负载均衡",
