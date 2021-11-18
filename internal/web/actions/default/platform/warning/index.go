@@ -44,9 +44,29 @@ func (this *IndexAction) RunPost(params struct {
 			Field("email", params.Email).
 			Require("请输入告警邮箱")
 	}
-	_, err := this.RPC().UserRPC().UpdateUser(this.UserContext(), &pb.UpdateUserRequest{
-		UserId: this.UserId(),
-		Email:  params.Email,
+
+	userResp, err := this.RPC().UserRPC().FindEnabledUser(this.UserContext(), &pb.FindEnabledUserRequest{UserId: this.UserId()})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
+	user := userResp.User
+	if user == nil {
+		this.ErrorPage(err)
+		return
+	}
+
+	_, err = this.RPC().UserRPC().UpdateUser(this.UserContext(), &pb.UpdateUserRequest{
+		UserId:        this.UserId(),
+		Email:         params.Email,
+		Username:      user.Username,
+		Password:      user.Password,
+		Fullname:      user.Fullname,
+		Mobile:        user.Mobile,
+		Tel:           user.Tel,
+		Remark:        user.Remark,
+		IsOn:          user.IsOn,
+		NodeClusterId: user.NodeClusterId,
 	})
 	if err != nil {
 		this.ErrorPage(err)
