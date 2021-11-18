@@ -57,16 +57,14 @@ func (this *IndexAction) RunPost(params struct {
 	}
 
 	_, err = this.RPC().UserRPC().UpdateUser(this.UserContext(), &pb.UpdateUserRequest{
-		UserId:        this.UserId(),
-		Email:         params.Email,
-		Username:      user.Username,
-		Password:      user.Password,
-		Fullname:      user.Fullname,
-		Mobile:        user.Mobile,
-		Tel:           user.Tel,
-		Remark:        user.Remark,
-		IsOn:          user.IsOn,
-		NodeClusterId: user.NodeClusterId,
+		UserId:   this.UserId(),
+		Email:    params.Email,
+		Username: user.Username,
+		Fullname: user.Fullname,
+		Mobile:   user.Mobile,
+		Tel:      user.Tel,
+		Remark:   user.Remark,
+		IsOn:     user.IsOn,
 	})
 	if err != nil {
 		this.ErrorPage(err)
