@@ -533,7 +533,7 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 		//	continue
 		//}
 		code := m.GetString("code")
-		if lists.ContainsString(featureCodes, code) || (code == "lb" && (lists.Contains(featureCodes, "lb-tcp") || lists.Contains(featureCodes, "lb-tcp-port"))) {
+		if lists.ContainsString(featureCodes, code) || (code == "lb" && (lists.Contains(featureCodes, "lb-tcp") || lists.Contains(featureCodes, "lb-tcp.lb-tcp-port"))) {
 			result = append(result, m)
 		} else { //判断子菜单是否已授权
 			sub := m.GetSlice("subItems")
