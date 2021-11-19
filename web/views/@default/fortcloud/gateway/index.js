@@ -83,7 +83,7 @@ Tea.context(function () {
     this.onReConnect = function (id) {
         this.$get(".reconnect")
             .params({
-                Id: this.id,
+                Id: id,
             }).success(resp => {
             if (resp.code === 200) {
                 teaweb.success("正在重连...")

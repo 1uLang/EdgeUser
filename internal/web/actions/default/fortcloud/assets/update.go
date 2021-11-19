@@ -34,6 +34,7 @@ func (this *UpdateAction) RunPost(params struct {
 	Protocol    string
 	Username    string
 	CertId      string
+	Gateway     string
 	Must        *actions.Must
 }) {
 
@@ -80,6 +81,7 @@ func (this *UpdateAction) RunPost(params struct {
 	args.Protocol = params.Protocol
 	args.Username = params.Username
 	args.CredentialId = params.CertId
+	args.AccessGatewayId = params.Gateway
 	args.UserId = uint64(this.UserId())
 	err = req.Assets.Update(args)
 	if err != nil {

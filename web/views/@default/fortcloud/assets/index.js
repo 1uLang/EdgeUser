@@ -10,6 +10,7 @@ Tea.context(function () {
     this.port = "22"
     this.pubHost = ""
     this.maskStr = ""
+    this.gateway = ""
     this.httpType = "ssh"
 
     this.protoData = [{value: "", proto: "ssh"}]
@@ -253,6 +254,7 @@ Tea.context(function () {
                     username: that.inputAuthUserName,
                     certId: that.selectAuthCer,
                     description: that.maskStr,
+                    gateway: that.gateway,
                     port: that.port,
                 }).success(resp => {
                 if (resp.code === 200) {
@@ -273,6 +275,7 @@ Tea.context(function () {
                 username: this.inputAuthUserName,
                 certId: this.selectAuthCer,
                 description: this.maskStr,
+                gateway: this.gateway,
                 port: this.port,
             }).success(resp => {
             if (resp.code === 200) {

@@ -2,6 +2,7 @@ package assets
 
 import (
 	"fmt"
+	gateway_model "github.com/1uLang/zhiannet-api/next-terminal/model/access_gateway"
 	asset_model "github.com/1uLang/zhiannet-api/next-terminal/model/asset"
 	cert_model "github.com/1uLang/zhiannet-api/next-terminal/model/cert"
 	next_terminal_server "github.com/1uLang/zhiannet-api/next-terminal/server"
@@ -33,8 +34,7 @@ func (this *IndexAction) RunGet(params struct {
 	PageNo    int
 	PageState int
 	Asset     string
-
-	Must *actions.Must
+	Must      *actions.Must
 }) {
 
 	req, err := this.checkAndNewServerRequest()
@@ -52,6 +52,11 @@ func (this *IndexAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
+	gateways, err := req.GateWay.GetAll(&gateway_model.GetAllReq{UserId: this.UserId()})
+	if err != nil {
+		this.ErrorPage(err)
+		return
+	}
 	for k, v := range list {
 		item := v.(map[string]interface{})
 		item["auth"] = strings.HasPrefix(item["tags"].(string), fmt.Sprintf("user_%v", this.UserId()))
@@ -59,6 +64,7 @@ func (this *IndexAction) RunGet(params struct {
 	}
 	this.Data["assets"] = list
 	this.Data["certs"] = certs
+	this.Data["gateways"] = gateways
 	this.Show()
 }
 
@@ -72,6 +78,7 @@ func (this *IndexAction) RunPost(params struct {
 	Protocol    string
 	Username    string
 	CertId      string
+	Gateway     string
 	Must        *actions.Must
 }) {
 
@@ -116,6 +123,7 @@ func (this *IndexAction) RunPost(params struct {
 	args.Protocol = params.Protocol
 	args.Username = params.Username
 	args.CredentialId = params.CertId
+	args.AccessGatewayId = params.Gateway
 	args.UserId = uint64(this.UserId())
 	err = req.Assets.Create(args)
 	if err != nil {
