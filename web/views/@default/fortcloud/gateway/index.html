@@ -48,7 +48,7 @@
                 <td>{{onChangeTimeFormat(item.created)}}</td>
                 <td>
                     <div style="display: flex;justify-content: space-around;padding: 4px 0;">
-                        <div v-show="item.active" class="edit_btn" @click="onReConnect(item.id)">重连</div>
+                        <div class="edit_btn" @click="onReConnect(item.id)">重连</div>
                         <div v-show="item.auth" class="edit_btn" @click="onOpenAuth(item)">授权</div>
                         <div v-show="item.auth" class="edit_btn" @click="onEdit(item)">编辑</div>
                         <div v-show="item.auth" class="edit_btn" style="color: #db2828" @click="onDelete(item.id)">删除
