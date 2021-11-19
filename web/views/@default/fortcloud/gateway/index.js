@@ -81,7 +81,7 @@ Tea.context(function () {
     }
 
     this.onReConnect = function (id) {
-        this.$get(".reconnect")
+        this.$post(".reconnect")
             .params({
                 Id: id,
             }).success(resp => {
