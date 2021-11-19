@@ -1,14 +1,12 @@
-package assets
+package gateway
 
 import (
 	"fmt"
-	asset_model "github.com/1uLang/zhiannet-api/next-terminal/model/asset"
-	cert_model "github.com/1uLang/zhiannet-api/next-terminal/model/cert"
+	gateway_model "github.com/1uLang/zhiannet-api/next-terminal/model/access_gateway"
 	next_terminal_server "github.com/1uLang/zhiannet-api/next-terminal/server"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/default/fortcloud"
 	"github.com/iwind/TeaGo/actions"
-	"strings"
 )
 
 type IndexAction struct {
@@ -32,7 +30,7 @@ func (this *IndexAction) RunGet(params struct {
 	PageSize  int
 	PageNo    int
 	PageState int
-	Asset     string
+	Gateway   string
 
 	Must *actions.Must
 }) {
@@ -42,44 +40,30 @@ func (this *IndexAction) RunGet(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	list, _, err := req.Assets.List(&asset_model.ListReq{UserId: this.UserId()})
+	list, _, err := req.GateWay.List(&gateway_model.ListReq{UserId: this.UserId()})
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
-	certs, _, err := req.Cert.List(&cert_model.ListReq{UserId: uint64(this.UserId())})
-	if err != nil {
-		this.ErrorPage(err)
-		return
-	}
-	for k, v := range list {
-		item := v.(map[string]interface{})
-		item["auth"] = strings.HasPrefix(item["tags"].(string), fmt.Sprintf("user_%v", this.UserId()))
-		list[k] = item
-	}
-	this.Data["assets"] = list
-	this.Data["certs"] = certs
+	this.Data["gateways"] = list
 	this.Show()
 }
 
 func (this *IndexAction) RunPost(params struct {
-	HostName    string
-	Ip          string
-	Type        string
-	Description string
-	Password    string
-	Port        int
-	Protocol    string
-	Username    string
-	CertId      string
-	Must        *actions.Must
+	HostName   string
+	Ip         string
+	Type       string
+	Password   string
+	Port       int
+	Username   string
+	PrivateKey string
+	Passphrase string
+	Must       *actions.Must
 }) {
 
 	params.Must.
 		Field("hostName", params.HostName).
 		Require("请输入主机名").
-		Field("protocol", params.Protocol).
-		Require("请选择接入协议").
 		Field("port", params.Port).
 		Require("请输入端口号").
 		Field("type", params.Type).
@@ -88,41 +72,38 @@ func (this *IndexAction) RunPost(params struct {
 		Require("请输入主机地址").
 		Match("[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\\.?", "请输入正确的主机地址")
 
-	if params.Type == "custom" {
+	if params.Type == "password" {
 		params.Must.
 			Field("username", params.Username).
 			Require("请输入授权账号").
 			Field("password", params.Password).
 			Require("请输入密码")
-	} else if params.Type == "on_custom" { //免密登录
-		params.Type = "custom"
 	} else {
 		params.Must.
-			Field("certId", params.CertId).
-			Require("请选择授权凭证")
+			Field("privateKey", params.PrivateKey).
+			Require("请选择密钥")
 	}
 	req, err := this.checkAndNewServerRequest()
 	if err != nil {
 		this.ErrorPage(fmt.Errorf("堡垒机组件错误:" + err.Error()))
 		return
 	}
-	args := &asset_model.CreateReq{}
+	args := &gateway_model.CreateReq{}
 	args.Name = params.HostName
 	args.IP = params.Ip
 	args.AccountType = params.Type
-	args.Description = params.Description
 	args.Password = params.Password
 	args.Port = params.Port
-	args.Protocol = params.Protocol
 	args.Username = params.Username
-	args.CredentialId = params.CertId
+	args.PrivateKey = params.PrivateKey
+	args.Passphrase = params.Passphrase
 	args.UserId = uint64(this.UserId())
-	err = req.Assets.Create(args)
+	err = req.GateWay.Create(args)
 	if err != nil {
 		this.ErrorPage(err)
 		return
 	}
 	// 日志
-	this.CreateLogInfo("堡垒机 - 新增资产:[%v]成功", params.HostName)
+	this.CreateLogInfo("堡垒机 - 新增网关:[%v]成功", params.HostName)
 	this.Success()
 }

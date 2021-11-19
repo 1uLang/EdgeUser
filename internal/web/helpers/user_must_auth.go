@@ -410,6 +410,11 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"code": "cert",
 				},
 				{
+					"name": "接入网关",
+					"url":  "/fortcloud/gateway",
+					"code": "gateway",
+				},
+				{
 					"name": "会话管理",
 					"url":  "/fortcloud/sessions",
 					"code": "sessions",

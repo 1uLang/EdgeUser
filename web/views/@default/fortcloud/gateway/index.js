@@ -12,44 +12,35 @@ Tea.context(function () {
     this.maskStr = ""
     this.httpType = "ssh"
 
-    this.protoData = [{value: "", proto: "ssh"}]
-
     this.bShowhAuth = false
+    this.gateway_name = ""
     this.authValue = ""
 
-    this.accountType = 'custom'
+    this.accountType = 'password'
     this.inputAuthUserName = ""
     this.inputAuthPassword = ""
+    this.inputAuthPrivateKey = ""
+    this.inputAuthPassphrase = ""
     this.selectAuthCer = 1
 
     this.pageState = 1
     this.allUsers = []
     this.authUsers = []
-    this.getLinkStatus = function (status) {
-        switch (status) {
-            case 1:
-                return "可连接"
-            case 0:
-                return "不可连接"
-            default:
-                return "未知"
-        }
-    }
-    this.getAuthCount = function (tags) {
-        let tmp = tags.split(",")
-        return tmp.length - 1
-    }
-    this.checkAuth = function (item) {
 
-    }
-    this.getStatus = function (status) {
-        if (status) {
-            return "运行中"
+    this.getType = function (tp) {
+        if (tp === 'password') {
+            return "密码"
         } else {
-            return "不可用"
+            return "密钥"
         }
     }
-
+    this.getStatus = function (state) {
+        if (state) {
+            return "连接中"
+        } else {
+            return "已端开"
+        }
+    }
     this.onChangeTimeFormat = function (time) {
         var resultTime = "";
         if (time) {
@@ -73,12 +64,11 @@ Tea.context(function () {
             this.post = ""
             this.platform = ""
             this.pubHost = ""
-            this.protoData = [{value: "", proto: "ssh"}]
             this.adminUser = ""
             this.state = false
             this.maskStr = ""
         } else if (id === 4) {
-            window.location = "/fortcloud/assets?pageState=4&asset=" + this.id
+            window.location = "/fortcloud/gateway?pageState=4&gateway=" + this.id
         }
 
         if (this.pageState != id) {
@@ -90,19 +80,19 @@ Tea.context(function () {
         this.onChangeState(3)
     }
 
-    this.onConnect = function (id) {
-        this.$post(".connect")
+    this.onReConnect = function (id) {
+        this.$get(".reconnect")
             .params({
-                Id: id
+                Id: this.id,
             }).success(resp => {
             if (resp.code === 200) {
-                window.open(resp.data.url)
+                teaweb.success("正在重连...")
             }
         })
     }
     this.onOpenAuth = function (item) {
         //req
-        this.asset_name = item.name
+        this.gateway_name = item.name
         this.bShowhAuth = true
         this.id = item.id
 
@@ -154,11 +144,11 @@ Tea.context(function () {
         this.bShowhAuth = false
         this.id = ""
     }
-    this.onGetIdList = function (array){
+    this.onGetIdList = function (array) {
         var tempList = []
-        if(array && array.length>0){
-            for(var index=0;index<array.length;index++){
-                if(!this.onCheckHadValue(array[index].id,tempList)){
+        if (array && array.length > 0) {
+            for (var index = 0; index < array.length; index++) {
+                if (!this.onCheckHadValue(array[index].id, tempList)) {
                     tempList.push(array[index].id)
                 }
             }
@@ -179,39 +169,30 @@ Tea.context(function () {
             .refresh()
 
     }
-    this.onEdit = function (id) {
+    this.onEdit = function (item) {
 
-        this.id = id
+        this.id = item.id
         let that = this
-        this.$post(".details")
-            .params({
-                id: id,
-            }).success(resp => {
-            if (resp.code === 200) {
-                let asset = resp.data.asset
-                that.host = asset.name
-                that.post = asset.ip
-                that.port = asset.port
-                that.accountType = asset.accountType
-                that.httpType = asset.protocol
-                that.inputAuthPassword = asset.password
-                that.inputAuthUserName = asset.username
-                that.selectAuthCer = asset.credentialId
-                that.maskStr = asset.description
-            }
-            this.onChangeState(5)
-        })
+        that.host = item.name
+        that.post = item.ip
+        that.port = item.port
+        that.accountType = item.accountType
+        that.inputAuthPassword = item.password
+        that.inputAuthUserName = item.username
+        that.inputAuthPrivateKey = item.privateKey
+        that.inputAuthPassphrase = item.passphrase
 
+        this.onChangeState(5)
         //赋值
     }
     this.onDelete = function (id) {
 
-        teaweb.confirm("确定要删除该资产吗？", function () {
+        teaweb.confirm("确定要删除该网关吗？", function () {
             this.$post(".delete")
                 .params({
                     Id: id
-                }).success(resp=>{
-                if(resp.code===200)
+                }).success(resp => {
+                if (resp.code === 200)
                     teaweb.success("删除成功")
             })
                 .refresh()
@@ -223,37 +204,22 @@ Tea.context(function () {
         // document.getElementById('btn-switch-state').checked = !this.state
     }
 
-    this.onAddProtoData = function () {
-        let curData = {value: "", proto: "ssh"}
-        this.protoData.push(curData)
-    }
-
-    this.onRemoveProtoData = function (index) {
-        if (this.protoData.length > 1) {
-            this.protoData.splice(index, 1);
-        }
-    }
-
     this.onUpdate = function () {
 
         let that = this
-        teaweb.confirm("确定要修改该资产信息吗？", function () {
-            let protocols = []
-            for (let item of that.protoData) {
-                protocols.push(item.proto + "/" + item.value)
-            }
+        teaweb.confirm("确定要修改该网关信息吗？", function () {
+
             this.$post(".update")
                 .params({
                     Id: that.id,
                     hostName: that.host,
                     ip: that.post,
+                    port: that.port,
                     type: that.accountType,
-                    protocol: that.httpType,
                     password: that.inputAuthPassword,
                     username: that.inputAuthUserName,
-                    certId: that.selectAuthCer,
-                    description: that.maskStr,
-                    port: that.port,
+                    privateKey: that.inputAuthPrivateKey,
+                    passphrase: that.inputAuthPassphrase,
                 }).success(resp => {
                 if (resp.code === 200) {
                     teaweb.success("修改成功")
@@ -267,13 +233,12 @@ Tea.context(function () {
             .params({
                 hostName: this.host,
                 ip: this.post,
+                port: this.port,
                 type: this.accountType,
-                protocol: this.httpType,
                 password: this.inputAuthPassword,
                 username: this.inputAuthUserName,
-                certId: this.selectAuthCer,
-                description: this.maskStr,
-                port: this.port,
+                privateKey: this.inputAuthPrivateKey,
+                passphrase: this.inputAuthPassphrase,
             }).success(resp => {
             if (resp.code === 200) {
                 teaweb.success("创建成功")
@@ -283,7 +248,7 @@ Tea.context(function () {
     }
 
     this.onDeleteAuthAccount = function (id) {
-        teaweb.confirm("确定要删除该资产授权吗？", function () {
+        teaweb.confirm("确定要删除该网关授权吗？", function () {
             this.$post(".delAuthorize")
                 .params({
                     Id: id
@@ -367,11 +332,11 @@ Tea.context(function () {
         return false
     }
 
-    this.onRemoveTableItem=function (id,table) { 
-        if(id && table && table.length>0 ){
-            for(var index=0;index<table.length;index++){
-                if(table[index].id==id){
-                    table.splice(index,1)
+    this.onRemoveTableItem = function (id, table) {
+        if (id && table && table.length > 0) {
+            for (var index = 0; index < table.length; index++) {
+                if (table[index].id == id) {
+                    table.splice(index, 1)
                 }
             }
         }
@@ -382,7 +347,7 @@ Tea.context(function () {
     this.onCheckSelectAllNoAuth = function () {
         var tempElement = document.getElementById("noAuth-allSelect")
         for (var index = 0; index < this.allUsers.length; index++) {
-            if (!this.allUsers[index].my &&!this.onCheckHadValue(this.allUsers[index].id, this.selectNoAuthPeopleListData)) {
+            if (!this.allUsers[index].my && !this.onCheckHadValue(this.allUsers[index].id, this.selectNoAuthPeopleListData)) {
                 tempElement.checked = false
                 return
             }
@@ -412,7 +377,7 @@ Tea.context(function () {
     }
 
     this.onListenClickNoAuthChange = function (item) {
-        if(item.my){
+        if (item.my) {
             return
         }
         let noAuthList = document.getElementsByName("noAuthSelect")
@@ -441,19 +406,19 @@ Tea.context(function () {
     }
     this.onAddSelectNoAuth = function (id, name) {
         if (id && name) {
-            var tempData = {id: id, name: name,my:false}
+            var tempData = {id: id, name: name, my: false}
             this.selectNoAuthPeopleListData.push(tempData)
         }
     }
     this.onRemoveSelectNoAuth = function (id) {
-        this.onRemoveTableItem(id,this.selectNoAuthPeopleListData)
+        this.onRemoveTableItem(id, this.selectNoAuthPeopleListData)
     }
 
     this.onAddAuthPeople = function () {
         if (this.selectNoAuthPeopleListData.length > 0) {
             this.selectNoAuthPeopleListData.forEach(element => {
                 this.authUsers.push(element)
-                this.onRemoveTableItem(element.id,this.allUsers)
+                this.onRemoveTableItem(element.id, this.allUsers)
             });
             this.selectNoAuthPeopleListData = []
         }
@@ -461,7 +426,7 @@ Tea.context(function () {
         tempElement.checked = false
         let noAuthList = document.getElementsByName("noAuthSelect")
         for (var index = 0; index < noAuthList.length; index++) {
-            if(!noAuthList[index].disabled){
+            if (!noAuthList[index].disabled) {
                 noAuthList[index].checked = false
             }
         }
@@ -526,19 +491,19 @@ Tea.context(function () {
 
     this.onAddSelectAuth = function (id, name) {
         if (id && name) {
-            var tempData = {id: id, name: name,my:false}
+            var tempData = {id: id, name: name, my: false}
             this.selectAuthPeopleListData.push(tempData)
         }
     }
     this.onRemoveSelectAuth = function (id) {
-        this.onRemoveTableItem(id,this.selectAuthPeopleListData)
+        this.onRemoveTableItem(id, this.selectAuthPeopleListData)
     }
 
     this.onRemoveAuthPeople = function () {
         if (this.selectAuthPeopleListData.length > 0) {
             this.selectAuthPeopleListData.forEach(element => {
                 this.allUsers.push(element)
-                this.onRemoveTableItem(element.id,this.authUsers)
+                this.onRemoveTableItem(element.id, this.authUsers)
             });
 
             this.selectAuthPeopleListData = []
@@ -551,7 +516,6 @@ Tea.context(function () {
         }
     }
     this.accountTypeData = [
-        {type: "custom", name: "密码"}, {type: "credential", name: "授权"}, {type: "no_custom", name: "实时输入"},
+        {type: "password", name: "密码"}, {type: "private-key", name: "密钥"}
     ]
-
 })

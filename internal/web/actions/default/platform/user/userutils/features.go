@@ -94,18 +94,13 @@ var (
 			Description: "用户可以新增、管理、删除域名",
 		},
 		{
-			Name:        "证书管理",
-			Code:        "servers.certs",
-			Description: "用户可以上传各类的证书",
-		},
-		{
 			Name:        "刷新预热",
 			Code:        "servers.cache",
 			Description: "用户可以配置URL刷新预热缓存",
 		},
 		{
 			Name:        "证书服务",
-			Code:        "certs",
+			Code:        "servers.certs",
 			Description: "用户可以开启证书服务功能",
 		},
 		{
@@ -217,6 +212,11 @@ var (
 			Name:        "授权凭证",
 			Code:        "fortcloud.cert",
 			Description: "用户可以创建授权登录资产的授权凭证",
+		},
+		{
+			Name:        "接入网关",
+			Code:        "fortcloud.gateway",
+			Description: "用户配置跳板机，访问网域内主机",
 		},
 		{
 			Name:        "会话管理",
