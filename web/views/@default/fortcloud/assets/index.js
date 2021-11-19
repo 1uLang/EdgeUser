@@ -78,6 +78,7 @@ Tea.context(function () {
             this.adminUser = ""
             this.state = false
             this.maskStr = ""
+            this.gateway = ""
         } else if (id === 4) {
             window.location = "/fortcloud/assets?pageState=4&asset=" + this.id
         }
@@ -199,6 +200,7 @@ Tea.context(function () {
                 that.inputAuthUserName = asset.username
                 that.selectAuthCer = asset.credentialId
                 that.maskStr = asset.description
+                that.gateway = asset.accessGatewayId
             }
             this.onChangeState(5)
         })
