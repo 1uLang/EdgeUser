@@ -38,7 +38,7 @@ Tea.context(function () {
         if (state) {
             return "连接中"
         } else {
-            return "已端开"
+            return "已断开"
         }
     }
     this.onChangeTimeFormat = function (time) {
