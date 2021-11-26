@@ -63,7 +63,7 @@ func (this *IndexAction) RunPost(params struct {
 	}
 
 	_, err = this.RPC().HTTPWebRPC().UpdateHTTPWebCache(this.UserContext(), &pb.UpdateHTTPWebCacheRequest{
-		WebId:     params.WebId,
+		HttpWebId: params.WebId,
 		CacheJSON: cacheJSON,
 	})
 	if err != nil {

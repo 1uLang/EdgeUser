@@ -59,7 +59,7 @@ func (this *SyncAPINodesTask) Loop() error {
 	}
 
 	newEndpoints := []string{}
-	for _, node := range resp.Nodes {
+	for _, node := range resp.ApiNodes {
 		if !node.IsOn {
 			continue
 		}

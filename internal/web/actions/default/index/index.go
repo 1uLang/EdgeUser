@@ -210,5 +210,8 @@ func (this *IndexAction) RunPost(params struct {
 
 	//跳转首页
 	this.Data["from"] = helpers.NewUserMustAuth("").FirstMenuUrl(userId)
+	if this.Data["from"] == "" {
+		this.Fail("无访问权限，请联系管理员获取模块权限")
+	}
 	this.Success()
 }

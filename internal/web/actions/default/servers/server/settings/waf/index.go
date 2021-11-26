@@ -34,7 +34,7 @@ func (this *IndexAction) RunGet(params struct {
 
 	// 当前的Server独立设置
 	if webConfig.FirewallRef == nil || webConfig.FirewallRef.FirewallPolicyId == 0 {
-		firewallPolicyId, err := dao.SharedHTTPWebDAO.InitEmptyHTTPFirewallPolicy(this.UserContext(), params.ServerId, webConfig.Id, webConfig.FirewallRef != nil && webConfig.FirewallRef.IsOn)
+		firewallPolicyId, err := dao.SharedHTTPWebDAO.InitEmptyHTTPFirewallPolicy(this.UserContext(), 0, params.ServerId, webConfig.Id, webConfig.FirewallRef != nil && webConfig.FirewallRef.IsOn)
 		if err != nil {
 			this.ErrorPage(err)
 			return
@@ -63,7 +63,7 @@ func (this *IndexAction) RunPost(params struct {
 	// TODO 检查配置
 
 	_, err := this.RPC().HTTPWebRPC().UpdateHTTPWebFirewall(this.UserContext(), &pb.UpdateHTTPWebFirewallRequest{
-		WebId:        params.WebId,
+		HttpWebId:    params.WebId,
 		FirewallJSON: params.FirewallJSON,
 	})
 	if err != nil {

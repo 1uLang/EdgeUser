@@ -103,7 +103,7 @@ func (this *IndexAction) RunPost(params struct {
 	// 设置跳转到HTTPS
 	// TODO 校验设置
 	_, err = this.RPC().HTTPWebRPC().UpdateHTTPWebRedirectToHTTPS(this.UserContext(), &pb.UpdateHTTPWebRedirectToHTTPSRequest{
-		WebId:               params.WebId,
+		HttpWebId:           params.WebId,
 		RedirectToHTTPSJSON: params.RedirectToHTTPSJSON,
 	})
 	if err != nil {

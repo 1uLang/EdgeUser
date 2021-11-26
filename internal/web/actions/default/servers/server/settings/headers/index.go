@@ -46,7 +46,7 @@ func (this *IndexAction) RunGet(params struct {
 			return
 		}
 		_, err = this.RPC().HTTPWebRPC().UpdateHTTPWebRequestHeader(this.UserContext(), &pb.UpdateHTTPWebRequestHeaderRequest{
-			WebId:      webId,
+			HttpWebId:  webId,
 			HeaderJSON: refJSON,
 		})
 		if err != nil {
@@ -73,7 +73,7 @@ func (this *IndexAction) RunGet(params struct {
 			return
 		}
 		_, err = this.RPC().HTTPWebRPC().UpdateHTTPWebResponseHeader(this.UserContext(), &pb.UpdateHTTPWebResponseHeaderRequest{
-			WebId:      webId,
+			HttpWebId:  webId,
 			HeaderJSON: refJSON,
 		})
 		if err != nil {

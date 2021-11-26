@@ -128,23 +128,30 @@ func (this *IndexAction) RunGet(params struct {
 		})
 	case "ca":
 		page = this.NewPage(countCA)
-		listResp, err = this.RPC().SSLCertRPC().ListSSLCerts(this.UserContext(), &pb.ListSSLCertsRequest{IsCA: true, Offset: page.Offset, Size: page.Size, Keyword: params.Keyword})
+		listResp, err = this.RPC().SSLCertRPC().ListSSLCerts(this.UserContext(), &pb.ListSSLCertsRequest{
+			IsCA:    true,
+			Offset:  page.Offset,
+			Size:    page.Size,
+			Keyword: params.Keyword,
+			UserId:  this.UserId(),
+		})
 	case "available":
 		page = this.NewPage(countAvailable)
-		listResp, err = this.RPC().SSLCertRPC().ListSSLCerts(this.UserContext(), &pb.ListSSLCertsRequest{IsAvailable: true, Offset: page.Offset, Size: page.Size, Keyword: params.Keyword})
+		listResp, err = this.RPC().SSLCertRPC().ListSSLCerts(this.UserContext(), &pb.ListSSLCertsRequest{IsAvailable: true, Offset: page.Offset, Size: page.Size, Keyword: params.Keyword, UserId: this.UserId(true)})
 	case "expired":
 		page = this.NewPage(countExpired)
-		listResp, err = this.RPC().SSLCertRPC().ListSSLCerts(this.UserContext(), &pb.ListSSLCertsRequest{IsExpired: true, Offset: page.Offset, Size: page.Size, Keyword: params.Keyword})
+		listResp, err = this.RPC().SSLCertRPC().ListSSLCerts(this.UserContext(), &pb.ListSSLCertsRequest{IsExpired: true, Offset: page.Offset, Size: page.Size, Keyword: params.Keyword, UserId: this.UserId(true)})
 	case "7days":
 		page = this.NewPage(count7Days)
-		listResp, err = this.RPC().SSLCertRPC().ListSSLCerts(this.UserContext(), &pb.ListSSLCertsRequest{ExpiringDays: 7, Offset: page.Offset, Size: page.Size, Keyword: params.Keyword})
+		listResp, err = this.RPC().SSLCertRPC().ListSSLCerts(this.UserContext(), &pb.ListSSLCertsRequest{ExpiringDays: 7, Offset: page.Offset, Size: page.Size, Keyword: params.Keyword, UserId: this.UserId(true)})
 	case "30days":
 		page = this.NewPage(count30Days)
-		listResp, err = this.RPC().SSLCertRPC().ListSSLCerts(this.UserContext(), &pb.ListSSLCertsRequest{ExpiringDays: 30, Offset: page.Offset, Size: page.Size, Keyword: params.Keyword})
+		listResp, err = this.RPC().SSLCertRPC().ListSSLCerts(this.UserContext(), &pb.ListSSLCertsRequest{ExpiringDays: 30, Offset: page.Offset, Size: page.Size, Keyword: params.Keyword, UserId: this.UserId(true)})
 	default:
 		page = this.NewPage(countAll)
 		listResp, err = this.RPC().SSLCertRPC().ListSSLCerts(this.UserContext(), &pb.ListSSLCertsRequest{
 			Keyword: params.Keyword,
+			UserId:  this.UserId(),
 		})
 	}
 	if err != nil {

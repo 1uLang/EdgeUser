@@ -9,7 +9,7 @@ import (
 	"github.com/TeaOSLab/EdgeUser/internal/apps"
 	teaconst "github.com/TeaOSLab/EdgeUser/internal/const"
 	"github.com/TeaOSLab/EdgeUser/internal/nodes"
-	"github.com/iwind/TeaGo/Tea"
+	"github.com/TeaOSLab/EdgeUser/internal/utils"
 	_ "github.com/iwind/TeaGo/bootstrap"
 )
 
@@ -31,12 +31,12 @@ func main() {
 	})
 
 	//初始化 第三方包的配置文件
-	server.SetApiDbPath(Tea.ConfigFile("api_db.yaml"))
+	server.SetApiDbPath(utils.Path() + "/build/configs/api_db.yaml")
 	server.InitMysqlLink()
 	// 初始化agengt和nextcloud配置
 	ag_ser.AgentInit(server.GetApiDbPath())
 	nc_model.InitialAdminUser()
-	cache.ApiDbPath = Tea.ConfigFile("api_db.yaml")
+	cache.ApiDbPath = utils.Path() + "/build/configs/api_db.yaml"
 	cache.InitClient()
 	app.Run(func() {
 		userNode := nodes.NewUserNode()

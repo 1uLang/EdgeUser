@@ -11,7 +11,6 @@ import (
 )
 
 var sharedUIConfig *systemconfigs.UserUIConfig = nil
-var HIDSType string = "safedog"
 
 const (
 	UISettingName = "userUIConfig"

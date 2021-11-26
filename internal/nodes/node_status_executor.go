@@ -88,7 +88,7 @@ func (this *NodeStatusExecutor) update() {
 		nodeId = configs.SharedAPIConfig.NumberId
 	}
 	_, err = rpcClient.UserNodeRPC().UpdateUserNodeStatus(rpcClient.Context(0), &pb.UpdateUserNodeStatusRequest{
-		NodeId:     nodeId,
+		UserNodeId: nodeId,
 		StatusJSON: jsonData,
 	})
 	if err != nil {

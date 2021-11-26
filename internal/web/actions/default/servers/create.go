@@ -447,7 +447,7 @@ func (this *CreateAction) RunPost(params struct {
 		this.ErrorPage(err)
 		return
 	}
-	webId := webIdResp.WebId
+	webId := webIdResp.HttpWebId
 	_, err = this.RPC().ServerRPC().UpdateServerWeb(this.UserContext(), &pb.UpdateServerWebRequest{
 		ServerId: serverId,
 		WebId:    webId,
@@ -458,7 +458,7 @@ func (this *CreateAction) RunPost(params struct {
 	}
 
 	_, err = this.RPC().HTTPWebRPC().UpdateHTTPWebCache(this.UserContext(), &pb.UpdateHTTPWebCacheRequest{
-		WebId:     webId,
+		HttpWebId: webId,
 		CacheJSON: cacheConfigJSON,
 	})
 	if err != nil {

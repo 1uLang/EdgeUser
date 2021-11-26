@@ -74,7 +74,6 @@ func loadSecurityConfig(userId int64) (*systemconfigs.SecurityConfig, error) {
 	resp, err := rpcClient.SysSettingRPC().ReadSysSetting(rpcClient.Context(userId), &pb.ReadSysSettingRequest{
 		Code: fmt.Sprintf("%s_user%v", SecuritySettingName, userId),
 	})
-	fmt.Println("resp------1------", resp)
 	if err != nil {
 		return nil, err
 	}

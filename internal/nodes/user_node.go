@@ -209,7 +209,7 @@ func (this *UserNode) pullConfig() error {
 	if err != nil {
 		return err
 	}
-	node := nodeResp.Node
+	node := nodeResp.UserNode
 	if node == nil {
 		return errors.New("invalid 'nodeId' or 'secret'")
 	}
@@ -367,6 +367,16 @@ func (this *UserNode) listenSock() error {
 					Code: "pid",
 					Params: map[string]interface{}{
 						"pid": os.Getpid(),
+					},
+				})
+			case "info":
+				exePath, _ := os.Executable()
+				_ = cmd.Reply(&gosock.Command{
+					Code: "info",
+					Params: map[string]interface{}{
+						"pid":     os.Getpid(),
+						"version": teaconst.Version,
+						"path":    exePath,
 					},
 				})
 			case "stop":
