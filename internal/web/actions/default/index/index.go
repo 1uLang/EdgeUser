@@ -1,6 +1,7 @@
 package index
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"github.com/1uLang/zhiannet-api/common/cache"
@@ -11,13 +12,16 @@ import (
 	"github.com/TeaOSLab/EdgeCommon/pkg/rpc/pb"
 	"github.com/TeaOSLab/EdgeUser/internal/configloaders"
 	teaconst "github.com/TeaOSLab/EdgeUser/internal/const"
+	"github.com/TeaOSLab/EdgeUser/internal/encrypt"
 	"github.com/TeaOSLab/EdgeUser/internal/oplogs"
 	"github.com/TeaOSLab/EdgeUser/internal/rpc"
+	"github.com/TeaOSLab/EdgeUser/internal/ttlcache"
 	"github.com/TeaOSLab/EdgeUser/internal/utils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/TeaOSLab/EdgeUser/internal/web/helpers"
 	"github.com/iwind/TeaGo/actions"
 	"github.com/iwind/TeaGo/maps"
+	"github.com/iwind/TeaGo/rands"
 	"github.com/iwind/TeaGo/types"
 	stringutil "github.com/iwind/TeaGo/utils/string"
 
@@ -175,8 +179,8 @@ func (this *IndexAction) RunPost(params struct {
 	//密码过期检查
 	this.Data["from"] = ""
 	if res, _ := edge_users_server.CheckPwdInvalid(uint64(resp.UserId)); res {
-		params.Auth.SetUpdatePwdToken(resp.UserId)
 		this.Data["from"] = "/updatePwd"
+		this.Data["Code"] = encode(resp.UserId)
 		this.Fail("密码已过期，请立即修改")
 	}
 	//ip登陆限制检查
@@ -214,4 +218,28 @@ func (this *IndexAction) RunPost(params struct {
 		this.Fail("无访问权限，请联系管理员获取模块权限")
 	}
 	this.Success()
+}
+
+func encode(userId int64) string {
+
+	enstr := fmt.Sprintf("%s%d", rands.String(32), time.Now().Add(3*time.Minute).Unix())
+	ttlcache.DefaultCache.Write(enstr, userId, time.Now().Unix()+180)
+	enstr = base64.URLEncoding.EncodeToString(encrypt.MagicKeyEncode([]byte(enstr)))
+
+	return enstr
+}
+
+func decode(enStr string) (userId int64, err error) {
+
+	bytes, err := base64.URLEncoding.DecodeString(enStr)
+	if err != nil {
+		return 0, err
+	}
+	enStr = string(encrypt.MagicKeyDecode(bytes))
+
+	value := ttlcache.DefaultCache.Read(enStr)
+	if value == nil {
+		return 0, fmt.Errorf("页面信息已过期，请刷新后重试")
+	}
+	return value.Value.(int64), nil
 }

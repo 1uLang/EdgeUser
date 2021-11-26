@@ -20,8 +20,8 @@ import (
 
 type ParentAction struct {
 	actions.ActionObject
-	userName 	string
-	parentId 	uint64
+	userName  string
+	parentId  uint64
 	rpcClient *rpc.RPCClient
 }
 
@@ -80,8 +80,9 @@ func (this *ParentAction) TinyMenu(menuItem string) {
 
 func (this *ParentAction) UserId(parent ...bool) int64 {
 	userId := this.Context.GetInt64("userId")
-	if len(parent) > 0 && parent[0]{
-		parentId,err := this.ParentId()
+
+	if userId > 0 && len(parent) > 0 && parent[0] {
+		parentId, err := this.ParentId()
 		if err != nil {
 			logs.Error(err)
 		}
@@ -94,14 +95,14 @@ func (this *ParentAction) UserId(parent ...bool) int64 {
 }
 func (this *ParentAction) ParentId() (uint64, error) {
 	if this.parentId != 0 {
-		return this.parentId,nil
+		return this.parentId, nil
 	}
-	parentId,err := edge_user_server.GetParentId(&edge_user_model.GetParentIdReq{UserId: uint64(this.UserId())})
+	parentId, err := edge_user_server.GetParentId(&edge_user_model.GetParentIdReq{UserId: uint64(this.UserId())})
 	if err != nil {
 		return 0, err
 	}
 	this.parentId = parentId
-	return this.parentId,nil
+	return this.parentId, nil
 }
 func (this *ParentAction) UserName() (string, error) {
 
