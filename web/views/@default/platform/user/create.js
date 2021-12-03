@@ -17,6 +17,10 @@ Tea.context(function () {
     }
     this.submitFail = function (resp) {
 
+        if (resp.message !== "") {
+            teaweb.warn(resp.message)
+            return
+        }
         var error = resp.errors[0].messages[0]
         teaweb.warn(error)
         //获取表单提交按钮
