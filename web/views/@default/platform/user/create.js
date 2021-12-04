@@ -19,7 +19,6 @@ Tea.context(function () {
 
         if (resp.message !== "") {
             teaweb.warn(resp.message)
-            return
         }else{
             var error = resp.errors[0].messages[0]
             teaweb.warn(error)
