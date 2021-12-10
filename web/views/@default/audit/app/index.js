@@ -29,6 +29,8 @@ Tea.context(function () {
                 return "iis"
             case 0:
                 return "nginx"
+            case 2:
+                return "tomcat"
             default:
                 return "未知"
         }
