@@ -10,15 +10,15 @@ import (
 	"time"
 )
 
-type AptAction struct {
+type NetAction struct {
 	actionutils.ParentAction
 }
 
-func (this *AptAction) Init() {
+func (this *NetAction) Init() {
 	this.Nav("", "", "")
 }
 
-func (this *AptAction) RunGet(params struct {
+func (this *NetAction) RunGet(params struct {
 	DayFrom  string
 	Page     int
 	PageSize int
@@ -39,11 +39,12 @@ func (this *AptAction) RunGet(params struct {
 		params.NodeId = node[0].Id
 	}
 	list := make([]*server.ListResp, 0)
-	key := fmt.Sprintf("apt-logs-list-%v-%v", params.NodeId, params.DayFrom)
+	key := fmt.Sprintf("apt-net-list-%v-%v", params.NodeId, params.DayFrom)
 	lists, err := cache.CheckCache(key, func() (interface{}, error) {
 		list, err := server.GetList(&server.ListReq{
 			Date:   params.DayFrom,
 			NodeId: params.NodeId,
+			Type:   "url",
 		})
 		return list, err
 	}, 60, true)

@@ -1,11 +1,11 @@
 {$layout}
 {$template "/datepicker"}
 
-<p class="comment" v-if="nodes.length == 0">请先添加APT检测节点。</p>
+<p class="comment" v-if="nodes.length == 0">请先添加网络防病毒节点。</p>
 <div style="height: 90vh;" v-if="nodes.length > 0">
     <div style="width: 100%;height: 40px;display: flex;justify-content: flex-end;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-top: 10px;">
         <div style="display: inline-flex;align-items: center;">
-            <div style="text-align: center;">APT检测节点：</div>
+            <div style="text-align: center;">网络防病毒检测节点：</div>
             <div class="ui field">
                 <div class="ui field">
                     <select class="ui dropdown auto-width" name="selectNode" v-model="selectNode"
@@ -18,7 +18,7 @@
     </div>
     <div style="width: 100%;height: 40px;display: flex;/* justify-content: flex-end; *//* border-bottom: 1px solid rgb(240, 240, 240); */padding-bottom: 10px;margin-top: -45px;">
         <div style="display: inline-flex; align-items: center;">
-            <div style="line-height: 40px; text-align: center;">高级持续性威胁检测</div>
+            <div style="line-height: 40px; text-align: center;">网络病毒威胁检测</div>
         </div>
     </div>
     <div style="display: flex;flex-direction: row;margin-top: 22px;display: none">
@@ -38,9 +38,9 @@
                 <th class='table-head-bg' style="width: 100px;">目标IP</th>
                 <th class='table-head-bg' style="width: 80px;">目标端口</th>
                 <th class='table-head-bg' style="width: 50px;">协议</th>
-                <th class='table-head-bg' style="width: 50px;">类型</th>
+                <th class='table-head-bg' style="width: 120px;">URL</th>
                 <!--<th class='table-head-bg' style="width: 100px;">追踪</th>-->
-                <th class='table-head-bg' style="width: 200px;">详情</th>
+                <th class='table-head-bg' style="width: 180px;">详情</th>
                 <th class='table-head-bg' style="width: 200px;">威胁情报来源</th>
             </tr>
             </thead>
@@ -53,8 +53,8 @@
                 <td>{{item.dst_ip}}</td>
                 <td>{{item.dst_port}}</td>
                 <td>{{item.proto}}</td>
-                <td>{{item.type}}</td>
-                <!-- <td>{{item.trail}}</td>-->
+                <!-- <td>{{item.type}}</td>-->
+                 <td>{{item.trail}}</td>
                 <td>{{item.info}}</td>
                 <td>{{item.reference}}</td>
             </tr>

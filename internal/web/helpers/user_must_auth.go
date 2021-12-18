@@ -196,6 +196,12 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"url":  "/waf/apt",
 				},
 				{
+					"code": "aptnet",
+					"url":  "/waf/net",
+					"name": "网络防病毒",
+					//"icon":   "empire",
+				},
+				{
 					"name": "WAF日志",
 					"code": "logs",
 					"url":  "/waf/logs",
@@ -461,6 +467,11 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"name": "应用管理",
 					"url":  "/audit/app",
 					"code": "app",
+				},
+				{
+					"name": "设备管理",
+					"url":  "/audit/device",
+					"code": "device",
 				},
 				{
 					"name": "审计日志",

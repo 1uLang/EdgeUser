@@ -80,6 +80,7 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/agent"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/app"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/db"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/device"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/host"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/logs"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/audit/report"
