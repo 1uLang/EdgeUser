@@ -191,16 +191,17 @@ func (this *userMustAuth) modules(userId int64) []maps.Map {
 					"url":  "/waf/alarm",
 				},
 				{
+
 					"name": "APT日志",
 					"code": "apt",
 					"url":  "/waf/apt",
 				},
-				{
-					"code": "aptnet",
-					"url":  "/waf/net",
-					"name": "网络防病毒",
-					//"icon":   "empire",
-				},
+				//{
+				//	"code": "aptnet",
+				//	"url":  "/waf/net",
+				//	"name": "网络防病毒",
+				//	//"icon":   "empire",
+				//},
 				{
 					"name": "WAF日志",
 					"code": "logs",

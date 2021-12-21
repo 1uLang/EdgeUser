@@ -67,6 +67,8 @@ import (
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/settings/profile"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/ui"
 	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/waf"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/waf/apt"
+	_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/waf/net"
 	//_ "github.com/TeaOSLab/EdgeUser/internal/web/actions/default/waf/logs"
 
 	//web漏洞扫描
