@@ -25,8 +25,8 @@ func (this *Helper) BeforeAction(actionPtr actions.ActionWrapper) (goNext bool) 
 
 	// 标签栏
 	tabbar := actionutils.NewTabbar()
-	tabbar.Add("高级持续性威胁检测", "", "/waf/apt", "", this.tab == "apt")
-	tabbar.Add("网络病毒威胁检测", "", "/waf/net", "", this.tab == "net")
+	tabbar.Add("恶意IP拦截", "", "/waf/apt", "", this.tab == "apt")
+	tabbar.Add("网络防病毒", "", "/waf/net", "", this.tab == "net")
 	actionutils.SetTabbar(actionPtr, tabbar)
 
 	return

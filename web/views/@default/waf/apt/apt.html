@@ -1,11 +1,11 @@
 {$layout}
 {$template "/datepicker"}
 <div class="margin"></div>
-<p class="comment" v-if="nodes.length == 0">请先添加APT检测节点。</p>
+<p class="comment" v-if="nodes.length == 0">请先添加APT防御。</p>
 <div style="height: 90vh;" v-if="nodes.length > 0">
     <div style="width: 100%;height: 40px;display: flex;justify-content: flex-end;border-bottom: 1px #f0f0f0 solid;width: 100%;padding-bottom: 10px;margin-top: -54px;">
         <div style="display: inline-flex;align-items: center;">
-            <div style="text-align: center;">APT检测节点：</div>
+            <div style="text-align: center;">APT防御：</div>
             <div class="ui field">
                 <div class="ui field">
                     <select class="ui dropdown auto-width" name="selectNode" v-model="selectNode"
@@ -42,6 +42,7 @@
                 <!--<th class='table-head-bg' style="width: 100px;">追踪</th>-->
                 <th class='table-head-bg' style="width: 200px;">详情</th>
                 <th class='table-head-bg' style="width: 200px;">威胁情报来源</th>
+                <th class='table-head-bg' style="width: 50px;">动作</th>
             </tr>
             </thead>
             <tbody id='tableBody'>
@@ -57,6 +58,7 @@
                 <!-- <td>{{item.trail}}</td>-->
                 <td>{{item.info}}</td>
                 <td>{{item.reference}}</td>
+                <td>已拦截</td>
             </tr>
             </tbody>
         </table>
