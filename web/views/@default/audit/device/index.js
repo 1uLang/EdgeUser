@@ -1,5 +1,5 @@
 Tea.context(function () {
-    
+
     this.searchSQLName = ""
     this.searchSQLIp = ""
 
@@ -11,7 +11,6 @@ Tea.context(function () {
     this.selectNoAuthPeopleListData = []
     this.selectAuthPeopleListData = []
 
-
     this.getStatus = function (status) {
         switch (status) {
             case 1:
@@ -22,29 +21,25 @@ Tea.context(function () {
                 return "已停用"
         }
     }
-
-    this.getAppName = function (type) {
-        switch (type) {
-            case 1:
-                return "iis"
+    this.getSystemName = function (system) {
+        switch (system) {
             case 0:
-                return "nginx"
-            case 2:
-                return "tomcat"
+                return "windows"
+            case 1:
+                return "linux"
             default:
                 return "未知"
         }
     }
-
-    this.onAddHost = function () {
+    this.onAddDevice = function () {
         teaweb.popup(Tea.url(".createPopup"), {
-			height: "300px",
-            width:"460px",
-			callback: function () {
+            height: "300px",
+            width: "460px",
+            callback: function () {
                 this.onSearch()
 
             }
-		})
+        })
     }
 
     this.onSearch = function () {
@@ -54,10 +49,10 @@ Tea.context(function () {
             json: true,
         }).success(resp => {
             if (resp.code === 200) {
-                if (resp.data.appList)
-                    this.appList = resp.data.appList
+                if (resp.data.deviceList)
+                    this.deviceList = resp.data.deviceList
                 else
-                    this.appList = []
+                    this.deviceList = []
                 // this.level = resp.data.level
             }
         })
@@ -65,34 +60,35 @@ Tea.context(function () {
 
     // this.onOpenAuth = function (id) {
     //     teaweb.popup(Tea.url(".auth"), {
-	// 		height: "270px",
+    //         height: "270px",
     //         width: "460px",
-	// 		callback: function () {
+    //         callback: function () {
     //             this.onSearch()
-	// 		}
-	// 	})
+    //
+    //         }
+    //     })
     // }
 
     this.onEdit = function (item) {
-        teaweb.popup(Tea.url(".createPopup",{
-            id:item.id,
-            name:item.name,
-            type:item.app_type,
-            ip:item.ip,
-            status:item.status,
-            edit:true,
+        teaweb.popup(Tea.url(".createPopup", {
+            id: item.id,
+            name: item.name,
+            ip: item.ip,
+            system: item.system,
+            status: item.status,
+            edit: true,
         }), {
-			height: "300px",
-            width:"460px",
-			callback: function () {
+            height: "300px",
+            width: "460px",
+            callback: function () {
                 this.onSearch()
-			}
-		})
+            }
+        })
     }
 
     this.onDelete = function (id) {
-        teaweb.confirm("确定要删除该应用？", function () {
-            this.$post(".delete").params({
+        teaweb.confirm("确定要删除该设备？", function () {
+            this.$post("/audit/device/delete").params({
                 Opt: "delete",
                 id: id,
             }).refresh()
@@ -100,12 +96,11 @@ Tea.context(function () {
     }
 
     this.tableData = [
-        {id:1,value1:"robin_mysql",value2:"47.108.234.195",value3:"nginx",value4:1},
-        {id:2,value1:"robin_mysql",value2:"47.108.234.195",value3:"nginx",value4:0},
-        {id:3,value1:"robin_mysql",value2:"47.108.234.195",value3:"nginx",value4:1},
-        {id:4,value1:"robin_mysql",value2:"47.108.234.195",value3:"nginx",value4:0},
+        {id: 1, value1: "robin_mysql", value2: "47.108.234.195", value3: "windows", value4: 1},
+        {id: 2, value1: "robin_mysql", value2: "47.108.234.195", value3: "linux", value4: 0},
+        {id: 3, value1: "robin_mysql", value2: "47.108.234.195", value3: "windows", value4: 1},
+        {id: 4, value1: "robin_mysql", value2: "47.108.234.195", value3: "linux", value4: 0},
     ]
-
 
     this.onOpenAuth = function (item) {
         //req

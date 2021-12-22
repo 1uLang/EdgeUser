@@ -1,4 +1,4 @@
-package waf
+package apt
 
 import (
 	"encoding/json"
@@ -39,7 +39,7 @@ func (this *AptAction) RunGet(params struct {
 		params.NodeId = node[0].Id
 	}
 	list := make([]*server.ListResp, 0)
-	key := fmt.Sprintf("apt-list-%v-%v", params.NodeId, params.DayFrom)
+	key := fmt.Sprintf("apt-logs-list-%v-%v", params.NodeId, params.DayFrom)
 	lists, err := cache.CheckCache(key, func() (interface{}, error) {
 		list, err := server.GetList(&server.ListReq{
 			Date:   params.DayFrom,

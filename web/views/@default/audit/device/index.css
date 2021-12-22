@@ -1,0 +1,118 @@
+.sure-btn{
+    height: 32px;
+    margin-left: 15px;
+    padding: 0 20px !important;
+    color: #fff;
+    background-color: #276ac6;
+    font-size: 14px;
+    font-weight: normal;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 32px;
+    cursor: pointer;
+}
+
+.table-head-bg{
+    height: 32px;
+    background: #f0f0f0;
+}
+
+.status-open{
+    display: inline-block;
+    color: #21ba45;
+    font-weight: 700;
+    padding: 4px 6px;
+    border-radius: 5px;
+    border: 1px solid #21ba45;
+}
+.status-close{
+    display: inline-block;
+    color: #db2828;
+    font-weight: 700;
+    padding: 4px 6px;
+    border-radius: 5px;
+    border: 1px solid #db2828;
+}
+
+.edit_btn{
+    color: #1b6aff;
+    cursor: pointer;
+}
+
+.del-btn{
+    color: #D51F16;
+    cursor: pointer;
+}
+
+
+
+.clean-btn{
+    width: 60px;
+    height: 30px;
+    color: #333;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+    border: 1px solid #d7d7d7;
+}
+.dialog-style{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 1;display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dialog-bg-style{
+    width: 600px;
+    height: 400px;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 1);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(215, 215, 215, 1);
+    border-radius: 0px;
+    box-shadow: none;
+}
+
+.auth-middle-btn-stype{
+    width: 80px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border: 1px solid #d7d7d7;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.auth-people-box-style{
+    width: 150px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #d7d7d7;
+}
+
+.auth-people-title-style{
+    border-bottom: 1px solid #d7d7d7;
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.auth-people-content-style{
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    cursor: default;
+}

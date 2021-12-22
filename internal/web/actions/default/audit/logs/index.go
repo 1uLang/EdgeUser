@@ -4,6 +4,7 @@ import (
 	"github.com/1uLang/zhiannet-api/audit/request"
 	"github.com/1uLang/zhiannet-api/audit/server/audit_app"
 	"github.com/1uLang/zhiannet-api/audit/server/audit_db"
+	"github.com/1uLang/zhiannet-api/audit/server/audit_device"
 	"github.com/1uLang/zhiannet-api/audit/server/audit_host"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
 	"github.com/iwind/TeaGo/actions"
@@ -63,6 +64,21 @@ func (this *IndexAction) RunGet() {
 		this.Data["appList"] = applist.Data.List
 	} else {
 		this.Data["appList"] = []maps.Map{}
+	}
+
+	//设备
+	devicelist, _ := audit_device.GetAuditDeviceList(&audit_device.ReqSearch{
+		PageSize: 999,
+		PageNum:  1,
+		User: &request.UserReq{
+			UserId: uint64(this.UserId()),
+		},
+	})
+	//this.Data["appList"] = applist.Data.List
+	if devicelist != nil && len(devicelist.Data.List) > 0 {
+		this.Data["deviceList"] = devicelist.Data.List
+	} else {
+		this.Data["deviceList"] = []maps.Map{}
 	}
 	page := this.NewPage(int64(0))
 	this.Data["page"] = page.AsHTML()
@@ -164,6 +180,30 @@ func (this *IndexAction) RunPost(params struct {
 		}
 	case 3:
 		list, _ := audit_app.GetAppLog(&audit_app.AppLogReq{
+			Size:      params.PageSize,
+			Page:      params.PageNum,
+			StartTime: Stime,
+			EndTime:   Etime,
+			Message:   params.Message,
+			TimeType:  params.TimeType,
+			AuditId:   params.AuditId,
+			Export:    params.Export,
+			UserId: &request.UserReq{
+				UserId: uint64(this.UserId()),
+			},
+		})
+		if list == nil {
+			break
+		}
+		if params.Export {
+			this.Data["filepath"] = list.Data.Filename
+		} else {
+			this.Data["list"] = list.Data.Log
+			this.Data["total"] = list.Data.Total
+			this.Data["page"] = list.Data.Page
+		}
+	case 4: //设备
+		list, _ := audit_device.GetDeviceLog(&audit_device.DeviceLogReq{
 			Size:      params.PageSize,
 			Page:      params.PageNum,
 			StartTime: Stime,

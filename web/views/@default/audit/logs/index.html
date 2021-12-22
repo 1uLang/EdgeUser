@@ -8,6 +8,7 @@
         <div :class="{'menu-select-color':pageState===1,'menu-define-color':pageState!=1}" @click="onChangeState(1)">数据库审计</div>
         <div :class="{'menu-select-color':pageState===2,'menu-define-color':pageState!=2}" @click="onChangeState(2)">主机审计</div>
         <div :class="{'menu-select-color':pageState===3,'menu-define-color':pageState!=3}" @click="onChangeState(3)">应用审计</div>
+        <div :class="{'menu-select-color':pageState===4,'menu-define-color':pageState!=4}" @click="onChangeState(4)">设备审计</div>
     </div>
 
     <div style="width: 100%;display: flex;flex-direction: column;margin-top: 10px;">
@@ -66,6 +67,19 @@
                     </div>
                     <div v-if="bShowSqlName" style="width:100%;position: absolute;left: 0;top: 28px;background-color: #fff;border: 1px solid #d7d7d7;">
                         <div v-for="item in appList" style="margin-left: 5px;padding-bottom: 3px;" @click.stop="onAddSqlNameValue(item.audit_id)">
+                            <img :src="getShowSelectValueImage(item.audit_id,sSelectSqlName)" width="12px" height="12px">
+                            <span style="margin-left: 5px;">{{item.name}}</span>
+                        </div>
+                    </div>
+                </div>
+                <!--设备-->
+                <div  v-if="pageState===4" style="width: 200px;position: relative;">
+                    <div @click.stop="onShowSqlName" style="height: 26px;width: 200px;border: 1px solid #d7d7d7;display: inline-flex;align-items: center;">
+                        <div v-for="itemId in sSelectSqlName" style="background-color: #0090cc;color: #fff;border-radius: 10px;height: 18px;font-size: 10px;line-height: 18px;padding: 0px 2px;">
+                            {{getItemInfo(itemId,deviceList)}}</div>
+                    </div>
+                    <div v-if="bShowSqlName" style="width:100%;position: absolute;left: 0;top: 28px;background-color: #fff;border: 1px solid #d7d7d7;">
+                        <div v-for="item in deviceList" style="margin-left: 5px;padding-bottom: 3px;" @click.stop="onAddSqlNameValue(item.audit_id)">
                             <img :src="getShowSelectValueImage(item.audit_id,sSelectSqlName)" width="12px" height="12px">
                             <span style="margin-left: 5px;">{{item.name}}</span>
                         </div>
@@ -209,6 +223,33 @@
                 <tr v-show="item.bOpen" style="min-height: 40px;">
                     <td colspan="9">{{item.message}}</td>
                 </tr>
+            </tbody>
+        </table>
+        <table v-if="pageState===4" id = "tab" class="ui table selectable celled" border="1" style="border-collapse: collapse;">
+            <thead>
+            <tr align="center">
+                <th class='table-head-bg' style="min-width: 120px;max-width: 120px;">设备IP</th>
+                <th class='table-head-bg' style="min-width: 120px;max-width: 120px;">设备名称</th>
+                <th class='table-head-bg' style="min-width: 530px;max-width: 530px;">内容</th>
+                <th class='table-head-bg' style="min-width: 140px;max-width: 140px;">记录时间</th>
+            </tr>
+            </thead>
+            <tbody id='tableBody' v-for="item in deviceLogList">
+            <tr align="center" style="height: 40px;" @click="onOpenItemDetail(item.id,deviceLogList)">
+                <td>
+                    <div style="display: inline-flex;">
+                        <span v-show="!item.bOpen">&#9658;</span>
+                        <span v-show="item.bOpen">&#9660;</span>
+                        <span style="margin-left: 5px;">{{item.server}}</span>
+                    </div>
+                </td>
+                <td>{{item.name}}</td>
+                <td class="txt-overflow" style="min-width: 280px;max-width: 280px;">{{item.message}}</td>
+                <td>{{onChangeTimeFormat(item.timestamp)}}</td>
+            </tr>
+            <tr v-show="item.bOpen" style="min-height: 40px;">
+                <td colspan="9">{{item.message}}</td>
+            </tr>
             </tbody>
         </table>
     </div>
