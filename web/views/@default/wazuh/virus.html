@@ -21,6 +21,7 @@
             <th class='table-head-bg' style="width: 250px;">恶意文件</th>
             <th class='table-head-bg' style="width: 282px;">特征值</th>
             <th class='table-head-bg' style="width: 134px;">发现时间</th>
+            <th class='table-head-bg' style="width: 134px;">动作</th>
         </tr>
         </thead>
         <tbody id='tableBody'>
@@ -29,6 +30,7 @@
             <td>{{item._source.data.virustotal.source.file}}</td>
             <td>{{item._source.data.virustotal.source.sha1}}</td>
             <td>{{onChangeTimeFormat(item._source.timestamp)}}</td>
+            <td>已隔离</td>
         </tr>
         </tbody>
     </table>
