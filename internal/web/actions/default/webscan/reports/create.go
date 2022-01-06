@@ -44,8 +44,8 @@ func (this *CreateAction) RunPost(params struct {
 			webscan_ids = append(webscan_ids, v)
 		} else {
 			err = nessus_scans_server.CreateReport(&nessus_scans_model.CreateReportReq{
-				ID: strings.TrimSuffix(params.TarIds[k], "-host"),
-				HistoryId:        strings.TrimSuffix(v, "-host"),
+				ID:        strings.TrimSuffix(params.TarIds[k], "-host"),
+				HistoryId: strings.TrimSuffix(v, "-host"),
 				UserId:    uint64(this.UserId(true)),
 			})
 			if err != nil {
@@ -61,8 +61,8 @@ func (this *CreateAction) RunPost(params struct {
 				IDS  []string `json:"id_list"`
 				Type string   `json:"list_type"`
 			}{IDS: webscan_ids, Type: "scans"},
-			TemplateId: "11111111-1111-1111-1111-111111111111", //快速
-			//TemplateId: "11111111-1111-1111-1111-111111111126", //综合分析报表
+			//TemplateId: "11111111-1111-1111-1111-111111111111", //快速
+			TemplateId: "11111111-1111-1111-1111-111111111126", //综合分析报表
 			UserId:     uint64(this.UserId(true)),
 		}
 		_, err = reports_server.Create(req)
