@@ -88,7 +88,7 @@ func (this *CreateAction) RunPost(params struct {
 			Field("email", params.Email).
 			Email("请输入正确的电子邮箱")
 	}
-	UseDatabackup := true
+	UseDatabackup := false
 	if UseDatabackup {
 		//// 创建nextcloud账号，并写入数据库
 		adminToken := nc_req.GetAdminToken()
