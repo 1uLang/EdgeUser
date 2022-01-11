@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	ag_ser "github.com/1uLang/zhiannet-api/agent/server"
+	"github.com/1uLang/zhiannet-api/audit"
 	"github.com/1uLang/zhiannet-api/common/cache"
 	"github.com/1uLang/zhiannet-api/common/server"
 	nc_model "github.com/1uLang/zhiannet-api/nextcloud/model"
@@ -37,6 +38,9 @@ func main() {
 	ag_ser.AgentInit(Tea.ConfigFile("api_db.yaml"))
 	nc_model.InitialAdminUser()
 	cache.InitClient()
+	//安全审计
+	audit.InitLogAddr()
+
 	app.Run(func() {
 		userNode := nodes.NewUserNode()
 		userNode.Run()

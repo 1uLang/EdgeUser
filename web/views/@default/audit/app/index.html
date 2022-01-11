@@ -40,9 +40,7 @@
                     </td>
                     <td>
                         <div style="padding: 4px 0;">
-                            123.129.208.233:5045 <br>
-                            123.129.208.235:5045 <br>
-                            123.129.208.236:5045 <br>
+                            <span v-for="addr in log_submit_addr">{{ addr }}<br/></span>
                         </div>
                     </td>
                     <td>
@@ -75,7 +73,8 @@
                 </tr>
             </tbody>
         </table>
-    </div>    
+    </div>
+    <div class="page" v-html="page"></div>
 </div>
 
 

@@ -1,6 +1,7 @@
 package host
 
 import (
+	"github.com/1uLang/zhiannet-api/audit"
 	"github.com/1uLang/zhiannet-api/audit/request"
 	"github.com/1uLang/zhiannet-api/audit/server/audit_host"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
@@ -17,7 +18,7 @@ func (this *IndexAction) Init() {
 }
 
 func (this *IndexAction) RunGet(params struct {
-	PageNum  int
+	Page     int
 	PageSize int
 	Ip       string
 	Name     string
@@ -28,7 +29,7 @@ func (this *IndexAction) RunGet(params struct {
 }) {
 	list, _ := audit_host.GetAuditHostList(&audit_host.ReqSearch{
 		PageSize: params.PageSize,
-		PageNum:  params.PageNum,
+		PageNum:  params.Page,
 		Ip:       params.Ip,
 		Name:     params.Name,
 		Status:   params.Status,
@@ -37,11 +38,16 @@ func (this *IndexAction) RunGet(params struct {
 		},
 	})
 	//this.Data["hostList"] = list.Data.List
+	count := int64(0)
 	if list != nil && len(list.Data.List) > 0 {
+		count = int64(list.Data.Total)
 		this.Data["hostList"] = list.Data.List
 	} else {
 		this.Data["hostList"] = []maps.Map{}
 	}
+	page := this.NewPage(int64(count))
+	this.Data["page"] = page.AsHTML()
+	this.Data["log_submit_addr"] = audit.LogSubmitAddr
 	if params.Json {
 		this.Success()
 	}

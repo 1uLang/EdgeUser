@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/1uLang/zhiannet-api/audit"
 	"github.com/1uLang/zhiannet-api/audit/request"
 	"github.com/1uLang/zhiannet-api/audit/server/audit_app"
 	"github.com/TeaOSLab/EdgeUser/internal/web/actions/actionutils"
@@ -17,7 +18,7 @@ func (this *IndexAction) Init() {
 }
 
 func (this *IndexAction) RunGet(params struct {
-	PageNum  int
+	Page     int
 	PageSize int
 	Type     string
 	Ip       string
@@ -30,7 +31,7 @@ func (this *IndexAction) RunGet(params struct {
 }) {
 	list, _ := audit_app.GetAuditAppList(&audit_app.ReqSearch{
 		PageSize: params.PageSize,
-		PageNum:  params.PageNum,
+		PageNum:  params.Page,
 		AppType:  params.Type,
 		Ip:       params.Ip,
 		Name:     params.Name,
@@ -39,12 +40,17 @@ func (this *IndexAction) RunGet(params struct {
 			UserId: uint64(this.UserId()),
 		},
 	})
+	count := int64(0)
 	//this.Data["appList"] = list.Data.List
 	if list != nil && len(list.Data.List) > 0 {
 		this.Data["appList"] = list.Data.List
+		count = int64(list.Data.Total)
 	} else {
 		this.Data["appList"] = []maps.Map{}
 	}
+	page := this.NewPage(int64(count))
+	this.Data["page"] = page.AsHTML()
+	this.Data["log_submit_addr"] = audit.LogSubmitAddr
 	if params.Json {
 		this.Success()
 	}
