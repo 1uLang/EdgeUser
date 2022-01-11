@@ -39,6 +39,8 @@ func main() {
 	nc_model.InitialAdminUser()
 	cache.InitClient()
 	//安全审计
+
+	audit.ApiDbPath = Tea.ConfigFile("api_db.yaml")
 	audit.InitLogAddr()
 
 	app.Run(func() {
