@@ -18,6 +18,7 @@ Vue.component("app-type-selector", {
 			{"id":0,"name":"nginx"},
 			{"id":1,"name":"iis"},
 			{"id":2,"name":"tomcat"},
+			{"id":3,"name":"apache"},
 		]
 		assemblyEdit = this.vAssemblyEdit
 		return {

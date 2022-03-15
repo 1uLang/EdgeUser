@@ -61,7 +61,7 @@ func (this *CreatePopupAction) RunPost(params struct {
 		Match("[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\\.?", "请输入正确的ip")
 	params.Must.
 		Field("type", params.Type).
-		In([]int{0, 1}, "请选择类型")
+		In([]int{0, 1, 2, 3}, "请选择类型")
 	if params.Id == 0 {
 		res, err := audit_app.AddApp(&audit_app.AppReq{
 			User: &request.UserReq{
